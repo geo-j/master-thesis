@@ -1,0 +1,201 @@
+team@slither.io
+ ml-agents@unity3d.com
+
+
+
+\subsection{Thesis}
+
+\subsection{Slither}
+The default colors are orange, yellow, purple, lavender, teal, green, chartreuse, brick, pink, red and white \cite{web:Slitherio_Wikipedia}
+
+
+\subsection{Intro to RL}
+Reinforcement learning makes use of many interesting concepts in order to function properly. For example, agents often use a value function to estimate the 'value' of a state. This value is linked to the expected return of the state. Agents can 'bootstrap' the value of these states to estimate nearby or similar states. Agents also need to balance between exploitation of high value states and the exploration of unfamiliar states.  and function approximators that can generalize.
+
+Reinforcement learning concepts are for example; agents that have a preference value for each state, ways to estimate these values, and bootstrapping to update values based on value estimates.  Other examples are a balance between exploration and exploitation, the step size to adjust the learning rate, the discount factor to take into account the preference for immediate reward, and function approximators that can generalize. These main RL concepts are by necessity included in most RL algorithms.
+
+These next examples are not always used in practice, but are useful in specific cases. RL algorithms often make use of deep neural networks, both as a function approximator and to process images into features. Many algorithms are able to learn off-policy, where the agent's actions do not necessarily reflect the learned behavior. This enables experience replay, where an agent learns by reviewing stored experiences. Model-based algorithms contain or create a model of their environment. This enables looking ahead and planning accordingly by analyzing possible future states. With policy gradient methods, the learned policy selects actions without consulting a value function. The value function can be used to critique this policy, which is called actor-critic.  Agents can learn by only using RL techniques, or by combining RL with other types of machine learning. For instance imitation learning, where agents learn to imitate a working example, feature learning, where agents learn to value features and feature combinations of the environment, or supervised learning, where an agent learns from labeled training data. 
+
+\subsection{MuZero}
+MuZero hasn’t been applied onto slither.io, or any online multiplayer game. I hope this thesis will give insight in how the MuZero algorithm can be applied to train an agent in an online multiplayer game. The aim is to create an agent that can compete with, and perhaps even beat skilled human players. Slither is a continuous state game, where a new game-state emerges after each frame. Due to this seemingly infinite state-space, the agent will mostly encounter states it has never seen before. This makes training the agent significantly more complicated. Luckily, the agent can be trained with the help of the MuZero algorithm. This algorithm has already been applied to 57 different Atari games. These are, like Slither, continuous-state video games. The algorithm works by combining a tree-based search with a learned model. MuZero learns a model to predict the reward, policy, and value function of states and state transitions.
+
+
+
+\subsection{Gym environment}
+To create a skilled slither.io agent, a training environment for the agent is needed. The game
+environment will be created as a Gym environment. Gym is an open-source toolkit for developing
+Reinforcement Learning algorithms, created by OpenAI. GitHub already contains a few repositories
+where slither.io is put into Gym.
+
+\subsection{RL in Nature}
+
+RL can be found in nature, within both humans and animals. Animals like mice can be conditioned to perform tasks by rewarding them with candy when they explore in the right direction. We humans have a model of our environment in our head, from which we base actions and decisions to guide us towards a better future. In our own brain, the neurotransmitter dopamine is released to signal rewards, making us feel better or worse depending on our perception of the situation. 
+RL can evolutionary learning, both are inherently directed towards some optimal outcome. People that create a more accurate model of their surroundings and are better able to anticipate on it are more likely to survive.  
+How I see it, species as a whole are continuously improved by evolutionary learning where the feedback is survival. , and individuals improve by reinforcement learning, where the feedback is composed of feelings and thoughts towards real and potential situations.
+
+\subsection{Universe Downsides}
+There are also downsides to training online in the actual game. Training in real-time is very inefficient. Universe only supports Linux and OSX, and the repository is 4 years old and archived. Also, Slither can become flooded with training bots.
+
+%MDP
+ I believe explaining RL via MDP is not the most interesting way to get acquainted to the wonders that RL holds, since frameworks are made up, and not true by necessity. Also, many problems don't have the Markov property, unless you deal with the inconvenience of regarding past states as a subset of the current state. 
+ 
+ % RL research
+ Much research in reinforcement learning is concerned with finding the most effective way of training an agent. Each reinforcement learning task is different. There is not just one trick, idea, or algorithm that ensures the success of reinforcement learning. Each method and technique has its strength and weaknesses, and the best way for training the agent depends on its environment and the task.
+ 
+ 
+ 
+ \subsection{Bellman Equations}
+ 
+ \begin{gather}
+    V^\pi(s) =  \underset{\underset{s' \sim P}{a' \sim \pi }}{\mathbb{E}} \ [r(s,a')\ +\ \gamma V^\pi(s')], \\ 
+    Q^\pi(s,a) =  \underset{\underset{s' \sim P}{a' \sim \pi }}{\mathbb{E}} \ [r(s,a)\ +\ \gamma Q^\pi(s',a')]
+\end{gather}
+
+\begin{gather}
+    V^*(s) = \underset{a'}{max} \underset{s' \sim P}{\mathbb{E}} \ [r(s,a')\ +\ \gamma V^*(s')], \\ 
+    Q^*(s,a) =  \underset{s' \sim P}{\mathbb{E}} \ [r(s,a)\ +\ \gamma \ \underset{a'}{max} \ Q^*(s',a')]
+\end{gather}
+ 
+ 
+ \subsection{Vanilla Policy Gradient}
+
+PPO:
+Actor critic policy gradient method
+on-policy, TD, uses value estimation to update policy parameters.
+variant of VPG and TRPO, but with cutoff trust region
+
+
+
+ 
+ 
+ 
+ 
+ 
+ \subsection{Unuseed Refs}
+
+ 
+
+@misc{Rainbow_2017, 
+    year={
+    \textbf{Rainbow: Combining Improvements in Deep Reinforcement Learning} (RDQN)
+    - Matteo Hessel, Joseph Modayil, Hado van Hasselt, Tom Schaul, Georg Ostrovski, Will Dabney, Dan Horgan, Bilal Piot, Mohammad Azar, David Silver -
+     \href{https://arxiv.org/abs/1710.02298}{arXiv},
+    2016}
+}
+ 
+ 
+ 
+ @misc{DPG_2014, 
+    year={
+    \textbf{Deterministic Policy Gradient Algorithms} (DPG)
+    - David Silver, Guy Lever, Nicolas Heess, Thomas Degris, Daan Wierstra, Martin Riedmiller -
+     \href{http://proceedings.mlr.press/v32/silver14.pdf}{DeepMind and UCL},
+    2014}
+}
+
+@misc{Double_DQN_2015, 
+    year={
+    \textbf{Deep Reinforcement Learning with Double Q-learning} (DDQN)
+    - Hado van Hasselt, Arthur Guez, David Silver -
+     \href{https://arxiv.org/abs/1509.06461}{arXiv},
+    2015}
+}
+
+@misc{DDPG_2015, 
+    year={
+    \textbf{Continuous Control with Deep Reinforcement Learning} (DDPG)
+    - Timothy P. Lillicrap, Jonathan J. Hunt, Alexander Pritzel, Nicolas Heess, Tom Erez, Yuval Tassa, David Silver, Daan Wierstra -
+     \href{https://arxiv.org/abs/1509.02971}{arXiv},
+    2015}
+}
+
+@misc{TRPO_2015, 
+    year={
+    \textbf{Trust Region Policy Optimization} (TRPO)
+    - John Schulman, Sergey Levine, Philipp Moritz, Michael I. Jordan, Pieter Abbeel -
+     \href{https://arxiv.org/abs/1502.05477}{arXiv},
+    2015}
+}
+
+@misc{GAE_2015, 
+    year={
+    \textbf{High-Dimensional Continuous Control Using Generalized Advantage Estimation} (GAE)
+    - John Schulman, Philipp Moritz, Sergey Levine, Michael Jordan, Pieter Abbeel -
+     \href{https://arxiv.org/abs/1506.02438}{arXiv},
+    2015}
+}
+
+@misc{ACER_2016, 
+    year={
+    \textbf{Sample Efficient Actor-Critic with Experience Replay} (ACER)
+    - Ziyu Wang, Victor Bapst, Nicolas Heess, Volodymyr Mnih, Remi Munos, Koray Kavukcuoglu, Nando de Freitas -
+     \href{https://arxiv.org/abs/1611.01224}{arXiv},
+    2016}
+}
+@misc{PER_2016, 
+    year={
+    \textbf{Prioritized Experience Replay} (PER)
+    - Tom Schaul, John Quan, Ioannis Antonoglou, David Silver -
+     \href{https://arxiv.org/abs/1511.05952}{arXiv},
+    2016}
+}
+
+@misc{A3C_Asynchronous_2016, 
+    year={
+    \textbf{Asynchronous Methods for Deep Reinforcement Learning} (A3C)
+    - Volodymyr Mnih, Adrià Puigdomènech Badia, Mehdi Mirza, Alex Graves, Timothy P. Lillicrap, Tim Harley, David Silver, Koray Kavukcuoglu -
+     \href{https://arxiv.org/abs/1602.01783}{arXiv},
+    2016}
+}
+
+ 
+@misc{ACKTR_2017, 
+    year={
+    \textbf{Scalable trust-region method for deep reinforcement learning using Kronecker-factored approximation} (ACKTR)
+    - Yuhuai Wu, Elman Mansimov, Shun Liao, Roger Grosse, Jimmy Ba -
+     \href{https://arxiv.org/abs/1708.05144}{arXiv},
+    2017}
+}
+
+ 
+
+@misc{TD3_2018, 
+    year={
+    \textbf{Addressing Function Approximation Error in Actor-Critic Methods} (TD3)
+    - Scott Fujimoto, Herke van Hoof, David Meger -
+     \href{https://arxiv.org/abs/1802.09477}{arXiv},
+    2018}
+}
+
+
+@misc{MuZero_2020, 
+    year={
+    \textbf{Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model} (MuZero)
+    - Julian Schrittwieser, Ioannis Antonoglou, Thomas Hubert, Karen Simonyan, Laurent Sifre, Simon Schmitt, Arthur Guez, Edward Lockhart, Demis Hassabis, Thore Graepel, Timothy Lillicrap, David Silver -
+    \href{https://www.nature.com/articles/s41586-020-03051-4}{\textit{Nature}}, \href{https://arxiv.org/abs/1911.08265}{arXiv},
+    2020.\\\\ \textbf{Previous Attempts} }
+}
+
+@misc{PPO_Locomotion_2017, 
+    year={
+    \textbf{Emergence of Locomotion Behaviours in Rich Environments}
+    - Nicolas Heess, Dhruva TB, Srinivasan Sriram, Jay Lemmon, Josh Merel, Greg Wayne, Yuval Tassa, Tom Erez, Ziyu Wang, S. M. Ali Eslami, Martin Riedmiller, David Silver -
+     \href{https://arxiv.org/abs/1707.02286}{arXiv},
+    2017}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

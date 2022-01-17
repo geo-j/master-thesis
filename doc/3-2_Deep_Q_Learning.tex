@@ -1,0 +1,91 @@
+
+
+
+\newpage
+\subsection{Deep Q-Learning}
+
+
+\subsubsection{DQN Algorithm}
+
+% Intro
+
+
+The paper "Playing Atari with Deep Reinforcement Learning" \cite{Atari_DQN_2013} from Mnih et al. in 2013 revolutionized reinforcement learning in video games. In this paper, an agent surpasses humans on the Atari console from 1977 on multiple games by performing actions while observing the video images of the game. The same raw input, network architecture, and parameter values are used in each of the 49 Atari games. By learning a different policy for each game the agent learns to play at or beyond the skill level of humans on many of these games. The paper used its own \textit{Deep Q-Learning} (DQN) algorithm to achieve this.
+
+
+% Deep Convolutional ANN / Preprocessed sequences / Experience replay
+
+The DQN agent contains a \textit{deep convolutional} ANN. This is a multi-layered ANN that is specialized for processing spatial data arrays such as images. The raw images collected from the screen are seen as the state $s$ of the environment $\epsilon$. These states are pre-processed into $\phi(s)$ to reduce the input size for the Q-function.
+
+DQN makes use of \textit{experience replay}. While playing the game, the agent stores transitions ($\phi_t, a_t, r_t, \phi_{t+1}$) in a \textit{replay memory} $\mathcal{D}$. During learning, these transitions are randomly sampled. 
+
+% Equations
+
+The loss is calculated as the square difference between the target $y_i$ and the action value function $Q(s,a;\theta_i)$:
+
+\begin{equation}
+    L_i(\theta_i) = \underset{s,a \sim  \rho(\cdot)}{\mathbb{E}} [(y_i - Q(s,a;\theta_i))^2]
+\end{equation}
+
+Here, $L_i$ is the loss at iteration \textit{i}, and $\rho(s,a)$ is the behavior distribution. The following gradient is obtained by differentiating the loss function with respect to the weights $\theta$:
+
+\begin{equation}
+    \label{eq: loss gradient DQN}
+    \nabla_{\theta_i} L_i (\theta_i) = \underset{\underset{s' \sim  \varepsilon}{s,a \sim  \rho(\cdot)}}{\mathbb{E}} [(r + \gamma \, \underset{a'}{max} \, Q(s',a';\theta_{i-1}) - Q(s,a;\theta_i)) \nabla_{\theta_i}Q(s,a;\theta_i)]
+\end{equation}
+
+
+
+
+
+
+\noindent
+The entire DQN algorithm is given below: 
+
+\begin{algorithm}[H]
+\caption{Deep Q-learning with Experience Replay \cite{Atari_DQN_2013}} \label{alg: Deep Q-learning}
+\hspace*{2mm} Initialize replay memory $\mathcal{D}$ to capacity N \\
+\hspace*{2mm} Initialize action-value function Q with random weights \\
+\hspace*{2mm} \textbf{for} episode = 1, M \textbf{do} \\
+\hspace*{7mm} Initialise sequence $s_1$ = $\{x_1\}$ and preprocessed sequenced $\phi_1 = \phi(s_1)$ \\
+\hspace*{7mm} \textbf{for} t = 1, T \textbf{do} \\
+\hspace*{12mm} With probability $\epsilon$ select a random action $a_t$ \\
+\hspace*{12mm} otherwise select $a_t = max_a \, Q^*(\phi(s_t), a; \theta)$ \\
+\hspace*{12mm} Execute action $a_t$ in emulator and observe reward $r_t$ and image $x_{t+1}$ \\
+\hspace*{12mm} Set $s_{t+1} = s_t, a_t, x_{t+1}$ and preprocess $\phi_{t+1} = \phi(s_{t+1})$ \\
+\hspace*{12mm} Store transition ($\phi_t, a_t, r_t, \phi_{t+1}$) in $\mathcal{D}$  \\
+\hspace*{12mm} Sample random minibatch of transitions ($\phi_j , a_j , r_j , \phi_{j+1} $) from $\mathcal{D}$  \\
+\hspace*{12mm} Set $y_j =  \begin{cases} r_j $ \hspace*{40mm}  for terminal $ \phi_{j+1}  \\ 
+r_j + \gamma \, max_{a'} \, Q(\phi_{j+1}, a';\theta) $ \hspace*{2.5mm}  for non-terminal $ \phi_{j+1}  \end{cases}$ \\
+\hspace*{12mm} Perform a gradient descent step on $(y_j - Q(\phi_j , a_j ; \theta))^2$ according to equation \ref{eq: loss gradient DQN} \\
+\hspace*{7mm} \textbf{end for} \\
+\hspace*{2mm} \textbf{end for}
+\end{algorithm}
+
+
+
+
+
+
+
+
+
+
+
+% \subsubsection{DQN Improvements}
+
+% Rainbow 
+
+
+
+
+
+
+
+
+
+%\subsection{Policy Optimization}
+
+
+
+

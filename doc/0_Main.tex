@@ -1,0 +1,102 @@
+\documentclass{article}
+
+%PACKAGES
+\usepackage[utf8]{inputenc}
+\usepackage{natbib}
+\usepackage{graphicx}
+\graphicspath{ {./Figures/} }
+\usepackage{amsmath} % \vspace{} \hspace{}
+\usepackage{physics}
+\usepackage[margin=4cm]{geometry}
+\usepackage{textpos} % plaats vakje voor figures
+\usepackage{float} % Voor H! gebruik in figures
+\usepackage{caption} 
+\usepackage{changepage} % Changes table to left
+\usepackage{comment}% Includes \begin{comment}
+\usepackage{fancyhdr}
+\usepackage{url}
+\pagestyle{fancy}
+\usepackage{xcolor} % colorpackage
+\usepackage[colorlinks,linkcolor=black, citecolor=teal,urlcolor=blue]{hyperref} % hyperlinks citations
+\usepackage{amssymb} % Expected symbol (\mathbb{E})
+\usepackage{algorithm} % implement algorithm pseudocode
+%\usepackage{subcaption} % For multiple images
+\usepackage{subfigure}
+\usepackage{bm} % For \boldsymbol
+
+%NEW COMMANDS
+\newcommand{\eg}{e.\,g.\ }
+\newcommand{\ie}{i.\,e.\ }
+
+\newcommand{\WeightVector}{\overset{\rightarrow}{\boldsymbol{\theta}} }
+
+%BEGIN DOCUMENT
+\begin{document}
+\nocite{*} % dont order citations
+
+\thispagestyle{empty} 
+\begin{center}
+    \vspace*{0.5cm}
+    \huge
+    \textbf{SOLVING THE ART GALLERY PROBLEM USING GRADIENT DESCENT}
+
+    \vspace*{0.4cm}
+    \textbf{Thesis Proposal }
+    \vspace*{2cm}
+
+    % \begin{figure}[H]
+    %     \centering   
+    %     \includegraphics[width = 11cm]{Figures/titlepage robot computer slither.png}
+    % \end{figure}
+
+
+    %Req indent
+
+    \vspace{-1cm}
+    \LARGE
+    Georgiana Juglan
+    \vfill 
+    \large    
+    Supervisor:\\
+    Tillmann Miltzow \\
+     
+\end{center}
+   
+
+\begin{textblock}{3}(6.5,0.7)
+\includegraphics[width = 6cm]{Figures/UU logo.png}
+\end{textblock}
+
+\begin{flushleft}
+    \vspace{0.5cm}
+    Master's Thesis \\
+    Computing Science\\
+    \today\\
+    Student Nr. 2996307 \\
+    Utrecht University\\
+    The Netherlands
+\end{flushleft}
+
+\newpage
+\thispagestyle{empty}
+\include{0a_Abstract}
+\thispagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+
+% \include{1_Introduction}
+% \include{2_Slither}
+% \include{3-1_Reinforcement_Learning}
+% \include{3-2_Deep_Q_Learning}
+% \include{4_Thesis_Project}
+
+\renewcommand{\headrulewidth}{0pt}% Remove header rule
+\fancyhead{}% Remove all header contents
+
+\bibliographystyle{unsrt}
+\bibliography{References}
+
+%\include{3_Appendix}
+
+
+\end{document}
