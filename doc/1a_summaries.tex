@@ -1,7 +1,7 @@
 \subsection{Efficient Computation of Visibility Polygons}
 This paper \cite{DBLP:journals/corr/BungiuHHHK14} introduces new implementations and their experimental evaluations for two existing algorithms (\cite{joe1987corrections}, \cite{asano1985efficient}) and a newly developed one for computing visibility in polygons. These implementations are available in the CGAL library \footnote{\url{https://www.cgal.org/}}, starting with version 4.5.
 
-Visibility in planar polygons can be defined as: given a polygon $\mathcal P \subset \mathbb R^2$, a point $p \in \mathcal P$ \textit{sees} a point $q \in \mathcal P$ if the line segment $\overline{pq} \subseteq \mathcal P$. Thus, the points that are visible from $p$ form the visibility polygon (region) $\mathcal V(p)$.
+Visibility in simple planar polygons can be defined as: given a polygon $\mathcal P \subset \mathbb R^2$, a point (guard) $p \in \mathcal P$ \textit{sees} a point $q \in \mathcal P$ if the line segment $\overline{pq} \subseteq \mathcal P$. Thus, the points that are visible from $p$ form the visibility polygon (region) $\mathcal V(p)$.
 
 Working with the visibility region is a basic tool in computational geometry, specifically in the Art Gallery Problem \cite{o1987art}. As the Art Gallery Problem \cite{o1987art} is an $\exists \mathbb R$-complete problem \cite{abrahamsen2021art}, it is crucial that the computation time of the visibility region is efficiently implemented. 
 
