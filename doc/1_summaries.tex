@@ -1,6 +1,16 @@
 \section{Literature Summaries}
 % TODO: add general explanation for the art gallery problem
+This section offers an overview of previous works addressing the Art Gallery Problem \cite{o1987art}. The Art Gallery Problem \cite{o1987art} can be introduced as given a polygon $\mathcal P$, we are interested in finding the minimum number of guards (points) that are able to see the whole polygon. Thus, we can define visibility in a simple planar polygon $\mathcal P \subset \mathbb R^2$ as a point (guard) $p \in \mathcal P$ being able to see another point $q \in \mathcal P$ if the line segment $\overline{pq} \subseteq \mathcal P$. The points that are visible from $p$ form the visibility polygon (region) $\mathcal V(p)$. The guards that see the whole polygon $\mathcal P$ form the resulting guard set $S$.
+
+Building on the aforementioned concepts, the papers summarised will inspect how visibility in polygons can be efficiently computed \cite{DBLP:journals/corr/BungiuHHHK14}, how it is not always possible to place guards at rational coordinates \cite{abrahamsen2021art}, in addition to two improved polygon guarding algorithms \cite{maleki2022implementation}, \cite{DBLP:journals/corr/abs-2007-06920}.
+% Some general notions that will appear in the papers are introduced below.
+
+% Visibility in simple planar polygons can be defined as: given a polygon $\mathcal P \subset \mathbb R^2$, a point (guard) $p \in \mathcal P$ \textit{sees} a point $q \in \mathcal P$ if the line segment $\overline{pq} \subseteq \mathcal P$. Thus, the points that are visible from $p$ form the visibility polygon (region) $\mathcal V(p)$.
+
+% A guard set $S$ is defined as a set of points in a given polygon $\mathcal P$ such that every point in $\mathcal P$ is seen by some point in $S$. $\forall x, y \in \mathcal P$, $x$ sees $y$ if the line segment $\overline{xy} \in \mathcal P$. 
+
 \input{1a_summaries}
 \input{1b_summaries}
+\newpage
 \input{1c_summaries}
 \input{1d_summaries}
