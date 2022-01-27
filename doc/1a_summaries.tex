@@ -3,7 +3,7 @@ This paper \cite{DBLP:journals/corr/BungiuHHHK14} introduces new implementations
 
 Working with the visibility region is a basic tool in computational geometry, specifically in the Art Gallery Problem \cite{o1987art}. As the Art Gallery Problem \cite{o1987art} is an $\exists \mathbb R$-complete problem \cite{abrahamsen2021art}, it is crucial that the computation time of the visibility region is efficiently implemented. 
 
-Therefore, this paper presents 3 algorithms and their implementation running times.
+Therefore, this paper presents 3 algorithms and their implementations' performance.
 
 \subsubsection{Algorithm of Joe and Simpson \cite{joe1987corrections}}
 The algorithm of Joe and Simpson \cite{joe1987corrections} runs in $O(n)$ time and space. It begins by sequentially scanning the boundaries of the simple polygon $\mathcal P$, and adds its boundary points $v_i, \forall i = \overline{1, n}$, with $n$ the number of vertices in $\mathcal P$, to a stack $s$. For each processed edge $\overline{v_iv_{i + 1}}$, its endpoints $v_i$ and $v_{i + 1}$ are checked whether they are in the visibility region of the viewpoint $p$. If they are, $v_i$ and $v_{i + 1}$ are added to $s$. Otherwise, they are scanned, but not added to $s$. At every moment, the algorithm checks whether $\overline{v_iv_{i + 1}}$ obscures a previously added line segment. If that is the case, than the endpoints of the obscured line segment are declared obsolete and deleted. 
@@ -14,7 +14,7 @@ The implementation of the algorithm handles the previously discussed cases for a
 % he points that are visible from $q$ form the visibility region $\mathcal V(q)$ (polygon)
 
 \subsubsection{Algorithm of Asano \cite{asano1985efficient}}
-The algorithm of Asano \cite{asano1985efficient} runs in $O(n \log n)$ time and $O(n)$ space and uses a plane sweep approach. It begins by efficiently sorting all the vertices of $\mathcal P$ based on their polar angles with respect to the viewpoint $p$. Then, the event line $L$ starts sweeping around $p$. Every line segment that $L$ intersects is stored in a balanced binary tree $T$ in the order of intersection. As $T$ is updated, a new vertex of $\mathcal V(p)$ is stored each time the segment closest to $p$ in $T$ changes. It is important to mention that the intersection between $L$ and line segments is not explicit, but is instead determin as summarised in the following subsections.
+The algorithm of Asano \cite{asano1985efficient} runs in $O(n \log n)$ time and $O(n)$ space and uses a plane sweep approach. It begins by efficiently sorting all the vertices of $\mathcal P$ based on their polar angles with respect to the viewpoint $p$. Then, the event line $L$ starts sweeping around $p$. Every line segment that $L$ intersects is stored in a balanced binary tree $T$ in the order of intersection. As $T$ is updated, a new vertex of $\mathcal V(p)$ is stored each time the segment closest to $p$ in $T$ changes. It is important to mention that the intersection between $L$ and line segments is not explicit, but is instead determined by comparisons between the endpoints' coordinates.
 	% - as the sweep proceeds, $T$ is updated and a neq vertex of $V(q)$ is generated each time the smallest element (segment closest to $q$) in $T$ changes
 	% - important to have efficient comparison ops (e.g.: *add pic*)
 
@@ -28,9 +28,9 @@ The algorithm introduced in the paper (Triangular Expansion) runs in $O(n^2)$ ti
 	% - triangulation has linear size, at most $O(n)$ recursive calls on the stack => $O(n)$ space
 
 \subsubsection{Experiments}
-The paper does not report on benchmarks with query points on edges in the interior polygon, as it claims that it performs similarly to other already implemented algorithms. Instead, it uses two real-world scenarios (a simple polygon of Norway with 20981 vertices, a cathedral polygon with 1209 vertices) and a worst-case polygon for the Triangular Expansion algorithm.
+The paper does not report on benchmarks with query points on edges in the interior polygon, as it claims that the implementations perform similarly to other already implemented algorithms. Instead, it uses two real-world scenarios (a simple polygon of Norway with 20981 vertices, and a cathedral polygon with 1209 vertices) and a worst-case polygon for the Triangular Expansion algorithm.
 
 In terms of results on the real-world polygons, the Triangular Expansion algorithm has a 2-factor improved performance when compared to Asano's algorithm \cite{asano1985efficient}, and performs one order of magnitude faster than Joe and Simpson's algorithm \cite{joe1987corrections}. For the worst-case scenario, Asano's algorithm \cite{asano1985efficient} outperforms the Triangular Expansion algorithm with increasing input complexity.
 
-Thus, despite the Triangular Expansion algorithm being outperformed in the worst-case scenario, this paper introduces efficient implementations for the 3 different visibility polygon algorithms in the CGAL library. The choice of algorithms when using the library can be adapted based on the input. 
+Thus, despite the Triangular Expansion algorithm being outperformed in the worst-case scenario, this paper introduces efficient implementations for the 3 different visibility polygon algorithms in the CGAL library. The choice of algorithms when using the library can be adapted based on the input polygons. 
 % - experiments - no reports on similar benchmarks with query points on edges and in the interior polygon; for the input graphs used, the triangular expansion is 2-factor faster than Asano, and one order of magnitude faster than Joe and Simpson; with increasing input complexity, Asano does become faster
