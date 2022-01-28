@@ -77,7 +77,7 @@ int main() {
 //   for (Edge_const_iterator eit = regular_output.edges_begin(); eit != regular_output.edges_end(); ++ eit)
 //     P.push_back(eit->source()->point());
 
-  CGAL::draw(P);
+  // CGAL::draw(P);
 
   return 0;
 }
