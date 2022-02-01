@@ -53,15 +53,26 @@ arr.insert(Segment2(Point2(3, 1), Point2(4, 2)))
 vs = RotationalSweepVisibility(arr)
 
 q = Point2(1.5, 3)
-face = arr.find(q)
-vx = vs.compute_visibility(q, face)
+z = Point2(3, 1.5)
+face1 = arr.find(q)
+face2 = arr.find(z)
+vx1 = vs.compute_visibility(q, face1)
+vx2 = vs.compute_visibility(z, face2)
 
+
+for v in vx1.halfedges:
+    draw(v.curve(), point = q, color='red',   visible_point=False, fill = True)
+    # draw(v.curve(), z, color='green', visible_point=False)
+
+for v in vx2.halfedges:
+    draw(v.curve(), point = z, color='yellow',  visible_point=False, fill = True)
+    # draw(v.curve(), z, color='green', visible_point=False)
 for he in arr.halfedges:
     draw(he.curve(), visible_point=True)
-for v in vx.halfedges:
-    draw(v.curve(), color='red', visible_point=False)
 
-draw(q, color='magenta')
+draw(q,  color='magenta')
+draw(z, color='magenta')
+
 
 plt.show()
 
