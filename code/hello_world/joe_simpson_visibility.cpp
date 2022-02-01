@@ -26,12 +26,123 @@ typedef typename Vertex_container::size_type                            Size_typ
 
 Vertex_container vertices;
 std::stack<Point_2> S;
+Geometry_traits_2 *traits;
+
 
 enum {LEFT, RIGHT, SCANA, SCANB, SCANC, SCAND, FINISH} oper;
 
 
+void left(Size_type &i, Point_2 &w, Point_2 p) {
+    if (i == vertices.size() - 1) {
+        oper = FINISH;
+    } else {
+        Point_2 tos = S.top();
+        S.pop();
+        Point_2 prev_tos = S.top();
+        S.push(tos);
+        CGAL::Orientation orientation_p = traits->orientation_2_object()(p, vertices[i], vertices[i + 1]);
+
+        if (orientation_p != CGAL::RIGHT_TURN) {
+            oper = LEFT;
+            w = vertices[i + 1];
+            S.push(w);
+            i ++;
+        } else {
+            CGAL::Orientation orientation_prev_tos = traits->orientation_2_object()(prev_tos, vertices[i], vertices[i + 1]);
+
+            if (orientation_prev_tos == CGAL::RIGHT_TURN) {
+                oper = SCANA;
+                w = vertices[i + 1];
+                i ++;
+            } else {
+                oper = RIGHT;
+                w = vertices[i];
+                i ++;
+            }
+        }
+    }
+}
+
+void right(Size_type &i, Point_2 w, Point_2 p) {
+    Point_2 u, tos, prev_tos = S.top();
+    CGAL::Orientation orientation_tos, orientation_prev_tos = traits->orientation_2_object()(p, prev_tos, vertices[i]);
+    int mode = 0;
+
+    while (S.size() > 1) {
+        tos = prev_tos;
+        orientation_tos = orientation_prev_tos;
+        S.pop();
+        prev_tos = S.top();
+        orientation_prev_tos = traits->orientation_2_object()(p, prev_tos, vertices[i]);
+
+        if (orientation_tos != CGAL::LEFT_TURN && orientation_prev_tos != CGAL::RIGHT_TURN) {
+            mode = 1;
+            break;
+        }
+
+        Segment_2 seg_v(vertices[i - 1], vertices[i]), seg_tos(prev_tos, tos);
+
+        if (vertices[i - 1] != tos) {
+            Object_2 intersection = Intersect_2()(seg_v, seg_tos);
+
+            if (intersection) {
+                Point_2 *intersection_point = object_cast<Point_2>(&intersection);
+                u = *intersection_point;
+                mode = 2;
+                break;
+            }
+        }
+    }
+
+    if (mode == 1) {
+        orientation_tos = traits->orientation_2_object()(p, vertices[i], vertices[i + 1]);
+        orientation_prev_tos = traits->orientation_2_object()(vertices[i - 1], vertices[i], vertices[i + 1]);
+
+        if (orientation_tos == CGAL::RIGHT_TURN) {
+            oper = RIGHT;
+            S.push(tos);
+            w = vertices[i];
+            i ++;
+        } else if (orientation_prev_tos == CGAL::RIGHT_TURN) {
+            Ray_2 ray(p, vertices[i]);
+            Segment_2 seg(prev_tos, tos);
+            Object_2 intersection = Intersect_2()(seg, ray);
+            Point_2 *intersection_point = object_cast<Point_2>(&intersection);
+            u = *intersection_point;
+
+            if (S.top() != u) {
+                S.push(u);
+            }
+
+            oper = LEFT;
+            w = vertices[i + 1];
+            S.push(vertices[i]);
+            S.push(w);
+            i ++;
+        } else {
+            Ray_2 ray(p, vertices[i]);
+            Segment_2 seg(prev_tos, tos);
+            Object_2 intersection = Intersect_2()(seg, ray);
+            Point_2 *intersection_point = object_cast<Point_2>(&intersection);
+            u = *intersection_point;
+
+            if (S.top() != u) {
+                S.push(u);
+            }
+
+            oper = SCANC;
+            w = vertices[i];
+            i ++;
+        }
+    } else if (mode == 2) {
+            // Case R4
+            oper = SCAND;
+            w = u;
+    }
+}
+
+
 Arrangement_2 compute_visibility_polygon(Point_2 p) {
-    Geometry_traits_2 *traits;
     /*
     Orientation_2 operator()(Point_2 p, Point_2 q, Point_2 r) that returns CGAL::LEFT_TURN, if r lies to the left of the oriented line l defined by p and q,
                                                                            CGAL::RIGHT_TURN if r lies to the right of l, and 
@@ -94,7 +205,7 @@ Arrangement_2 compute_visibility_polygon(Point_2 p) {
 
                     oper = SCANB;
                 }
-                
+
             S.push(tos);
         }
 
