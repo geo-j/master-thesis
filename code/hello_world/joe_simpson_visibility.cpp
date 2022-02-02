@@ -31,6 +31,40 @@ Geometry_traits_2 *traits;
 
 enum {LEFT, RIGHT, SCANA, SCANB, SCANC, SCAND, FINISH} oper;
 
+/*! Scan edges v_i,v_{i+1},...,v_n, until find an edge intersecting given ray
+    or given segment. is_ray = true -> ray, false -> segment.
+    The intersection point is returned by u */
+Size_type scan_edges( Size_type i, Point_2& ray_begin, Point_2& ray_end, Point_2& u, bool is_ray) {
+    CGAL::Orientation old_orientation = CGAL::RIGHT_TURN;
+    Ray_2 ray(ray_begin, ray_end);
+    Segment_2 ray_segment(ray_begin, ray_end);
+    Size_type k;
+    Object_2 result;
+    for (k = i; k + 1 < vertices.size(); k ++) {
+        CGAL::Orientation curr_orientation = traits->orientation_2_object()(ray_begin, ray_end, vertices[k + 1]);
+        if (curr_orientation != old_orientation) {
+            // Orientation switch, an intersection may occur
+            Segment_2 seg(vertices[k], vertices[k + 1]);
+            if (is_ray) {
+                result = Intersect_2()(seg, ray);
+                if(result)
+                    break;
+            } else {
+                result = Intersect_2()(seg, ray_segment);
+                if(result)
+                    break;
+            }
+        }
+        old_orientation = curr_orientation;
+    }
+    Point_2 *intersection_point = object_cast<Point_2>(&result);
+    if (intersection_point) {
+            u = *intersection_point;
+    } else {
+            u = vertices[k + 1];
+    }
+    return k;
+}
 
 void left(Size_type &i, Point_2 &w, Point_2 p) {
     if (i == vertices.size() - 1) {
