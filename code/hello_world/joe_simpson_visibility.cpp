@@ -208,6 +208,50 @@ void scana(Size_type& i, Point_2& w, const Point_2& q) {
     }
 }
 
+/*! Find the first edge interecting the segment (v_0, s_t) */
+void scanb(Size_type& i, Point_2& w) {
+    if (i == vertices.size() - 1) {
+        oper = FINISH;
+        return;
+    }
+    Point_2 u;
+    Size_type k = scan_edges(i, S.top(), vertices[0], u, false);
+    if ((k + 1 == vertices.size() - 1) && (vertices[0] == u)) {
+        // Case B1
+        oper = FINISH;
+        S.push(vertices[0]);
+    } else {
+        // Case B2
+        oper = RIGHT;
+        i = k + 1;
+        w = u;
+    }
+}
+
+/*! Finds the exit from a general front hidden window by finding the first
+vertex to the right of the ray defined by the query_point and w*/
+void scanc(Size_type& i, Point_2& w) {
+    Point_2 u;
+    Size_type k = scan_edges(i, S.top(), w, u, false);
+    oper = RIGHT;
+    i = k + 1;
+    w = u;
+}
+
+  /*! find the first edge intersecting the given window (s_t, w) */
+void scand(Size_type& i, Point_2& w) {
+    Point_2 u;
+    Size_type k = scan_edges(i, S.top(), w, u, false);
+    oper = LEFT;
+    i = k+1;
+    S.push(u);
+    if (u != vertices[k + 1]) {
+        S.push(vertices[k + 1]);
+    }
+    w = vertices[k + 1];
+}
+  
+
 Arrangement_2 compute_visibility_polygon(Point_2 p) {
     /*
     Orientation_2 operator()(Point_2 p, Point_2 q, Point_2 r) that returns CGAL::LEFT_TURN, if r lies to the left of the oriented line l defined by p and q,
