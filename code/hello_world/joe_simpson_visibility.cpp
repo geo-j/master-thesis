@@ -34,7 +34,7 @@ enum {LEFT, RIGHT, SCANA, SCANB, SCANC, SCAND, FINISH} oper;
 /*! Scan edges v_i,v_{i+1},...,v_n, until find an edge intersecting given ray
     or given segment. is_ray = true -> ray, false -> segment.
     The intersection point is returned by u */
-Size_type scan_edges( Size_type i, Point_2& ray_begin, Point_2& ray_end, Point_2& u, bool is_ray) {
+Size_type scan_edges( Size_type i, Point_2 ray_begin, Point_2 ray_end, Point_2& u, bool is_ray) {
     CGAL::Orientation old_orientation = CGAL::RIGHT_TURN;
     Ray_2 ray(ray_begin, ray_end);
     Segment_2 ray_segment(ray_begin, ray_end);
@@ -175,6 +175,38 @@ void right(Size_type &i, Point_2 w, Point_2 p) {
     }
 }
 
+void scana(Size_type& i, Point_2& w, const Point_2& q) {
+// Scan v_i, v_i+1, ..., v_n for the first edge to intersect (z, s_t)
+    Point_2 u;
+    Size_type k = scan_edges( i, q, S.top(), u, true);
+
+    CGAL::Orientation orientation = traits->orientation_2_object()(q, vertices[k], vertices[k + 1]);
+
+    if (orientation == CGAL::RIGHT_TURN) {
+        bool forward = traits->collinear_are_ordered_along_line_2_object()(q, S.top(), u);
+
+        if (!forward) {
+        // Case A1
+            oper = RIGHT;
+            i = k + 1;
+            w = u;
+        } else {
+        // Case A2
+            oper = SCAND;
+            i = k+1;
+            w = u;
+        }
+    } else {
+        // Case A3
+        oper = LEFT;
+        i = k + 1;
+        S.push(u);
+        w = vertices[k + 1];
+        if (u != w) {
+            S.push(w);
+        }
+    }
+}
 
 Arrangement_2 compute_visibility_polygon(Point_2 p) {
     /*
