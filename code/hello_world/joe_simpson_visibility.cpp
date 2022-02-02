@@ -3,6 +3,8 @@
 #include <CGAL/Arr_segment_traits_2.h>
 #include <CGAL/enum.h>
 #include <CGAL/Object.h>
+#include <CGAL/Polygon_2.h>
+#include <CGAL/Arr_naive_point_location.h>
 
 #include <stack>
 
@@ -14,6 +16,7 @@ typedef typename CGAL::Arrangement_2<Traits_2>                          Arrangem
 typedef typename Arrangement_2::Geometry_traits_2                       Geometry_traits_2;
 typedef Kernel::Point_2                                                 Point_2;
 typedef Kernel::Segment_2                                               Segment_2;
+typedef CGAL::Polygon_2<Kernel>                                         Polygon_2;
 typedef typename Geometry_traits_2::Ray_2                               Ray_2;
 typedef typename Geometry_traits_2::Object_2                            Object_2;
 typedef typename Kernel::Intersect_2                                    Intersect_2;
@@ -57,7 +60,7 @@ Size_type scan_edges( Size_type i, Point_2 ray_begin, Point_2 ray_end, Point_2& 
         }
         old_orientation = curr_orientation;
     }
-    Point_2 *intersection_point = object_cast<Point_2>(&result);
+    const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&result);
     if (intersection_point) {
             u = *intersection_point;
     } else {
@@ -120,7 +123,7 @@ void right(Size_type &i, Point_2 w, Point_2 p) {
             Object_2 intersection = Intersect_2()(seg_v, seg_tos);
 
             if (intersection) {
-                Point_2 *intersection_point = object_cast<Point_2>(&intersection);
+                const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&intersection);
                 u = *intersection_point;
                 mode = 2;
                 break;
@@ -141,7 +144,7 @@ void right(Size_type &i, Point_2 w, Point_2 p) {
             Ray_2 ray(p, vertices[i]);
             Segment_2 seg(prev_tos, tos);
             Object_2 intersection = Intersect_2()(seg, ray);
-            Point_2 *intersection_point = object_cast<Point_2>(&intersection);
+            const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&intersection);
             u = *intersection_point;
 
             if (S.top() != u) {
@@ -157,7 +160,7 @@ void right(Size_type &i, Point_2 w, Point_2 p) {
             Ray_2 ray(p, vertices[i]);
             Segment_2 seg(prev_tos, tos);
             Object_2 intersection = Intersect_2()(seg, ray);
-            Point_2 *intersection_point = object_cast<Point_2>(&intersection);
+            const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&intersection);
             u = *intersection_point;
 
             if (S.top() != u) {
@@ -243,7 +246,7 @@ void scand(Size_type& i, Point_2& w) {
     Point_2 u;
     Size_type k = scan_edges(i, S.top(), w, u, false);
     oper = LEFT;
-    i = k+1;
+    i = k + 1;
     S.push(u);
     if (u != vertices[k + 1]) {
         S.push(vertices[k + 1]);
@@ -251,6 +254,38 @@ void scand(Size_type& i, Point_2& w) {
     w = vertices[k + 1];
 }
   
+void output(const Point_2& p, Arrangement_2& out_arr) {
+
+    // if(inserted_artificial_starting_vertex)
+    //   stack.pop();
+
+    std::vector<Point_2> points;
+    while(!S.empty()) {
+        Point_2& tos = S.top();
+        if (tos != p /*|| query_pt_is_vertex*/) {
+            points.push_back(tos);
+        }
+        S.pop();
+    }
+
+    // if(inserted_artificial_starting_vertex) {
+    //     points.back() = points[0];
+    //     inserted_artificial_starting_vertex = false;
+    // }
+    points.pop_back();
+      //std::cout << " ordanary " << std::endl; 	
+    typename Arrangement_2::Vertex_handle v_last, v_first;
+    v_last = v_first = out_arr.insert_in_face_interior(points[0], out_arr.unbounded_face());
+	
+    for(unsigned int i = 0; i < points.size() - 1; i ++){
+        if(points[i] < points[(i+1)]){
+            v_last = out_arr.insert_from_left_vertex (Segment_2(points[i], points[i + 1]), v_last)->target();
+        } else {
+            v_last = out_arr.insert_from_right_vertex(Segment_2(points[i], points[i + 1]), v_last)->target();
+        }        
+    }
+    out_arr.insert_at_vertices(Segment_2(points.front(), points.back()), v_last, v_first);
+}
 
 Arrangement_2 compute_visibility_polygon(Point_2 p) {
     /*
@@ -261,6 +296,7 @@ Arrangement_2 compute_visibility_polygon(Point_2 p) {
     CGAL::Orientation orientation = traits->orientation_2_object()(p, vertices[0], vertices[1]);  // check where vertices[1] (v_1) lies w.r.t. the line pvertices[0] (pv_0)
     Point_2 w;
     Size_type i = 0;
+    Arrangement_2 out_arr;
 
     if (orientation != CGAL::RIGHT_TURN) {
         oper = LEFT;
@@ -286,13 +322,13 @@ Arrangement_2 compute_visibility_polygon(Point_2 p) {
                 scana(i, w, p);
                 break;
             case SCANB:
-                scanb(i, w, p);
+                scanb(i, w);
                 break;
             case SCANC:
-                scanc(i, w, p);
+                scanc(i, w);
                 break;
             case SCAND:
-                scand(i, w, p);
+                scand(i, w);
                 break;
         }
 
@@ -310,7 +346,7 @@ Arrangement_2 compute_visibility_polygon(Point_2 p) {
                 Ray_2 ray_origin(p, vertices[0]);
 
                 if (Object_2 result = Intersect_2()(seg, ray_origin)) {
-                    Point_2 *intersection_point = object_cast<Point_2>(&result);
+                    const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&result);
                     tos = *intersection_point;
 
                     oper = SCANB;
@@ -320,10 +356,41 @@ Arrangement_2 compute_visibility_polygon(Point_2 p) {
         }
 
     } while(oper != FINISH);
+
+    output(p, out_arr);
+
+    return out_arr;
 }
 
 int main() {
+    Polygon_2 P;
+    Point_2 p1(0,4), p2(0,0), p3(3,2), p4(4,0), p5(4,4), p6(1,2);
+    P.push_back(p1);
+    P.push_back(p2);
+    P.push_back(p3);
+    P.push_back(p4);
+    P.push_back(p5);
+    P.push_back(p6);
 
+    std::vector<Segment_2> segments;
+    segments.push_back(Segment_2(p1, p2));
+    segments.push_back(Segment_2(p2, p3));
+    segments.push_back(Segment_2(p3, p4));
+    segments.push_back(Segment_2(p4, p5));
+    segments.push_back(Segment_2(p5, p6));
+    segments.push_back(Segment_2(p6, p1));
+    Arrangement_2 env;
+    CGAL::insert_non_intersecting_curves(env,segments.begin(),segments.end());
+
+    // find the face of the query point
+    // (usually you may know that by other means)
+    Point_2 q(0.5, 2);
+    Arrangement_2::Face_const_handle * face;
+    CGAL::Arr_naive_point_location<Arrangement_2> pl(env);
+    CGAL::Arr_point_location_result<Arrangement_2>::Type obj = pl.locate(q);
+
+    // The query point locates in the interior of a face
+    face = boost::get<Arrangement_2::Face_const_handle> (&obj);
 
     return 0;
 }
