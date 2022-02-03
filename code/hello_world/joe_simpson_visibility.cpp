@@ -80,8 +80,11 @@ Size_type scan_edges( Size_type i, Point_2 ray_begin, Point_2 ray_end, Point_2& 
 }
 
 void left(Size_type &i, Point_2 &w, Point_2 p) {
+    std::cout << "LEFT" << std::endl;
+    std::cout << S.size() << std::endl;
     if (i == vertices.size() - 1) {
         oper = FINISH;
+        std::cout << "FINISH" << std::endl;
     } else {
         Point_2 tos = S.top();
         S.pop();
@@ -111,6 +114,7 @@ void left(Size_type &i, Point_2 &w, Point_2 p) {
 }
 
 void right(Size_type &i, Point_2 w, Point_2 p) {
+    std::cout << "RIGHT" << std::endl;
     Point_2 u, tos, prev_tos = S.top();
     CGAL::Orientation orientation_tos, orientation_prev_tos = traits->orientation_2_object()(p, prev_tos, vertices[i]);
     int mode = 0;
@@ -189,6 +193,7 @@ void right(Size_type &i, Point_2 w, Point_2 p) {
 }
 
 void scana(Size_type& i, Point_2& w, const Point_2& q) {
+    std::cout << "SCANA" << std::endl;
 // Scan v_i, v_i+1, ..., v_n for the first edge to intersect (z, s_t)
     Point_2 u;
     Size_type k = scan_edges( i, q, S.top(), u, true);
@@ -206,7 +211,7 @@ void scana(Size_type& i, Point_2& w, const Point_2& q) {
         } else {
         // Case A2
             oper = SCAND;
-            i = k+1;
+            i = k + 1;
             w = u;
         }
     } else {
@@ -223,6 +228,7 @@ void scana(Size_type& i, Point_2& w, const Point_2& q) {
 
 /*! Find the first edge interecting the segment (v_0, s_t) */
 void scanb(Size_type& i, Point_2& w) {
+    std::cout << "SCANB" << std::endl;
     if (i == vertices.size() - 1) {
         oper = FINISH;
         return;
@@ -244,6 +250,7 @@ void scanb(Size_type& i, Point_2& w) {
 /*! Finds the exit from a general front hidden window by finding the first
 vertex to the right of the ray defined by the query_point and w*/
 void scanc(Size_type& i, Point_2& w) {
+    std::cout << "SCANC" << std::endl;
     Point_2 u;
     Size_type k = scan_edges(i, S.top(), w, u, false);
     oper = RIGHT;
@@ -253,6 +260,7 @@ void scanc(Size_type& i, Point_2& w) {
 
   /*! find the first edge intersecting the given window (s_t, w) */
 void scand(Size_type& i, Point_2& w) {
+    std::cout << "SCAND" << std::endl;
     Point_2 u;
     Size_type k = scan_edges(i, S.top(), w, u, false);
     oper = LEFT;
@@ -269,6 +277,7 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
     // if(inserted_artificial_starting_vertex)
     //   stack.pop();
 
+    std::cout << S.empty() << std::endl;
     std::vector<Point_2> points;
     while(!S.empty()) {
         Point_2& tos = S.top();
@@ -278,18 +287,22 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
         S.pop();
     }
 
+
+    std::cout << "here" << std::endl;
+    std::cout << points.size() << std::endl;
     // if(inserted_artificial_starting_vertex) {
-    //     points.back() = points[0];
+        // points.back() = points[0];
     //     inserted_artificial_starting_vertex = false;
     // }
-    points.pop_back();
+    // points.pop_back();
       //std::cout << " ordanary " << std::endl; 	
     typename Arrangement_2::Vertex_handle v_last, v_first;
     v_last = v_first = out_arr.insert_in_face_interior(points[0], out_arr.unbounded_face());
+
 	
     for(unsigned int i = 0; i < points.size() - 1; i ++){
         if(points[i] < points[i + 1]){
-            v_last = out_arr.insert_from_left_vertex (Segment_2(points[i], points[i + 1]), v_last)->target();
+            v_last = out_arr.insert_from_left_vertex(Segment_2(points[i], points[i + 1]), v_last)->target();
         } else {
             v_last = out_arr.insert_from_right_vertex(Segment_2(points[i], points[i + 1]), v_last)->target();
         }        
@@ -300,17 +313,15 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
 /*! Finds a visible vertex from the query point 'q' in 'face' 
     to start the algorithm from*/
 Ccb_halfedge_const_circulator find_visible_start(Face_const_handle face, Point_2 &p) {
-    std::cout << p << std::endl;
     Location_result result = point_location.ray_shoot_up(p);
 
     if (const Halfedge_const_handle* e = boost::get<Halfedge_const_handle>(&result)) {
         Line_2 line = Line_2((*e)->source()->point(), (*e)->target()->point());
         auto y = traits->compute_y_at_x_2_object()(line, p.x());
-        std::cout << "here" << std::endl;
 	    Point_2 q(p.x(), y);
 
         vertices.push_back(q);
-        // // inserted_artificial_starting_vertex = true;
+        // inserted_artificial_starting_vertex = true;
 
         return (*e)->next()->ccb();
     } else if (const Vertex_const_handle* v = boost::get<Vertex_const_handle>(&result)) {
@@ -337,78 +348,84 @@ Arrangement_2 compute_visibility_polygon(Point_2 p, Face_const_handle face) {
       vertices.push_back(curr->source()->point());
     } while(++ curr != circ);
 
-    // vertices.push_back(vertices[0]);
+    vertices.push_back(vertices[0]);
 
     /*
     Orientation_2 operator()(Point_2 p, Point_2 q, Point_2 r) that returns CGAL::LEFT_TURN, if r lies to the left of the oriented line l defined by p and q,
                                                                            CGAL::RIGHT_TURN if r lies to the right of l, and 
                                                                            CGAL::COLLINEAR if r lies on l. 
    */
-    // CGAL::Orientation orientation = traits->orientation_2_object()(p, vertices[0], vertices[1]);  // check where vertices[1] (v_1) lies w.r.t. the line pvertices[0] (pv_0)
-    // Point_2 w;
-    // Size_type i = 0;
+    CGAL::Orientation orientation = traits->orientation_2_object()(p, vertices[0], vertices[1]);  // check where vertices[1] (v_1) lies w.r.t. the line pvertices[0] (pv_0)
+    Point_2 w;
+    Size_type i = 0;
     Arrangement_2 out_arr;
 
-    // if (orientation != CGAL::RIGHT_TURN) {
-    //     oper = LEFT;
-    //     i = 1;
-    //     S.push(vertices[0]);
-    //     S.push(vertices[1]);
-    // } else {
-    //     oper = SCANA;
-    //     i = 1;
-    //     w = vertices[1];
-    //     S.push(vertices[0]);
-    // }
+    if (orientation != CGAL::RIGHT_TURN) {
+        oper = LEFT;
+        i = 1;
+        S.push(vertices[0]);
+        S.push(vertices[1]);
+    } else {
+        oper = SCANA;
+        i = 1;
+        w = vertices[1];
+        S.push(vertices[0]);
+    }
 
-    // do {
-    //     switch(oper) {
-    //         case LEFT:
-    //             left(i, w, p);
-    //             break;
-    //         case RIGHT:
-    //             right(i, w, p);
-    //             break;
-    //         case SCANA:
-    //             scana(i, w, p);
-    //             break;
-    //         case SCANB:
-    //             scanb(i, w);
-    //             break;
-    //         case SCANC:
-    //             scanc(i, w);
-    //             break;
-    //         case SCAND:
-    //             scand(i, w);
-    //             break;
-    //     }
 
-    //     Point_2 prev_tos = S.top();
-    //     S.pop();
+    do {
+        switch(oper) {
+            case LEFT:
+                left(i, w, p);
+                break;
+            case RIGHT:
+                right(i, w, p);
+                break;
+            case SCANA:
+                scana(i, w, p);
+                break;
+            case SCANB:
+                scanb(i, w);
+                break;
+            case SCANC:
+                scanc(i, w);
+                break;
+            case SCAND:
+                scand(i, w);
+                break;
+            case FINISH:
+                break;
+        }
 
-    //     if (oper == LEFT && 
-    //         // check if s_{t - 1}s_t intersect pv_0
-    //         traits->orientation_2_object()(p, vertices[0], S.top()) == CGAL::RIGHT_TURN && // check if s_t is on the right of v0
-    //         traits->orientation_2_object()(p, vertices[0], prev_tos) == CGAL::LEFT_TURN) { // check if s_{t - 1} is on the left of v0
-    //             Point_2 tos = S.top();
-    //             S.pop();
 
-    //             Segment_2 seg(S.top(), tos);
-    //             Ray_2 ray_origin(p, vertices[0]);
 
-    //             if (Object_2 result = Intersect_2()(seg, ray_origin)) {
-    //                 const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&result);
-    //                 tos = *intersection_point;
+        if (oper == LEFT) {
+            // check if s_{t - 1}s_t intersect pv_0
+            Point_2 tos = S.top();
+            S.pop();
 
-    //                 oper = SCANB;
-    //             }
+            std::cout << S.size() << std::endl;
 
-    //         S.push(tos);
-    //     }
+            if (traits->orientation_2_object()(p, vertices[0], S.top()) == CGAL::RIGHT_TURN && // check if s_t is on the right of v0
+                traits->orientation_2_object()(p, vertices[0], tos) == CGAL::LEFT_TURN) { // check if s_{t - 1} is on the left of v0
+                Point_2 tos = S.top();
+                S.pop();
 
-    // } while(oper != FINISH);
+                Segment_2 seg(S.top(), tos);
+                Ray_2 ray_origin(p, vertices[0]);
 
-    // output(p, out_arr);
+                if (Object_2 result = Intersect_2()(seg, ray_origin)) {
+                    const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&result);
+                    tos = *intersection_point;
+
+                    oper = SCANB;
+                }
+            }
+            S.push(tos);
+        }
+    } while(oper != FINISH);
+
+    output(p, out_arr);
 
     return out_arr;
 }
