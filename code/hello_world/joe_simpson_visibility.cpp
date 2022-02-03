@@ -277,7 +277,7 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
     // if(inserted_artificial_starting_vertex)
     //   stack.pop();
 
-    std::cout << S.empty() << std::endl;
+    // std::cout << S.empty() << std::endl;
     std::vector<Point_2> points;
     while(!S.empty()) {
         Point_2& tos = S.top();
@@ -288,13 +288,13 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
     }
 
 
-    std::cout << "here" << std::endl;
-    std::cout << points.size() << std::endl;
+    // std::cout << "here" << std::endl;
+    // std::cout << points.size() << std::endl;
     // if(inserted_artificial_starting_vertex) {
-        // points.back() = points[0];
+        points.back() = points[0];
     //     inserted_artificial_starting_vertex = false;
     // }
-    // points.pop_back();
+    points.pop_back();
       //std::cout << " ordanary " << std::endl; 	
     typename Arrangement_2::Vertex_handle v_last, v_first;
     v_last = v_first = out_arr.insert_in_face_interior(points[0], out_arr.unbounded_face());
@@ -404,7 +404,7 @@ Arrangement_2 compute_visibility_polygon(Point_2 p, Face_const_handle face) {
             Point_2 tos = S.top();
             S.pop();
 
-            std::cout << S.size() << std::endl;
+            // std::cout << S.size() << std::endl;
 
             if (traits->orientation_2_object()(p, vertices[0], S.top()) == CGAL::RIGHT_TURN && // check if s_t is on the right of v0
                 traits->orientation_2_object()(p, vertices[0], tos) == CGAL::LEFT_TURN) { // check if s_{t - 1} is on the left of v0
@@ -464,8 +464,11 @@ int main() {
     point_location.attach(env);
     Arrangement_2 output = compute_visibility_polygon(p, *face);
 
-    // for (Edge_const_iterator eit = output.edges_begin(); eit != output.edges_end(); ++ eit)
-    //     std::cout << "[" << eit->source()->point() << " -> " << eit->target()->point() << "]" << std::endl;
+std::cout << "Non-regularized visibility region of q has "
+            << output.number_of_edges()
+            << " edges:" << std::endl;
+    for (Edge_const_iterator eit = output.edges_begin(); eit != output.edges_end(); ++ eit)
+        std::cout << "[" << eit->source()->point() << " -> " << eit->target()->point() << "]" << std::endl;
 
     return 0;
 }
