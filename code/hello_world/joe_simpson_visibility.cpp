@@ -6,6 +6,7 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Arr_naive_point_location.h>
 #include <CGAL/Arr_walk_along_line_point_location.h>
+#include <CGAL/draw_polygon_2.h>
 
 #include <stack>
 
@@ -275,7 +276,7 @@ void scand(Size_type& i, Point_2& w) {
 void output(const Point_2& p, Arrangement_2& out_arr) {
 
     // if(inserted_artificial_starting_vertex)
-    //   stack.pop();
+      S.pop();
 
     // std::cout << S.empty() << std::endl;
     std::vector<Point_2> points;
@@ -308,6 +309,13 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
         }        
     }
     out_arr.insert_at_vertices(Segment_2(points.front(), points.back()), v_last, v_first);
+
+    // if (out_arr.faces_begin()->is_unbounded()) {
+    //   out_arr = (++ out_arr.faces_begin());
+    // }
+    // else {
+    //   out_arr = out_arr.faces_begin();
+    // }
 }
 
 /*! Finds a visible vertex from the query point 'q' in 'face' 
@@ -408,8 +416,8 @@ Arrangement_2 compute_visibility_polygon(Point_2 p, Face_const_handle face) {
 
             if (traits->orientation_2_object()(p, vertices[0], S.top()) == CGAL::RIGHT_TURN && // check if s_t is on the right of v0
                 traits->orientation_2_object()(p, vertices[0], tos) == CGAL::LEFT_TURN) { // check if s_{t - 1} is on the left of v0
-                Point_2 tos = S.top();
-                S.pop();
+                // Point_2 tos = S.top();
+                // S.pop();
 
                 Segment_2 seg(S.top(), tos);
                 Ray_2 ray_origin(p, vertices[0]);
@@ -453,6 +461,7 @@ int main() {
     // find the face of the query point
     // (usually you may know that by other means)
     Point_2 p(0.5, 2);
+    P.push_back(p);
     Arrangement_2::Face_const_handle * face;
     CGAL::Arr_naive_point_location<Arrangement_2> pl(env);
     CGAL::Arr_point_location_result<Arrangement_2>::Type obj = pl.locate(p);
@@ -464,11 +473,12 @@ int main() {
     point_location.attach(env);
     Arrangement_2 output = compute_visibility_polygon(p, *face);
 
-std::cout << "Non-regularized visibility region of q has "
-            << output.number_of_edges()
-            << " edges:" << std::endl;
+    std::cout << "Non-regularized visibility region of q has "
+              << output.number_of_edges()
+              << " edges:" << std::endl;
     for (Edge_const_iterator eit = output.edges_begin(); eit != output.edges_end(); ++ eit)
         std::cout << "[" << eit->source()->point() << " -> " << eit->target()->point() << "]" << std::endl;
 
+    CGAL::draw(P);
     return 0;
 }
