@@ -38,7 +38,7 @@ typedef typename Vertex_container::size_type                            Size_typ
 
 Vertex_container vertices;
 std::stack<Point_2> S;
-Geometry_traits_2 *traits;
+const Geometry_traits_2 *traits;
 Arr_point_location point_location;
 
 
@@ -297,51 +297,56 @@ void output(const Point_2& p, Arrangement_2& out_arr) {
     out_arr.insert_at_vertices(Segment_2(points.front(), points.back()), v_last, v_first);
 }
 
-  /*! Finds a visible vertex from the query point 'q' in 'face' 
+/*! Finds a visible vertex from the query point 'q' in 'face' 
     to start the algorithm from*/
-Ccb_halfedge_const_circulator find_visible_start(Face_const_handle face, Point_2 &q) {
-    Location_result result = point_location.ray_shoot_up(q);
+Ccb_halfedge_const_circulator find_visible_start(Face_const_handle face, Point_2 &p) {
+    std::cout << p << std::endl;
+    Location_result result = point_location.ray_shoot_up(p);
 
-    if (const Halfedge_const_handle* e = boost::get<Halfedge_const_handle>(&(result))) {
-	    Point_2 p(q.x(), traits->compute_y_at_x_2_object()(Line_2((*e)->source()->point(), (*e)->target()->point()), q.x()));
+    if (const Halfedge_const_handle* e = boost::get<Halfedge_const_handle>(&result)) {
+        Line_2 line = Line_2((*e)->source()->point(), (*e)->target()->point());
+        auto y = traits->compute_y_at_x_2_object()(line, p.x());
+        std::cout << "here" << std::endl;
+	    Point_2 q(p.x(), y);
 
-        vertices.push_back(p);
-        // inserted_artificial_starting_vertex = true;
+        vertices.push_back(q);
+        // // inserted_artificial_starting_vertex = true;
 
         return (*e)->next()->ccb();
-    } else if (const Vertex_const_handle* v = boost::get<Vertex_const_handle>(&(result))) {
+    } else if (const Vertex_const_handle* v = boost::get<Vertex_const_handle>(&result)) {
 	    Halfedge_around_vertex_const_circulator cir = (*v)->incident_halfedges();
 
-	while(face != cir->face()) {
-	  ++cir;
-	}
-	return cir->next()->ccb();
-      }
-    else
-      {
-	CGAL_assertion_msg(false, "Should not be reachable.");
-	return Ccb_halfedge_const_circulator();
-      }
-  }
+        while(face != cir->face()) {
+            ++ cir;
+        }
 
-Arrangement_2 compute_visibility_polygon(Point_2 p) {
+	    return cir->next()->ccb();
+    }
+    // else {
+	// CGAL_assertion_msg(false, "Should not be reachable.");
+	// return Ccb_halfedge_const_circulator();
+    //   }
+}
+
+Arrangement_2 compute_visibility_polygon(Point_2 p, Face_const_handle face) {
+
+    Ccb_halfedge_const_circulator circ = find_visible_start(face, p);
+    Ccb_halfedge_const_circulator curr = circ;
+
+    do {
+      vertices.push_back(curr->source()->point());
+    } while(++ curr != circ);
+
+    // vertices.push_back(vertices[0]);
+
     /*
     Orientation_2 operator()(Point_2 p, Point_2 q, Point_2 r) that returns CGAL::LEFT_TURN, if r lies to the left of the oriented line l defined by p and q,
                                                                            CGAL::RIGHT_TURN if r lies to the right of l, and 
                                                                            CGAL::COLLINEAR if r lies on l. 
    */
-    Ccb_halfedge_const_circulator circ = find_visible_start(face, q);
-    Ccb_halfedge_const_circulator curr = circ;
-
-    do {
-      vertices.push_back(curr->source()->point());
-    } while(++curr != circ);
-
-    vertices.push_back(vertices[0]);
-
-    CGAL::Orientation orientation = traits->orientation_2_object()(p, vertices[0], vertices[1]);  // check where vertices[1] (v_1) lies w.r.t. the line pvertices[0] (pv_0)
-    Point_2 w;
-    Size_type i = 0;
+    // CGAL::Orientation orientation = traits->orientation_2_object()(p, vertices[0], vertices[1]);  // check where vertices[1] (v_1) lies w.r.t. the line pvertices[0] (pv_0)
+    // Point_2 w;
+    // Size_type i = 0;
     Arrangement_2 out_arr;
 
     // if (orientation != CGAL::RIGHT_TURN) {
@@ -438,8 +443,9 @@ int main() {
     // The query point locates in the interior of a face
     face = boost::get<Arrangement_2::Face_const_handle> (&obj);
 
-    std::cout << "here";
-    Arrangement_2 output = compute_visibility_polygon(p);
+    traits = (&env)->geometry_traits();
+    point_location.attach(env);
+    Arrangement_2 output = compute_visibility_polygon(p, *face);
 
     // for (Edge_const_iterator eit = output.edges_begin(); eit != output.edges_end(); ++ eit)
     //     std::cout << "[" << eit->source()->point() << " -> " << eit->target()->point() << "]" << std::endl;
