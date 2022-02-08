@@ -3,7 +3,7 @@ This paper \cite{maleki2022implementation} introduces the implementations and th
 
 We distinguish between vertex guards (guards that can be placed on the vertices of $\mathcal P$) and point guards (guards that can be placed without restriction inside $\mathcal P$). If $\forall q \in \mathcal P$ is visible from some point of an edge, then $\mathcal P$ is a weak visibility polygon.
 
-Given that computing a minimum number of guards for guarding a polygon is NP-hard \cite{1057165}, the paper will inspect how the Art Gallery Problem \cite{o1987art} can be tackled using 3 approximation algorithms.
+Given that computing a minimum number of guards for guarding a polygon is NP-hard \cite{1057165}, the paper will inspect how the Art Gallery Problem \cite{o1987art} can be tackled using three approximation algorithms.
 
 \subsubsection{Algorithm of Ghosh \cite{GHOSH2010718}}
 The algorithm of Ghosh \cite{GHOSH2010718} runs in $O(n^4)$ time and yields a $O(\log n)$-approximation for computing the minimum vertex guard for simple polygons. It begins by drawing lines through every pair of vertices of $\mathcal P$ and computing the set of all its convex components $C$. It continues by adding the elements of $C$ that are visible from vertex $j, \forall j$ into the set $F_j$. Then, it recursively eliminates the redundant sets $F_i$ from $C$ as follows: $\forall$ fixed $j$, another vertex $i$ is searched for such that the set $F_i$ is also visible from $j$ ($|F_j| \leq |F_i|$); $F_i$ is eliminated from $C$, $i$ is added to $S$ and the process continues until $C$ is empty. At the end, $S$ contains the approximated guardset for $\mathcal P$.
@@ -26,7 +26,9 @@ Firstly, a procedure for generating arbitrary weak visibility polygons is devise
     \label{fig:weak}
 \end{figure}
 
-The algorithms of Ghosh \cite{GHOSH2010718} and Bhattacharya \cite{bhattacharya2016approximability} were tested using arbitrarily generated polygons with $n = \overline{10, 15}$ vertices and $r \in \{2, 3\}$ reflex vertices. The results suggest that for low values of $n$ and $r$, the algorithm of Ghosh \cite{GHOSH2010718} performs better when using the number of guards as evaluation criteria. Its constant time approximation in the small case contrasts with the constant approximation of the algorithm of Bhattacharya \cite{bhattacharya2016approximability}. Similarly, the algorithm of Ghosh \cite{GHOSH2010718} performed better both when tested on a weak visibility polygon with low $n = \overline{10, 15}$ and $\frac n 2 \leq r$, and when tested with large $n \in \{100, 400\}$.
+The algorithms of Ghosh \cite{GHOSH2010718} and Bhattacharya \cite{bhattacharya2016approximability} were tested using arbitrarily generated polygons with $n = \overline{10, 15}$ vertices and $r \in \{2, 3\}$ reflex vertices. The results suggest that for low values of $n$ and $r$, the algorithm of Ghosh \cite{GHOSH2010718} performs better when using the number of guards as evaluation criteria. 
+% Its constant time approximation in the small case contrasts with the constant approximation of the algorithm of Bhattacharya \cite{bhattacharya2016approximability}.
+Similarly, the algorithm of Ghosh \cite{GHOSH2010718} performed better both when tested on a weak visibility polygon with low $n = \overline{10, 15}$ and $\frac n 2 \leq r$, and when tested with large $n \in \{100, 400\}$.
 
 Secondly, a procedure for generating arbitrary simple polygons with custom number of reflex vertices $r$ is devised in Figure \ref{fig:arbitrary}: starting from a simple convex polygon $\mathcal P$ with $n$ vertices ($u, v, x1, x2, ..., x7$), $\mathcal P$ is triangulated such that every triangle has a joint edge with its boundaries; $r$ reflex vertices ($r1, r2, r3$) are randomly added inside $\mathcal P$, and the boundaries outside of the reflex vertices are moved such that all $r$ points are now forming boundaries. 
 
@@ -37,7 +39,7 @@ Secondly, a procedure for generating arbitrary simple polygons with custom numbe
     \label{fig:arbitrary}
 \end{figure}
 
-The new algorithm is tested on simple polygons constructed as previously mentioned by starting from low $r$ and gradually increasing it. The results are reported positively in the sense that the $|S|$ always remains close to the optimal, as a 2-approximation solution.
+The new algorithm is tested on simple polygons constructed as mentioned by starting from low $r$ and gradually increasing it. The results are reported positively in the sense that the $|S|$ always remains close to the optimal, as a 2-approximation solution.
 
 Therefore, through the newly implemented algorithm, this paper \cite{maleki2022implementation} testifies that the algorithm of Ghosh \cite{GHOSH2010718} performs like a constant approximation in practice, and often better than its theoretical bound when tested on complex simple polygons.
 % - guards placed on vertices = vertex guards
