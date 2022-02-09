@@ -29,9 +29,8 @@ class Arrangement {
 
         /*
         * Arrangement() class constructor
-        * Initialises a hard-coded arrangement
         */
-        // TODO: I think ideally it would be reading points from a file as parameter; or both?
+        // TODO: should it also have hardcoded stuff?
         Arrangement() {
             // Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2), p(0.5, 2);
             // // draw the segments between the points
@@ -45,6 +44,14 @@ class Arrangement {
             // CGAL::insert_non_intersecting_curves(arrangement, segments.begin(), segments.end());
         }
 
+        /* overloaded input operator
+        * The format of the input file is:
+        * E                     * number of edges
+        * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+        * p3.x p3.y p4.x p4.y
+        * ...
+        */
+        // TODO: should it also read the guards?
         friend std::istream &operator>>(std::istream &f, Arrangement &a) {
             std::size_t E, x1, y1, x2, y2;
             std::vector<Segment_2> segments;
@@ -62,6 +69,7 @@ class Arrangement {
 
             return f;
         }
+        
         /* overloaded output operator
         * The format of the output file is:
         * E                     * number of edges
