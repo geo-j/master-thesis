@@ -8,6 +8,12 @@ INPUT = "arrangement_main_out"
 
 arr = arrangement.Arrangement()
 
+"""The format of the input file is:
+    E                     * number of edges
+    p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+    p3.x p3.y p4.x p4.y
+    ...
+"""
 with open(INPUT, "r") as f:
     E = int(f.readline())
 
