@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from numpy import random
 
 
-INPUT = "regularised_visibility_out"
+INPUT = "pentagram.out"
 
 
 arrangement = arrangement.Arrangement()
@@ -22,25 +22,21 @@ guards = []
     ...
 """
 with open(INPUT, 'r') as f:
-    E = int(f.readline())
+    E = int(input())
 
     for e in range(E):
-        segment = list(map(int, f.readline().split()))
+        segment = list(map(int, input().split()))
         p1 = Point2(*segment[:2])
         p2 = Point2(*segment[2:])
 
         arrangement.insert(Segment2(p1, p2))
     
-    IV = int(f.readline())
+    IV = int(input())
 
     for iv in range(IV):
-        vertex = list(map(float, f.readline().split()))
+        vertex = list(map(float, input().split()))
         q = Point2(*vertex)
         guards.append(q)
-
-# draw the polygon's boundaries
-for he in arrangement.halfedges:
-    draw(he.curve(), visible_point=True)
 
 # draw the guards and their visibility regions
 for guard in guards:
@@ -53,6 +49,10 @@ for guard in guards:
         draw(v.curve(), point = guard, color=color, visible_point=False, fill = True)
     
     draw(guard, color='magenta')
+
+# draw the polygon's boundaries
+for he in arrangement.halfedges:
+    draw(he.curve(), visible_point=True)
 
 plt.show()
 
