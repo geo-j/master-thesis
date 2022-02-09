@@ -10,8 +10,10 @@
 
 
 int main() {
-    std::ofstream f("arrangement_main_in.dat"), g("arrangement_main_out");
-    Arrangement arrangement();
+    std::ofstream g("arrangement_main_out");
+    Arrangement arrangement;
+
+    arrangement.print(g);
 
     return 0;
 }

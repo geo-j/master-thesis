@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Simple_polygon_visibility_2.h>
 #include <CGAL/Arrangement_2.h>
@@ -24,10 +26,10 @@ class Arrangement {
 
         /*
         * Arrangement() constructor
-        * @param none
         * Initialises a hard-coded arrangement
         */
         Arrangement() {
+            // first create the polygon and its boundaring points
             Polygon_2 P;
             Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2);
             P.push_back(p1);
@@ -37,6 +39,7 @@ class Arrangement {
             P.push_back(p5);
             P.push_back(p6);
 
+            // then draw the segments between the points
             std::vector<Segment_2> segments;
             segments.push_back(Segment_2(p1, p2));
             segments.push_back(Segment_2(p2, p3));
@@ -45,6 +48,14 @@ class Arrangement {
             segments.push_back(Segment_2(p5, p6));
             segments.push_back(Segment_2(p6, p1));
             CGAL::insert_non_intersecting_curves(arrangement, segments.begin(), segments.end());
+        }
+
+        void print(std::ofstream& f) {
+            f << this->arrangement.number_of_edges() << std::endl;
+
+            for (auto eit = this->arrangement.edges_begin(); eit != arrangement.edges_end(); ++ eit) {
+                f << eit->source()->point() << ' ' << eit->target()->point() << std::endl;
+            }
         }
     
     private:
