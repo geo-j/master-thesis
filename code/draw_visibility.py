@@ -1,5 +1,5 @@
 from skgeom.draw import draw
-from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility
+from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility
 import matplotlib.pyplot as plt
 from numpy import random
 
@@ -8,7 +8,7 @@ INPUT = "regularised_visibility_out"
 
 
 arrangement = arrangement.Arrangement()
-vs = RotationalSweepVisibility(arrangement)
+vs = TriangularExpansionVisibility(arrangement)
 guards = []
 
 """The format of the input file is:
@@ -38,10 +38,11 @@ with open(INPUT, 'r') as f:
         q = Point2(*vertex)
         guards.append(q)
 
-
+# draw the polygon's boundaries
 for he in arrangement.halfedges:
     draw(he.curve(), visible_point=True)
 
+# draw the guards and their visibility regions
 for guard in guards:
     face = arrangement.find(guard)
     vx = vs.compute_visibility(guard, face)
