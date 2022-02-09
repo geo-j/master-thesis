@@ -25,7 +25,7 @@ class Arrangement {
     public:
 
         /*
-        * Arrangement() constructor
+        * Arrangement() class constructor
         * Initialises a hard-coded arrangement
         */
         Arrangement() {
@@ -50,7 +50,17 @@ class Arrangement {
             CGAL::insert_non_intersecting_curves(arrangement, segments.begin(), segments.end());
         }
 
-        void print(std::ofstream& f) {
+        /* print method
+        * :param stream f: data stream where the arrangement should be output
+        *
+        * The format of the output file is:
+        * E                     * number of edges
+        * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+        * p3.x p3.y p4.x p4.y
+        * ...
+        */
+        template<typename stream>
+        void print(stream &f) {
             f << this->arrangement.number_of_edges() << std::endl;
 
             for (auto eit = this->arrangement.edges_begin(); eit != arrangement.edges_end(); ++ eit) {
