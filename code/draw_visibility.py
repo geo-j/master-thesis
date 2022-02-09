@@ -1,20 +1,27 @@
 from skgeom.draw import draw
 from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility
 import matplotlib.pyplot as plt
+from numpy import random
 
 
 INPUT = "arrangement_main_out"
 
 
-arr = arrangement.Arrangement()
+arrangement = arrangement.Arrangement()
+vs = RotationalSweepVisibility(arrangement)
+guards = []
 
 """The format of the input file is:
     E                     * number of edges
     p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
     p3.x p3.y p4.x p4.y
     ...
+    IV                    * number of isolated vertices (intended to be guards)
+    q1.x q1.y             * isolated vertex with coordinates q1(x, y) separated by spaces
+    q2.x q2.y
+    ...
 """
-with open(INPUT, "r") as f:
+with open(INPUT, 'r') as f:
     E = int(f.readline())
 
     for e in range(E):
@@ -22,32 +29,28 @@ with open(INPUT, "r") as f:
         p1 = Point2(*segment[:2])
         p2 = Point2(*segment[2:])
 
-        arr.insert(Segment2(p1, p2))
+        arrangement.insert(Segment2(p1, p2))
+    
+    IV = int(f.readline())
 
+    for iv in range(IV):
+        vertex = list(map(float, f.readline().split()))
+        q = Point2(*vertex)
+        guards.append(q)
 
-vs = RotationalSweepVisibility(arr)
+for guard in guards:
+    face = arrangement.find(guard)
+    vx = vs.compute_visibility(guard, face)
 
-q = Point2(0.5, 2)
-z = Point2(1, 1.5)
-face1 = arr.find(q)
-face2 = arr.find(z)
-vx1 = vs.compute_visibility(q, face1)
-vx2 = vs.compute_visibility(z, face2)
+    # use a random colour for each guard
+    color = random.rand(3,)
+    for v in vx.halfedges:
+        draw(v.curve(), point = q, color=color, visible_point=False, fill = True)
+    
+    draw(guard, color='magenta')
 
-
-for v in vx1.halfedges:
-    draw(v.curve(), point = q, color='red', visible_point=False, fill = True)
-    # draw(v.curve(), z, color='green', visible_point=False)
-
-for v in vx2.halfedges:
-    draw(v.curve(), point = z, color='blue', visible_point=False, fill = True)
-    # draw(v.curve(), z, color='green', visible_point=False)
-for he in arr.halfedges:
+for he in arrangement.halfedges:
     draw(he.curve(), visible_point=True)
-
-draw(q,  color='magenta')
-draw(z, color='magenta')
-
 
 plt.show()
 
