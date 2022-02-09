@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from numpy import random
 
 
-INPUT = "arrangement_main_out"
+INPUT = "regularised_visibility_out"
 
 
 arrangement = arrangement.Arrangement()
@@ -38,6 +38,10 @@ with open(INPUT, 'r') as f:
         q = Point2(*vertex)
         guards.append(q)
 
+
+for he in arrangement.halfedges:
+    draw(he.curve(), visible_point=True)
+
 for guard in guards:
     face = arrangement.find(guard)
     vx = vs.compute_visibility(guard, face)
@@ -45,12 +49,9 @@ for guard in guards:
     # use a random colour for each guard
     color = random.rand(3,)
     for v in vx.halfedges:
-        draw(v.curve(), point = q, color=color, visible_point=False, fill = True)
+        draw(v.curve(), point = guard, color=color, visible_point=False, fill = True)
     
     draw(guard, color='magenta')
-
-for he in arrangement.halfedges:
-    draw(he.curve(), visible_point=True)
 
 plt.show()
 
