@@ -1,4 +1,5 @@
 #include <fstream>
+#include <vector>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Simple_polygon_visibility_2.h>
@@ -19,6 +20,8 @@ typedef CGAL::Arrangement_2<Traits_2>                                   Arrangem
 typedef Arrangement_2::Face_handle                                      Face_handle;
 typedef Arrangement_2::Edge_const_iterator                              Edge_const_iterator;
 typedef Arrangement_2::Ccb_halfedge_circulator                          Ccb_halfedge_circulator;
+// typedef Arrangement_2::Isolated_vertex_const_iterator                   Isolated_vertex_const_iterator;
+
 
 
 class Arrangement {
@@ -28,18 +31,10 @@ class Arrangement {
         * Arrangement() class constructor
         * Initialises a hard-coded arrangement
         */
+        // TODO: I think ideally it would be reading points from a file as parameter; or both?
         Arrangement() {
-            // first create the polygon and its boundaring points
-            Polygon_2 P;
-            Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2);
-            P.push_back(p1);
-            P.push_back(p2);
-            P.push_back(p3);
-            P.push_back(p4);
-            P.push_back(p5);
-            P.push_back(p6);
-
-            // then draw the segments between the points
+            Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2), p(0.5, 2);
+            // draw the segments between the points
             std::vector<Segment_2> segments;
             segments.push_back(Segment_2(p1, p2));
             segments.push_back(Segment_2(p2, p3));
@@ -58,16 +53,34 @@ class Arrangement {
         * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
         * p3.x p3.y p4.x p4.y
         * ...
+        * IV                    * number of isolated vertices (intended to be guards)
+        * q1.x q1.y             * isolated vertex with coordinates q1(x, y) separated by spaces
+        * q2.x q2.y
+        * ...
         */
         template<typename stream>
         void print(stream &f) {
             f << this->arrangement.number_of_edges() << std::endl;
 
-            for (auto eit = this->arrangement.edges_begin(); eit != arrangement.edges_end(); ++ eit) {
+            for (auto eit = this->arrangement.edges_begin(); eit != this->arrangement.edges_end(); ++ eit) {
                 f << eit->source()->point() << ' ' << eit->target()->point() << std::endl;
             }
+        }
+
+        template<typename stream>
+        void print_guards(stream &f) {
+            f << guards.size() << std::endl;
+
+            for (auto guard : guards) {
+                f << guard.x() << ' ' << guard.y() << std::endl;
+            }
+        }
+
+        void add_guard(const Point_2 p) {
+            this->guards.push_back(p);
         }
     
     private:
         Arrangement_2 arrangement;
+        std::vector<Point_2> guards;
 };

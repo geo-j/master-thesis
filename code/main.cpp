@@ -12,8 +12,11 @@
 int main() {
     std::ofstream g("arrangement_main_out");
     Arrangement arrangement;
+    Point_2 p(0.5, 2);
+    arrangement.add_guard(p);
 
     arrangement.print(g);
+    arrangement.print_guards(g);
 
     return 0;
 }
