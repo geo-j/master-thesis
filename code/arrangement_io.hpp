@@ -33,16 +33,50 @@ class Arrangement {
         */
         // TODO: I think ideally it would be reading points from a file as parameter; or both?
         Arrangement() {
-            Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2), p(0.5, 2);
-            // draw the segments between the points
+            // Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2), p(0.5, 2);
+            // // draw the segments between the points
+            // std::vector<Segment_2> segments;
+            // segments.push_back(Segment_2(p1, p2));
+            // segments.push_back(Segment_2(p2, p3));
+            // segments.push_back(Segment_2(p3, p4));
+            // segments.push_back(Segment_2(p4, p5));
+            // segments.push_back(Segment_2(p5, p6));
+            // segments.push_back(Segment_2(p6, p1));
+            // CGAL::insert_non_intersecting_curves(arrangement, segments.begin(), segments.end());
+        }
+
+        friend std::istream &operator>>(std::istream &f, Arrangement &a) {
+            std::size_t E, x1, y1, x2, y2;
             std::vector<Segment_2> segments;
-            segments.push_back(Segment_2(p1, p2));
-            segments.push_back(Segment_2(p2, p3));
-            segments.push_back(Segment_2(p3, p4));
-            segments.push_back(Segment_2(p4, p5));
-            segments.push_back(Segment_2(p5, p6));
-            segments.push_back(Segment_2(p6, p1));
-            CGAL::insert_non_intersecting_curves(arrangement, segments.begin(), segments.end());
+
+            f >> E;
+
+            for (auto i = 0; i < E; i ++) {
+                f >> x1 >> y1 >> x2 >> y2;
+                Point_2 p1(x1, y1), p2(x2, y2);
+
+                segments.push_back(Segment_2(p1, p2));
+            }
+
+            CGAL::insert_non_intersecting_curves(a.arrangement, segments.begin(), segments.end());
+
+            return f;
+        }
+        /* overloaded output operator
+        * The format of the output file is:
+        * E                     * number of edges
+        * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+        * p3.x p3.y p4.x p4.y
+        * ...
+        */
+        friend std::ostream &operator<<(std::ostream &f, const Arrangement &a) {
+            f << a.arrangement.number_of_edges() << std::endl;
+
+            for (auto eit = a.arrangement.edges_begin(); eit != a.arrangement.edges_end(); ++ eit) {
+                f << eit->source()->point() << ' ' << eit->target()->point() << std::endl;
+            }
+
+            return f;
         }
 
         /* print method
@@ -52,10 +86,6 @@ class Arrangement {
         * E                     * number of edges
         * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
         * p3.x p3.y p4.x p4.y
-        * ...
-        * IV                    * number of isolated vertices (intended to be guards)
-        * q1.x q1.y             * isolated vertex with coordinates q1(x, y) separated by spaces
-        * q2.x q2.y
         * ...
         */
         template<typename stream>
