@@ -67,6 +67,17 @@ class Arrangement {
             }
         }
 
+        // TODO: think about whether I should also print guards in the arrangement
+
+        /* print_guards method
+        * :param stream f: data stream where the arrangement should be output
+        *
+        * The format of the output file is:
+        * IV                    * number of isolated vertices (intended to be guards)
+        * q1.x q1.y             * isolated vertex with coordinates q1(x, y) separated by spaces
+        * q2.x q2.y
+        * ...
+        */
         template<typename stream>
         void print_guards(stream &f) {
             f << guards.size() << std::endl;
@@ -76,6 +87,9 @@ class Arrangement {
             }
         }
 
+        /* add_guard method
+        *  :param Point_2 p: point that would guard the arrangement
+        */
         void add_guard(const Point_2 p) {
             this->guards.push_back(p);
         }
