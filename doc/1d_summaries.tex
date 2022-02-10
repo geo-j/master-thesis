@@ -10,12 +10,12 @@ The paper \cite{DBLP:journals/corr/abs-2007-06920} starts by introducing the not
     \label{fig:vis}
 \end{figure}
 
-Then, it continues by defining the candidate guard set $C$ and the witness guard set $W$ that will be later used in the algorithm: when shooting rays from every reflex vertex such that the angle between any two rays is at most $\delta$, all the intersection points of the rays within $\mathcal P$ define the candidate guard set $C$, together with the faces they are part of. A witness guard set $W$ is then defined by picking an arbitrary interior point of every face of $\mathcal P$, together with all faces of $\mathcal P$. In this way, the problem can be discretised in a way in which the solution to the discretised problem are also solutions to the continuous problem.
+Then, it continues by defining the candidate guard set $C$ and the witness guard set $W$ that will be later used in the algorithm. Firstly, rays are shot from every reflex vertex such that the angle between any two rays is at most $\delta$, as observed in Figure \ref{fig:rays}. The figure was taken from \cite{DBLP:journals/corr/abs-2007-06920}. All the intersection points of the rays within $\mathcal P$ define the candidate guard set $C$, together with the faces they are part of. A witness guard set $W$ is then defined by picking an arbitrary interior point of every face of $\mathcal P$, together with all faces of $\mathcal P$. In this way, the problem can be discretised in a way in which the solution to the discretised problem are also solutions to the continuous problem.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{Screenshot from 2022-02-02 11-20-56.png}
-    \caption{Shooting Rays from All Reflex Vertices with Angles between Them at Most $\delta$.}
+    \includegraphics[width=0.3\textwidth]{Shooting-1.png}
+    \caption{Shooting Rays from All Reflex Vertices with Angles between Them at Most $\delta$ \cite{DBLP:journals/corr/abs-2007-06920}.}
     \label{fig:rays}
 \end{figure}
 
