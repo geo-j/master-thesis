@@ -17,12 +17,12 @@ The algorithm introduced in the paper is focussed on polygons with large number 
 \subsubsection{Experiments}
 Algorithms of Ghosh \cite{GHOSH2010718} and Bhattacharya \cite{bhattacharya2016approximability} are tested on weak visibility polygons, and the newly introduced algorithm is tested on simple polygons. 
 
-Firstly, a procedure for generating arbitrary weak visibility polygons is devised in Figure \ref{fig:weak}: given two points $p = (k, 0), q = (-k, 0)$,  $n$ random points $\{x_1, ..., x_n\}$ sorted on the distance from $p$ on $\overline{pq}$, $n$ sorted random angles $\{\alpha_1, ..., \alpha_n\} \in  (0, \pi)$, and $n$ vertices $\{y_1, ..., y_n\}$ are created by shooting $n$ rays at the corresponding angle $\alpha_i, \forall x_i$. Then, $n$ reflex vertices $\{z_1, ..., z_n\}$ are added in the quadrilateral formed by vertices $x_iy_iy_{i + 1}x_{i + 1}$.
+Firstly, a procedure for generating arbitrary weak visibility polygons is devised in Figure \ref{fig:weak}: given two points $p = (k, 0), q = (-k, 0)$,  $n$ random points $\{x_1, ..., x_n\}$ sorted on the distance from $p$ on $\overline{pq}$, $n$ sorted random angles $\{\alpha_1, ..., \alpha_n\} \in  (0, \pi)$, and $n$ vertices $\{y_1, ..., y_n\}$ are created by shooting $n$ rays at the corresponding angle $\alpha_i, \forall x_i$. Then, $n$ reflex vertices $\{z_1, ..., z_n\}$ are added in the quadrilateral formed by vertices $x_iy_iy_{i + 1}x_{i + 1}$. The figure is accredited to \cite{maleki2022implementation}.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.6\textwidth]{Screenshot from 2022-02-02 10-45-34.png}
-    \caption{Generated Weak Visibility Polygon for $n = 3$.}
+    \includegraphics[width=0.6\textwidth]{weak.png}
+    \caption{Generated Weak Visibility Polygon for $n = 3$ \cite{maleki2022implementation}.}
     \label{fig:weak}
 \end{figure}
 
@@ -34,7 +34,7 @@ Secondly, a procedure for generating arbitrary simple polygons with custom numbe
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{Screenshot from 2022-02-02 10-49-51.png}
+    \includegraphics[width=0.7\textwidth]{concave_test.png}
     \caption{Generated Arbitrary Simple Polygon $\mathcal P$ for $n = 12, r = 3$.}
     \label{fig:arbitrary}
 \end{figure}
