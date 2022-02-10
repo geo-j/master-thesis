@@ -14,11 +14,24 @@ First, we will address the question regarding whether polygons given by integer 
 \end{figure}
 
 \subsubsection{Intuition for Triangular Pockets}
-The six triangular pockets are created in order to force a guard on a line segment. As such, they are grouped into three pairs: top pockets are paired with bottom pockets corresponding to their position in $\mathcal P$. A depiction of this positioning can be found in Figure \ref{fig:tb} (b). For every pair (leftmost, middle, rightmost) of triangular pockets, there is a corresponding line $l_\ell, l_m, l_r$, respectively, that joins the peaks of each triangular pocket in a pair. A guard can see both the peaks $t, b$ of the pockets only if it is placed on the line segment $\overline{tb}$ (Figure \ref{fig:tb} (a)). Hence, one guard is needed per pair, resulting in 3 guards in total.
+The six triangular pockets are created in order to force a guard on a line segment. As such, they are grouped into three pairs: top pockets are paired with bottom pockets corresponding to their position in $\mathcal P$. A depiction of this positioning can be found in Figure \ref{fig:disjoint_triangle}. For every pair (leftmost, middle, rightmost) of triangular pockets, there is a corresponding line $l_\ell, l_m, l_r$, respectively, that joins the peaks of each triangular pocket in a pair. A guard can see both the peaks $t, b$ of the pockets only if it is placed on the line segment $\overline{tb}$ (Figure \ref{fig:forcing_line}). Hence, one guard is needed per pair, resulting in 3 guards in total. Both figures have been taken from \cite{1057165}.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{Screenshot from 2022-02-02 09-57-44.png}
+    % \includegraphics[width=\textwidth]{Screenshot from 2022-02-02 09-57-44.png}
+    \begin{subfigure}{0.2\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ForcingLine-1.png}
+        \caption{The only way that one guard can see both $t$ and $b$ is when the guard is on the blue line.}
+        \label{fig:forcing_line}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.75\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{DisjointTriangleRegions2-1.png}
+        \caption{The only way to guard the polygon with three guards requires one guard on each of the green lines $l_\ell, l_m, l_r$.}
+        \label{fig:disjoint_triangle}
+    \end{subfigure}
     \caption{Forcing Guards to Lie on Specific Line Segments.}
     \label{fig:tb}
 \end{figure}
