@@ -48,6 +48,7 @@ for guard in guards:
     for v in vx.halfedges:
         draw(v.curve(), point = guard, color=color, visible_point=False, fill = True)
     
+for guard in guards:
     draw(guard, color='magenta')
 
 # draw the polygon's boundaries
