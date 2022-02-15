@@ -72,7 +72,7 @@ class Arrangement {
                 push_back_unique(a.boundary_vertices, p2);
             }
 
-            CGAL::insert_non_intersecting_curves(a.arrangement, segments.begin(), segments.end());
+            CGAL::insert_non_intersecting_curves(a.input_arrangement, segments.begin(), segments.end());
 
             return f;
         }
@@ -85,9 +85,9 @@ class Arrangement {
         * ...
         */
         friend std::ostream &operator<<(std::ostream &f, const Arrangement &a) {
-            f << a.arrangement.number_of_edges() << std::endl;
+            f << a.input_arrangement.number_of_edges() << std::endl;
 
-            for (auto eit = a.arrangement.edges_begin(); eit != a.arrangement.edges_end(); ++ eit) {
+            for (auto eit = a.input_arrangement.edges_begin(); eit != a.input_arrangement.edges_end(); ++ eit) {
                 f << eit->source()->point() << ' ' << eit->target()->point() << std::endl;
             }
 
@@ -105,9 +105,9 @@ class Arrangement {
         */
         template<typename stream>
         void print(stream &f) {
-            f << this->arrangement.number_of_edges() << std::endl;
+            f << this->input_arrangement.number_of_edges() << std::endl;
 
-            for (auto eit = this->arrangement.edges_begin(); eit != this->arrangement.edges_end(); ++ eit) {
+            for (auto eit = this->input_arrangement.edges_begin(); eit != this->input_arrangement.edges_end(); ++ eit) {
                 f << eit->source()->point() << ' ' << eit->target()->point() << std::endl;
             }
         }
@@ -155,18 +155,18 @@ class Arrangement {
 
         /* compute_visibility method
         *  :param Point_2 p                :point whose visibility region needs to be computed
-        *  :return std::vector<Point_2>    :vector with all visible points from p
+        *  :return Arrangement_2           :arrangement visible from point p
         * 
-        *  This method computes the visibility region given a point p in the arrangement 
+        *  This method computes the visibility region arrangement given a point p in the arrangement 
         */
-        // TODO: probably need to change the return value at some point. Not always feasible to return an array of points that most probably will overlap
-        std::vector<Point_2> compute_visibility() {
+        Arrangement_2 compute_visibility() {
             std::vector<Point_2> visible_points;
+            Arrangement_2 visibility_region;
 
             for (auto guard : this->guards) {
                 // find the face of the guard
                 Arrangement_2::Face_const_handle *face;
-                CGAL::Arr_naive_point_location<Arrangement_2> pl(this->arrangement);
+                CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
                 CGAL::Arr_point_location_result<Arrangement_2>::Type obj = pl.locate(guard);
 
                 // The query point is located in the interior of a face
@@ -174,23 +174,22 @@ class Arrangement {
 
                 // define type of visibility algorithm used
                 // TODO: should make it changeable at invocation time
-                TEV visibility(this->arrangement);
-                Arrangement_2 visibility_region;
+                TEV visibility(this->input_arrangement);
                 visibility.compute_visibility(guard, *face, visibility_region);
 
                 // add the visible points only once
                 // TODO: probably optimise this
-                for (auto eit = visibility_region.edges_begin(); eit != visibility_region.edges_end(); ++ eit) {
-                    push_back_unique(visible_points, eit->source()->point());
-                    push_back_unique(visible_points, eit->target()->point());
-                }
+                // for (auto eit = visibility_region.edges_begin(); eit != visibility_region.edges_end(); ++ eit) {
+                //     push_back_unique(visible_points, eit->source()->point());
+                //     push_back_unique(visible_points, eit->target()->point());
+                // }
             }
 
-            return visible_points;
+            return visibility_region;
         }
     
     private:
-        Arrangement_2 arrangement;
+        Arrangement_2 input_arrangement;
         std::vector<Point_2> guards;
         std::vector<Point_2> boundary_vertices;
 };
