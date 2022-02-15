@@ -11,15 +11,11 @@
 #include <CGAL/Simple_polygon_visibility_2.h>
 #include <CGAL/Triangular_expansion_visibility_2.h>
 #include <CGAL/Rotational_sweep_visibility_2.h>
+#include <CGAL/Boolean_set_operations_2.h>
 
 #include "utils.hpp"
 
 
-// TODO: think about how the kernel would need to be changed
-typedef CGAL::Exact_predicates_exact_constructions_kernel                   Kernel;
-typedef CGAL::Polygon_2<Kernel>                                             Polygon_2;
-typedef Kernel::Point_2                                                     Point_2;
-typedef Kernel::Segment_2                                                   Segment_2;
 typedef CGAL::Arr_segment_traits_2<Kernel>                                  Traits_2;
 typedef CGAL::Arrangement_2<Traits_2>                                       Arrangement_2;
 typedef Arrangement_2::Face_handle                                          Face_handle;
@@ -67,9 +63,13 @@ class Arrangement {
                 f >> x1 >> y1 >> x2 >> y2;
                 Point_2 p1(x1, y1), p2(x2, y2);
 
+                // create segments for arrangement
                 segments.push_back(Segment_2(p1, p2));
                 push_back_unique(a.boundary_vertices, p1);
                 push_back_unique(a.boundary_vertices, p2);
+
+                // create points for polygon
+                a.input_polygon.push_back(p1);
             }
 
             CGAL::insert_non_intersecting_curves(a.input_arrangement, segments.begin(), segments.end());
@@ -139,57 +139,69 @@ class Arrangement {
             this->guards.push_back(p);
         }
 
-        // TODO: either take the visible vertices vector as input, or use the guards
-        bool is_completely_visible(std::vector<Point_2> visible_points) {
-            std::size_t count = 0;
+        bool is_completely_visible(Polygon_2 visibility_polygon) {
+            // std::size_t count = 0;
 
-            for (auto point : visible_points) {
-                auto it = std::find(this->boundary_vertices.begin(), this->boundary_vertices.end(), point);
+            // for (auto point : visible_points) {
+            //     auto it = std::find(this->boundary_vertices.begin(), this->boundary_vertices.end(), point);
 
-                if (it != this->boundary_vertices.end())
-                    count ++;
-            }
+            //     if (it != this->boundary_vertices.end())
+            //         count ++;
+            // }
 
-            return count == boundary_vertices.size();
+            // return count == boundary_vertices.size();
+            return visibility_polygon == this->input_polygon;
         }
 
-        /* compute_visibility method
-        *  :param Point_2 p                :point whose visibility region needs to be computed
-        *  :return Arrangement_2           :arrangement visible from point p
+        /* compute_full_visibility method
+        *  :return Arrangement_2           :arrangement visible from all guards
         * 
         *  This method computes the visibility region arrangement given a point p in the arrangement 
         */
-        Arrangement_2 compute_visibility() {
+        Arrangement_2 compute_full_visibility() {
             std::vector<Point_2> visible_points;
-            Arrangement_2 visibility_region;
+            Polygon_2 prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon;
 
-            for (auto guard : this->guards) {
+            for (auto i = 0; i < this->guards.size(); i ++) {
+                auto guard = this->guards.at(i);
+
                 // find the face of the guard
-                Arrangement_2::Face_const_handle *face;
+                // Arrangement_2::Face_const_handle *face;
                 CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
-                CGAL::Arr_point_location_result<Arrangement_2>::Type obj = pl.locate(guard);
+                auto obj = pl.locate(guard);
 
                 // The query point is located in the interior of a face
-                face = boost::get<Arrangement_2::Face_const_handle> (&obj);
+                auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
 
                 // define type of visibility algorithm used
                 // TODO: should make it changeable at invocation time
                 TEV visibility(this->input_arrangement);
-                visibility.compute_visibility(guard, *face, visibility_region);
+                Arrangement_2 visibility_arrangement;
+                visibility.compute_visibility(guard, *face, visibility_arrangement);
 
+                if (i == 0)
+                    // initialise first visibility polygon
+                    prev_visibility_polygon = arrangement_to_polygon(visibility_arrangement);
+                else {
+                    // if there are multiple guards, join the previously computed visibility polygon with the current one
+                    // TODO: probably optimise this, is converting back and forth from arrangements to polygon even necessary?
+                    cur_visibility_polygon = arrangement_to_polygon(visibility_arrangement);
+                    CGAL::join(prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon);
+                    prev_visibility_polygon = joined_visibility_polygon;
+                }
                 // add the visible points only once
-                // TODO: probably optimise this
                 // for (auto eit = visibility_region.edges_begin(); eit != visibility_region.edges_end(); ++ eit) {
                 //     push_back_unique(visible_points, eit->source()->point());
                 //     push_back_unique(visible_points, eit->target()->point());
                 // }
             }
 
-            return visibility_region;
+            return polygon_to_arrangement(prev_visibility_polygon);
         }
     
     private:
         Arrangement_2 input_arrangement;
+        Polygon_2 input_polygon;
         std::vector<Point_2> guards;
         std::vector<Point_2> boundary_vertices;
 };
