@@ -36,6 +36,7 @@ Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
 		vertices.push_back(eit->source()->point());
 	} while (++ eit != *arrangement.unbounded_face()->inner_ccbs_begin());
 
+	// TODO: could a polygon that actually has 3 collinear boundary points be a problem?
 	// if 3 points are collinear, it means that the middle point is extra from the joined arrangement, so we can delete it
 	// so that the polygon comparison works
 	auto i = 0;
