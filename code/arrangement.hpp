@@ -44,8 +44,6 @@ class Arrangement {
 
                 // create segments for arrangement
                 segments.push_back(Segment_2(p1, p2));
-                push_back_unique(a.boundary_vertices, p1);
-                push_back_unique(a.boundary_vertices, p2);
 
                 // create points for polygon
                 a.input_polygon.push_back(p1);
