@@ -22,7 +22,6 @@ typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 
 
 
-// TODO: make function that checks whether the whole polygon is visible
 class Arrangement {
     public:
        /* overloaded input operator
