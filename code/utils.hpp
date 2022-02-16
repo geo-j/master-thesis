@@ -1,11 +1,18 @@
 #include <vector>
 
+#include <CGAL/Polygon_2.h>
+#include <CGAL/Arrangement_2.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/Arr_segment_traits_2.h>
+
 
 // TODO: think about how the kernel would need to be changed
 typedef CGAL::Exact_predicates_exact_constructions_kernel                   Kernel;
 typedef CGAL::Polygon_2<Kernel>                                             Polygon_2;
 typedef Kernel::Point_2                                                     Point_2;
 typedef Kernel::Segment_2                                                   Segment_2;
+typedef CGAL::Arr_segment_traits_2<Kernel>                                  Traits_2;
+typedef CGAL::Arrangement_2<Traits_2>                                       Arrangement_2;
 
 
 template<typename type>
@@ -20,16 +27,17 @@ void push_back_unique(std::vector<type> &v, type element) {
 * :param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
 * :return   Polygon_2     polygon:     output polygon converted from the given arrangement
 */
-Polygon_2 arrangement_to_polygon(Arrangement_2 arrangement) {
+Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
 	std::vector<Point_2> vertices;
 
-	auto eit = arrangement.unbounded_face()->inner_ccbs_begin();
+	auto eit = *arrangement.unbounded_face()->inner_ccbs_begin();
 	do {
 		vertices.push_back(eit->source()->point());
-	} while (++ eit != arrangement.unbounded_face()->inner_ccbs_begin());
+	} while (++ eit != *arrangement.unbounded_face()->inner_ccbs_begin());
 
 	return Polygon_2(vertices.begin(), vertices.end()); //clockwise order!
 }
+
 
 /* polygon to arrangement function, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArrangementFunctions.cpp
 * :param   Polygon_2     polygon:       input polygon to be converted to an arrangement
