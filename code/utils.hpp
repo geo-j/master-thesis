@@ -23,19 +23,45 @@ void push_back_unique(std::vector<type> &v, type element) {
         v.push_back(element);
 }
 
-/* arrangement to polygon function, as taken from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArrangementFunctions.cpp
+/* arrangement to polygon function, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArrangementFunctions.cpp
 * :param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
 * :return   Polygon_2     polygon:     output polygon converted from the given arrangement
 */
 Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
 	std::vector<Point_2> vertices;
 
+	// loop around the arrangement
 	auto eit = *arrangement.unbounded_face()->inner_ccbs_begin();
 	do {
 		vertices.push_back(eit->source()->point());
 	} while (++ eit != *arrangement.unbounded_face()->inner_ccbs_begin());
 
-	return Polygon_2(vertices.begin(), vertices.end()); //clockwise order!
+	// if 3 points are collinear, it means that the middle point is extra from the joined arrangement, so we can delete it
+	// so that the polygon comparison works
+	auto i = 0;
+	while (i < vertices.size()) {
+		// check whether the last 2 points in the vertex vector are collinear with the first one
+		if (i == vertices.size() - 2) {
+			if (CGAL::collinear(vertices.at(i), vertices.at(i + 1), vertices.at(0))) {
+				vertices.erase(vertices.begin() + i + 1);
+			} else
+				i ++;
+		// check whether the last point in the vertex vector is collinear with the first 2 points
+		} else if (i == vertices.size() - 1) {
+			if (CGAL::collinear(vertices.at(i), vertices.at(0), vertices.at(1))) {
+				vertices.erase(vertices.begin());
+			} else
+				i ++;
+		// check if any of the other points are collinear
+		} else {
+			if (CGAL::collinear(vertices.at(i), vertices.at(i + 1), vertices.at(i + 2))) {
+				vertices.erase(vertices.begin() + i + 1);
+			} else
+				i ++;
+		}
+	}
+
+	return Polygon_2(vertices.begin(), vertices.end()); // clockwise order!
 }
 
 
