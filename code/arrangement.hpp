@@ -32,7 +32,8 @@ class Arrangement {
         * ...
         */
         friend std::istream &operator>>(std::istream &f, Arrangement &a) {
-            std::size_t E, x1, y1, x2, y2;
+            std::size_t E;
+            double x1, y1, x2, y2;
             std::vector<Segment_2> segments;
 
             f >> E;
@@ -70,6 +71,26 @@ class Arrangement {
             }
 
             return f;
+        }
+
+        /* read_guards method
+        * :param stream f: data stream from where the guards are input
+        * The format of the input guards file is:
+        * G             * number of guards
+        * q1.x q1.y     * coordinates of the guard in the format of q(x, y) separated by spaces
+        * q2.x q2.y     
+        */
+        template<typename stream>
+        void read_guards(stream &f) {
+            std::size_t n_guards;
+            f >> n_guards;
+
+            for (auto i = 0; i < n_guards; i ++) {
+                double x, y;
+                f >> x >> y;
+                Point_2 q(x, y);
+                this->add_guard(q);
+            }
         }
 
         /* print_polygon method
@@ -118,9 +139,10 @@ class Arrangement {
         /* add_guard method
         *  :param Point_2 p: point that would guard the arrangement
         */
-        void add_guard(const Point_2 p) {
-            this->guards.push_back(p);
+        void add_guard(const Point_2 q) {
+            this->guards.push_back(q);
         }
+
 
         // TODO: probably some edge cases are missing based on the arrangement to polygon conversion
         /* is_completely_visible method
@@ -193,6 +215,6 @@ class Arrangement {
     private:
         Arrangement_2 input_arrangement;
         Polygon_2 input_polygon;
+        // TODO: maybe guards class in the future?
         std::vector<Point_2> guards;
-        std::vector<Point_2> boundary_vertices;
 };
