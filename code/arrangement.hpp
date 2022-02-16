@@ -1,23 +1,18 @@
 #include <fstream>
 #include <algorithm>
 
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Simple_polygon_visibility_2.h>
-#include <CGAL/Arrangement_2.h>
-#include <CGAL/Arr_segment_traits_2.h>
 #include <CGAL/Arr_naive_point_location.h>
-#include <CGAL/Polygon_2.h>
-#include <CGAL/draw_polygon_2.h>
 #include <CGAL/Simple_polygon_visibility_2.h>
 #include <CGAL/Triangular_expansion_visibility_2.h>
 #include <CGAL/Rotational_sweep_visibility_2.h>
 #include <CGAL/Boolean_set_operations_2.h>
+#include <CGAL/Arr_overlay_2.h>
+#include <CGAL/draw_polygon_2.h>
 
 #include "utils.hpp"
 
 
-typedef CGAL::Arr_segment_traits_2<Kernel>                                  Traits_2;
-typedef CGAL::Arrangement_2<Traits_2>                                       Arrangement_2;
 typedef Arrangement_2::Face_handle                                          Face_handle;
 typedef Arrangement_2::Edge_const_iterator                                  Edge_const_iterator;
 typedef Arrangement_2::Ccb_halfedge_circulator                              Ccb_halfedge_circulator;
@@ -26,26 +21,10 @@ typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>  RSV;
 typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 
 
+
 // TODO: make function that checks whether the whole polygon is visible
 class Arrangement {
     public:
-        /*
-        * Arrangement() class constructor
-        */
-        // TODO: should it also have hardcoded stuff?
-        Arrangement() {
-            // Point_2 p1(0, 4), p2(0, 0), p3(3, 2), p4(4, 0), p5(4, 4), p6(1, 2), p(0.5, 2);
-            // // draw the segments between the points
-            // std::vector<Segment_2> segments;
-            // segments.push_back(Segment_2(p1, p2));
-            // segments.push_back(Segment_2(p2, p3));
-            // segments.push_back(Segment_2(p3, p4));
-            // segments.push_back(Segment_2(p4, p5));
-            // segments.push_back(Segment_2(p5, p6));
-            // segments.push_back(Segment_2(p6, p1));
-            // CGAL::insert_non_intersecting_curves(arrangement, seif (it == a.boundary_vertices.end())
-        }
-
        /* overloaded input operator
         * The format of the input file is:
         * E                     * number of edges
@@ -94,25 +73,30 @@ class Arrangement {
             return f;
         }
 
-        /* print method
+        /* print_polygon method
         * :param stream f: data stream where the arrangement should be output
         *
         * The format of the output file is:
-        * E                     * number of edges
+        * V                     * number of vertices of the polygon
+        * p1.x p1.y             * vertex with coordinates p1(x, y), separated by spaces, in clockwise order
+        * p2.x p2.y
+        * ...
         * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
         * p3.x p3.y p4.x p4.y
         * ...
         */
         template<typename stream>
-        void print(stream &f) {
-            f << this->input_arrangement.number_of_edges() << std::endl;
+        void print_polygon(stream &f) {
+            f << this->input_polygon.size() << std::endl;
 
-            for (auto eit = this->input_arrangement.edges_begin(); eit != this->input_arrangement.edges_end(); ++ eit) {
-                f << eit->source()->point() << ' ' << eit->target()->point() << std::endl;
+            for (auto vit = this->input_polygon.vertices_begin(); vit != this->input_polygon.vertices_end(); ++ vit) {
+                f << *vit << std::endl;
+            }
+            f << std::cout;
+            for (auto eit = this->input_polygon.edges_begin(); eit != this->input_polygon.edges_end(); ++ eit) {
+                f << *eit << std::endl;
             }
         }
-
-        // TODO: think about whether I should also print guards in the arrangement
 
         /* print_guards method
         * :param stream f: data stream where the arrangement should be output
@@ -139,28 +123,37 @@ class Arrangement {
             this->guards.push_back(p);
         }
 
-        bool is_completely_visible(Polygon_2 visibility_polygon) {
-            // std::size_t count = 0;
-
-            // for (auto point : visible_points) {
-            //     auto it = std::find(this->boundary_vertices.begin(), this->boundary_vertices.end(), point);
-
-            //     if (it != this->boundary_vertices.end())
-            //         count ++;
+        // TODO: probably some edge cases are missing based on the arrangement to polygon conversion
+        /* is_completely_visible method
+        *  :param Arrangement_2 visibility_arrangement: the visibility arrangement resulted from computing the visibility of one or multiple guards
+        *  :return bool                               : whether the whole input arrangement is seen by the visibility arrangement
+        *       1                                     : whole arrangement is seen
+        *       0                                     : otherwise
+        * 
+        *  This method computes whether the whole input arrangement is completely seen by the visibility arrangement of one or multiple guards
+        *  This is achieved by converting the visibility arrangement to a polygon and using the built-in == operator.
+        */
+        bool is_completely_visible(Arrangement_2 visibility_arrangement) {
+            Polygon_2 visibility_polygon = arrangement_to_polygon(visibility_arrangement);
+            // CGAL::draw(visibility_polygon);
+            // CGAL::draw(this->input_polygon);
+            // for (auto vit = visibility_polygon.vertices_begin(); vit != visibility_polygon.vertices_end(); ++ vit) {
+            //     std::cout << *vit << std::endl;
             // }
+            // std::cout << std::endl;
 
-            // return count == boundary_vertices.size();
             return visibility_polygon == this->input_polygon;
         }
 
         /* compute_full_visibility method
         *  :return Arrangement_2           :arrangement visible from all guards
         * 
-        *  This method computes the visibility region arrangement given a point p in the arrangement 
+        *  This method computes the visibility region arrangement of all the guards
+        *  This is achieved by computing the visibility region arrangement for each of the guards placed in the arrangement, and overlaying them
         */
         Arrangement_2 compute_full_visibility() {
             std::vector<Point_2> visible_points;
-            Polygon_2 prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon;
+            Arrangement_2 prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon;
 
             for (auto i = 0; i < this->guards.size(); i ++) {
                 auto guard = this->guards.at(i);
@@ -181,12 +174,11 @@ class Arrangement {
 
                 if (i == 0)
                     // initialise first visibility polygon
-                    prev_visibility_polygon = arrangement_to_polygon(visibility_arrangement);
+                    prev_visibility_polygon = visibility_arrangement;
                 else {
                     // if there are multiple guards, join the previously computed visibility polygon with the current one
-                    // TODO: probably optimise this, is converting back and forth from arrangements to polygon even necessary?
-                    cur_visibility_polygon = arrangement_to_polygon(visibility_arrangement);
-                    CGAL::join(prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon);
+                    cur_visibility_polygon = visibility_arrangement;
+                    CGAL::overlay(prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon);
                     prev_visibility_polygon = joined_visibility_polygon;
                 }
                 // add the visible points only once
@@ -196,7 +188,7 @@ class Arrangement {
                 // }
             }
 
-            return polygon_to_arrangement(prev_visibility_polygon);
+            return prev_visibility_polygon;
         }
     
     private:
