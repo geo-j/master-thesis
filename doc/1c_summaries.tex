@@ -1,9 +1,9 @@
 \subsection{Implementation of Polygon Guarding Algorithms for Art Gallery Problems \cite{maleki2022implementation}}
-This paper \cite{maleki2022implementation} introduces the implementations and their experimental evaluations for two existing approximation algorithms (\cite{GHOSH2010718}, \cite{bhattacharya2016approximability}) and a newly developed one for computing visibility in simple polygons in the context of the Art Gallery Problem \cite{o1987art}.
+Maleki abd Mohades \cite{maleki2022implementation} introduce the implementations and their experimental evaluations for two existing approximation algorithms (\cite{GHOSH2010718}, \cite{bhattacharya2016approximability}) and a newly developed one for computing visibility in simple polygons in the context of the Art Gallery Problem \cite{o1987art}.
 
 We distinguish between vertex guards (guards that can be placed on the vertices of $\mathcal P$) and point guards (guards that can be placed without restriction inside $\mathcal P$). If $\forall q \in \mathcal P$ is visible from some point of an edge, then $\mathcal P$ is a weak visibility polygon.
 
-Given that computing a minimum number of guards for guarding a polygon is NP-hard \cite{1057165}, the paper will inspect how the Art Gallery Problem \cite{o1987art} can be tackled using three approximation algorithms.
+Given that computing a minimum number of guards for guarding a polygon is NP-hard \cite{1057165}, Maleki and Mohades will inspect how the Art Gallery Problem \cite{o1987art} can be tackled using three approximation algorithms.
 
 \subsubsection{Algorithm of Ghosh \cite{GHOSH2010718}}
 The algorithm of Ghosh \cite{GHOSH2010718} runs in $O(n^4)$ time and yields a $O(\log n)$-approximation for computing the minimum vertex guard for simple polygons. It begins by drawing lines through every pair of vertices of $\mathcal P$ and computing the set of all its convex components $C$. It continues by adding the elements of $C$ that are visible from vertex $j, \forall j$ into the set $F_j$. Then, it recursively eliminates the redundant sets $F_i$ from $C$ as follows: $\forall$ fixed $j$, another vertex $i$ is searched for such that the set $F_i$ is also visible from $j$ ($|F_j| \leq |F_i|$); $F_i$ is eliminated from $C$, $i$ is added to $S$ and the process continues until $C$ is empty. At the end, $S$ contains the approximated guardset for $\mathcal P$.
@@ -12,7 +12,7 @@ The algorithm of Ghosh \cite{GHOSH2010718} runs in $O(n^4)$ time and yields a $O
 The algorithm of Bhattacharya \cite{bhattacharya2016approximability} runs in $O(n^2)$ time and yields a 6-approximation for computing the minimum vertex guard for weak visibility polygons without holes. It begins by choosing two neighbours $u, v$ as parents for every vertex in $\mathcal P$. It then computes the Shortest Path Tree from each pair of parents $u, v$ to every other vertex in $\mathcal P$. All vertices on the Shortest Path Tree are initialised as unmarked. In clockwise order from $\overline{uv}$, every vertex $z \in \mathcal P$ is checked for visibility from $u, \text{ and } v$. If all vertices $z$ are visible, then $u, \text{ and }v$ are added to $S$. Otherwise, $z$ is added to $S$ and the procedure continues with $z$ as the starting node. All vertices that become seen from $S$ are marked. At the end, the algorithm checks whether the vertices in $S$ have overlapping visibility regions, and duplicates are removed.
 
 \subsubsection{New Algorithm}
-The algorithm introduced in the paper is focussed on polygons with large number of vertices $n$ and different amounts of reflex vertices $r$. If the number of reflex vertices is significantly lower than the total number of vertices ($r \leq \log \log n$), guards are placed at all reflex vertices. Otherwise, they are placed according to the algorithm of Ghosh \cite{GHOSH2010718}.
+The algorithm introduced by Maleki and Mohades is focussed on polygons with large number of vertices $n$ and different amounts of reflex vertices $r$. If the number of reflex vertices is significantly lower than the total number of vertices ($r \leq \log \log n$), guards are placed at all reflex vertices. Otherwise, they are placed according to the algorithm of Ghosh \cite{GHOSH2010718}.
 
 \subsubsection{Experiments}
 Algorithms of Ghosh \cite{GHOSH2010718} and Bhattacharya \cite{bhattacharya2016approximability} are tested on weak visibility polygons, and the newly introduced algorithm is tested on simple polygons. 
@@ -41,7 +41,7 @@ Secondly, a procedure for generating arbitrary simple polygons with custom numbe
 
 The new algorithm is tested on simple polygons constructed as mentioned by starting from low $r$ and gradually increasing it. The results are reported positively in the sense that the $|S|$ always remains close to the optimal, as a 2-approximation solution.
 
-Therefore, through the newly implemented algorithm, this paper \cite{maleki2022implementation} testifies that the algorithm of Ghosh \cite{GHOSH2010718} performs like a constant approximation in practice, and often better than its theoretical bound when tested on complex simple polygons.
+Therefore, through the newly implemented algorithm, Maleki and Mohades \cite{maleki2022implementation} testify that the algorithm of Ghosh \cite{GHOSH2010718} performs like a constant approximation in practice, and often better than its theoretical bound when tested on complex simple polygons.
 % - guards placed on vertices = vertex guards
 % - no restrictions = point guards
 % - $\mathcal P$ is called weak visibility polygon if every point in $\mathcal P$ is visible from some point of an edge
