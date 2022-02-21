@@ -1,15 +1,33 @@
 \subsection{Implementation of Polygon Guarding Algorithms for Art Gallery Problems \cite{maleki2022implementation}}
-Maleki abd Mohades \cite{maleki2022implementation} introduce the implementations and their experimental evaluations for two existing approximation algorithms (\cite{GHOSH2010718}, \cite{bhattacharya2016approximability}) and a newly developed one for computing visibility in simple polygons in the context of the Art Gallery Problem \cite{o1987art}.
+Maleki and Mohades \cite{maleki2022implementation} introduce their implementations and experimental evaluations for two existing approximation algorithms (\cite{GHOSH2010718}, \cite{bhattacharya2016approximability}) and a newly developed one for computing visibility in simple polygons in the context of the Art Gallery Problem \cite{o1987art}.
 
 We distinguish between vertex guards (guards that can be placed on the vertices of $\mathcal P$) and point guards (guards that can be placed without restriction inside $\mathcal P$). If $\forall q \in \mathcal P$ is visible from some point of an edge, then $\mathcal P$ is a weak visibility polygon.
 
 Given that computing a minimum number of guards for guarding a polygon is NP-hard \cite{1057165}, Maleki and Mohades will inspect how the Art Gallery Problem \cite{o1987art} can be tackled using three approximation algorithms.
 
 \subsubsection{Algorithm of Ghosh \cite{GHOSH2010718}}
-The algorithm of Ghosh \cite{GHOSH2010718} runs in $O(n^4)$ time and yields a $O(\log n)$-approximation for computing the minimum vertex guard for simple polygons. It begins by drawing lines through every pair of vertices of $\mathcal P$ and computing the set of all its convex components $C$. It continues by adding the elements of $C$ that are visible from vertex $j, \forall j$ into the set $F_j$. Then, it recursively eliminates the redundant sets $F_i$ from $C$ as follows: $\forall$ fixed $j$, another vertex $i$ is searched for such that the set $F_i$ is also visible from $j$ ($|F_j| \leq |F_i|$); $F_i$ is eliminated from $C$, $i$ is added to $S$ and the process continues until $C$ is empty. At the end, $S$ contains the approximated guardset for $\mathcal P$.
+The algorithm of Ghosh \cite{GHOSH2010718} runs in $O(n^4)$ time and yields a $O(\log n)$-approximation for computing the minimum vertex guard for simple polygons. It begins by  computing the set of all the convex components $C$ of the polygon $\mathcal P$. Let then $F_j$ be the set of all convex components from $C$ that are visible from a vertex $j \in \mathcal P$. The redundant sets $F_j, \forall j$ are afterwards eliminated as follows: for all fixed $j$, the algorithm searches for a vertex $i \neq j, i \in \mathcal P$ such that $F_i$ is also visible from $j$ ($|F_i| \leq |F_j|$); $F_i$ is eliminated, $j$ is added to $S$ and the process continues until $C$ is empty. At the end, $S$ contains the approximated guard set for $\mathcal P$.
+
+An example run of the algorithm is depicted in Figure \ref{fig:ghosh}, where polygon $\mathcal P$ is divided into two convex components $C_1$ and $C_2$, such that $C = \{C_1, C_2\}$. The sets $F_j, \forall j \in \mathcal P$ are also displayed. Since $F_1 \subseteq F_2 \subseteq F_3 \subseteq F_4 \subseteq F_6$ and $F_5 \subseteq F_3 \subseteq F_4 \subseteq F_6$, $F_1, F_2, F_3, F_4$, and $F_5$ are removed. The remaining set $F_6$ yields the final guard set $S = \{6\}$, which can see both convex regions of $\mathcal P$, and hence the whole polygon.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{ghosh-eg.png}
+    \caption{The Algorithm of Ghosh \cite{GHOSH2010718} Example.}
+    \label{fig:ghosh}
+\end{figure}
 
 \subsubsection{Algorithm of Bhattacharya \cite{bhattacharya2016approximability}}
 The algorithm of Bhattacharya \cite{bhattacharya2016approximability} runs in $O(n^2)$ time and yields a 6-approximation for computing the minimum vertex guard for weak visibility polygons without holes. It begins by choosing two neighbours $u, v$ as parents for every vertex in $\mathcal P$. It then computes the Shortest Path Tree from each pair of parents $u, v$ to every other vertex in $\mathcal P$. All vertices on the Shortest Path Tree are initialised as unmarked. In clockwise order from $\overline{uv}$, every vertex $z \in \mathcal P$ is checked for visibility from $u, \text{ and } v$. If all vertices $z$ are visible, then $u, \text{ and }v$ are added to $S$. Otherwise, $z$ is added to $S$ and the procedure continues with $z$ as the starting node. All vertices that become seen from $S$ are marked. At the end, the algorithm checks whether the vertices in $S$ have overlapping visibility regions, and duplicates are removed.
+
+An example run of the algorithm is depicted in Figure \ref{fig:bhaca}. The algorithm starts with vertices $a$ and $c$ as parents of $b$. Clockwise, vertex $d$ is visible from $\overline{ac}$, but $e$ is not. For this reason, $e$ is added to the guard set $S$, and vertices $d$ and $f$ are chosen as the new parents. Clockwise, all vertices $a, b, c, e$ are visible from $\overline{ef}$, so $d$ and $f$ are added to $S$. Since the visibility regions of $d$ and $f$ coincide, and the visibility region of $e$ is included in that of $d$ and $f$, $e$ and $f$ can be removed from $S$. As such, the final guard set becomes $S = \{d\}$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{bacha-eg.png}
+    \caption{The Algorithm of Bhattacharya \cite{bhattacharya2016approximability} Example.}
+    \label{fig:bhaca}
+\end{figure}
 
 \subsubsection{New Algorithm}
 The algorithm introduced by Maleki and Mohades is focussed on polygons with large number of vertices $n$ and different amounts of reflex vertices $r$. If the number of reflex vertices is significantly lower than the total number of vertices ($r \leq \log \log n$), guards are placed at all reflex vertices. Otherwise, they are placed according to the algorithm of Ghosh \cite{GHOSH2010718}.
