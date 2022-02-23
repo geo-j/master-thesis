@@ -1,0 +1,51 @@
+\section{Theory}
+
+We are interested in defining the gradient for computing the best change in a guard's position given its coordinates.
+
+- we will only look at one coordinate (vary $y$), since varying $x$ is symmetrical, but rotated $90^\circ$
+
+- we will first look at a canonical situation $||\bigtriangledown f|| = 1, \alpha = \beta = 1$
+
+Let:
+
+- $f(p)$ - area seen by guard $p$
+
+- $f'_i(p)$ - the change in the area seen locally by guard $p$, as given by its derivative
+
+- $f'(p) = \sum_i f'_i(p)$ - the change in the area seen globally by guard $p$
+
+- $\bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})$ - the direction of the greatest increase of $f$
+
+- $r$ - reflex vertex
+
+- $p$ - guard whose position needs to be optimised
+
+- $|\overline{pr}| = 1$
+
+- $p', p''$ - the new positions of the guard where the $y$-coord is varied
+
+    - $|\overline{pp'}| = |\overline{aa''}| = x$
+
+- $\overline{ar} = \alpha, a \in \overline{pr}$ - additional guard construction
+
+- $\triangle rde$ - area seen by $p$
+
+    - $\triangle rdf$ - area seen by $p'$
+
+- $|\overline{rd}| = \beta$ - distance between reflex vertex and polygon boundary
+
+- $|\overline{de}| = L$
+
+Using the Intercept Theorem:
+
+- in $\triangle ra'a$, $\triangle rp'p$: $\frac{|\overline{pp'}|}{|\overline{df}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{x}{|\overline{df}|} = \frac{1}{\beta} \Rightarrow |\overline{df}| = x\beta$
+
+- in $\triangle pp'r$, $\triangle aa'r$: $\frac{|\overline{aa'}|}{|\overline{pp'}|} = \frac{\alpha}{1} = \frac{|\overline{aa'}|}{x} \Rightarrow |\overline{aa'}| = x\alpha$
+
+- in $\triangle pp''r$, $\triangle aa''r$: $\frac{|\overline{aa''}|}{pp''} = \frac{|\overline{ar}|}{|\overline{pr}|} = \frac{x}{|\overline{pp''}|} = \frac{\alpha}{1} \Rightarrow |\overline{pp''}| = \frac{x}{\alpha}$
+
+- in $\triangle pp''r$, $\triangle rde$: $\frac{|\overline{pp''}|}{|\overline{de}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{\frac{x}{\alpha}}{L} = \frac{1}{\beta} \Rightarrow L = \frac{x\beta}{\alpha}$
+
+Computing the area of the square triangle $\triangle rde$:
+
+- $A = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{\beta L}{2} = \frac{\beta \frac{x\beta}{\alpha}}{2} = \frac{\beta^2x}{2\alpha}$
