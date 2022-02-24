@@ -1,51 +1,96 @@
 \section{Theory}
 
-We are interested in defining the gradient for computing the best change in a guard's position given its coordinates.
+Given a polygon $\mathcal P$ and a guard $p(x, y) \in \mathcal P$, we are interested in defining the gradient for computing the best change in the position of $p$.
 
-- we will only look at one coordinate (vary $y$), since varying $x$ is symmetrical, but rotated $90^\circ$
+We will compute the gradient by fixing the $x$-coordinate of $p$ and varying the $y$-coordinate. The reason behind this choice is the fact that the computation of the gradient would remain the same for the varied $x$-coordinate, after a $90^\circ$ rotation of the plane.
 
-- we will first look at a canonical situation $||\bigtriangledown f|| = 1, \alpha = \beta = 1$
+Let $\bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})$ be the gradient of guard $p(x, y)$ given the change in position of $p$ on the $y$-axis. That is, the direction of the greatest increase of $f$. We consider the case where there is only a positive change in the $y$ position of $p$. The case with a negative coordinate change would be analogous.
 
-Let:
+Let $g$ be a boundary line of $\mathcal P$, $r$ a reflex vertex of $\mathcal P$ and $p$ a guard whose position requires optimisation with respect to $r$. Let $d$ be the maximum point on $g$ that $p$ can see behind $r$. The distance between $r$ and $d$ is considered as $|\overline{rd}| = \beta$. By varying the position of $p$ such that the area seen by $p$ is increased around $r$, we will observe two additional positions of $p$ named $p'$ and $p''$ which can see up to a maximum point $d'$ and $d''$ on $g$, respectively. Take the distance between $d$ and $d''$ to be $|\overline{dd''}| = L$. As such, $\triangle rdd'$ and $\triangle rdd''$ become the additionally seen areas when $p$ moves to positions $p'$ and $p''$, respectively. 
 
-- $f(p)$ - area seen by guard $p$
+Let $a''$ be the projection of $p'$ on $p''r$, and $a$ the projection of $a''$ on the line $pr$ such that the distance from $a$ to $r$ is $|\overline{ar}| = \alpha$. Take the distance between $p$ and $p'$ to be $x$. Since $a''$ is the projection of $p'$ on $pr$, then $|\overline{pp'}| = |\overline{aa''}| = x$.
 
-- $f'_i(p)$ - the change in the area seen locally by guard $p$, as given by its derivative
+We define $f(p)$ as the area seen by a guard $p$, and $f'_i(p)$ the local change in the area seen by guard $p$ around reflex vertex $i$, as given by the derivative of $f$. The total (global) change in the area seen by $p$ can be thus summed up to $f'(p) = \sum_i f'_i(p)$.
 
-- $f'(p) = \sum_i f'_i(p)$ - the change in the area seen globally by guard $p$
 
-- $\bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})$ - the direction of the greatest increase of $f$
 
-- $r$ - reflex vertex
+\subsection{Canonical Case}
+Consider the geometrical construction in Figure \ref{fig:gradient}.
 
-- $p$ - guard whose position needs to be optimised
+In the canonical case we will consider the situation where $||\bigtriangledown f|| = 1, x = \alpha = \beta = 1$, and the distance from guard $p$ to reflex vertex $r$ is normalised $|\overline{pr}| = 1$. 
 
-- $|\overline{pr}| = 1$
+We are now interested in computing the distances $|\overline{df}|, |\overline{aa'}|, |\overline{pp''}|, L$ such that we can compute the increase in the area seen by $p$ and thus the gradient $\bigtriangledown f$. The two triangle areas that need to be computed in order to do so are $A_{\triangle rdd'}$ and $A_{\triangle rdd''}$.
 
-- $p', p''$ - the new positions of the guard where the $y$-coord is varied
+Given that $pp''$ is parallel to $g$, we can use the Intercept Theorem to compute the lengths of the segments as follows:
 
-    - $|\overline{pp'}| = |\overline{aa''}| = x$
+\begin{itemize}
+    \item in $\triangle raa'$, $\triangle rpp'$, with $aa' || pp'$: $$\frac{|\overline{pp'}|}{|\overline{dd'}|} = \frac{|\overline{pr}|}{|\overline{rd}|} \iff \frac{x}{|\overline{dd'}|} = \frac{1}{\beta} \Rightarrow |\overline{dd'}| = x\beta$$
+    
+    $$\frac{|\overline{aa'}|}{|\overline{pp'}|} = \frac{\alpha}{1} = \frac{|\overline{aa'}|}{x} \Rightarrow |\overline{aa'}| = x\alpha$$
 
-- $\overline{ar} = \alpha, a \in \overline{pr}$ - additional guard construction
+    \item in $\triangle rpp''$, $\triangle raa''$, with $pp'' || aa''$: $$\frac{|\overline{aa''}|}{pp''} = \frac{|\overline{ar}|}{|\overline{pr}|} \iff \frac{x}{|\overline{pp''}|} = \frac{\alpha}{1} \Rightarrow |\overline{pp''}| = \frac{x}{\alpha}$$
+    
+    \item in $\triangle rpp''$, $\triangle rdd''$, with $pp'' || dd''$: $$\frac{|\overline{pp''}|}{|\overline{dd''}|} = \frac{|\overline{pr}|}{|\overline{rd}|} \iff \frac{\frac{x}{\alpha}}{L} = \frac{1}{\beta} \Rightarrow L = \frac{x\beta}{\alpha}$$
+\end{itemize}
 
-- $\triangle rde$ - area seen by $p$
+Now the area of the square triangle $\triangle rdd''$ corresponding to the gradient $\bigtriangledown f$ can be computed as: $$\bigtriangledown f = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{\beta L}{2} = \frac{\beta \frac{x\beta}{\alpha}}{2} = \frac{\beta^2x}{2\alpha}, ||x|| = 1$$
 
-    - $\triangle rdf$ - area seen by $p'$
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = \textwidth]{gradient.png}
+    \caption{Canonical Gradient Construction.}
+    \label{fig:gradient}
+\end{figure}
 
-- $|\overline{rd}| = \beta$ - distance between reflex vertex and polygon boundary
 
-- $|\overline{de}| = L$
+\subsection{General Case}
 
-Using the Intercept Theorem:
 
-- in $\triangle ra'a$, $\triangle rp'p$: $\frac{|\overline{pp'}|}{|\overline{df}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{x}{|\overline{df}|} = \frac{1}{\beta} \Rightarrow |\overline{df}| = x\beta$
 
-- in $\triangle pp'r$, $\triangle aa'r$: $\frac{|\overline{aa'}|}{|\overline{pp'}|} = \frac{\alpha}{1} = \frac{|\overline{aa'}|}{x} \Rightarrow |\overline{aa'}| = x\alpha$
+% - we will only look at one coordinate (vary $y$), since varying $x$ is symmetrical, but rotated $90^\circ$
 
-- in $\triangle pp''r$, $\triangle aa''r$: $\frac{|\overline{aa''}|}{pp''} = \frac{|\overline{ar}|}{|\overline{pr}|} = \frac{x}{|\overline{pp''}|} = \frac{\alpha}{1} \Rightarrow |\overline{pp''}| = \frac{x}{\alpha}$
+% - we will first look at a canonical situation $||\bigtriangledown f|| = 1, \alpha = \beta = 1$
 
-- in $\triangle pp''r$, $\triangle rde$: $\frac{|\overline{pp''}|}{|\overline{de}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{\frac{x}{\alpha}}{L} = \frac{1}{\beta} \Rightarrow L = \frac{x\beta}{\alpha}$
+% Let:
 
-Computing the area of the square triangle $\triangle rde$:
+% - $f(p)$ - area seen by guard $p$
 
-- $A = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{\beta L}{2} = \frac{\beta \frac{x\beta}{\alpha}}{2} = \frac{\beta^2x}{2\alpha}$
+% - $f'_i(p)$ - the change in the area seen locally by guard $p$, as given by its derivative
+
+% - $f'(p) = \sum_i f'_i(p)$ - the change in the area seen globally by guard $p$
+
+% - $\bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})$ - the direction of the greatest increase of $f$
+
+% - $r$ - reflex vertex
+
+% - $p$ - guard whose position needs to be optimised
+
+% - $|\overline{pr}| = 1$
+
+% - $p', p''$ - the new positions of the guard where the $y$-coord is varied
+
+    % - $|\overline{pp'}| = |\overline{aa''}| = x$
+
+% - $\overline{ar} = \alpha, a \in \overline{pr}$ - additional guard construction
+
+% - $\triangle rde$ - area seen by $p$
+
+    % - $\triangle rdf$ - area seen by $p'$
+
+% - $|\overline{rd}| = \beta$ - distance between reflex vertex and polygon boundary
+
+% - $|\overline{de}| = L$
+
+% Using the Intercept Theorem:
+
+% - in $\triangle ra'a$, $\triangle rp'p$: $\frac{|\overline{pp'}|}{|\overline{df}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{x}{|\overline{df}|} = \frac{1}{\beta} \Rightarrow |\overline{df}| = x\beta$
+
+% - in $\triangle pp'r$, $\triangle aa'r$: $\frac{|\overline{aa'}|}{|\overline{pp'}|} = \frac{\alpha}{1} = \frac{|\overline{aa'}|}{x} \Rightarrow |\overline{aa'}| = x\alpha$
+
+% - in $\triangle pp''r$, $\triangle aa''r$: $\frac{|\overline{aa''}|}{pp''} = \frac{|\overline{ar}|}{|\overline{pr}|} = \frac{x}{|\overline{pp''}|} = \frac{\alpha}{1} \Rightarrow |\overline{pp''}| = \frac{x}{\alpha}$
+
+% - in $\triangle pp''r$, $\triangle rde$: $\frac{|\overline{pp''}|}{|\overline{de}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{\frac{x}{\alpha}}{L} = \frac{1}{\beta} \Rightarrow L = \frac{x\beta}{\alpha}$
+
+% Computing the area of the square triangle $\triangle rde$:
+
+% - $A = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{\beta L}{2} = \frac{\beta \frac{x\beta}{\alpha}}{2} = \frac{\beta^2x}{2\alpha}$
