@@ -1,18 +1,46 @@
 \section{Theory}
 
-Given a polygon $\mathcal P$ and a guard $p(x, y) \in \mathcal P$, we are interested in defining the gradient for computing the best change in the position of $p$.
 
-We will compute the gradient by fixing the $x$-coordinate of $p$ and varying its $y$-coordinate. The reason behind this choice is the fact that the computation of the gradient remains the same regardless of the rotation applied to the plane.
+Let $\mathcal P$ be a polygon and $p(x, y) \in \mathcal P$ a guard. We are interested in computing the best direction for moving $p$ inside $\mathcal P$ such that the visibility area $\mathcal V(p)$ is increased. That is, a better position such that $p$ ``sees more'' of the polygon $\mathcal P$. 
 
-We define $f(p)$ as the area seen by a guard $p$, and $f'_i(p)$ the local change in the area seen by guard $p$ around reflex vertex $i$, as given by the derivative of $f$. The total (global) change in the area seen by $p$ can be thus summed up to $f'(p) = \sum_i f'_i(p)$.
+We can define $f(p)$ as the area seen by a guard $p$. Let $f'_i(p)$ the local change in the area seen by guard $p$ around reflex vertex $i$, as given by the derivative of $f$. Given all reflex vertices $i$, the total (global) change in the area seen by $p$ can be thus summed up to $f'(p) = \sum_i f'_i(p)$. Thus, $f(p)$ becomes the continuous objective function of The Art Gallery Problem. Given the existence of this objective function, we can use gradient descent as a method to compute what the best change in the position of $p$ inside $\mathcal P$ is.
 
-Let $\bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})$ be the gradient of guard $p(x, y)$ given the change in position of $p$ on the $y$-axis. That is, the direction of the greatest increase of $f$. 
+Gradient descent is an iterative optimisation algorithm for finding the local minimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. In this way, we can define $\bigtriangledown f$ to be the gradient of $f$. $\bigtriangledown f$ will then indicate the direction of the steepest descent for the objective function $f(p)$. 
+
+
+% defining the gradient for computing the best change in the position of $p$.
+
+Given that $f$ is a function that describes the visibility area of a point $p(x, y)$, we will first need to define how its gradient is computed in this case. In order to simplify the gradient computation and without losing generality, we will analyse the gradient by fixing one of the coordinates of $p$ and varying the other one. In this case, fixing the $x$-coordinate and varying the $y$-coordinate. As such, the computation of the gradient remains the same regardless of the rotation applied to the plane.
+
+
+We will use the notation $\frac{\partial f}{\partial x}$ to denote the change in the visibility area $f(p)$ when the $x$-coordinate is modified by a small amount $\partial x$. Analogously, we will use $\frac{\partial f}{\partial y}$ to denote the small change in the $y$-coordinate of $p$. In this way, we define 
+
+\begin{equation}
+    \bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) \label{eq:gradient}
+\end{equation}
+
+to be the gradient of guard $p(x, y)$. 
+
+We will now create a canonical geometrical construction that will allow us to further define and compute $\bigtriangledown f$ given a guard $p$ and a reflex vertex $r$. In this case, we consider the normalised length of the gradient as $||\bigtriangledown f|| = 1$. This canonical construction is displayed in Figure \ref{fig:gradient}. We will then generalise this case to multiple reflex vertices and guards.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{gradient2.png}
+    \caption{Canonical Gradient Construction.}
+    \label{fig:gradient}
+\end{figure}
+
+Let $g$ be a boundary line segment of $\mathcal P$, $r$ a reflex vertex of $\mathcal P$ and $p$ a guard whose position we wish to optimise. Let $\overline{pr} = \alpha$. Additionally, let $d$ be the maximum point of visibility on $g$ that $p$ can see behind $r$. The distance between $r$ and $d$ is considered as $|\overline{rd}| = \beta$. 
+% That is, the direction of the greatest increase of $f$. 
 
 % We consider the case where there is only a positive change in the $y$ position of $p$. The case with a negative coordinate change would be analogous.
 
-Let $g$ be a boundary line of $\mathcal P$, $r$ a reflex vertex of $\mathcal P$ and $p$ a guard whose position requires optimisation with respect to $r$. Let $\overline{pr} = \alpha$. Additionally, let $d$ be the maximum point on $g$ that $p$ can see behind $r$. The distance between $r$ and $d$ is considered as $|\overline{rd}| = \beta$. 
 
-Let $\partial x$ be the extremely small change in the position of $p$ to a new position $p'$. $p'$ can see up to a new maximum point $d'$ around $r$ on $g$. Let the distance between $d$ and $d'$ be $|\overline{dd'}| = L$. As such, $\triangle rdd'$ becomes the increase in the visibility area of $p$ when it moves to position $p'$. 
+Let $\partial x$ be the extremely small change in the position of $p$ to a new position $p'$. $p'$ can see then up to a new maximum point $d'$ around $r$ on $g$. Let thus the distance between $d$ and $d'$ be $|\overline{dd'}| = L$. As such, $\triangle rdd'$ corresponds the increase in the visibility area of $p$ when it moves to position $p'$. That is, the first derivative $f'(p)$ will denote the change in the area of triangle $\triangle rdd'$:
+
+\begin{equation}
+    \text{Area}_{\triangle rdd'} = f'(p). \label{eq:derivative}
+\end{equation}
 
 % Let $a''$ be the projection of $p'$ on $p''r$, and $a$ the projection of $a''$ on the line $pr$ such that the distance from $a$ to $r$ is $|\overline{ar}| = \alpha$. Take the distance between $p$ and $p'$ to be $x$. Since $a''$ is the projection of $p'$ on $pr$, then $|\overline{pp'}| = |\overline{aa''}| = x$.
 
@@ -21,29 +49,63 @@ Let $\partial x$ be the extremely small change in the position of $p$ to a new p
 
 
 % \subsection{Canonical Case}
-Consider the geometrical construction in Figure \ref{fig:gradient}. The construction was created for ease of computation, and the general case can be translated and rotated to this case.
+% Consider the geometrical construction in Figure \ref{fig:gradient}. The construction was created for ease of computation, and the general case can be translated and rotated to this case.
 
-In this canonical case we will consider the situation where the gradient is normalised as $||\bigtriangledown f|| = 1$. 
+% In this canonical case we will consider the situation where the gradient is normalised as $||\bigtriangledown f|| = 1$. 
 
-We are now interested in computing the distances $\partial x$, and $L$ such that we can compute the increase in the area seen by $p$ and thus the gradient $\bigtriangledown f$. Computing $\bigtriangledown f$ is thus equivalent to computing the change in the area of triangle $\triangle rdd'$.
+We are now interested in compute the distances $\partial x$, and $L$ such that we can further explore how to compute the increase in the area seen by $p$. Since $\bigtriangledown f$ depends on the change in the coordinates of $p$, computing it is tightly connected to the change in the area of triangle $\triangle rdd'$. The change in the area of the triangle $\triangle rdd'$  In this way, we will calculate the area of $\triangle rdd'$ as follows:
 % We are now interested in computing the distances $|\overline{df}|, |\overline{aa'}|, |\overline{pp''}|, L$ such that we can compute the increase in the area seen by $p$ and thus the gradient $\bigtriangledown f$. The two triangle areas that need to be computed in order to do so are $A_{\triangle rdd'}$ and $A_{\triangle rdd''}$.
 
-Given that triangles $\triangle rpp'$ and $\triangle rdd'$ are square triangle, we can compute their areas as follows:
+Given that triangles $\triangle rpp'$ and $\triangle rdd'$ are square triangles, their areas are:
 
-$$\text{Area}_{\triangle rpp'} = \frac{\alpha \partial x}{2}$$
+\begin{align}
+    \text{Area}_{\triangle rpp'} &= \frac{\alpha \partial x}{2}, \label{eq:rpp}\\
+    \text{Area}_{\triangle rdd'} &= \frac{\beta L}{2}. \label{eq:rdd}   
+\end{align}
 
-$$\text{Area}_{\triangle rdd'} = \frac{\beta L}{2}$$
 
-Given that $\overline{pp'}$ is parallel to $g$, we can use the Intercept Theorem in triangles $\triangle rpp'$ and $\triangle rdd'$ to compute length $L$: $$\frac{||\overline{pp'}||}{||\overline{dd'}||} = \frac \alpha \beta \iff \frac{\partial x}{L} = \frac \alpha \beta \Rightarrow L = \frac{\beta \partial x}{\alpha}.$$
+Given that $\overline{pp'}$ is parallel to $g$, we can use Thales's Theorem in triangles $\triangle rpp'$ and $\triangle rdd'$ to compute length $L$: 
+
+\begin{equation}
+    \frac{||\overline{pp'}||}{||\overline{dd'}||} = \frac \alpha \beta \iff \frac{\partial x}{L} = \frac \alpha \beta \Rightarrow L = \frac{\beta \partial x}{\alpha}.
+    \label{eq:L}
+\end{equation}
+
 
 % we can compute the length $L$: $$\frac{\text{Area}_{\triangle rdd'}}{\text{Area}_{\triangle rpp'}} = \frac{\frac{\beta L}{2}}{\frac{\alpha \partial x}{2}} = \frac{\beta L}{\alpha \partial x} \Rightarrow L = \frac{\partial x \beta}{\alpha}.$$
 
 We are now interested in how areas $\text{Area}_{\triangle rpp'}$ and $\text{Area}_{\triangle rdd'}$ change depending on how $\alpha$ and $\beta$ are varied. That is, $\frac{\text{Area}_{\triangle rdd'}}{\text{Area}_{\triangle rpp'}}$ as a function of $\alpha$ and $\beta$: 
 
-$$\frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} = \frac{\frac{\alpha \partial x}{2}}{\frac{\beta L}{2}} = \frac{\alpha \partial x}{\beta L} = \frac{\alpha \alpha}{\beta \beta} = {(\frac \alpha \beta)}^2 \Rightarrow \text{Area}_{\triangle rdd'} = {(\frac \beta \alpha)}^2 \frac{\alpha \partial x}{2} = \frac{\beta^2 \partial x}{2\alpha}.$$
+\begin{align}
+    \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} \overset{(\ref{eq:rpp}), (\ref{eq:rdd})}{=} &\frac{\frac{\alpha \partial x}{2}}{\frac{\beta L}{2}} \\
+    = &\frac{\alpha \partial x}{\beta L} \\
+    = &\frac{\alpha \alpha}{\beta \beta} \\
+    \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} = &{(\frac \alpha \beta)}^2 \label{eq:rddrpp}
+\end{align}
+
+We can now express the area of $\triangle rdd'$ as only dependent on $\alpha, \beta$, the small position change $\partial x$ and the already known area of $\triangle rpp'$:
+
+\begin{align}
+    \text{Area}_{\triangle rdd'} \overset{(\ref{eq:rddrpp})}{=} &{(\frac \beta \alpha)}^2 \text{Area}_{\triangle rpp'} \\
+    \overset{(\ref{eq:rpp})}{=} &{(\frac \beta \alpha)}^2 \frac{\alpha \partial x}{2} \\
+    \text{Area}_{\triangle rdd'} = &\frac{\beta^2 \partial x}{2\alpha}. \label{eq:ardd}
+\end{align}
+% \end{align*}
 % $$\frac{\partial f}{\partial x} = \frac{\text{Area}_{\triangle rdd'}}{\partial x}$$
 
-Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the small change $\partial x$ in the position of $p$ is $$\bigtriangledown f = \frac{\partial f}{\partial x} = \frac{\text{Area}_{\triangle rdd'}}{\partial x} = \frac{\beta^2}{2\alpha}.$$
+Analogously, we can compute the change in the $y$-coordinate by rotating the plane with $90^\circ$ and follow the same steps. This procedure will result in
+
+\begin{equation}
+    \text{Area}_{\triangle rdd'} = \frac{\beta^2 \partial y}{2\alpha}. \label{eq:ardd2}
+\end{equation}
+
+Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the small changes $\partial x, \partial y$ in the position of $p$ is 
+
+\begin{align*}
+    \bigtriangledown f \overset{(\ref{eq:gradient})}{=} &(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) \\
+    \overset{(\ref{eq:derivative})}{=} &(\frac{\text{Area}_{\triangle rdd'}}{\partial x}, \frac{\text{Area}_{\triangle rdd'}}{\partial y}) \\
+    \bigtriangledown f \overset{(\ref{eq:ardd}), (\ref{eq:ardd2})}{=} &(\frac{\beta^2}{2\alpha}, \frac{\beta^2}{2\alpha}). \\
+\end{align*}
 
 % Given that $pp''$ is parallel to $g$, we can use the Intercept Theorem to compute the lengths of the segments as follows:
 
@@ -58,13 +120,6 @@ Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ gi
 % \end{itemize}
 
 % Now the area of the square triangle $\triangle rdd''$ corresponding to the gradient $\bigtriangledown f$ can be computed as: $$\bigtriangledown f = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{\beta L}{2} = \frac{\beta \frac{x\beta}{\alpha}}{2} = \frac{\beta^2x}{2\alpha}, ||x|| = 1$$
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width = 0.6\textwidth]{gradient2.png}
-    \caption{Canonical Gradient Construction.}
-    \label{fig:gradient}
-\end{figure}
 
 
 % \subsection{General Case}
