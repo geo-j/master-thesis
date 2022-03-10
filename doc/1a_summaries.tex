@@ -5,14 +5,19 @@ Bungiu, Hemmer, Hershberger, Huang and Kr\"oller  \cite{DBLP:journals/corr/Bungi
 Therefore, Bungiu et al. present three algorithms and their practical performance.
 
 \subsubsection{Algorithm of Joe and Simpson \cite{joe1987corrections}}
-The algorithm of Joe and Simpson \cite{joe1987corrections} runs in $O(n)$ time and space. Let $v_i, \forall i = \overline{1, n}$ be the boundary points of the polygon $\mathcal P$ with $n$ vertices, and $p$ the point with the visibility polygon $Vis(p)$ of interest, and $s$ the stack on which the vertices determining $Vis(p)$ are processed on. The algorithm begins by sequentially scanning the boundaries of $\mathcal P$ by shooting rays $pv_i, \forall i = \overline{1, n}$ in the order of $i$. For each processed edge $\overline{v_iv_{i + 1}}$, its endpoints $v_i$ and $v_{i + 1}$ are checked whether they are in the visibility region of the viewpoint $p$. This means that the position of every $v_{i + 1}$ with respect to the ray $pv_i$ is checked. If $v_{i + 1}$ is found in front of the ray $pv_i$ given the rotating direction of $pv_i$, so if $v_{i + 1}$ is seen from $p$, then both $v_i$ and $v_{i + 1}$ are added to the processing stack $s$. For every newly pushed vertex on $s$, the algorithm checks whether the segment $v_iv_{i + 1}$ obscures any of the previously added vertices. If that is the case, then the endpoints of the obscured line segment are declared obsolete and deleted. The polygon comprised of the vertices from $s$ forms at the end the visibility polygon $Vis(p)$.
+The algorithm of Joe and Simpson \cite{joe1987corrections} runs in $O(n)$ time and space. 
 
+Let $v_i$, for $i = {1, 2, ..., n}$, be the boundary vertices of the polygon $\mathcal P$. Let $p$ be a guard in $\mathcal P$, and let $s$ be a stack datastructure. $s$ will be used to keep track of the vertices determining $Vis(p)$. 
+
+The algorithm begins by scanning the boundaries of $\mathcal P$. The scanning is done through shooting rays $pv_i$, for $i = {1, 2, ..., n}$ in this order. The endpoints $v_i$ and $v_{i + 1}$ of each ray form a boundary edge $\overline{v_iv_{i + 1}}$. In this way, the processing of $v_i$ and $v_{i + 1}$ is done by checking whether the points are in $Vis(p)$. This means that the position of every $v_{i + 1}$ with respect to the ray $pv_i$ is checked. If $v_{i + 1}$ is found in front of the ray $pv_i$ (if $v_{i + 1}$ is seen from $p$), then both $v_i$ and $v_{i + 1}$ are added to the processing stack $s$. For every newly pushed vertex on $s$, the algorithm checks whether the segment $v_iv_{i + 1}$ obscures any of the previously added vertices. If that is the case, then the endpoints of the obscured line segment are declared obsolete and deleted. The polygon comprised of the vertices from $s$ forms at the end the visibility polygon $Vis(p)$.
+
+% TODO: this might need better explanation? not sure if edge cases are needed
 Figure \ref{fig:joe} displays an example run of the Algorithm of Joe and Simpson \cite{joe1987corrections} for polygon $\mathcal P$ and viewpoint $p$. First, the ray from $p$ is shot through vertex $v_1$, and $v_1$ is added to $s$. Then, the ray from $p$ is shot through $v_2$. Since $pv_2$ takes a right turn from $pv_1$, this means that $v_2$ is still in the visibility region of $p$, so $v_2$ is also added to $s$. Next, the ray $pv_3$ takes a left turn from $v_2$, which means that $v_3$ is not seen from $p$. At the end, $Vis(p) = \{v_1, v_2, v_4, v_5, v_7, v_8, v_9, v_{10}\}$, as coloured in green. 
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.7\textwidth]{joe_simpson_eg.png}
-	\caption{Algorithm of Joe and Simpson \cite{joe1987corrections} Example.}
+	\caption{An example run of the algorithm of Joe and Simpson \cite{joe1987corrections} for polygon $\mathcal P$ guarded by $p$ and boundary vertices $v_i$, for $i = \{1, 2, ..., n\}$.}
 	\label{fig:joe}
 \end{figure}
 
@@ -24,17 +29,65 @@ Figure \ref{fig:joe} displays an example run of the Algorithm of Joe and Simpson
 % he points that are visible from $q$ form the visibility region $\mathcal V(q)$ (polygon)
 
 \subsubsection{Algorithm of Asano \cite{asano1985efficient}}
-The algorithm of Asano \cite{asano1985efficient} runs in $O(n \log n)$ time and $O(n)$ space and uses a plane sweep approach with event line $L$. It begins by efficiently sorting all the vertices of $\mathcal P$ based on their polar angles with respect to the viewpoint $p$. For example, suppose $p$ and some given points $a_1, a_2, b_1, b_2$ are given in a plane with positive coordinates, as placed in Figure \ref{fig:asano}. The figure is taken from \cite{DBLP:journals/corr/BungiuHHHK14} and annotated in order to facilitate the explanations given in these summaries. Then, the points will be treated in the order of $b_2, b_1, a_2, a_1$ with respect to $p$ and their angular comparisons $\measuredangle b_2Oq < \measuredangle b_1Oq < \measuredangle s_1Oq < \measuredangle a_1Oq$, where $O(0, 0)$. Then, the event line $L$ starts sweeping around $p$. Every line segment that $L$ intersects is stored in a balanced binary tree $T$ in the order of intersection. As $T$ is updated, a new vertex of $Vis(p)$ is stored each time the segment closest to $p$ in $T$ changes. It is important to mention that the intersection between $L$ and line segments is not explicit, but is instead determined by comparisons between the endpoints' coordinates. For instance, in Figure \ref{fig:asano}, the endpoint $b_2$ of line segment $\overline{b_2a_2}$ is the first one $L$ intersects. $b_2$ is thus added to $T$. Then, $L$ continues sweeping and adds $b_1, a_2$ and $a_1$ to $T$. Although $\overline{b_2a_2}$ and $\overline{b_1a_1}$ represent line segments $s_2$ and $s_1$, respectively, the intersection of $L$ with them is not explicitly computed, but is determined based solely on the positions of their endpoints: $s_1$ is farther away from $p$ because $q, a_2$ and $b_2$ are on the same side of $s_2$.
+The algorithm of Asano \cite{asano1985efficient} runs in $O(n \log n)$ time and $O(n)$ space. It uses a plane sweep approach with event line $L$. 
+
+Let $\mathcal P$ be a polygon determined by vertices $\{a_1, a_2, a_3, b_1, b_2, b_3, b_4\}$. Suppose we want to guard it by point $p$. The algorithm of Asano \cite{asano1985efficient} begins by efficiently sorting all the vertices of $\mathcal P$ based on their polar angles with respect to the guard $p$. Figure \ref{fig:asano} displays an example run of the algorithm. The points will be treated in the order of $a_2, a_1, a_3, b_4, b_3, b_2, b_1$ with respect to $p$ and their angular comparisons $$\measuredangle a_2Op < \measuredangle a_1Op < \measuredangle a_3Op < \measuredangle b_4Op < \measuredangle b_3Op < \measuredangle b_2Op < \measuredangle b_1Op,$$ where $O = (0, 0)$. 
+
+Then, the event line $L$ starts sweeping around $p$ as shown in Subfigures \ref{fig:asano1} - \ref{fig:asano7}. Every line segment that $L$ intersects is stored in a balanced binary tree $T$ in the order of their intersection angle. As $T$ is updated, a new vertex of $Vis(p)$ is stored each time the segment closest to $p$ in $T$ changes. It is important to mention that the intersection between $L$ and line segments is not explicit, but is instead determined by comparisons between the endpoints' coordinates. For instance, in Figure \ref{fig:asano}, the endpoint $b_2$ of line segment $\overline{b_2a_2}$ is the first one $L$ intersects. $b_2$ is thus added to $T$. Then, $L$ continues sweeping and adds $b_1, a_2$ and $a_1$ to $T$. Although $\overline{b_2a_2}$ and $\overline{b_1a_1}$ represent line segments $s_2$ and $s_1$, respectively, the intersection of $L$ with them is not explicitly computed, but is determined based solely on the positions of their endpoints: $s_1$ is farther away from $p$ because $q, a_2$ and $b_2$ are on the same side of $s_2$.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width = 0.5\textwidth]{compare_segments.png}
-	\caption{The Algorithm of Asano \cite{asano1985efficient} Visual Example \cite{DBLP:journals/corr/BungiuHHHK14}.}
+	\begin{subfigure}{0.45\linewidth}
+		\includegraphics*[width = \linewidth]{asano7.png}
+		\caption{$a_2$ is added to the empty $Vis(p)$ such \\ that $Vis(p) = \{a_2\}$.}
+		\label{fig:asano1}
+	\end{subfigure}
+	\begin{subfigure}{0.45\linewidth}
+		\includegraphics*[width = \linewidth]{asano1.png}
+		\caption{$a_1$ is added to $Vis(p)$ such that \\ $Vis(p) = \{a_1, a_2\}$, and line segment $\overline{b_1a_1}$ is added to the empty binary tree $T = \{\overline{b_1a_1}\}$.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\linewidth}
+		\includegraphics*[width = \linewidth]{asano2.png}
+		\caption{$a_3$ is added to $Vis(p)$ such \\ that $Vis(p)~=~\{a_1, a_2, a_3\}$,  and line \\ segment $\overline{a_1a_3}$ is added to $T$ such that \\ $T = \{\overline{b_1a_1}, \overline{a_1a_3}\}$.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\linewidth}
+		\includegraphics*[width = \linewidth]{asano3.png}
+		\caption{$b_4$ is added to $Vis(p)$ such \\ that $Vis(p)=\{a_1, a_2, a_3, b_4\}$, and line \\ segment $\overline{a_3b_4}$ is added to $T$ such that \\ $T = \{\overline{b_1a_1}, \overline{a_1a_3}\, \overline{a_3b_4}\}$.}
+	\end{subfigure}
+\end{figure}
+\begin{figure}[h!]
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{0.45\linewidth}
+		\includegraphics*[width = \linewidth]{asano4.png}
+		\caption{$b_3$ is added to $Vis(p)$ \\ such that $Vis(p)=\{a_1, a_2, a_3, b_4, b_3\}$, \\ and line segment $\overline{b_4b_3}$ is added to $T$ \\ such that $T = \{\overline{b_1a_1}, \overline{a_1a_3}\, \overline{a_3b_4}, \overline{b_4b_3}\}$.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\linewidth}
+		\includegraphics*[width = \linewidth]{asano5.png}
+		\caption{$b_2$ is added to $Vis(p)$ such that \\ $Vis(p) = \{a_1, a_2, a_3, b_3, b_4, b_2\}$, and line segment $\overline{b_2a_2}$ is added to $T$ such that \\ $T = \{\overline{b_1a_1}, \overline{a_1a_3}\, \overline{a_3b_4}, \overline{b_4b_3}, \overline{b_2a_2}\}$.}
+	\end{subfigure}
+
+	\begin{subfigure}{\linewidth}
+		\centering
+		\includegraphics*[width = 0.6\linewidth]{asano6.png}
+		\caption{$b_1$ is not added to $Vis(p)$ because it is obstructed by the line segment $\overline{b_2a_2}$ which is already in $T$. For the same reason, line segments $\overline{b_3b_1}$ and $\overline{b_1a_1}$ are also not added in $T$.}
+		\label{fig:asano7}
+	\end{subfigure}
+	\caption{Example run of the Algorithm of Asano \cite{asano1985efficient} on polygon $\mathcal P$ and guard $p$. The vertices of $\mathcal P$ are added to the binary tree $T$ in the order of their angle between $p$ and the origin $O = (0, 0)$. The result of the algorithm is visibility region $Vis(p) = \{a_1, a_2, a_3, b_3, b_4, b_2\}$.}
 	\label{fig:asano}
 \end{figure}
+
+
+
+% \begin{figure}[h!]
+% 	\centering
+% 	\includegraphics[width = 0.5\textwidth]{compare_segments.png}
+% 	\caption{The Algorithm of Asano \cite{asano1985efficient} Visual Example \cite{DBLP:journals/corr/BungiuHHHK14}.}
+% 	\label{fig:asano}
+% \end{figure}
 	% - as the sweep proceeds, $T$ is updated and a neq vertex of $V(q)$ is generated each time the smallest element (segment closest to $q$) in $T$ changes
 	% - important to have efficient comparison ops (e.g.: *add pic*)
-
+\newpage 
 \subsubsection{New Algorithm: Triangular Expansion}
 The algorithm introduced by Bungiu et al. \cite{DBLP:journals/corr/BungiuHHHK14} is named Triangular Expansion and runs in $O(n^2)$ time and $O(n)$ space. It begins by triangulating $\mathcal P$ in $O(n \log n)$ time if $\mathcal P$ has holes, and $O(n)$ otherwise. Unfortunately the runtime is constrained by CGAL, which makes use of the Delaunay triangulation algorithm \cite{delaunay1934sphere} with $O(n^2)$ time for the worst case, but with better performance in practice. 
 
