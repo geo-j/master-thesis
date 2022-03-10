@@ -69,7 +69,7 @@ In terms of the convergence to the optimal solution, the iterative algorithm wit
 	% - secondary objective function: minimise the number of face-guards used in $G$ and the number of unseen face-witnesses
 	% - if $G$ contains only point guards and sees all face-witnesses => optimal solution; otherwise it refines $\mathbb{A}$ and goes to the next iteration
 % - given a closed simply polygon $P$ we say 2 points $p, q$ see each other if the segment $seg(p, q)$ is fully contained in $P$
-% - the art gallery problem seeks a min size set $G \subset P$ of guards that sees $P$ completely
+% - the Art Gallery Problem seeks a min size set $G \subset P$ of guards that sees $P$ completely
 % - notion of _vision-stability_
 	% - consider an _enhanced_ guard that can see "around the corner" by an angle of $\delta$ or a _diminished_ guard whose vision is by an angle of $\delta$ "blocked" by reflex vertices
 	% - a polygon $P$ has vision-stability $\delta$ if the optimal number of enhanced guards to guard $P$ is the same as the optimal number of diminished guards to guard $P$
@@ -84,7 +84,7 @@ In terms of the convergence to the optimal solution, the iterative algorithm wit
 	% - the bottleneck is not solving the IP, ol
 		% 	- normal protocol - square splits only if the face is incident to more than one reflex vertex; choose angular split with probability 0.8, and the other two remaining split types with equal probabilities; in case a split is impossible, we will try the two other splits, before deciding that a face is unsplittable
 		% 	- square spthms
-	% - the art gallery problem is in NP for vision-stable polygons
+	% - the Art Gallery Problem is in NP for vision-stable polygons
 	% - _reliable_ - even if the input polygon is not vision-stable, the reported result is correct
 	% - refine by splitting appropriate faces
 	% - work with _critical witnesses_
