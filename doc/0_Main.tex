@@ -2,7 +2,7 @@
 
 %PACKAGES
 \usepackage[utf8]{inputenc}
-\usepackage{natbib}
+\usepackage[sorting=nty]{biblatex}
 \usepackage{graphicx}
 \graphicspath{ {./Figures/} }
 \usepackage{amsmath} % \vspace{} \hspace{}
@@ -24,6 +24,8 @@
 % \usepackage{subfigure}
 \usepackage{bm} % For \boldsymbol
 \usepackage{amsmath}
+
+\addbibresource{bib.bib}
 
 %NEW COMMANDS
 \newcommand{\eg}{e.\,g.\ }
@@ -93,12 +95,12 @@
 % \include{3-1_Reinforcement_Learning}
 % \include{3-2_Deep_Q_Learning}
 % \include{4_Thesis_Project}
+\printbibliography
 
 \renewcommand{\headrulewidth}{0pt}% Remove header rule
 \fancyhead{}% Remove all header contents
 
-\bibliographystyle{unsrt}
-\bibliography{bib}
+% \bibliographystyle{unsrt}
 
 %\include{3_Appendix}
 
