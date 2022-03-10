@@ -10,6 +10,12 @@ Figure \ref{fig:art} displays an example of The Art Gallery Problem \cite{o1987a
     \caption{Example of an Art Gallery Problem instance with polygon $P$ guarded by 4 points. The visibility area $Vis(p)$ is highlit in pink.}
     \label{fig:art}
 \end{figure}
+
+% TODO: probably needed in some other more introductive section
+
+Working with the visibility region is a basic tool in computational geometry, specifically in the context of the Art Gallery Problem \cite{o1987art}, which is an $\exists \mathbb R$-complete problem \cite{abrahamsen2021art}. The problem class $\exists \mathbb R$ consists of instances that can be reduced in polynomial time to a decision problem of whether a system of polynomial equations with integer coefficients and any number of real variables has a solution. Since NP $\subseteq \exists \mathbb R$, the $\exists \mathbb R$ class is an even harder to solve complexity class, since $\exists \mathbb R$-complete problems are not know to have solutions of polynomial space. 
+% For this reason, it is crucial that the computation time of the visibility region is efficiently implemented. 
+
 Building on the aforementioned concepts, this section will further inspect how visibility in polygons can be efficiently computed \cite{DBLP:journals/corr/BungiuHHHK14}, how it is not always possible to place guards at rational coordinates \cite{abrahamsen2021art}, in addition to two improved polygon guarding algorithms \cite{maleki2022implementation}, \cite{DBLP:journals/corr/abs-2007-06920}.
 % Some general notions that will appear in the papers are introduced below.
 
