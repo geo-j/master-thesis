@@ -2,19 +2,19 @@
 Abrahamsen, Adamaszek, and Miltzow \cite{abrahamsen2021art} study the placement of the guards in the context of The Art Gallery Problem \cite{o1987art}. Namely, it focusses on and confirms that there are polygons with integer coordinates that require guards placed at points with irrational coordinates. Generalising, Abrahamsen et al. show that $\forall n \in \mathbb N$, there is a family of simple monotone polygons that can either be guarded by $3n$ guards with irrational coordinates, or requires at least $4n$ guards with rational coordinates. The result is also extended to a rectilinear polygon that can be guarded by 9 guards with irrational coordinates, or requires at least 10 guards with rational coordinates. The family of simple monotone polygons that can be guarded by $3n$ guards with irrational coordinates, as well as the rectilinear polygon that can be guarded by 9 guards with irrational coordinates are also discussed.
 
 
-At the time of writing, there was no combinatorial algorithm for finding an optimal solution for The Art Gallery Problem \cite{o1987art}, nor for its decidability version on whether a set $S$ of given size $k$ exists. As such, it is not known whether the problem is in NP.
+% Before the time of the writing, there was no combinatorial algorithm for finding an optimal solution for The Art Gallery Problem \cite{o1987art}, nor for its decidability version on whether a set $S$ of given size $k$ exists. As such, it was not known whether the problem is in NP.
 
-First, we will address the question regarding whether polygons given by integer coordinates require guard positions with irrational coordinates in any optimal solution by introducing a crafted monotone polygon $\mathcal P$. A polygon is monotone if there exists a line $l$ such that every line orthogonal to $l$ intersects it at most twice. Polygon $\mathcal P$ is depicted in Figure \ref{fig:p} and is constructed using a rectangle, six triangular pockets (in green), three rectangular pockets (in blue) and four quadrilaterial pockets (in red) are added. The intuition behind the polygon will be explained in the upcoming subsections. The figure is accredited to \cite{1057165}.
+First, we will address the question regarding whether polygons given by integer coordinates require guard positions with irrational coordinates in any optimal solution by introducing a crafted monotone polygon $\mathcal P$. A polygon is monotone if there exists a line $l$ such that every line orthogonal to $l$ intersects its boundary at most twice. Polygon $\mathcal P$ is depicted in Figure \ref{fig:p} and is constructed using a rectangle, six triangular pockets (in green), three rectangular pockets (in blue) and four quadrilaterial pockets (in red) are added. The intuition behind the polygon will be explained in the upcoming subsections. The figure is accredited to Abraham et al. \cite{1057165}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{fig-12-1.png}
-    \caption{Polygon $\mathcal P$ \cite{1057165}.}
+    \caption{The polygon $\mathcal P$ developed by Abraham et al \cite{1057165} to emphasise the need for irrational guards sometimes.}
     \label{fig:p}
 \end{figure}
 
 \subsubsection{Intuition for Triangular Pockets}
-The six triangular pockets are created in order to force a guard on a line segment, as depicted in Figure \ref{fig:tb}. The figure is taken from \cite{abrahamsen2021art}. As such, they are grouped into three pairs: top pockets are paired with bottom pockets corresponding to their position in $\mathcal P$. For every pair (leftmost, middle, rightmost) of triangular pockets, there is a corresponding line $l_\ell, l_m, l_r$, respectively, that joins the peaks of each triangular pocket in a pair. A guard can see both the peaks $t, b$ of the pockets only if it is placed on the line segment $\overline{tb}$ (Figure \ref{fig:forcing_line}). Hence, one guard is needed per pair, resulting in 3 guards in total. Both figures have been taken from \cite{1057165}.
+The six triangular pockets are created in order to force a guard on a line segment, as depicted in Figure \ref{fig:tb}. The figure is taken from \cite{abrahamsen2021art}. As such, they are grouped into three pairs: top pockets are paired with bottom pockets corresponding to their position in $\mathcal P$. For every pair (leftmost, middle, rightmost) of triangular pockets, there is a corresponding line $l_\ell, l_m, l_r$, respectively, that joins the peaks of each triangular pocket in a pair. A guard can see both the peaks $t, b$ of the pockets only if it is placed on the line segment $\overline{tb}$ (Figure \ref{fig:forcing_line}). Hence, one guard is needed per pair, resulting in 3 guards in total.
 
 \begin{figure}[h!]
     \centering
@@ -38,12 +38,12 @@ The six triangular pockets are created in order to force a guard on a line segme
 
 \subsubsection{Intuition for Quadrilaterial Pockets}
 The four quadrilateral pockets are created in order to force a guard in a region bounded by a curve. Figure \ref{fig:quadrilateral_pockets} was taken and adapted from \cite{1057165}, and depicts the visualisation for this case. 
-Consider some position of $g_{\ell}$ on $l_{\ell}$. As $g_{\ell}$ moves up on $l_{\ell}$, the point $p^{\ell}_t$ slides towards the right on segment $e^{\ell}_t$, and point $p^{\ell}_b$ slides to the left on segment $e^{\ell}_b$. In this way, the lines $p^{\ell}_tb$ and $p^{\ell}_bd$, where $b, d$ are reflex vertices, intersect and form the curve $c_{\ell}$. Considering thus the fixed position of a guard $g_m$ either on the left or on the right of the curve $c_\ell$, there exists a position of guard $g_{\ell}$ on $l_{\ell}$ such that edge $e_t^{\ell}$ and line $p_b^{\ell}g_m$ are seen by $g_\ell$. Then, only if $g_m$ is on the left or on $c_\ell$ can it see the remaining parts of the pockets that are not seen by $g_\ell$ (edge $e_b^{\ell}$, line $p_t^{\ell}g_{\ell}$). Analogously, in order for the right side of $\mathcal P$ and the right pair of quadrilateral pockets to be seen by both guards $g_m$ and $g_r$, $g_m$ has to be on the curve $c_r$ or on its right. Since $g_m$ has to also satisfy its position on $c_\ell$, its only feasible position is as the intersection point between $c_\ell$ and $c_r$. 
+Consider some position of $g_{\ell}$ on $l_{\ell}$. As $g_{\ell}$ moves up on $l_{\ell}$, the point $p^{\ell}_t$ slides towards the right on segment $e^{\ell}_t$, and point $p^{\ell}_b$ slides to the left on segment $e^{\ell}_b$. In this way, the lines $p^{\ell}_tb$ and $p^{\ell}_bd$, where $b, d$ are reflex vertices, intersect and form the curve $c_{\ell}$. Considering thus the fixed position of a guard $g_m$ either on the left or on the right of the curve $c_\ell$, there exists a position of guard $g_{\ell}$ on $l_{\ell}$ such that edge $e_t^{\ell}$ and line $p_b^{\ell}g_m$ are seen by $g_\ell$. Then, only if $g_m$ is on the left or on $c_\ell$ can it see the remaining parts of the pockets that are not seen by $g_\ell$ (edge $e_b^{\ell}$, line $p_t^{\ell}g_{\ell}$). Analogously, in order for the right side of $\mathcal P$ and the right pair of quadrilateral pockets to be seen by both guards $g_m$ and $g_r$, $g_m$ has to be on the curve $c_r$ or on its right. Since $g_m$ has to also satisfy its position on $l_m$, its only feasible position is as the intersection point between $c_\ell, c_r$ and $l_m$. 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{fig-6-1.png}
-    \caption{Restricting a Guard to a Region Bounded by a Curve \cite{1057165}.}
+    \caption{Restricting a guard to a region bounded by a curve \cite{1057165}.}
     \label{fig:quadrilateral_pockets}
 \end{figure}
 
