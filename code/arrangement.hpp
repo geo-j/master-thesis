@@ -167,12 +167,6 @@ class Arrangement {
         */
         bool is_completely_visible(Arrangement_2 visibility_arrangement) {
             Polygon_2 visibility_polygon = arrangement_to_polygon(visibility_arrangement);
-            // CGAL::draw(visibility_polygon);
-            // CGAL::draw(this->input_polygon);
-            // for (auto vit = visibility_polygon.vertices_begin(); vit != visibility_polygon.vertices_end(); ++ vit) {
-            //     std::cout << *vit << std::endl;
-            // }
-            // std::cout << std::endl;
 
             return visibility_polygon == this->input_polygon;
         }
@@ -191,7 +185,6 @@ class Arrangement {
                 auto guard = this->guards.at(i);
 
                 // find the face of the guard
-                // Arrangement_2::Face_const_handle *face;
                 CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
                 auto obj = pl.locate(guard);
 
@@ -213,11 +206,6 @@ class Arrangement {
                     CGAL::overlay(prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon);
                     prev_visibility_polygon = joined_visibility_polygon;
                 }
-                // add the visible points only once
-                // for (auto eit = visibility_region.edges_begin(); eit != visibility_region.edges_end(); ++ eit) {
-                //     push_back_unique(visible_points, eit->source()->point());
-                //     push_back_unique(visible_points, eit->target()->point());
-                // }
             }
 
             return prev_visibility_polygon;
