@@ -274,33 +274,69 @@ class Arrangement {
         bool get_guard_reflex_arrangement_intersection(Point_2 guard, Point_2 reflex_vertex, Point_2 &d) {
             std::cout << "Ray [" << guard << ';' << reflex_vertex << "] " << std::endl;
             Ray_2 pr(guard, reflex_vertex);
-            auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
 
-            do {
-                Segment_2 edge = Segment_2(eit->source()->point(), eit->target()->point());
-                std::cout << "- tries to intersect boundary segment [" << eit->source()->point() << ", " << eit->target()->point() << "]" << std::endl;
+            // only look at reflex vertices that are actually visible from the guard
+            if (this->is_visible_from(guard, reflex_vertex)) {
+                auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
 
-                auto intersection = CGAL::intersection(pr, edge);
-                if (intersection) {
-                    d = *boost::get<Point_2 >(&*intersection);
+                do {
+                    Segment_2 edge = Segment_2(eit->source()->point(), eit->target()->point());
+                    std::cout << "- tries to intersect boundary segment [" << eit->source()->point() << ", " << eit->target()->point() << "]" << std::endl;
 
-                    // intersection point d should be different than the reflex vertices (obviously the ray through the reflex vertex containts the reflex vertex itself)
-                    if (d != reflex_vertex) {
-                        std::cout << "\tmanages to at " << d << std::endl;
-                        return true;
+                    auto intersection = CGAL::intersection(pr, edge);
+                    if (intersection) {
+                        d = *boost::get<Point_2 >(&*intersection);
+
+                        // intersection point d should be visible from the guard, 
+                        //      but also different than the reflex vertices (obviously the ray through the reflex vertex containts the reflex vertex itself)
+                        if (d != reflex_vertex && this->is_visible_from(guard, d)) {
+                                std::cout << "\tmanages to at " << d << std::endl;
+                                return true;
+                        }
                     }
-                }
-            } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+                } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+            }
 
             return false;
         }
+
+        /* is_visible_from method
+        * :in param Point_2 p:  the viewpoint
+        * :in param Point_2 r:  the point that needs to be checked for visibility from viewpoint p
+        * :return bool:         true if r is visible from p,
+        *                           false otherwise
+        * 
+        * This method checks whether a point r is visible from p by checking whether r is in the visibility region of p.
+        */
+        bool is_visible_from(Point_2 p, Point_2 r) {
+            // first compute the visibility region of the guard
+            auto visibility_region = this->compute_guard_visibility(p);
+
+            // find where in the visibility region the guard is placed
+            CGAL::Arr_naive_point_location<Arrangement_2> pl(visibility_region);
+            auto obj = pl.locate(r);
+
+            // The query point may be a vertex on the visibility region boundary
+            // TODO: handle degenerate collinear case
+            auto *vertex = boost::get<Arrangement_2::Vertex_const_handle> (&obj);
+            
+            
+            // if d is in the visibility region of the guard, then it can be counted as an intersection point
+            if (vertex) {
+                std::cout << '\t' << p << " can see " << r << std::endl;
+                return true;
+            }
+
+            return false;
+        }
+
 
         void get_all_guard_reflex_boundary_intersections() {
             for (auto guard : this->guards) {
                 for (auto reflex_vertex : this->reflex_vertices) {
                     Point_2 d;
                     if (this->get_guard_reflex_arrangement_intersection(guard, reflex_vertex, d))
-                        std::cout << "Ray [" << guard << "; " << reflex_vertex << "] intersects boundary point " << d << std::endl;
+                        std::cout << ">>> Ray [" << guard << "; " << reflex_vertex << "] intersects boundary point " << d << std::endl;
                 }
             }
         }
