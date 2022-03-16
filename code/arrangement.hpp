@@ -20,6 +20,8 @@ typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_true>    NSPV
 typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>  RSV;
 typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 
+// typedef Kernel::Orientation_2                                               orientation;
+
 
 
 class Arrangement {
@@ -221,9 +223,30 @@ class Arrangement {
             return prev_visibility_polygon;
         }
 
-        // void get_reflex_vertices() {
+        /* get_reflex_vertices method, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArtGallery.cpp
+        * 
+        *  This method adds all the reflex vertices of the input arrangement in the reflex_vertices vector.
+        */
+        void get_reflex_vertices() {
+            //Identify reflex vertices
+            //use do/while for circular loop
+            //The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
+            auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
+            do {
+                //Left turn, because the boundary is clockwise...
+                if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
+                    //eit->source() is a reflex vertex...
+                    this->reflex_vertices.push_back(eit->source()->point());
+                    std::cout << "Reflex vertex (" << eit->source()->point().x() << ',' << eit->source()->point().y() << ')' << std::endl;
+                    // eit->source()->data().isReflex = true;
+                    // reflexHandles.push_back(eit->source());
+                    // reflexNeighbours.push_back(
+                    //     make_pair(eit->prev()->source(), eit->target()
+                    //     ));
 
-        // }
+                }
+            } while (++eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+        }
     
     private:
         Arrangement_2 input_arrangement;
