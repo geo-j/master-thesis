@@ -24,6 +24,11 @@ typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 
 class Arrangement {
     public:
+        /* *****************
+           *     I/O       *
+           *****************
+        */
+
        /* overloaded input operator
         * The format of the input file is:
         * E                     * number of edges
@@ -142,6 +147,12 @@ class Arrangement {
         }
 
 
+
+        /* *****************
+           *  Visibility   *
+           *****************
+        */
+
         // TODO: probably some edge cases are missing based on the arrangement to polygon conversion
         /* is_completely_visible method
         *  :param Arrangement_2 visibility_arrangement: the visibility arrangement resulted from computing the visibility of one or multiple guards
@@ -209,6 +220,10 @@ class Arrangement {
 
             return prev_visibility_polygon;
         }
+
+        // void get_reflex_vertices() {
+
+        // }
     
     private:
         Arrangement_2 input_arrangement;
@@ -216,4 +231,6 @@ class Arrangement {
         Polygon_2 input_polygon;
         // TODO: maybe guards class in the future?
         std::vector<Point_2> guards;
+
+        std::vector<Point_2> reflex_vertices;
 };
