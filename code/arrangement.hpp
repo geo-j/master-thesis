@@ -9,6 +9,8 @@
 #include <CGAL/Boolean_set_operations_2.h>
 #include <CGAL/Arr_overlay_2.h>
 #include <CGAL/draw_polygon_2.h>
+#include <CGAL/Ray_2.h>
+#include <CGAL/intersections.h>
 
 #include "utils.hpp"
 
@@ -20,7 +22,9 @@ typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_true>    NSPV
 typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>  RSV;
 typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 
-// typedef Kernel::Orientation_2                                               orientation;
+// typedef CGAL::Ray_2<Traits_2>                                               Ray_2
+typedef Kernel::Ray_2                                                       Ray_2;;
+typedef Kernel::Intersect_2                                                 Intersect_2;
 
 
 
@@ -79,7 +83,7 @@ class Arrangement {
         }
 
         /* read_guards method
-        * :param stream f: data stream from where the guards are input
+        * :out param stream f: data stream from where the guards are input
         * The format of the input guards file is:
         * G             * number of guards
         * q1.x q1.y     * coordinates of the guard in the format of q(x, y) separated by spaces
@@ -99,7 +103,7 @@ class Arrangement {
         }
 
         /* print_polygon method
-        * :param stream f: data stream where the arrangement should be output
+        * :out param stream f: data stream where the arrangement should be output
         *
         * The format of the output file is:
         * V                     * number of vertices of the polygon
@@ -124,7 +128,7 @@ class Arrangement {
         }
 
         /* print_guards method
-        * :param stream f: data stream where the arrangement should be output
+        * :out param stream f: data stream where the arrangement should be output
         *
         * The format of the output file is:
         * IV                    * number of isolated vertices (intended to be guards)
@@ -142,7 +146,7 @@ class Arrangement {
         }
 
         /* add_guard method
-        *  :param Point_2 p: point that would guard the arrangement
+        *  :in param Point_2 p: point that would guard the arrangement
         */
         void add_guard(const Point_2 q) {
             this->guards.push_back(q);
@@ -157,7 +161,7 @@ class Arrangement {
 
         // TODO: probably some edge cases are missing based on the arrangement to polygon conversion
         /* is_completely_visible method
-        *  :param Arrangement_2 visibility_arrangement: the visibility arrangement resulted from computing the visibility of one or multiple guards
+        *  :in param Arrangement_2 visibility_arrangement: the visibility arrangement resulted from computing the visibility of one or multiple guards
         *  :return bool                               : whether the whole input arrangement is seen by the visibility arrangement
         *       1                                     : whole arrangement is seen
         *       0                                     : otherwise
@@ -171,6 +175,29 @@ class Arrangement {
             return visibility_polygon == this->input_polygon;
         }
 
+        /* compute_guard_visibility method
+        *  :in param Point_2 guard         :guard whose visibility region needs to be computed
+        *  :return Arrangement_2           :arrangement visible from the guard
+        * 
+        *  This method computes the visibility region arrangement of a guards
+        */
+        Arrangement_2 compute_guard_visibility(Point_2 guard) {
+            // find the face of the guard
+            CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
+            auto obj = pl.locate(guard);
+
+            // The query point is located in the interior of a face
+            auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
+
+            // define type of visibility algorithm used
+            // TODO: should make it changeable at invocation time
+            TEV visibility(this->input_arrangement);
+            Arrangement_2 visibility_arrangement;
+            visibility.compute_visibility(guard, *face, visibility_arrangement);
+
+            return visibility_arrangement;
+        }
+
         /* compute_full_visibility method
         *  :return Arrangement_2           :arrangement visible from all guards
         * 
@@ -179,37 +206,33 @@ class Arrangement {
         */
         Arrangement_2 compute_full_visibility() {
             std::vector<Point_2> visible_points;
-            Arrangement_2 prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon;
+            Arrangement_2 prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement;
 
             for (auto i = 0; i < this->guards.size(); i ++) {
                 auto guard = this->guards.at(i);
 
-                // find the face of the guard
-                CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
-                auto obj = pl.locate(guard);
-
-                // The query point is located in the interior of a face
-                auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
-
-                // define type of visibility algorithm used
-                // TODO: should make it changeable at invocation time
-                TEV visibility(this->input_arrangement);
-                Arrangement_2 visibility_arrangement;
-                visibility.compute_visibility(guard, *face, visibility_arrangement);
+                Arrangement_2 visibility_arrangement = this->compute_guard_visibility(guard);
 
                 if (i == 0)
                     // initialise first visibility polygon
-                    prev_visibility_polygon = visibility_arrangement;
+                    prev_visibility_arrangement = visibility_arrangement;
                 else {
                     // if there are multiple guards, join the previously computed visibility polygon with the current one
-                    cur_visibility_polygon = visibility_arrangement;
-                    CGAL::overlay(prev_visibility_polygon, cur_visibility_polygon, joined_visibility_polygon);
-                    prev_visibility_polygon = joined_visibility_polygon;
+                    cur_visibility_arrangement = visibility_arrangement;
+                    CGAL::overlay(prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement);
+                    prev_visibility_arrangement = joined_visibility_arrangement;
                 }
             }
 
-            return prev_visibility_polygon;
+            return prev_visibility_arrangement;
         }
+
+
+
+        /* *****************
+           *   Gradient    *
+           *****************
+        */
 
         /* get_reflex_vertices method, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArtGallery.cpp
         * 
@@ -225,7 +248,7 @@ class Arrangement {
                 if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
                     //eit->source() is a reflex vertex...
                     this->reflex_vertices.push_back(eit->source()->point());
-                    std::cout << "Reflex vertex (" << eit->source()->point().x() << ',' << eit->source()->point().y() << ')' << std::endl;
+                    // std::cout << "Reflex vertex (" << eit->source()->point().x() << ',' << eit->source()->point().y() << ')' << std::endl;
                     // eit->source()->data().isReflex = true;
                     // reflexHandles.push_back(eit->source());
                     // reflexNeighbours.push_back(
@@ -233,9 +256,56 @@ class Arrangement {
                     //     ));
 
                 }
-            } while (++eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+            } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
         }
     
+        /* get_guard_reflex_arrangement_intersection method
+        * 
+        * :in param Point_2    guard:             the guard whose reflex-arrangement intersection we want to calculate
+        * :in param Point_2    reflex_vertex:     the reflex vertex past which the guard's visibility intersects the arrangement
+        * :out param Point_2   d:                 the intersection point between the ray [guard, reflex_vertex] and the arrangement as output
+        * :return bool:                           true if an intersection point between the ray [guard, reflex_vertex] and the arrangement was found;
+        *                                            false otherwise
+        * 
+        * This method computes the intersection point between a given guard and a reflex vertex in the input arrangement.
+        */
+        // TODO: account for intersection past the boundary of the polygon
+        //       should I then first compute the visibility of a point?
+        bool get_guard_reflex_arrangement_intersection(Point_2 guard, Point_2 reflex_vertex, Point_2 &d) {
+            std::cout << "Ray [" << guard << ';' << reflex_vertex << "] " << std::endl;
+            Ray_2 pr(guard, reflex_vertex);
+            auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
+
+            do {
+                Segment_2 edge = Segment_2(eit->source()->point(), eit->target()->point());
+                std::cout << "- tries to intersect boundary segment [" << eit->source()->point() << ", " << eit->target()->point() << "]" << std::endl;
+
+                auto intersection = CGAL::intersection(pr, edge);
+                if (intersection) {
+                    d = *boost::get<Point_2 >(&*intersection);
+
+                    // intersection point d should be different than the reflex vertices (obviously the ray through the reflex vertex containts the reflex vertex itself)
+                    if (d != reflex_vertex) {
+                        std::cout << "\tmanages to at " << d << std::endl;
+                        return true;
+                    }
+                }
+            } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+
+            return false;
+        }
+
+        void get_all_guard_reflex_boundary_intersections() {
+            for (auto guard : this->guards) {
+                for (auto reflex_vertex : this->reflex_vertices) {
+                    Point_2 d;
+                    if (this->get_guard_reflex_arrangement_intersection(guard, reflex_vertex, d))
+                        std::cout << "Ray [" << guard << "; " << reflex_vertex << "] intersects boundary point " << d << std::endl;
+                }
+            }
+        }
+
+
     private:
         Arrangement_2 input_arrangement;
         // TODO: should probably adapt it to polygons with holes
