@@ -212,6 +212,7 @@ class Arrangement {
     
     private:
         Arrangement_2 input_arrangement;
+        // TODO: should probably adapt it to polygons with holes
         Polygon_2 input_polygon;
         // TODO: maybe guards class in the future?
         std::vector<Point_2> guards;

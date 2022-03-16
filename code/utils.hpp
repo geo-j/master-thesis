@@ -23,6 +23,7 @@ void push_back_unique(std::vector<type> &v, type element) {
         v.push_back(element);
 }
 
+// TODO: should probably take into account polygons with holes
 /* arrangement to polygon function, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArrangementFunctions.cpp
 * :param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
 * :return   Polygon_2     polygon:     output polygon converted from the given arrangement
