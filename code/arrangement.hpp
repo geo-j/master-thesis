@@ -11,6 +11,7 @@
 #include <CGAL/draw_polygon_2.h>
 #include <CGAL/Ray_2.h>
 #include <CGAL/intersections.h>
+#include <CGAL/Object.h>
 
 #include "utils.hpp"
 
@@ -22,9 +23,9 @@ typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_true>    NSPV
 typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>  RSV;
 typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 
-// typedef CGAL::Ray_2<Traits_2>                                               Ray_2
-typedef Kernel::Ray_2                                                       Ray_2;;
+typedef Kernel::Ray_2                                                       Ray_2;
 typedef Kernel::Intersect_2                                                 Intersect_2;
+typedef Kernel::Object_2                                                    Object_2;
 
 
 
@@ -272,7 +273,7 @@ class Arrangement {
         // TODO: account for intersection past the boundary of the polygon
         //       should I then first compute the visibility of a point?
         bool get_guard_reflex_arrangement_intersection(Point_2 guard, Point_2 reflex_vertex, Point_2 &d) {
-            std::cout << "Ray [" << guard << ';' << reflex_vertex << "] " << std::endl;
+            // std::cout << "Ray [" << guard << ';' << reflex_vertex << "] " << std::endl;
             Ray_2 pr(guard, reflex_vertex);
 
             // only look at reflex vertices that are actually visible from the guard
@@ -281,16 +282,19 @@ class Arrangement {
 
                 do {
                     Segment_2 edge = Segment_2(eit->source()->point(), eit->target()->point());
-                    std::cout << "- tries to intersect boundary segment [" << eit->source()->point() << ", " << eit->target()->point() << "]" << std::endl;
+                    // std::cout << "- tries to intersect boundary segment [" << eit->source()->point() << ", " << eit->target()->point() << "]" << std::endl;
 
-                    auto intersection = CGAL::intersection(pr, edge);
-                    if (intersection) {
-                        d = *boost::get<Point_2 >(&*intersection);
+                    Object_2 intersection = CGAL::intersection(pr, edge);
+                    const Point_2 *intersection_point = CGAL::object_cast<Point_2>(&intersection);
 
-                        // intersection point d should be visible from the guard, 
-                        //      but also different than the reflex vertices (obviously the ray through the reflex vertex containts the reflex vertex itself)
-                        if (d != reflex_vertex && this->is_visible_from(guard, d)) {
-                                std::cout << "\tmanages to at " << d << std::endl;
+                    // check if the ray intersects any of the edges of the visibility region
+                    if (intersection_point) {
+                        d = *intersection_point;
+                        // d = *boost::get<Point_2 >(&*intersection);
+
+                        if (d != eit->target()->point() && d != eit->source()->point() && // intersection point should be different than the segment endpoints it is on
+                            this->is_visible_from(guard, d)) {  // intersection point should be visible from the guard
+                                // std::cout << "\tmanages to at " << d << std::endl;
                                 return true;
                         }
                     }
@@ -323,7 +327,7 @@ class Arrangement {
             
             // if d is in the visibility region of the guard, then it can be counted as an intersection point
             if (vertex) {
-                std::cout << '\t' << p << " can see " << r << std::endl;
+                // std::cout << '\t' << p << " can see " << r << std::endl;
                 return true;
             }
 
