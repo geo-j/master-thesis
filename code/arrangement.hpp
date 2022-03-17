@@ -12,6 +12,7 @@
 #include <CGAL/Ray_2.h>
 #include <CGAL/intersections.h>
 #include <CGAL/Object.h>
+#include <CGAL/squared_distance_2.h>
 
 #include "utils.hpp"
 
@@ -26,6 +27,7 @@ typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 typedef Kernel::Ray_2                                                       Ray_2;
 typedef Kernel::Intersect_2                                                 Intersect_2;
 typedef Kernel::Object_2                                                    Object_2;
+typedef Kernel::FT                                                          FT;
 
 
 
@@ -292,8 +294,8 @@ class Arrangement {
                         d = *intersection_point;
                         // d = *boost::get<Point_2 >(&*intersection);
 
-                        if (d != eit->target()->point() && d != eit->source()->point() && // intersection point should be different than the segment endpoints it is on
-                            this->is_visible_from(guard, d)) {  // intersection point should be visible from the guard
+                        if (d != eit->target()->point() && d != eit->source()->point() // intersection point should be different than the segment endpoints it is on (collinear guard - reflex vertex - intersection point case)
+                            && this->is_visible_from(guard, d)) {  // intersection point should be visible from the guard
                                 // std::cout << "\tmanages to at " << d << std::endl;
                                 return true;
                         }
@@ -335,13 +337,35 @@ class Arrangement {
         }
 
 
+        /* gradient method
+        * :in param Point_2 guard:  guard point whose gradient needs to be computed
+        * :return FT:               value of the gradient of the guard
+        * 
+        * This method computes the gradient of a guard around all the reflex vertices it sees
+        */
+        // TODO: actually apply the rotation in the computation
+        FT gradient(Point_2 guard) {
+            FT gradient = 0;
+            
+            for (auto reflex_vertex : this->reflex_vertices) {
+                Point_2 intersection_point;
+
+                if (this->get_guard_reflex_arrangement_intersection(guard, reflex_vertex, intersection_point)) {
+                    auto alpha = CGAL::squared_distance(guard, reflex_vertex);
+                    auto beta = CGAL::squared_distance(intersection_point, reflex_vertex);
+
+                    gradient += (beta * beta) / (2 * alpha);
+
+                    // std::cout << ">>> Ray [" << guard << "; " << reflex_vertex << "] intersects boundary point " << intersection_point << " and has gradient " << gradient << std::endl;
+                }
+            }
+
+            return gradient;
+        }
+
         void get_all_guard_reflex_boundary_intersections() {
             for (auto guard : this->guards) {
-                for (auto reflex_vertex : this->reflex_vertices) {
-                    Point_2 d;
-                    if (this->get_guard_reflex_arrangement_intersection(guard, reflex_vertex, d))
-                        std::cout << ">>> Ray [" << guard << "; " << reflex_vertex << "] intersects boundary point " << d << std::endl;
-                }
+                std::cout << "Guard " << guard << " has gradient " << this->gradient(guard) << std::endl;
             }
         }
 
