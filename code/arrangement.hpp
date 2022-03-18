@@ -234,7 +234,58 @@ class Arrangement {
             return prev_visibility_arrangement;
         }
 
+        /* is_visible_from method
+        * :in param Point_2 p:  the viewpoint
+        * :in param Point_2 r:  the point that needs to be checked for visibility from viewpoint p
+        * :return bool:         true if r is visible from p,
+        *                           false otherwise
+        * 
+        * This method checks whether a point r is visible from p by checking whether r is in the visibility region of p.
+        */
+        bool is_visible_from(Point_2 p, Point_2 r) {
+            // first compute the visibility region of the guard
+            auto visibility_region = this->compute_guard_visibility(p);
 
+            // find where in the visibility region the guard is placed
+            CGAL::Arr_naive_point_location<Arrangement_2> pl(visibility_region);
+            auto obj = pl.locate(r);
+
+            // The query point may be a vertex on the visibility region boundary
+            // TODO: handle degenerate collinear case
+            auto *vertex = boost::get<Arrangement_2::Vertex_const_handle> (&obj);
+            
+            
+            // if d is in the visibility region of the guard, then it can be counted as an intersection point
+            if (vertex) {
+                // std::cout << '\t' << p << " can see " << r << std::endl;
+                return true;
+            }
+
+            return false;
+        }
+
+        /* is_inside_arrangement method
+        * :in param Point_2 p:  the point that needs to be checked whether it is inside the arrangement
+        * :return bool:         true if r is inside the arrangement
+        *                           false otherwise
+        * 
+        * This method checks whether a point p is inside the input arrangement
+        */
+        bool is_inside_arrangement(Point_2 p) {
+            // find where in the visibility region the guard is placed
+            CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
+            auto obj = pl.locate(p);
+
+            // The query point may be a face on the visibility region boundary
+            auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
+            
+            if (!(*face)->is_unbounded()) {
+                // std::cout << '\t' << p << " can see " << r << std::endl;
+                return true;
+            }
+
+            return false;
+        }
 
         /* *****************
            *   Gradient    *
@@ -308,37 +359,6 @@ class Arrangement {
             return false;
         }
 
-        /* is_visible_from method
-        * :in param Point_2 p:  the viewpoint
-        * :in param Point_2 r:  the point that needs to be checked for visibility from viewpoint p
-        * :return bool:         true if r is visible from p,
-        *                           false otherwise
-        * 
-        * This method checks whether a point r is visible from p by checking whether r is in the visibility region of p.
-        */
-        bool is_visible_from(Point_2 p, Point_2 r) {
-            // first compute the visibility region of the guard
-            auto visibility_region = this->compute_guard_visibility(p);
-
-            // find where in the visibility region the guard is placed
-            CGAL::Arr_naive_point_location<Arrangement_2> pl(visibility_region);
-            auto obj = pl.locate(r);
-
-            // The query point may be a vertex on the visibility region boundary
-            // TODO: handle degenerate collinear case
-            auto *vertex = boost::get<Arrangement_2::Vertex_const_handle> (&obj);
-            
-            
-            // if d is in the visibility region of the guard, then it can be counted as an intersection point
-            if (vertex) {
-                // std::cout << '\t' << p << " can see " << r << std::endl;
-                return true;
-            }
-
-            return false;
-        }
-
-
         /* gradient method
         * :in param Point_2 guard:  guard point whose gradient needs to be computed
         * :return Vector_2:         gradient of the guard as a vector
@@ -382,11 +402,25 @@ class Arrangement {
             return Df;
         }
 
-        void get_all_guard_reflex_boundary_intersections() {
-            for (auto guard : this->guards) {
-                Vector_2 gradient = this->gradient(guard);
-                float learning_rate = 0.1;
-                std::cout << ">>>> Guard " << guard << " has gradient (" << guard.x() + learning_rate * gradient.x() << ", " << guard.y() + learning_rate * gradient.y() << ")" << std::endl;
+        void optimise() {
+            float learning_rate = 0.01;
+            for (auto i = 0; i < this->guards.size(); i ++) {
+                Vector_2 gradient;
+                Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
+                std::cout << cur_guard_position << std::endl;
+
+                do {
+                    prev_guard_position = cur_guard_position;
+
+                    gradient = this->gradient(prev_guard_position);
+                    
+                    cur_guard_position = Point_2(prev_guard_position.x() + learning_rate * gradient.x(), prev_guard_position.y() + learning_rate * gradient.y());
+
+                    std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
+                    std::cout << this->is_inside_arrangement(cur_guard_position) << std::endl;
+                    
+                    // std::cout << ">>>> Guard " << this->guards.at(i) << " has gradient (" << this->guards.at(i).x() + learning_rate * gradient.x() << ", " << this->guards.at(i).y() + learning_rate * gradient.y() << ")" << std::endl;
+                } while(prev_guard_position != cur_guard_position && this->is_inside_arrangement(cur_guard_position));
             }
         }
 
