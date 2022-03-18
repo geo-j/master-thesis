@@ -13,6 +13,7 @@
 #include <CGAL/intersections.h>
 #include <CGAL/Object.h>
 #include <CGAL/squared_distance_2.h>
+#include <CGAL/Vector_2.h>
 
 #include "utils.hpp"
 
@@ -27,7 +28,10 @@ typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
 typedef Kernel::Ray_2                                                       Ray_2;
 typedef Kernel::Intersect_2                                                 Intersect_2;
 typedef Kernel::Object_2                                                    Object_2;
+typedef Kernel::Line_2                                                      Line_2;
 typedef Kernel::FT                                                          FT;
+typedef Kernel::Vector_2                                                    Vector_2;
+
 
 
 
@@ -272,8 +276,6 @@ class Arrangement {
         * 
         * This method computes the intersection point between a given guard and a reflex vertex in the input arrangement.
         */
-        // TODO: account for intersection past the boundary of the polygon
-        //       should I then first compute the visibility of a point?
         bool get_guard_reflex_arrangement_intersection(Point_2 guard, Point_2 reflex_vertex, Point_2 &d) {
             // std::cout << "Ray [" << guard << ';' << reflex_vertex << "] " << std::endl;
             Ray_2 pr(guard, reflex_vertex);
@@ -339,33 +341,52 @@ class Arrangement {
 
         /* gradient method
         * :in param Point_2 guard:  guard point whose gradient needs to be computed
-        * :return FT:               value of the gradient of the guard
+        * :return Vector_2:         gradient of the guard as a vector
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
-        // TODO: actually apply the rotation in the computation
-        FT gradient(Point_2 guard) {
-            FT gradient = 0;
+        Vector_2 gradient(Point_2 guard) {
+            Vector_2 Df;
             
-            for (auto reflex_vertex : this->reflex_vertices) {
-                Point_2 intersection_point;
+            for (auto i = 0; i < this->reflex_vertices.size(); i ++) {
+                Point_2 arrangement_intersection_point;
 
-                if (this->get_guard_reflex_arrangement_intersection(guard, reflex_vertex, intersection_point)) {
-                    auto alpha = CGAL::squared_distance(guard, reflex_vertex);
-                    auto beta = CGAL::squared_distance(intersection_point, reflex_vertex);
+                if (this->get_guard_reflex_arrangement_intersection(guard, this->reflex_vertices.at(i), arrangement_intersection_point)) {
+                    auto alpha = CGAL::squared_distance(guard, this->reflex_vertices.at(i));
+                    auto beta = CGAL::squared_distance(arrangement_intersection_point, this->reflex_vertices.at(i));
 
-                    gradient += (beta * beta) / (2 * alpha);
+                    // get the line of the guard p and the arrangement intersection point d
+                    Line_2 pd(guard, arrangement_intersection_point);
+                    // get the orthogonal line on pd through p
+                    Line_2 orthogonal_pd = pd.perpendicular(guard);
 
+                    // calculate the y-coord of the gradient
+                    auto y = (beta * beta) / (2 * alpha);
+                    // calculate the x-coord of the gradient as rotated on the orthogonal line
+                    auto x = orthogonal_pd.x_at_y(y);
+
+                    // create a vector with the partial gradient to be able to add them for each reflex vertex
+                    Vector_2 df(guard, Point_2(x, y));
+
+                    // std::cout << "Guard " << guard << " for reflex vertex " << this->reflex_vertices.at(i) << " has gradient " << x << ", " << y << std::endl;
+
+                    // initialise gradient if first reflex vertex,
+                    //      otherwise just add all gradient vectors
+                    if (i == 0) 
+                        Df = df;
+                    else
+                        Df += df;
                     // std::cout << ">>> Ray [" << guard << "; " << reflex_vertex << "] intersects boundary point " << intersection_point << " and has gradient " << gradient << std::endl;
                 }
             }
-
-            return gradient;
+            return Df;
         }
 
         void get_all_guard_reflex_boundary_intersections() {
             for (auto guard : this->guards) {
-                std::cout << "Guard " << guard << " has gradient " << this->gradient(guard) << std::endl;
+                Vector_2 gradient = this->gradient(guard);
+                float learning_rate = 0.1;
+                std::cout << ">>>> Guard " << guard << " has gradient (" << guard.x() + learning_rate * gradient.x() << ", " << guard.y() + learning_rate * gradient.y() << ")" << std::endl;
             }
         }
 
