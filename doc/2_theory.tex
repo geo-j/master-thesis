@@ -1,28 +1,28 @@
 \section{Theory}
 
 
-Let $\mathcal P$ be a polygon and $p(x, y) \in \mathcal P$ a guard. We are interested in computing the best direction for moving $p$ inside $\mathcal P$ such that the visibility area $Vis(p)$ is increased. That is, exploring what would be a better position for $p$ such that $p$ ``sees more'' of the polygon $\mathcal P$. 
+Let $\mathcal P$ be a polygon and $p(x, y) \in \mathcal P$ a guard. We are interested in computing the best direction for moving $p$ inside $\mathcal P$ such that the visibility area $Vis(p)$ increases. That is, exploring what would be a better position for $p$ such that $p$ ``sees more'' of the polygon $\mathcal P$. 
 
-We can define $f(p)$ as the area seen by a guard $p$. Let $f'_i(p)$ be the local change in the area seen by guard $p$ around a reflex vertex $i$ of $\mathcal P$, as given by the derivative of $f$. Given all reflex vertices $i$, the total (global) change in the area seen by $p$ can be thus summed up to $f'(p) = \sum_i f'_i(p)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $\mathcal P$ and its reflex vertices $r_1$ and $r_2$. The polygon $\mathcal P$ is guarded by $p$, and its position is modified to $p'$ by a small change $\partial x$. The visibility areas of $p$ become $f'_{r_1}$ and $f'_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $p$ becomes $f'(p) = f'_{r_1}(p) + f'_{r_2}(p)$.
+We can define $f(p)$ as the area seen by a guard $p$. Let $f'_i(p)$ be the local change in the area seen by guard $p$ around a reflex vertex $i$ of $\mathcal P$, as given by the derivative of $f$. Given all reflex vertices $i$, the total (global) change in the area seen by $p$ can be thus summed up to $f'(p) = \sum_i f'_i(p)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $\mathcal P$ and its reflex vertices $r_1$ and $r_2$. The polygon $\mathcal P$ is guarded by $p$, and its position is modified to $p'$ by a small change $\partial y$. The visibility areas of $p$ become $f'_{r_1}$ and $f'_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $p$ becomes $f'(p) = f'_{r_1}(p) + f'_{r_2}(p)$.
 
 Thus, $f(p)$ is the continuous objective function of The Art Gallery Problem. We can then use gradient descent as a method to optimise the objective function $f$. We will define below what the methodology of gradient descent is comprised of.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{sumf.png}
-    \caption{Global Change in The Area Seen by $p$ When Moved by $\partial x$ to a New Position $p'$.}
+    \caption{Global change in the area seen by $p$ when moved by $\partial y$ to a new position $p'$.}
     \label{fig:sumf}
 \end{figure}
 
-Gradient descent is an iterative optimisation algorithm for finding the local minimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. In this way, we can define $\bigtriangledown f$ to be the gradient of $f$. The gradient $\bigtriangledown f$ will then indicate the direction of the steepest descent for the objective function $f(p)$. 
+Gradient descent is an iterative optimisation algorithm for finding the local maximum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. In this way, we can define $\bigtriangledown f$ to be the gradient of $f$. The gradient $\bigtriangledown f$ will then indicate the direction of the steepest descent for the objective function $f(p)$. 
 
 
 % defining the gradient for computing the best change in the position of $p$.
 
-Given that $f$ is a function that describes the visibility area of a point $p(x, y)$, we will first need to define how its gradient is computed. In order to simplify the gradient computation and without losing generality, we will analyse the gradient by fixing one of the coordinates of $p$ and varying the other one. In this case, fixing the $x$-coordinate and varying the $y$-coordinate. As such, the computation of the gradient remains the same regardless of the rotation applied to the plane.
+Given that $f$ is a function that describes the visibility area of a point $p(x, y)$, we will first need to define how its gradient is computed. In order to simplify the gradient computation without losing generality, we will analyse the gradient by fixing one of the coordinates of $p$ and varying the other one. In this case, fixing the $x$-coordinate and varying the $y$-coordinate. As such, the computation of the gradient remains the same regardless of the rotation applied to the plane.
 
 
-We will use the notation $\frac{\partial f}{\partial x}$ to denote the change in the visibility area $f(p)$ when the $x$-coordinate is modified by a small amount $\partial x$. Analogously, we will use $\frac{\partial f}{\partial y}$ to denote the small change in the $y$-coordinate of $p$. In this way, we define 
+We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in the visibility area $f(p)$ when the $y$-coordinate is modified by a small amount $\partial y \rightarrow 0$. Analogously, we will use $\frac{\partial f}{\partial x}$ to denote the small change in the $x$-coordinate of $p$. In this way, we define 
 
 \begin{equation}
     \bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) \label{eq:gradient}
@@ -35,7 +35,7 @@ We will now create a canonical geometrical construction that will allow us to fu
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.6\textwidth]{gradient2.png}
-    \caption{Canonical Gradient Construction.}
+    \caption{Canonical gradient construction and for when the position of $p$ is varied by a small amount $\partial y$.}
     \label{fig:gradient}
 \end{figure}
 
@@ -48,7 +48,7 @@ Let $g$ be a boundary line segment of $\mathcal P$, $r$ a reflex vertex inside $
 Let $\partial x$ be an extremely small change in the position of $p$. Call $p'$ this new position of $p$. The point $p'$ can see then up to a new maximum point $d'$ around $r$ on $g$. Let thus the distance between $d$ and $d'$ be $|\overline{dd'}| = L$. As such, $\triangle rdd'$ denotes the increase in the visibility area of $p$ when it moves to position $p'$. That is, the first derivative $f'(p)$ of $f$ will represent the change in the visibility area of $p$:
 
 \begin{equation}
-    \text{Area}_{\triangle rdd'} = f'(p). \label{eq:derivative}
+    \text{Area}_{\triangle rdd'} = f'_r(p). \label{eq:derivative}
 \end{equation}
 
 % Let $a''$ be the projection of $p'$ on $p''r$, and $a$ the projection of $a''$ on the line $pr$ such that the distance from $a$ to $r$ is $|\overline{ar}| = \alpha$. Take the distance between $p$ and $p'$ to be $x$. Since $a''$ is the projection of $p'$ on $pr$, then $|\overline{pp'}| = |\overline{aa''}| = x$.
@@ -112,9 +112,9 @@ Analogously, we can compute the change in the $y$-coordinate by rotating the pla
 Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the small changes $\partial x, \partial y$ in the position of $p$, and hence the gradient $\bigtriangledown f$ is 
 
 \begin{align*}
-    \bigtriangledown f \overset{(\ref{eq:gradient})}{=} &(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) \\
-    \overset{(\ref{eq:derivative})}{=} &(\frac{\text{Area}_{\triangle rdd'}}{\partial x}, \frac{\text{Area}_{\triangle rdd'}}{\partial y}) \\
-    \bigtriangledown f \overset{(\ref{eq:ardd}), (\ref{eq:ardd2})}{=} &(\frac{\beta^2}{2\alpha}, \frac{\beta^2}{2\alpha}). \\
+    \bigtriangledown f \overset{(\ref{eq:gradient})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\partial f}{\partial y} + \partial y) \\
+    \overset{(\ref{eq:derivative})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\text{Area}_{\triangle rdd'}}{\partial y} + 0) \\
+    \bigtriangledown f \overset{(\ref{eq:ardd}), (\ref{eq:ardd2})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\beta^2}{2\alpha}). \\
 \end{align*}
 
 % Given that $pp''$ is parallel to $g$, we can use the Intercept Theorem to compute the lengths of the segments as follows:
