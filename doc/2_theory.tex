@@ -45,7 +45,7 @@ Let $g$ be a boundary line segment of $\mathcal P$, $r$ a reflex vertex inside $
 % We consider the case where there is only a positive change in the $y$ position of $p$. The case with a negative coordinate change would be analogous.
 
 
-Let $\partial x$ be an extremely small change in the position of $p$. Call $p'$ this new position of $p$. The point $p'$ can see then up to a new maximum point $d'$ around $r$ on $g$. Let thus the distance between $d$ and $d'$ be $|\overline{dd'}| = L$. As such, $\triangle rdd'$ denotes the increase in the visibility area of $p$ when it moves to position $p'$. That is, the first derivative $f'(p)$ of $f$ will represent the change in the visibility area of $p$:
+Let $\partial y$ be an extremely small change in the position of $p$. Call $p'$ this new position of $p$. The point $p'$ can see then up to a new maximum point $d'$ around $r$ on $g$. Let thus the distance between $d$ and $d'$ be $|\overline{dd'}| = L$. As such, $\triangle rdd'$ denotes the increase in the visibility area of $p$ when it moves to position $p'$. That is, the first derivative $f'(p)$ of $f$ will represent the change in the visibility area of $p$:
 
 \begin{equation}
     \text{Area}_{\triangle rdd'} = f'_r(p). \label{eq:derivative}
@@ -62,7 +62,7 @@ Let $\partial x$ be an extremely small change in the position of $p$. Call $p'$ 
 
 % In this canonical case we will consider the situation where the gradient is normalised as $||\bigtriangledown f|| = 1$. 
 
-We are now interested in computing how the area seen by guard $p$ increases given the change $\partial x$ in the position of $p$. The distances $||\overline{pr}|| = \alpha$ and $||\overline{rd}|| = \beta$ are known, so we aim at expressing the gradient $\bigtriangledown f$ through $\alpha$ and $\beta$. Since $\bigtriangledown f$ depends on the change in the coordinates of $p$, computing it is tightly connected to the change in the area of triangle $\triangle rdd'$. We will proceed to calculate the area of $\triangle rdd'$ below.
+We are now interested in computing how the area seen by guard $p$ increases given the change $\partial y$ in the position of $p$. The distances $||\overline{pr}|| = \alpha$ and $||\overline{rd}|| = \beta$ are known, so we aim at expressing the gradient $\bigtriangledown f$ through $\alpha$ and $\beta$. Since $\bigtriangledown f$ depends on the change in the coordinates of $p$, computing it is tightly connected to the change in the area of triangle $\triangle rdd'$. We will proceed to calculate the area of $\triangle rdd'$ below.
 % We are now interested in computing the distances $|\overline{df}|, |\overline{aa'}|, |\overline{pp''}|, L$ such that we can compute the increase in the area seen by $p$ and thus the gradient $\bigtriangledown f$. The two triangle areas that need to be computed in order to do so are $A_{\triangle rdd'}$ and $A_{\triangle rdd''}$.
 
 Given that triangles $\triangle rpp'$ and $\triangle rdd'$ are square triangles, their areas can be calculated as:
@@ -93,7 +93,7 @@ We are now interested in how areas $\text{Area}_{\triangle rpp'}$ and $\text{Are
     \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} = &{(\frac \alpha \beta)}^2 \label{eq:rddrpp}
 \end{align}
 
-We can now express the area of $\triangle rdd'$ as only dependent on $\alpha, \beta$, the small position change $\partial x$ and the already known area of $\triangle rpp'$:
+We can now express the area of $\triangle rdd'$ as only dependent on $\alpha, \beta$, the small position change $\partial y$ and the already known area of $\triangle rpp'$:
 
 \begin{align}
     \text{Area}_{\triangle rdd'} \overset{(\ref{eq:rddrpp})}{=} &{(\frac \beta \alpha)}^2 \text{Area}_{\triangle rpp'} \\
@@ -109,7 +109,7 @@ Analogously, we can compute the change in the $y$-coordinate by rotating the pla
     \text{Area}_{\triangle rdd'} = \frac{\beta^2 \partial y}{2\alpha}. \label{eq:ardd2}
 \end{equation}
 
-Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the small changes $\partial x, \partial y$ in the position of $p$, and hence the gradient $\bigtriangledown f$ is 
+Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the small change $\partial y$ in the position of $p$, and hence the gradient $\bigtriangledown f$ is 
 
 \begin{align*}
     \bigtriangledown f \overset{(\ref{eq:gradient})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\partial f}{\partial y} + \partial y) \\
