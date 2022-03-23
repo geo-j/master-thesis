@@ -83,3 +83,50 @@ Arrangement_2 polygon_to_arrangement(Polygon_2 polygon) {
 
     return arrangement;
 }
+
+/* get_reflex_vertices method, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArtGallery.cpp
+* :in param Arrangement_2 arrangement:	the arrangement whose reflex vertices need to be computed
+*
+*  This method adds all the reflex vertices of am arrangement in the reflex_vertices vector.
+*/
+std::vector<Point_2> get_reflex_vertices(Arrangement_2 arrangement) {
+	std::vector<Point_2> reflex_vertices;
+
+	// Identify reflex vertices
+	// use do/while for circular loop
+	// The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
+	auto eit = *arrangement.unbounded_face()->inner_ccbs_begin();
+
+	do {
+		//Left turn, because the boundary is clockwise...
+		if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN)
+			reflex_vertices.push_back(eit->source()->point());
+
+	} while (++ eit != *arrangement.unbounded_face()->inner_ccbs_begin());
+
+	return reflex_vertices;
+}
+
+/* is_inside_arrangement method
+* :in param Arrangement_2 arrangement:	the arrangement which needs to be checked whether it contains the point inside
+* :in param Point_2 p:  				the point that needs to be checked whether it is inside the arrangement
+* :return bool:         				true if r is inside the arrangement
+*                           				false otherwise
+* 
+* This method checks whether a point p is inside the input arrangement
+*/
+bool is_inside_arrangement(Arrangement_2 arrangement, Point_2 p) {
+	// find where in the visibility region the guard is placed
+	CGAL::Arr_naive_point_location<Arrangement_2> pl(arrangement);
+	auto obj = pl.locate(p);
+
+	// The query point may be a face on the visibility region boundary
+	auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
+	
+	if (!(*face)->is_unbounded()) {
+		// std::cout << '\t' << p << " can see " << r << std::endl;
+		return true;
+	}
+
+	return false;
+}
