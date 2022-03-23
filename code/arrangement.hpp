@@ -1,5 +1,6 @@
 #include <fstream>
 #include <algorithm>
+#include <utility>
 
 #include <CGAL/Simple_polygon_visibility_2.h>
 #include <CGAL/Arr_naive_point_location.h>
@@ -292,30 +293,6 @@ class Arrangement {
            *****************
         */
 
-        /* get_reflex_vertices method, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArtGallery.cpp
-        * 
-        *  This method adds all the reflex vertices of the input arrangement in the reflex_vertices vector.
-        */
-        void get_reflex_vertices() {
-            //Identify reflex vertices
-            //use do/while for circular loop
-            //The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
-            auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
-            do {
-                //Left turn, because the boundary is clockwise...
-                if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
-                    //eit->source() is a reflex vertex...
-                    this->reflex_vertices.push_back(eit->source()->point());
-                    // std::cout << "Reflex vertex (" << eit->source()->point().x() << ',' << eit->source()->point().y() << ')' << std::endl;
-                    // eit->source()->data().isReflex = true;
-                    // reflexHandles.push_back(eit->source());
-                    // reflexNeighbours.push_back(
-                    //     make_pair(eit->prev()->source(), eit->target()
-                    //     ));
-
-                }
-            } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
-        }
     
         /* get_guard_reflex_arrangement_intersection method
         * 
@@ -359,6 +336,34 @@ class Arrangement {
             return false;
         }
 
+        std::vector<std::pair<Point_2, Point_2>> get_reflex_intersection_pairs(Point_2 guard) {
+            Arrangement_2 visibility_arrangement = this->compute_guard_visibility(guard);
+            std::vector<std::pair<Point_2, Point_2>> boundary_intersections; //= get_reflex_vertices(visibility_arrangement);
+
+            auto eit = *visibility_arrangement.unbounded_face()->inner_ccbs_begin();
+            // Identify reflex vertices
+            // use do/while for circular loop
+            // The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
+            do {
+                //Left turn, because the boundary is clockwise...
+                if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
+                    // identify reflex vertex
+                    Point_2 reflex_vertex = eit->source()->point();
+
+                    // check the clockwise orientation of the reflex vertex and the guard
+                    // whether we're in the order intersection point - reflex vertex - guard
+                    if (CGAL::collinear(guard, reflex_vertex, eit->prev()->source()->point()))
+                        boundary_intersections.push_back(std::make_pair(reflex_vertex, eit->prev()->source()->point()));
+
+                    // or whether we're in the order guard - reflex vertex - intersection point
+                    else if (CGAL::collinear(guard, reflex_vertex, eit->target()->point()))
+                        boundary_intersections.push_back(std::make_pair(reflex_vertex, eit->target()->point()));
+                }
+
+            } while (++ eit != *visibility_arrangement.unbounded_face()->inner_ccbs_begin());
+
+            return boundary_intersections;
+        }
         /* gradient method
         * :in param Point_2 guard:  guard point whose gradient needs to be computed
         * :return Vector_2:         gradient of the guard as a vector
@@ -421,6 +426,17 @@ class Arrangement {
                     
                     // std::cout << ">>>> Guard " << this->guards.at(i) << " has gradient (" << this->guards.at(i).x() + learning_rate * gradient.x() << ", " << this->guards.at(i).y() + learning_rate * gradient.y() << ")" << std::endl;
                 } while(prev_guard_position != cur_guard_position && this->is_inside_arrangement(cur_guard_position));
+            }
+        }
+
+        void print_reflex_intersections() {
+            for (auto guard : this->guards) {
+                auto pairs = this->get_reflex_intersection_pairs(guard);
+
+                for (auto pair : pairs) {
+                    std::cout << "Guard " << guard << " reflex vertex " << pair.first << " intersection point " << pair.second << std::endl;
+                }
+
             }
         }
 
