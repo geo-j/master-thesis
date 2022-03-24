@@ -65,7 +65,7 @@ class Drawing(object):
     def draw_arrangement(self) -> None:
         # draw the polygon's boundaries
         for he in self.arrangement.halfedges:
-            draw(he.curve(), visible_point=True)
+            draw(he.curve(), visible_point = True)
 
     def draw_all(self) -> None:
         self.draw_visibility_regions()
