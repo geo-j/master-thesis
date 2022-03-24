@@ -5,10 +5,10 @@ int main() {
     Arrangement arrangement;
     std::cin >> arrangement;
     arrangement.read_guards(std::cin);
-    arrangement.get_reflex_vertices();
-    arrangement.optimise();
-    // std::cout << arrangement;
+    // arrangement.print_reflex_intersections();
+    std::cout << arrangement;
     // arrangement.print_guards(std::cout);
+    arrangement.optimise();
 
     // auto visible_vertices = arrangement.compute_full_visibility();
     // for (auto v : visible_vertices)

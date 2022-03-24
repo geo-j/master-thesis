@@ -208,8 +208,15 @@ class Arrangement {
             else {
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
-                if (edge)
-                    visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
+                if (edge) {
+                    try {
+                        visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
+                    } catch(CGAL::Assertion_exception) {
+                        visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
+                        std::cout << "here\n";
+
+                    }
+                }
             }
 
             return visibility_arrangement;
@@ -380,7 +387,7 @@ class Arrangement {
         */
        // TODO: see where to move the learning rate; probably in main?
         void optimise() {
-            float learning_rate = 0.1;
+            float learning_rate = 0.2;
 
             for (auto i = 0; i < this->guards.size(); i ++) {
                 Vector_2 gradient;
@@ -388,6 +395,7 @@ class Arrangement {
                 Arrangement_2 visibility_arrangement;
                 std::cout << cur_guard_position << std::endl;
 
+                int j = 10;
                 // try to update the guard position until there are no more changes, or it goes outside the arrangement
                 do {
                     // compute visibility arrangement of each guard position
@@ -400,17 +408,18 @@ class Arrangement {
                     // update current guard position
                     cur_guard_position = Point_2(prev_guard_position.x() + learning_rate * gradient.x(), prev_guard_position.y() + learning_rate * gradient.y());
 
+                    // std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (!is_inside_arrangement(this->input_arrangement, cur_guard_position)) {
+                        // std::cout << "not inside\n";
                         cur_guard_position = this->place_guard_on_boundary(prev_guard_position, cur_guard_position);
                     }
                     std::cout << cur_guard_position << std::endl;
 
-
-                    std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
-                    std::cout << is_inside_arrangement(this->input_arrangement, cur_guard_position) << std::endl;
+                    j ++;
+                    // std::cout << is_inside_arrangement(this->input_arrangement, cur_guard_position) << std::endl;
                     
-                } while (prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position));
+                } while (prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position) && j < 17);
 
             }
         }
@@ -423,13 +432,17 @@ class Arrangement {
     * This method computes the guard's position on the arrangement's boundary in the case when the gradient requires it to be outside of the polygon
     */
     Point_2 place_guard_on_boundary(Point_2 prev_guard, Point_2 guard) {
+        // std::cout << "prev guard " << prev_guard << " wished guard " << guard << std::endl;
         auto guard_movement = Segment_2(prev_guard, guard);
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         Point_2 new_guard;
+        Segment_2 edge;
 
         do {
+            // std::cout<<"here";
+            edge = Segment_2(eit->source()->point(), eit->target()->point());
             // compute the intersection between the guard's gradient direction and the arrangement boundary
-            auto intersection = CGAL::intersection(Segment_2(eit->source()->point(), eit->target()->point()), guard_movement);
+            auto intersection = CGAL::intersection(edge, guard_movement);
 
             if (intersection) {
                 new_guard = *boost::get<Point_2>(&*intersection);
@@ -437,6 +450,12 @@ class Arrangement {
             }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+
+        if (prev_guard == new_guard) {
+            auto edge_line = edge.supporting_line();
+            new_guard = edge_line.projection(guard);
+            // std::cout << "boundary guard " << new_guard << std::endl;
+        }
 
         return new_guard;
     }

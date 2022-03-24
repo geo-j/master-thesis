@@ -24,6 +24,6 @@ pos_y = ys[:-1] + v / 2
 norm = np.sqrt(u ** 2 + v ** 2) 
 
 # TODO: scale still needs to be figured out
-plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, minlength = 2, scale = 50)
+plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, scale = 50)
 
 plt.show()
