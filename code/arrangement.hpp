@@ -187,21 +187,30 @@ class Arrangement {
         *  :in param Point_2 guard         :guard whose visibility region needs to be computed
         *  :return Arrangement_2           :arrangement visible from the guard
         * 
-        *  This method computes the visibility region arrangement of a guards
+        *  This method computes the visibility region arrangement of a guard
         */
         Arrangement_2 compute_guard_visibility(Point_2 guard) {
-            // find the face of the guard
-            CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
-            auto obj = pl.locate(guard);
-
-            // The query point is located in the interior of a face
-            auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
-
             // define type of visibility algorithm used
             // TODO: should make it changeable at invocation time
             NSPV visibility(this->input_arrangement);
             Arrangement_2 visibility_arrangement;
-            visibility.compute_visibility(guard, *face, visibility_arrangement);
+
+            // find the face of the guard
+            CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
+            auto obj = pl.locate(guard);
+
+            // check if the query point is located in the interior of a face
+            auto *face = boost::get<Arrangement_2::Face_const_handle>(&obj);
+
+            if (face)
+                visibility.compute_visibility(guard, *face, visibility_arrangement);
+            // if the guard is on the arrangement boundary, then get the inner face of that edge to compute its visibility
+            else {
+                auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
+
+                if (edge)
+                    visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
+            }
 
             return visibility_arrangement;
         }
@@ -257,9 +266,8 @@ class Arrangement {
             
             
             // if d is in the visibility region of the guard, then it can be counted as an intersection point
-            if (vertex) {
+            if (vertex)
                 return true;
-            }
 
             return false;
         }
@@ -281,7 +289,7 @@ class Arrangement {
         *  This method computes the tuples between all the reflex vertices a guard sees, their intersection points with the input arrangement boundaries and the orientation of the guard in relation to the boundary of the polygon and a specific reflex vertex
         */
         std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> get_reflex_intersection_pairs(Arrangement_2 visibility_arrangement, Point_2 guard) {
-            std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> boundary_intersections; //= get_reflex_vertices(visibility_arrangement);
+            std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> boundary_intersections;
 
             auto eit = *visibility_arrangement.unbounded_face()->inner_ccbs_begin();
 
@@ -298,7 +306,7 @@ class Arrangement {
                     // whether we're in the order intersection point - reflex vertex - guard
                     if (CGAL::collinear(guard, reflex_vertex, eit->prev()->source()->point())) {
                         Line_2 boundary(reflex_vertex, eit->target()->point());
-                        // std::cout << "boundary line " << reflex_vertex << " " << eit->target()->point() << std::endl;
+
                         CGAL::Oriented_side orientation = boundary.oriented_side(guard);
                         boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->prev()->source()->point(), orientation));
                     }
@@ -306,7 +314,6 @@ class Arrangement {
                     // or whether we're in the order guard - reflex vertex - intersection point
                     else if (CGAL::collinear(guard, reflex_vertex, eit->target()->point())) {
                         Line_2 boundary(reflex_vertex, eit->prev()->source()->point());
-                        // std::cout << "boundary line " << reflex_vertex << " " << eit->prev()->source()->point() << std::endl;
 
                         CGAL::Oriented_side orientation = boundary.oriented_side(guard);
                         boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->target()->point(), orientation));
@@ -317,6 +324,7 @@ class Arrangement {
 
             return boundary_intersections;
         }
+
         /* gradient method
         * :in param Arrangement_2 visibility_arrangement:   the visibility region of the guard
         * :in param Point_2 guard:                          guard point whose gradient needs to be computed
@@ -346,17 +354,13 @@ class Arrangement {
                 // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
                 //      otherwise, counterclockwise
                 Vector_2 vp;
-                if (orientation == CGAL::ON_POSITIVE_SIDE) {
+                if (orientation == CGAL::ON_POSITIVE_SIDE)
                     vp = v.perpendicular(CGAL::CLOCKWISE);
-                    // std::cout << vp << " length = " << vp.squared_length() << " clockwise\n";
-                } else {
+                else
                     vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
-                    // std::cout << vp << " length = " << vp.squared_length() << " clockwise\n";
-                }
 
                 // compute Df for reflex vertex r
                 Vector_2 Dfr = vp * ((beta * beta) / (2 * alpha)) * (1 / alpha);
-                // std::cout << df << std::endl;
 
                 // initialise total gradient Df if first reflex vertex,
                 //      otherwise just add all gradient vectors
@@ -374,7 +378,6 @@ class Arrangement {
         * This method optimises the position of all guards using gradient descent.
         * The optimisation process stops when the guard position cannot be changed, or the guard is moved outside of the polygon
         */
-       // TODO: move guard on the wall of the polygon, when it wants to be moved outside
        // TODO: see where to move the learning rate; probably in main?
         void optimise() {
             float learning_rate = 0.1;
@@ -383,6 +386,7 @@ class Arrangement {
                 Vector_2 gradient;
                 Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
                 Arrangement_2 visibility_arrangement;
+                std::cout << cur_guard_position << std::endl;
 
                 // try to update the guard position until there are no more changes, or it goes outside the arrangement
                 do {
@@ -396,15 +400,46 @@ class Arrangement {
                     // update current guard position
                     cur_guard_position = Point_2(prev_guard_position.x() + learning_rate * gradient.x(), prev_guard_position.y() + learning_rate * gradient.y());
 
-                    // std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
-                    // std::cout << is_inside_arrangement(this->input_arrangement, cur_guard_position) << std::endl;
-                    
-                    // std::cout << ">>>> Guard " << this->guards.at(i) << " has gradient (" << this->guards.at(i).x() + learning_rate * gradient.x() << ", " << this->guards.at(i).y() + learning_rate * gradient.y() << ")" << std::endl;
-                } while(prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position));
+                    // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
+                    if (!is_inside_arrangement(this->input_arrangement, cur_guard_position)) {
+                        cur_guard_position = this->place_guard_on_boundary(prev_guard_position, cur_guard_position);
+                    }
+                    std::cout << cur_guard_position << std::endl;
 
-                std::cout << "Guard " << this->guards.at(i) << " moved to " << cur_guard_position << std::endl;
+
+                    std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
+                    std::cout << is_inside_arrangement(this->input_arrangement, cur_guard_position) << std::endl;
+                    
+                } while (prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position));
+
             }
         }
+
+    /* place_guard_on_boundary method
+    * :in param Point_2 prev_guard:     the previous position of the guard
+    * :in param Point_2 guard:          the guard position it should have according to the gradient
+    * :return Point_2:                  the boundary position of the guard
+    * 
+    * This method computes the guard's position on the arrangement's boundary in the case when the gradient requires it to be outside of the polygon
+    */
+    Point_2 place_guard_on_boundary(Point_2 prev_guard, Point_2 guard) {
+        auto guard_movement = Segment_2(prev_guard, guard);
+        auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
+        Point_2 new_guard;
+
+        do {
+            // compute the intersection between the guard's gradient direction and the arrangement boundary
+            auto intersection = CGAL::intersection(Segment_2(eit->source()->point(), eit->target()->point()), guard_movement);
+
+            if (intersection) {
+                new_guard = *boost::get<Point_2>(&*intersection);
+                break;
+            }
+
+        } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+
+        return new_guard;
+    }
 
 
     private:

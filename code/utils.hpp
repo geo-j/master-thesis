@@ -121,11 +121,19 @@ bool is_inside_arrangement(Arrangement_2 arrangement, Point_2 p) {
 	auto obj = pl.locate(p);
 
 	// The query point may be a face on the visibility region boundary
-	auto *face = boost::get<Arrangement_2::Face_const_handle> (&obj);
+	auto *face = boost::get<Arrangement_2::Face_const_handle>(&obj);
 	
-	if (!(*face)->is_unbounded()) {
-		// std::cout << '\t' << p << " can see " << r << std::endl;
-		return true;
+	// if the query point is within a face, and the face is bounded, then it is inside the arrangement
+	if (face) {
+		if (!(*face)->is_unbounded())
+			return true;
+	}
+	// if the query point is not within a face, but it is on the arrangement boundary, we consider it to still be inside the arrangement
+	else {
+		auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
+		
+		if (edge)
+			return true;
 	}
 
 	return false;
