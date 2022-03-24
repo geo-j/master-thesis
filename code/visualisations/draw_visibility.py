@@ -4,9 +4,6 @@ import matplotlib.pyplot as plt
 from numpy import random
 
 
-INPUT = "pentagram.out"
-
-
 arrangement = arrangement.Arrangement()
 vs = TriangularExpansionVisibility(arrangement)
 guards = []
@@ -21,22 +18,21 @@ guards = []
     q2.x q2.y
     ...
 """
-with open(INPUT, 'r') as f:
-    E = int(input())
+E = int(input())
 
-    for e in range(E):
-        segment = list(map(int, input().split()))
-        p1 = Point2(*segment[:2])
-        p2 = Point2(*segment[2:])
+for e in range(E):
+    segment = list(map(int, input().split()))
+    p1 = Point2(*segment[:2])
+    p2 = Point2(*segment[2:])
 
-        arrangement.insert(Segment2(p1, p2))
-    
-    IV = int(input())
+    arrangement.insert(Segment2(p1, p2))
 
-    for iv in range(IV):
-        vertex = list(map(float, input().split()))
-        q = Point2(*vertex)
-        guards.append(q)
+IV = int(input())
+
+for iv in range(IV):
+    vertex = list(map(float, input().split()))
+    q = Point2(*vertex)
+    guards.append(q)
 
 # draw the guards and their visibility regions
 for guard in guards:
