@@ -109,14 +109,16 @@ Analogously, we can compute the change in the $y$-coordinate by rotating the pla
     \text{Area}_{\triangle rdd'} = \frac{\beta^2 \partial y}{2\alpha}. \label{eq:ardd2}
 \end{equation}
 
-Thus, the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the small change $\partial y$ in the position of $p$, and hence the gradient $\bigtriangledown f$ is 
+We can now compute the change in the visibility area $\text{Area}_{\triangle rdd'}$ of $p$ given the movement $\partial y$ in the position of $p$. Since the $x$-coordinate of $p$ is fixed, so $\partial x = 0$, the gradient $\bigtriangledown f$ is 
 
 \begin{align*}
-    \bigtriangledown f \overset{(\ref{eq:gradient})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\partial f}{\partial y} + \partial y) \\
-    \overset{(\ref{eq:derivative})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\text{Area}_{\triangle rdd'}}{\partial y} + 0) \\
-    \bigtriangledown f \overset{(\ref{eq:ardd}), (\ref{eq:ardd2})}{=} &(\frac{\partial f}{\partial x} + \partial x, \frac{\beta^2}{2\alpha}). \\
+    \bigtriangledown f \overset{(\ref{eq:gradient})}{=} &(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) \\
+    \overset{(\ref{eq:derivative})}{=} &(0, \frac{\text{Area}_{\triangle rdd'}}{\partial y} + \partial y) \\
+    \bigtriangledown f \overset{(\ref{eq:ardd}), (\ref{eq:ardd2})}{=} &(0, \frac{\beta^2}{2\alpha} + 0) \\
+    \bigtriangledown f = &(0, \frac{\beta^2}{2\alpha}).
 \end{align*}
 
+Analogously, when $p$ is moved along the $x$-axis with a fixed $y$-coordinate, the gradient $$\bigtriangledown f = (\frac{\beta^2}{2\alpha}, 0).$$
 % Given that $pp''$ is parallel to $g$, we can use the Intercept Theorem to compute the lengths of the segments as follows:
 
 % \begin{itemize}
