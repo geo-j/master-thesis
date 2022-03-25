@@ -68,7 +68,7 @@ We are now interested in computing how the area seen by guard $p$ increases give
 Given that triangles $\triangle rpp'$ and $\triangle rdd'$ are square triangles, their areas can be calculated as:
 
 \begin{align}
-    \text{Area}_{\triangle rpp'} &= \frac{\alpha \partial x}{2}, \label{eq:rpp}\\
+    \text{Area}_{\triangle rpp'} &= \frac{\alpha \partial y}{2}, \label{eq:rpp}\\
     \text{Area}_{\triangle rdd'} &= \frac{\beta L}{2}. \label{eq:rdd}   
 \end{align}
 
@@ -77,8 +77,8 @@ Given that $\overline{pp'}$ is parallel to $g$, we can use Thales's Theorem in t
 
 \begin{align}
     \frac{||\overline{pp'}||}{||\overline{dd'}||} &= \frac \alpha \beta \\
-    \frac{\partial x}{L} &= \frac \alpha \beta  \label{eq:dxL} \\
-    L &= \frac{\beta \partial x}{\alpha}. \label{eq:L}
+    \frac{\partial y}{L} &= \frac \alpha \beta  \label{eq:dxL} \\
+    L &= \frac{\beta \partial y}{\alpha}. \label{eq:L}
 \end{align}
 
 
@@ -87,8 +87,8 @@ Given that $\overline{pp'}$ is parallel to $g$, we can use Thales's Theorem in t
 We are now interested in how areas $\text{Area}_{\triangle rpp'}$ and $\text{Area}_{\triangle rdd'}$ change depending on how $\alpha$ and $\beta$. That is, $\frac{\text{Area}_{\triangle rdd'}}{\text{Area}_{\triangle rpp'}}$ as a function of $\alpha$ and $\beta$: 
 
 \begin{align}
-    \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} \overset{(\ref{eq:rpp}), (\ref{eq:rdd})}{=} &\frac{\frac{\alpha \partial x}{2}}{\frac{\beta L}{2}} \\
-    = &\frac{\alpha \partial x}{\beta L} \\
+    \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} \overset{(\ref{eq:rpp}), (\ref{eq:rdd})}{=} &\frac{\frac{\alpha \partial y}{2}}{\frac{\beta L}{2}} \\
+    = &\frac{\alpha \partial y}{\beta L} \\
     \overset{(\ref{eq:dxL})}{=} &\frac{\alpha \alpha}{\beta \beta} \\
     \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} = &{(\frac \alpha \beta)}^2 \label{eq:rddrpp}
 \end{align}
@@ -97,8 +97,8 @@ We can now express the area of $\triangle rdd'$ as only dependent on $\alpha, \b
 
 \begin{align}
     \text{Area}_{\triangle rdd'} \overset{(\ref{eq:rddrpp})}{=} &{(\frac \beta \alpha)}^2 \text{Area}_{\triangle rpp'} \\
-    \overset{(\ref{eq:rpp})}{=} &{(\frac \beta \alpha)}^2 \frac{\alpha \partial x}{2} \\
-    \text{Area}_{\triangle rdd'} = &\frac{\beta^2 \partial x}{2\alpha}. \label{eq:ardd}
+    \overset{(\ref{eq:rpp})}{=} &{(\frac \beta \alpha)}^2 \frac{\alpha \partial y}{2} \\
+    \text{Area}_{\triangle rdd'} = &\frac{\beta^2 \partial y}{2\alpha}. \label{eq:ardd}
 \end{align}
 % \end{align*}
 % $$\frac{\partial f}{\partial x} = \frac{\text{Area}_{\triangle rdd'}}{\partial x}$$
