@@ -391,7 +391,7 @@ class Arrangement {
                 Arrangement_2 visibility_arrangement;
                 std::cout << cur_guard_position << std::endl;
 
-                int j = 10;
+                // int j = 10;
                 // try to update the guard position until there are no more changes, or it goes outside the arrangement
                 do {
                     // compute visibility arrangement of each guard position
@@ -408,14 +408,15 @@ class Arrangement {
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (!is_inside_arrangement(this->input_arrangement, cur_guard_position)) {
                         // std::cout << "not inside\n";
-                        cur_guard_position = this->place_guard_on_boundary(prev_guard_position, cur_guard_position);
+                        Point_2 new_guard_position;
+                        if (this->place_guard_on_boundary(prev_guard_position, cur_guard_position, new_guard_position))
+                            cur_guard_position = new_guard_position;
                     }
-                    std::cout << cur_guard_position << std::endl;
 
-                    j ++;
-                    // std::cout << is_inside_arrangement(this->input_arrangement, cur_guard_position) << std::endl;
+                    if (is_inside_arrangement(this->input_arrangement, cur_guard_position))
+                        std::cout << cur_guard_position << std::endl;
                     
-                } while (prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position) && j < 17);
+                } while (prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position));
 
             }
         }
@@ -423,16 +424,19 @@ class Arrangement {
     /* place_guard_on_boundary method
     * :in param Point_2 prev_guard:     the previous position of the guard
     * :in param Point_2 guard:          the guard position it should have according to the gradient
-    * :return Point_2:                  the boundary position of the guard
+    * :out param Point_2 new_guard:     the new guard boundary position
+    * :return bool:                     true if the guard can be placed on the boundary,
+    *                                       false otherwise
     * 
     * This method computes the guard's position on the arrangement's boundary in the case when the gradient requires it to be outside of the polygon
     */
-    Point_2 place_guard_on_boundary(Point_2 prev_guard, Point_2 guard) {
+    bool place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
         // std::cout << "prev guard " << prev_guard << " wished guard " << guard << std::endl;
         auto guard_movement = Segment_2(prev_guard, guard);
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
-        Point_2 new_guard;
         Segment_2 edge;
+        // std::cout << guard_movement << std::endl;
+        bool placed = false;
 
         do {
             // std::cout<<"here";
@@ -442,18 +446,21 @@ class Arrangement {
 
             if (intersection) {
                 new_guard = *boost::get<Point_2>(&*intersection);
+                placed = true;
+                // std::cout << "hello???\n";
                 break;
             }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
-        if (prev_guard == new_guard) {
+        if (prev_guard == new_guard && placed) {
             auto edge_line = edge.supporting_line();
             new_guard = edge_line.projection(guard);
             // std::cout << "boundary guard " << new_guard << std::endl;
         }
 
-        return new_guard;
+        // std::cout << "placed? " << placed << std::endl;
+        return placed;
     }
 
 
