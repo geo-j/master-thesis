@@ -208,15 +208,11 @@ class Arrangement {
             else {
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
-                if (edge) {
-                    try {
+                if (edge)
+                    if ((*edge)->is_on_inner_ccb())
                         visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
-                    } catch(CGAL::Assertion_exception) {
+                    else
                         visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
-                        std::cout << "here\n";
-
-                    }
-                }
             }
 
             return visibility_arrangement;
