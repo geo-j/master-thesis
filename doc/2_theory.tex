@@ -1,5 +1,6 @@
 \section{Theory}
 
+\subsection{Computing the Gradient}
 
 Let $\mathcal P$ be a polygon and $p(x, y) \in \mathcal P$ a guard. We are interested in computing the best direction for moving $p$ inside $\mathcal P$ such that the visibility area $Vis(p)$ increases. That is, exploring what would be a better position for $p$ such that $p$ ``sees more'' of the polygon $\mathcal P$. 
 
@@ -118,7 +119,38 @@ We can now compute the change in the visibility area $\text{Area}_{\triangle rdd
     \bigtriangledown f = &(0, \frac{\beta^2}{2\alpha}).
 \end{align*}
 
-Analogously, when $p$ is moved along the $x$-axis with a fixed $y$-coordinate, the gradient $$\bigtriangledown f = (\frac{\beta^2}{2\alpha}, 0).$$
+Analogously, when $p$ is moved along the $x$-axis with a fixed $y$-coordinate, the gradient becomes $$\bigtriangledown f = (\frac{\beta^2}{2\alpha}, 0).$$
+
+\subsection{Computing the New Guard Position}
+
+We can now compute the optimised position of the guard, given the computation of the gradient. In order to do so, we will use the construction depicted in Figure \ref{fig:vperp}. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{v_perp.png}
+    \caption{Computing the new position $p'$ of guard $p$ around reflex vertex $r$ based on the gradient $\bigtriangledown f$.}
+    \label{fig:vperp}
+\end{figure}
+
+Let vector $\vec{v} = (r - p) = (x, y)^\intercal$, with norm $||v|| = \alpha$. So, $||\frac{\vec v}{\alpha}|| = 1$.
+
+Let vector $\vec{v}^\perp$ be the orthogonally translated vector to $\vec{v}$, in the same direction as $\vec{\bigtriangledown f}$, such that $||\vec{v}|| = ||\vec{v}^\perp|| = \alpha$.
+
+The coordinates of $\vec v^\perp$ can then be computed using the construction from Figure \ref{fig:vsquare}. Since $\vec v^\perp \perp \vec v$, and $p$ and $r$ are on the right-hand side of $\vec v^\perp$, the coordinates of $\vec v^\perp$ will be rotated by $-90^\circ$ so that $\vec v^\perp = (-y, x)^\intercal$. Analogously for the case when $p$ and $r$ are rotated by $180^\circ$ to the left-hand side of $\vec v^\perp$, the coordinates of $\vec v^\perp$ will be rotated by $90^\circ$ to $\vec v^\perp = (-x, y)^\intercal$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{v_square.png}
+    \caption{Computing the coordinates of $\vec v^\perp$ given the guard $p$ and the reflex vertex $r(x, y)$.}
+    \label{fig:vsquare}
+\end{figure}
+
+We know that the norm of the gradient is $||\vec{\bigtriangledown f}|| = \frac{\beta^2}{2\alpha}$. Since $\vec{\bigtriangledown f}$ has the same direction as $\vec v^\perp$ and we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 \alpha$, the gradient can be computed as $$\vec{\bigtriangledown f} = \vec v^\perp \frac{\beta^2}{2\alpha} \frac 1 \alpha.$$
+
+
+
+
+
 % Given that $pp''$ is parallel to $g$, we can use the Intercept Theorem to compute the lengths of the segments as follows:
 
 % \begin{itemize}
