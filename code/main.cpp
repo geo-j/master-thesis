@@ -3,12 +3,14 @@
 
 int main() {
     Arrangement arrangement;
-    std::cin >> arrangement;
+    float learning_rate;
+
+    std::cin >> learning_rate >> arrangement;
     arrangement.read_guards(std::cin);
     // arrangement.print_reflex_intersections();
     std::cout << arrangement;
     // arrangement.print_guards(std::cout);
-    arrangement.optimise();
+    arrangement.optimise(learning_rate);
 
     // auto visible_vertices = arrangement.compute_full_visibility();
     // for (auto v : visible_vertices)

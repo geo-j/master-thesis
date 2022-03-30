@@ -382,9 +382,7 @@ class Arrangement {
         * The optimisation process stops when the guard position cannot be changed, or the guard is moved outside of the polygon
         */
        // TODO: see where to move the learning rate; probably in main?
-        void optimise() {
-            float learning_rate = 0.2;
-
+        void optimise(float learning_rate) {
             for (auto i = 0; i < this->guards.size(); i ++) {
                 Vector_2 gradient;
                 Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
