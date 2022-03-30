@@ -3,7 +3,7 @@
 
 int main() {
     Arrangement arrangement;
-    float learning_rate;
+    double learning_rate;
 
     std::cin >> learning_rate >> arrangement;
     arrangement.read_guards(std::cin);

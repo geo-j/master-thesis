@@ -56,9 +56,39 @@ class Arrangement {
             std::vector<Segment_2> segments;
 
             f >> E;
+            // skip newline character that isn't read by f, so that newline can properly read the next lines
+            f.ignore();
 
             for (auto i = 0; i < E; i ++) {
-                f >> x1 >> y1 >> x2 >> y2;
+                // keep count of which one of the 4 coords we are reading
+                int coord = 0;
+
+                // read each line with points
+                std::string line, number; 
+                std::getline(f, line);
+                // stringstream tokenises the string by spaces
+                std::stringstream s(line);
+
+                // for each string between spaces, check which one of the 4 coords it is, and get its double value, based on whether it's a fraction or not
+                while (s >> number) {
+                    switch (coord) {
+                        case 0:
+                            x1 = get_number(number);
+                            break;
+                        case 1:
+                            y1 = get_number(number);
+                            break;
+                        case 2: 
+                            x2 = get_number(number);
+                            break;
+                        case 3:
+                            y2 = get_number(number);
+                            break;
+                    }
+
+                    coord ++;
+                }
+
                 Point_2 p1(x1, y1), p2(x2, y2);
 
                 // create segments for arrangement
@@ -382,7 +412,7 @@ class Arrangement {
         * The optimisation process stops when the guard position cannot be changed, or the guard is moved outside of the polygon
         */
        // TODO: see where to move the learning rate; probably in main?
-        void optimise(float learning_rate) {
+        void optimise(double learning_rate) {
             for (auto i = 0; i < this->guards.size(); i ++) {
                 Vector_2 gradient;
                 Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
