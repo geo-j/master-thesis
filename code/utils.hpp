@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Arrangement_2.h>
@@ -23,10 +24,29 @@ void push_back_unique(std::vector<type> &v, type element) {
         v.push_back(element);
 }
 
+/* get_number function
+* :in param string s:	string that needs to be converted to a double
+* :return double:		input string converted to a double
+*
+* This function checks whether the input string is a number or a fraction. If it's a fraction, it takes the numerator and denominator on each side of the fraction and returns their fraction value.
+*/
+double get_number(std::string s) {
+	double x, y;
+	size_t frac = s.find('/');
+
+	// check if input string is fraction, and if so, take the numerator and denominator on both sides of the fraction and return their result.
+	if (frac != std::string::npos) {
+		x = stod(s.substr(0, frac));
+		y = stod(s.substr(frac + 1, -1));
+		
+		return x / y;
+	} else
+		return stod(s);
+}
 // TODO: should probably take into account polygons with holes
 /* arrangement to polygon function, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArrangementFunctions.cpp
-* :param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
-* :return   Polygon_2     polygon:     output polygon converted from the given arrangement
+* :in param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
+* :return   Polygon_2     polygon:        output polygon converted from the given arrangement
 */
 Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
 	std::vector<Point_2> vertices;
