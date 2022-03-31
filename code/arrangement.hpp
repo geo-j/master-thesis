@@ -1,6 +1,7 @@
 #include <fstream>
 #include <algorithm>
 #include <tuple>
+#include <chrono>
 
 #include <CGAL/Simple_polygon_visibility_2.h>
 #include <CGAL/Arr_naive_point_location.h>
@@ -411,7 +412,6 @@ class Arrangement {
         * This method optimises the position of all guards using gradient descent.
         * The optimisation process stops when the guard position cannot be changed, or the guard is moved outside of the polygon
         */
-       // TODO: see where to move the learning rate; probably in main?
         void optimise(double learning_rate) {
             for (auto i = 0; i < this->guards.size(); i ++) {
                 Vector_2 gradient;
