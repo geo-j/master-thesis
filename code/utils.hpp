@@ -43,6 +43,8 @@ double get_number(std::string s) {
 	} else
 		return stod(s);
 }
+
+
 // TODO: should probably take into account polygons with holes
 /* arrangement to polygon function, as adapted from Simon's implementation https://github.com/simonheng/AGPIterative/blob/main/ArtGalleryCore/ArrangementFunctions.cpp
 * :in param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
