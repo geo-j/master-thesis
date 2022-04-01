@@ -101,6 +101,9 @@ class Arrangement {
 
             CGAL::insert_non_intersecting_curves(a.input_arrangement, segments.begin(), segments.end());
 
+            a.visibility.attach(a.input_arrangement);
+            a.pl = CGAL::Arr_naive_point_location<Arrangement_2>(a.input_arrangement);
+
             return f;
         }
 
@@ -221,29 +224,34 @@ class Arrangement {
         *  This method computes the visibility region arrangement of a guard
         */
         Arrangement_2 compute_guard_visibility(Point_2 guard) {
-            // define type of visibility algorithm used
-            // TODO: should make it changeable at invocation time
-            NSPV visibility(this->input_arrangement);
             Arrangement_2 visibility_arrangement;
 
-            // find the face of the guard
-            CGAL::Arr_naive_point_location<Arrangement_2> pl(this->input_arrangement);
-            auto obj = pl.locate(guard);
+            auto obj = this->pl.locate(guard);
 
+            std::cout << "before face\n";
             // check if the query point is located in the interior of a face
             auto *face = boost::get<Arrangement_2::Face_const_handle>(&obj);
 
-            if (face)
-                visibility.compute_visibility(guard, *face, visibility_arrangement);
+            if (face) {
+                this->visibility.compute_visibility(guard, *face, visibility_arrangement);
+                // std::cout << (*face)->number_of_isolated_vertices() << std::endl;
+                std::cout << "after face\n";
+
+            }
             // if the guard is on the arrangement boundary, then get the inner face of that edge to compute its visibility
             else {
+                std::cout << "before edge\n";
+
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
                 if (edge)
                     if ((*edge)->is_on_inner_ccb())
-                        visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
+                        this->visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
                     else
-                        visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
+                        this->visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
+                
+                std::cout << "after edge\n";
+
             }
 
             return visibility_arrangement;
@@ -424,6 +432,7 @@ class Arrangement {
                 do {
                     // compute visibility arrangement of each guard position
                     visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
+
                     prev_guard_position = cur_guard_position;
 
                     // compute gradient of current guard position
@@ -434,17 +443,17 @@ class Arrangement {
 
                     // std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
-                    if (!is_inside_arrangement(this->input_arrangement, cur_guard_position)) {
+                    if (this->input_polygon.bounded_side(cur_guard_position) == CGAL::ON_UNBOUNDED_SIDE) {
                         // std::cout << "not inside\n";
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard_position, cur_guard_position, new_guard_position))
                             cur_guard_position = new_guard_position;
                     }
 
-                    if (is_inside_arrangement(this->input_arrangement, cur_guard_position))
+                    if (this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE)
                         std::cout << cur_guard_position << std::endl;
                     
-                } while (prev_guard_position != cur_guard_position && is_inside_arrangement(this->input_arrangement, cur_guard_position));
+                } while (prev_guard_position != cur_guard_position && this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE);
 
             }
         }
@@ -496,8 +505,12 @@ class Arrangement {
         Arrangement_2 input_arrangement;
         // TODO: should probably adapt it to polygons with holes
         Polygon_2 input_polygon;
+        // define type of visibility algorithm used
+        // TODO: should make it changeable at invocation time
+        TEV visibility;
+        // find the face of the guard
+        CGAL::Arr_naive_point_location<Arrangement_2> pl;
         // TODO: maybe guards class in the future?
         std::vector<Point_2> guards;
-
         std::vector<Point_2> reflex_vertices;
 };
