@@ -18,11 +18,13 @@ Thus, we consider $f(p)$ as the continuous objective function of The Art Gallery
 \end{figure}
 
 
-Gradient descent is an iterative optimisation algorithm for finding the local optimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. Let $\bigtriangledown f$ be the gradient of $f$. The gradient $\vec{\bigtriangledown f}$ then indicates the direction of the steepest descent for the objective function $f(p)$.
+% Gradient descent is an iterative optimisation algorithm for finding the local optimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. 
+Let $\bigtriangledown f$ be the gradient of $f$. The gradient $\vec{\bigtriangledown f}$ then indicates the direction of the steepest descent for the objective function $f(p)$.
 
 After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $p'$ of guard $p$: $$p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.$$
 
-The learning rate (step size) $l$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. High learning rates result in faster approaching towards the optimum, but risks overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
+The learning rate (step size) $l$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
+% High learning rates result in faster approaching towards the optimum, but risks overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
 
 In later sections we will experiment with various learning rates. As such, we will explore how they influence the performance of our algorithm in relation to different test polygons. 
 
