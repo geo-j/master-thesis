@@ -47,8 +47,8 @@ class Drawing(object):
         for line in stdin:
             x, y = map(float, line.strip().split())
 
-        self.xs.append(x)
-        self.ys.append(y)
+            self.xs.append(x)
+            self.ys.append(y)
     
     def read_all_input(self) -> None:
         self.read_input_arrangement()
