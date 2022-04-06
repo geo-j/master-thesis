@@ -10,7 +10,7 @@ The algorithm will be coded in C ++ with the help of the CGAL library(\url{https
 \subsection{Progress So Far}
 The first four weeks of the project have been spent on doing literature research.
 
-Two weeks have been spent on creating the C ++ skeleton and trying out already given examples.
+Two weeks have been spent on creating the project coding skeleton. The skeleton was used to try out already given examples from the CGAL library (\url{https://www.cgal.org}). Visualisations for each optimisation step in the guard's positions have also been created using the Scikit Geometry library (\url{https://scikit-geometry.github.io/scikit-geometry/}).
 
 The rest of the time has been spent on devising the gradient computation for one guard and implementing it.
 The pseudo-code can be found in Algorithm \ref{alg:1g}.
@@ -76,12 +76,17 @@ The polygons used so far as input cases are the irrational guard polygon (Figure
 
 So far:
 - literature research
+- visualisations
 - created the algorithm for one guard
 - implemented the gradient computation for one guard
 - get multiple polygons as test cases
 - have results for polygons that require rational coordinates
 
 \subsection{Future Plans}
+The next step in the development of this thesis is to extend and implement the gradient descent computation algorithm to multiple guards. That is, moving the guards interdependently.
+
+Additionally, the algorithm will be tested with other polygons of different sizes to check its runtime performance. A comparison with other existing algorithms will be done at the end. The comparison will take place both in terms of runtime performance, as well as the optimised position of the guards. Because gradient descent is an approximation algorithm, the irrational guards' positions will be assessed using an error margin.
+
 Future plans:
 - algorithm for multiple guards
 - implement algorithm for multiple guards
