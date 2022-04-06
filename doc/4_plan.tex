@@ -36,6 +36,44 @@ The pseudo-code can be found in Algorithm \ref{alg:1g}.
     \end{algorithmic}
 \end{algorithm}
 
+The polygons used so far as input cases are the irrational guard polygon (Figure \ref{fig:p}), a star-shaped polygon (Subfigure \ref{fig:star}), a comb-shaped polygon (Subfigure \ref{fig:comb}), an arrow head (Subfigure \ref{fig:concave}) and an arbitrary polygon (Subfigure \ref{fig:random}). Each of them will be used for testing various aspects of the algorithm as follows:
+
+\begin{itemize}
+    \item the \textbf{Star polygon} will test whether guards can do a basic move from anywhere inside the polygon to the centre of it
+    \item the \textbf{Comb polygon} will test whether given 4 guards, the algorithm places each of them in one of the polygon spikes
+    \item the \textbf{Arrowhead polygon} will test the movement of a guard to optimality on the boundary of the polygon
+    \item the \textbf{Arbitrary polygon} and the \textbf{Irrational Guards polygon} will combine the previously mentioned cases.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{pentagram.png}
+        \caption{Star test input polygon.}
+        \label{fig:star}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{comb.png}
+        \caption{Comb test input polygon.}
+        \label{fig:comb}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{concave_triangle.png}
+        \caption{Arrowhead test input polygon.}
+        \label{fig:concave}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{random.png}
+        \caption{Arbitrary test input polygon.}
+        \label{fig:random}
+    \end{subfigure}
+    \caption{Input polygons used for testing the algorithm.}
+\end{figure}
+
 So far:
 - literature research
 - created the algorithm for one guard
@@ -43,6 +81,7 @@ So far:
 - get multiple polygons as test cases
 - have results for polygons that require rational coordinates
 
+\subsection{Future Plans}
 Future plans:
 - algorithm for multiple guards
 - implement algorithm for multiple guards
