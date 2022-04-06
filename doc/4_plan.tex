@@ -1,9 +1,43 @@
 \section{Thesis Project Plan}
 \label{sec:thesis}
 
-The main goal of this thesis is to find an approximate solution to The Art Gallery Problem \cite{o1987art} using gradient descent. 
+The main goal of this thesis is to find an approximate solution to The Art Gallery Problem \cite{o1987art} using gradient descent. As such, we will devise an algorithm for optimising the positions of the guards inside the given Art Gallery polygon. 
+The algorithm will be coded in C ++ with the help of the CGAL library(\url{https://www.cgal.org}).
+
+\subsection{Motivation}
+% see what Till says
+
+\subsection{Progress So Far}
+The first four weeks of the project have been spent on doing literature research.
+
+Two weeks have been spent on creating the C ++ skeleton and trying out already given examples.
+
+The rest of the time has been spent on devising the gradient computation for one guard and implementing it.
+The pseudo-code can be found in Algorithm \ref{alg:1g}.
+
+\begin{algorithm}
+    \begin{algorithmic}[1]
+    \caption{Position Optimisation for One Guard}
+    \label{alg:1g}
+    \For{\textbf{each} guard $p(x, y)$}
+        \State{\textit{cur\_guard\_position} $\gets (x, y)$}
+
+        \While{\textit{prev\_guard\_position} $\neq$ \textit{cur\_guard\_position}} \Comment{continue as long as there are no more improvements in the guard's position}
+            % \State{compute \textit{visibility\_region} of $p$}
+            \State{compute $\bigtriangledown f$}
+            \State{\textit{prev\_guard\_position} $\gets$ \textit{cur\_guard\_position}}
+            \State{\textit{cur\_guard\_position} $\gets \textit{prev\_guard\_position} + l\bigtriangledown f$}
+
+            \If{\textit{cur\_guard\_position} is outside the polygon}
+                \State{place \textit{cur\_guard\_position} on polygon boundary}
+            \EndIf
+        \EndWhile
+    \EndFor
+    \end{algorithmic}
+\end{algorithm}
 
 So far:
+- literature research
 - created the algorithm for one guard
 - implemented the gradient computation for one guard
 - get multiple polygons as test cases
