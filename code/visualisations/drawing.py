@@ -29,7 +29,7 @@ class Drawing(object):
         E = int(input())
 
         for _ in range(E):
-            segment = list(map(int, input().split()))
+            segment = list(map(float, input().split()))
             p1 = Point2(*segment[:2])
             p2 = Point2(*segment[2:])
 
