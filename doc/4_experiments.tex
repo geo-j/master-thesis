@@ -1,21 +1,104 @@
-\section{Experiments}
+\section{Practice}
 \label{sec:experiments}
 
+% This section will provide the implementation details of the theory chapter. As such, we will devise an algorithm for optimising the positions of the guards inside the given Art Gallery polygon. 
+% The algorithm is coded in C ++ with the use of the CGAL library (\url{https://www.cgal.org}).
+\subsection{Implementation}
+In section \ref{sec:theory} we devised formula \ref{eq:l} for computing the gradient of one guard and the reflex vertices it can see. This section will thus show the implementation and use of the formula to iteratively optimise a guard's position. The algorithm is coded in C ++ and makes use of the CGAL library (\url{https://www.cgal.org}).
+
+The implementation takes a polygon and a guard with an arbitrary position as input. The main idea of the algorithm is that the position of the guard is continuously improved until an optimum is found. That is, until the computed gradient does not change the position of the guard anymore.
+It can happen that the gradient computes an optimised position of the guard outside the polygon. In that case, the guard is placed and subsequently moved on the polygon boundary. The pseudo-code can be found in Algorithm \ref{alg:1g}.
+
+\begin{algorithm}[H]
+    \begin{algorithmic}[1]
+    \caption{Position Optimisation for One Guard}
+    \label{alg:1g}
+
+    \State{\textbf{Input:} polygon $\mathcal P$, guard $p(x, y)$}
+    \State{\textbf{Output:} optimised position $p'(x', y')$ of the guard}
+    \State{}
+    % \For{\textbf{each} guard $p(x, y)$}
+    \State{\textit{cur\_guard\_position} $\gets p(x, y)$}
+
+    \While{\textit{prev\_guard\_position} $\neq$ \textit{cur\_guard\_position}} %\Comment{continue as long as there are no more improvements in the guard's position}
+        % \State{compute \textit{visibility\_region} of $p$}
+        \State{compute $\bigtriangledown f(\textit{cur\_guard\_position})$}
+        \State{\textit{prev\_guard\_position} $\gets$ \textit{cur\_guard\_position}}
+        \State{\textit{cur\_guard\_position} $\gets \textit{prev\_guard\_position} + l\bigtriangledown f$}
+
+        \If{\textit{cur\_guard\_position} is outside the polygon}
+            \State{place \textit{cur\_guard\_position} on polygon boundary}
+        \EndIf
+    \EndWhile
+    \State{$p'(x', y') \gets \textit{cur\_guard\_position}$}
+    % \EndFor
+    \State \Return $p'$
+    \end{algorithmic}
+\end{algorithm}
+
+The implementation has been tested with one guard and multiple input polygons. The polygons used target specific use- or edge-cases. These cases will be built upon when expanding the implementation to multiple guards. The input polygons are:
+
+% are the irrational guard polygon (Figure \ref{fig:p}), a star-shaped polygon (Subfigure \ref{fig:star}), a comb-shaped polygon (Subfigure \ref{fig:comb}), an arrow head (Subfigure \ref{fig:concave}) and an arbitrary polygon (Subfigure \ref{fig:random}). Each of them will be used for testing various aspects of the algorithm as follows:
+
+\begin{itemize}
+    \item the \textbf{Star polygon} (Subfigure \ref{fig:star}) tests whether guards can do a basic move from anywhere inside the polygon to the centre of it. It can be fully seen by 1 guard.
+    \item the \textbf{Arrowhead polygon} (Subfigure \ref{fig:concave}) tests the movement of guard to optimality on the boundary of the polygon. This polygon can be fully seen by 1 guard.
+    \item the \textbf{Comb polygon} (Subfigure \ref{fig:comb}) tests whether given 4 guards, the algorithm places each of them in each one of the spikes,
+    \item the \textbf{Arbitrary polygon} (Subfigure \ref{fig:random}) combines the previously mentioned cases. It can be seen by 3 guards.
+    \item the \textbf{Irrational Guards polygon} (Figure \ref{fig:p}) combines the previously mentioned cases. It can be fully seen by 3 guards with irrational coordinates, or 4 guards with rational coordinates.
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{pentagram.png}
+        \caption{Star test input polygon.}
+        \label{fig:star}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{concave_triangle.png}
+        \caption{Arrowhead test input polygon.}
+        \label{fig:concave}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{comb.png}
+        \caption{Comb test input polygon.}
+        \label{fig:comb}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{random.png}
+        \caption{Arbitrary test input polygon.}
+        \label{fig:random}
+    \end{subfigure}
+    \caption{Input polygons used for testing the algorithm.}
+\end{figure}
 % Timetable and planning What will you do with the remainder of my thesis? Give an approximate estimation/timetable for what you will do and when you will be done.
+\subsection{Preliminary Results}
+The implementation was tested on the four previously mentioned input polygons and an arbitrarily placed guard. The gradient descent was computed with a learning rate chosen of 0.2. The choice behind the learning rate is that it is big enough to find an optimum position in a reasonable runtime. It is also small enough to observe a smooth, relevant improvement in the guard's position.
+
+The experiments had a 1-minute run timeout. This amount of time was chosen in order to build some intuition related to the speed of the algorithm. That is, we expect that the algorithm should be fast for such small input polygons. That is the case with the star and the arrowhead polygons in Subfigures \ref{fig:star_gradient} and \ref{fig:concave_gradient}. There, the final guard positions are optimally found within 1 minute. From this position, the polygons are fully seen.
+
+This is not the case with the rest of the three input polygons. The final position of the guard in Subfigures \ref{fig:comb_gradient}, \ref{fig:random_gradient} and \ref{fig:love_gradient} is the last computed position at timeout. Additionally, all of these polygons require multiple guards to be fully visible. For this reason, we expect that gradient descent would either find a local optimum, or would continuously jump between multiple local optima given a large enough learning rate.
+
+In the case of the comb (Subfigure \ref{fig:comb_gradient}), the tendency of the guard is to move towards the lower boundary of the polygon. This maximises the area observed by the guard, even though the guard is not able to see all spikes at once. When given a longer timeout, we would expect that the algorithm would move the guard between the local optima below each of the spikes.
+
+The arbitrary polygon (Subfigure \ref{fig:random_gradient}) shows similar behaviour in terms of moving between local optima. Initially the guard takes a large jump from its initial position to a more fine-tuned path. After a few smoother steps, it takes another large jump close to the boundary of the polygon. Nonetheless, this polygon cannot be fully guarded by 1 point. In order to emphasise this aspect, we will later explore in more detail the jump between local optima with different learning rates.
+
+Lastly, the irrational guard polygon (Subfigure \ref{fig:love_gradient}) depicts the least number of steps taken by the guard within the time limit. That is expected, as it is also the largest polygon out of all input polygons. This polygon can also not be guarded by only 1 point. So, we will explore local optima with different learning rates for it as well. 
+Moreover, we will also examine how well our approximation gradient descent algorithm performs when compared to the exact irrational positions of the guards.
+
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width = \textwidth]{pentagram_gradient.png}
-        \caption{Star polygon gradient example.}
+        \caption{Star polygon gradient example}
         \label{fig:star_gradient}
-    \end{subfigure}
-    \begin{subfigure}{0.45\textwidth}
-        \centering
-        \includegraphics[width = \textwidth]{comb_gradient.png}
-        \caption{Comb polygon gradient example.}
-        \label{fig:comb_gradient}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
         \centering
@@ -25,9 +108,22 @@
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
         \centering
+        \includegraphics[width = \textwidth]{comb_gradient.png}
+        \caption{Comb polygon gradient example.}
+        \label{fig:comb_gradient}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
         \includegraphics[width = \textwidth]{random_gradient.png}
         \caption{Arbitrary polygon gradient example.}
         \label{fig:random_gradient}
     \end{subfigure}
-    \caption{Gradient descent examples on the test polygons.}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width = \textwidth]{love_gradient.png}
+        \caption{Arbitrary polygon gradient example.}
+        \label{fig:love_gradient}
+    \end{subfigure}
+    \caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
+    \label{fig:gradients}
 \end{figure}
