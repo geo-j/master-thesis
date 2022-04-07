@@ -162,7 +162,11 @@ We know that the norm of the gradient is $||\vec{\bigtriangledown f}|| = \frac{\
 
 As mentioned before, the total gradient for guard $p$ and all the reflex vertices $r$ the guard can see is $$\vec{\bigtriangledown f} = \sum_r \vec{\bigtriangledown f_r}, \forall r \text{ reflex vertex } \in \mathcal P.$$
 
-The new position $p'$ of guard $p$ based on all the reflex vertices it can see is: $$p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.$$
+The new position $p'$ of guard $p$ based on all the reflex vertices it can see is: 
+\begin{equation}
+    p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.
+    \label{eq:l}
+\end{equation}
 
 
 
