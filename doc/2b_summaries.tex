@@ -13,6 +13,7 @@ First, we will address the question regarding whether polygons given by integer 
     \label{fig:p}
 \end{figure}
 
+\newpage
 \subsubsection{Intuition for Triangular Pockets}
 The six triangular pockets are created in order to force a guard on a line segment, as depicted in Figure \ref{fig:tb}. The figure is taken from \cite{abrahamsen2021art}. As such, they are grouped into three pairs: top pockets are paired with bottom pockets corresponding to their position in $\mathcal P$. For every pair (leftmost, middle, rightmost) of triangular pockets, there is a corresponding line $l_\ell, l_m, l_r$, respectively, that joins the peaks of each triangular pocket in a pair. A guard can see both the peaks $t, b$ of the pockets only if it is placed on the line segment $\overline{tb}$ (Figure \ref{fig:forcing_line}). Hence, one guard is needed per pair, resulting in 3 guards in total.
 

@@ -20,15 +20,15 @@ Thus, we consider $f(p)$ as the continuous objective function of The Art Gallery
 
 % Gradient descent is an iterative optimisation algorithm for finding the local optimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. 
 Let $\bigtriangledown f$ be the gradient of $f$. The gradient $\vec{\bigtriangledown f}$ then indicates the direction of the steepest descent for the objective function $f(p)$.
+The learning rate (step size) $l$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
 
 After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $p'$ of guard $p$: $$p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.$$
 
-The learning rate (step size) $l$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
 % High learning rates result in faster approaching towards the optimum, but risks overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
 
 In later sections we will experiment with various learning rates. As such, we will explore how they influence the performance of our algorithm in relation to different test polygons. 
 
-
+\newpage
 \subsubsection{Computing the Gradient}
 
 Given that $f$ is a function that describes the visibility area of a point $p(x, y)$, we first need to define how its gradient is computed. We will simplify the gradient computation without losing generality. As such, we will analyse the gradient by fixing one of the coordinates of $p$ and varying the other one. In this case, fixing the $x$-coordinate and varying the $y$-coordinate. The computation of the gradient remains the same regardless of the rotation applied to the plane.
@@ -42,7 +42,7 @@ We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in
 
 to be the gradient of $f$ given that $\mathcal P$ is guarded by a point $p(x, y)$. 
 
-We will now create a canonical geometrical construction that allows us to further define and compute $\vec{\bigtriangledown f}$. In this case, we consider the normalised length of the gradient as $||\vec{\bigtriangledown f}|| = 1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
+We will now create a canonical geometrical construction that allows us to further define and compute $\vec{\bigtriangledown f}$. In this case, we consider the normalised length of the gradient as $||\vec{\bigtriangledown f}||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
 % We will then generalise this case to multiple reflex vertices and guards.
 
 \begin{figure}[h!]
@@ -153,7 +153,7 @@ The coordinates of $\vec v^\perp$ can then be computed using the construction fr
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.55\textwidth]{theory/v_square.png}
+    \includegraphics[width = 0.35\textwidth]{theory/v_square.png}
     \caption{Computing the coordinates of $\vec v^\perp$ given the guard $p$ and the reflex vertex $r(x, y)$.}
     \label{fig:vsquare}
 \end{figure}

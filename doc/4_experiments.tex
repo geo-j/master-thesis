@@ -5,7 +5,7 @@ This section will provide the implementation details of the theory part (section
 % As such, we will devise an algorithm for optimising the positions of the guards inside the given Art Gallery polygon. 
 % The algorithm is coded in C ++ with the use of the CGAL library (\url{https://www.cgal.org}).
 \subsection{Implementation}
-In section \ref{sec:theory} we devised formula \ref{eq:l} for computing the gradient of one guard and the reflex vertices it can see. This section will thus show the implementation and use of the formula to iteratively optimise a guard's position. 
+In section \ref{sec:theory} we devised formula \ref{eq:l} for computing the gradient of one guard and the reflex vertices it can see. This section will show the implementation and use of the formula to iteratively optimise a guard's position. 
 
 The implementation takes a polygon and a guard with an arbitrary position as input. The main idea of the algorithm is that the position of the guard is continuously improved until an optimum is found. That is, until the computed gradient does not change the position of the guard anymore.
 It can happen that the gradient computes an optimised position of the guard outside the polygon. In that case, the guard is placed and subsequently moved on the polygon boundary. The pseudo-code can be found in Algorithm \ref{alg:1g}.
@@ -37,7 +37,7 @@ It can happen that the gradient computes an optimised position of the guard outs
     \end{algorithmic}
 \end{algorithm}
 
-The implementation has been tested with one guard and multiple input polygons. The polygons target specific use- or edge-cases. These cases will be built upon when expanding the implementation to multiple guards. The input polygons are:
+The implementation has been tested with one guard and multiple input polygons. The polygons target specific use- or edge-cases. These cases will be built upon when expanding the implementation to multiple guards. The current input polygons are:
 
 % are the irrational guard polygon (Figure \ref{fig:p}), a star-shaped polygon (Subfigure \ref{fig:star}), a comb-shaped polygon (Subfigure \ref{fig:comb}), an arrow head (Subfigure \ref{fig:concave}) and an arbitrary polygon (Subfigure \ref{fig:random}). Each of them will be used for testing various aspects of the algorithm as follows:
 
@@ -122,11 +122,11 @@ The experiments had a 1-minute run timeout. This amount of time was chosen in or
 
 This is not the case with the rest of the three input polygons. The final position of the guard in Subfigures \ref{fig:comb_gradient}, \ref{fig:random_gradient} and \ref{fig:love_gradient} is the last computed position at timeout. Additionally, all of these polygons require multiple guards to be fully visible. For this reason, we expect that gradient descent would either settle in a local optimum, or would continuously jump between multiple local optima given a large enough learning rate.
 
-In the case of the comb (Subfigure \ref{fig:comb_gradient}), the tendency of the guard is to move towards the lower boundary of the polygon. This maximises the area observed by the guard, even though the guard is not able to see all the spikes at once. When given a longer timeout, we expect that the algorithm would move the guard between the local optima below each of the spikes.
+In the case of the comb polygon (Subfigure \ref{fig:comb_gradient}), the tendency of the guard is to move towards the lower boundary of the polygon. This maximises the area observed by the guard, even though the guard is not able to see all the spikes at once. When given a longer timeout, we expect that the algorithm would move the guard between the local optima below each of the spikes.
 
 The arbitrary polygon (Subfigure \ref{fig:random_gradient}) shows similar behaviour in terms of moving between local optima. Initially the guard takes a large jump from its initial position to a more fine-tuned path. After a few smoother steps, it takes another large jump close to the boundary of the polygon. Nonetheless, this polygon cannot be fully guarded by 1 point. In order to explore this aspect, we will later look into how the jumps between local optima differ given the learning rate.
 
-Lastly, the algorithm managed to take the least number of steps within the time limit (slowest) in the irrational guard polygon (Subfigure \ref{fig:love_gradient}). That is expected, as it is also the largest polygon out of all the input ones. This polygon can also not be guarded by only 1 point. So, later in this paper we will also explore how the algorithm performs when different learning rates are used. 
+Lastly, the algorithm managed to take the least number of steps within the time limit (slowest) in the irrational guard polygon (Subfigure \ref{fig:love_gradient}). That is expected, as it is also the largest polygon out of all the input ones. This polygon can also not be guarded by only 1 point. So, we will explore in the next subsection how the algorithm performs when different learning rates are used. 
 % Moreover, we will also examine how well our approximation gradient descent algorithm performs when compared to the exact irrational positions of the guards.
 
 
@@ -168,4 +168,4 @@ Subfigures \ref{fig:concave_gradient_045} and \ref{fig:concave_gradient_06} show
 
 Subfigures \ref{fig:random_gradient_045} and \ref{fig:random_gradient_06} show the transition for the arbitrary polygon from $l = 0.45$ to $l = 0.6$, respectively. Unlike the arrowhead polygon, the arbitrary polygon appears to show a complete opposite evolution. When $l = 0.45$, the guard does not follow a clear path towards an optimum. Instead, it appears that after a few steps it returns to a position close to the starting position. This type of cycling could be accounted for by the gradient computation being unable to escape a local optimum. When $l = 0.6$, we would expect that the guard path is even more chaotic and dispersed. However, the learning rate in this case turns out to be large enough to escape the local optimum that $l = 0.45$ was stuck in. Nonetheless, we expect that even with a larger learning rate, the guard path would still not reach an optimum final position. Because the arbitrary polygon requires multiple guards for full visibility, we predict that the one guard would still be stuck in a cycle between all the guards' local optima.
 
-Therefore, we predict that the choice of the learning rate will be closely intertwined with the type of input polygon and the number of guards required to guard it. This situation will be considered more in-depth in the later phases of this thesis. Then, we can assess whether this is the case given a gradient computation algorithm for multiple guards.
+Therefore, we expect that the choice of the learning rate will be closely intertwined with the type of input polygon and the number of guards required to guard it. This situation will be considered more in-depth in the later phases of this thesis. Then, we can assess whether this is the case given a gradient computation algorithm for multiple guards.
