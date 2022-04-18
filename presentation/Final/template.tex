@@ -36,7 +36,9 @@
 \usepackage{booktabs} % Required for better table rules
 \usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
 \usepackage{pgfgantt}
+\usepackage{subcaption} % For multiple images
 \usepackage{subfiles} % Best loaded last in the preamble
+
 
 
 \usetikzlibrary{arrows, automata}
@@ -76,32 +78,149 @@
 
 %------------------------------------------------
 
-\begin{frame}{Project Aim}
-	% This is a simple slide.
-	% The aim of this project is to introduce another approach to solving the well-known Job-Shop Problem: Timed Automata, and apply it to a similar NP-hard problem: the Travelling Salesman Problem.
-	% The TSP will be thus modelled as a JSP, and solved using the same method deployed with Timed Automata
-	% \begin{itemize}
-	% 	\item Introduce Timed Automata as a solution to the Job Shop Problem 
-	% 	\item Apply it to other NP-complete problems such as the Travelling Salesman
-	% \end{itemize}
-
-
-\end{frame}
-
 % \subfile{sections/1_jsp.tex}
 
-% \subfile{sections/2_ta.tex}
+\begin{frame}{The Art Gallery Problem}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.7\textwidth]{Images/p.png}
+	\end{figure}
+\end{frame}
 
-% \subfile{sections/3_ta_for_jsp.tex} 
+% \begin{frame}{Previous Literature}
+% 	\begin{itemize}
+% 		\item approximation algorithms with ILPs
+% 		\item no gradient descent so far
+% 	\end{itemize}
+% \end{frame}
 
-% \subfile{sections/4_tsp.tex}
+\begin{frame}{Theory}
+	\begin{figure}
+		\includegraphics[width = 0.7\textwidth]{Images/gradient2.png}
+	\end{figure}
+\end{frame}
 
-% \subfile{sections/5_tsp_as_jsp.tex}
+\begin{frame}{Practice}
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/pentagram.png}
+			\caption{Star polygon.}
+			\label{fig:star}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle.png}
+			\caption{Arrowhead polygon.}
+			\label{fig:concave}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/comb.png}
+			\caption{Comb polygon.}
+			\label{fig:comb}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/random.png}
+			\caption{Arbitrary polygon.}
+			\label{fig:random}
+		\end{subfigure}
+		% \caption{Input polygons used for testing the algorithm.}
+	\end{figure}
+\end{frame}
 
-% \subfile{sections/6_ta_for_tsp.tex}
+\begin{frame}{Practice}
+	\begin{figure}
+		\centering
+		\includegraphics[width = \textwidth]{Images/fig-12-1.png}
+		\caption{Irrational guards polygon \cite{abrahamsen2021art}.}
+	\end{figure}
+\end{frame}
 
+\begin{frame}{Practice}
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/pentagram_gradient.png}
+			\caption{Star polygon gradient example.}
+			\label{fig:star_gradient}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle_gradient.png}
+			\caption{Arrowhead polygon gradient example.}
+			\label{fig:concave_gradient}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/comb_gradient.png}
+			\caption{Comb polygon gradient example.}
+			\label{fig:comb_gradient}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/random_gradient.png}
+			\caption{Arbitrary polygon gradient example.}
+			\label{fig:random_gradient}
+		\end{subfigure}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\includegraphics[width = \textwidth]{Images/love_gradient.png}
+			\caption{Arbitrary polygon gradient example.}
+			\label{fig:love_gradient}
+		\end{subfigure}
+		\caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
+		\label{fig:gradients}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Practice}
+	\begin{figure}
+		\centering
+		\includegraphics[width = \textwidth]{Images/love_gradient.png}
+		\caption{Irrational guards polygon \cite{abrahamsen2021art} gradient example.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Practice}
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle_gradient_045.png}
+			\caption{Arrowhead polygon gradient with learning rate $l = 0.45$ example}
+			\label{fig:concave_gradient_045}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle_gradient_06.png}
+			\caption{Arrowhead polygon gradient with learning rate $l = 0.6$ example.}
+			\label{fig:concave_gradient_06}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/random_gradient_045.png}
+			\caption{Arbitrary polygon gradient with learning rate $l = 0.45$ example.}
+			\label{fig:random_gradient_045}
+		\end{subfigure}
+		\begin{subfigure}{0.45\textwidth}
+			\centering
+			\includegraphics[width = 0.7\textwidth]{Images/random_gradient_06.png}
+			\caption{Arbitrary polygon gradient with learning rate $l = 0.6$ example.}
+			\label{fig:random_gradient_06}
+		\end{subfigure}
+		% \caption{Gradient descent examples with learning rate $l \in \{0.45, 0.6\}$ on the one-guard Arrowhead and multiple guards arbitrary input polygons.}
+		\label{fig:multiple_gradients}
+	\end{figure}
+\end{frame}
 \begin{frame}{Conclusion and Future Remarks}
-	% \begin{itemize}
+	\begin{itemize}
+		\item gradient computation and implementation for multiple guards
+		\item testing with multiple input polygons
+		\item testing against previously existing algorithms \cite{DBLP:journals/corr/abs-2007-06920}
 	% 	\setlength{\itemsep}{0.5pt}
 	% 	\item solve the Job-Shop Problem using Timed Automata
 	% 	\item model the Travelling Salesman problem as an instance of the Single-Machine Shop problem
@@ -111,7 +230,7 @@
 	% 	\setlength{\itemsep}{0.5pt}
 	% 	\item complexity analysis
 	% 	\item other methods for city grouping
-	% \end{itemize}
+	\end{itemize}
 \end{frame}
 
 %------------------------------------------------
@@ -249,7 +368,7 @@
 \appendix
 
 \begin{frame}{References}
-	\nocite{*} % Display all references regardless of if they were cited
+	% \nocite{*} % Display all references regardless of if they were cited
 	\bibliography{example.bib}
 	\bibliographystyle{plain}
 \end{frame}
