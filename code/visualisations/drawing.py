@@ -1,13 +1,16 @@
 from skgeom.draw import draw
 from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility
 import matplotlib.pyplot as plt
-from numpy import random
+from numpy import random, diff, sqrt
+from sys import stdin
 
 class Drawing(object):
     def __init__(self) -> None:
         self.arrangement = arrangement.Arrangement()
         self.vs = TriangularExpansionVisibility(self.arrangement)
         self.guards = []
+        self.xs = []
+        self.ys = []
     
     ###########
     #  Input #
@@ -26,7 +29,7 @@ class Drawing(object):
         E = int(input())
 
         for _ in range(E):
-            segment = list(map(int, input().split()))
+            segment = list(map(float, input().split()))
             p1 = Point2(*segment[:2])
             p2 = Point2(*segment[2:])
 
@@ -40,9 +43,17 @@ class Drawing(object):
             q = Point2(*vertex)
             self.guards.append(q)
     
+    def read_guards_paths(self) -> None:
+        for line in stdin:
+            x, y = map(float, line.strip().split())
+
+            self.xs.append(x)
+            self.ys.append(y)
+    
     def read_all_input(self) -> None:
         self.read_input_arrangement()
         self.read_input_guards()
+        self.read_guards_paths()
     
     ###########
     #  Output #
@@ -67,7 +78,19 @@ class Drawing(object):
         for he in self.arrangement.halfedges:
             draw(he.curve(), visible_point = True)
 
+    def draw_guards_paths(self) -> None:
+        plt.scatter(self.xs, self.ys, color = 'magenta')
+
+        u = diff(self.xs)
+        v = diff(self.ys)
+        pos_x = self.xs[:-1] + u / 2
+        pos_y = self.ys[:-1] + v / 2
+        norm = sqrt(u ** 2 + v ** 2) 
+
+        plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, scale = 5, scale_units = 'inches')
+
     def draw_all(self) -> None:
         self.draw_visibility_regions()
         self.draw_guards()
         self.draw_arrangement()
+        self.draw_guards_paths()

@@ -5,23 +5,23 @@ Hengeveld and Miltzow \cite{DBLP:journals/corr/abs-2007-06920} start by introduc
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{vis_delta.png}
+    \includegraphics[width=0.5\textwidth]{literature/vis_delta.png}
     \caption{Enhanced ($vis_\delta(p)$) and Diminished ($vis_{-\delta}(p)$) Visibility Regions of $p$ \cite{DBLP:journals/corr/abs-2007-06920}.}
     \label{fig:vis}
 \end{figure}
 
-A core idea of Hengeveld and Miltzow's approach is to discretise the problem in order to improve the computation time. In this way, only a subset of potential guards and points to be guarded from $\mathcal P$ would be considered. In order to do so, they introduce the notions of a candidate guard set $C$ and a witness set $W$. The role of the candidate guard set $C$ is to discretise the guard searching space. As such, we can find an upper bound $opt[C]$ on the final guard set. Thus $C$ is ``pretty close'' on the actual optimum guard set $opt$. The candidate guard set $C$ is then initialised with a subset of all the potential guards. The guards that are included should have their visibility regions overlap as little as possible. Similarly, the witness set $W$ discretises the space of the guards' visibility regions. At initialisation time, $W$ contains a subset of all vertices and faces of $\mathcal P$. It is important to also include faces in $W$. In this way, we account for the fact that if a point $p$ is included in a face $f$, then $f$ sees at least as much as $p$. So, we can determine an approximation of how much more $f$ sees when compared to $g$. Thus, by adding the face as a witness, we are creating a discretisation of the space containing a superset of possible guard positions.
+The core idea of Hengeveld and Miltzow's approach is to discretise the problem in order to improve the computation time. In this way, only a subset of potential guards and points to be guarded from $\mathcal P$ would be considered. In order to do so, they introduce the notions of a candidate guard set $C$ and a witness set $W$. The role of the candidate guard set $C$ is to discretise the guard searching space. As such, we can find an upper bound $opt[C]$ on the final guard set. Thus $C$ is ``pretty close'' on the actual optimum guard set $opt$. The candidate guard set $C$ is then initialised with a subset of all the potential guards. The guards that are included should have their visibility regions overlap as little as possible. Similarly, the witness set $W$ discretises the space of the guards' visibility regions. At initialisation time, $W$ contains a subset of all vertices and faces of $\mathcal P$. It is important to also include faces in $W$. In this way, we account for the fact that if a point $p$ is included in a face $f$, then $f$ sees at least as much as $p$. So, we can determine an approximation of how much more $f$ sees when compared to $g$. Thus, by adding the face as a witness, we are creating a discretisation of the space containing a superset of possible guard positions.
 
 Firstly, rays are shot from every reflex vertex such that the angle between any two rays is at most $\delta$, as observed in Figure \ref{fig:rays}, as taken from \cite{DBLP:journals/corr/abs-2007-06920}. All the intersection points of the rays within $\mathcal P$ define the candidate guard set $C$, together with the faces they are part of. A witness guard set $W$ is then defined by picking an arbitrary interior point of every face of $\mathcal P$, together with all faces of $\mathcal P$. In this way, the problem can be discretised in a way in which the solution to the discretised problem are also solutions to the continuous problem.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.3\textwidth]{Shooting-1.png}
+    \includegraphics[width=0.3\textwidth]{literature/Shooting-1.png}
     \caption{Shooting rays from all reflex Vertices with angles between them at most $\delta$ \cite{DBLP:journals/corr/abs-2007-06920}.}
     \label{fig:rays}
 \end{figure}
 
-
+\newpage
 \subsubsection{One-Shot Vision-Stable Algorithm}
 At first, an Integer Program (IP) is built and named the One-Shot Vision-Stable Algorithm. It computes the minimum number of point guards in polynomial time in a vision-stable polygon $\mathcal P$ with  vision-stability $\delta$ and $r$ reflex vertices. The guards are encoded by binary integers, and linear equations and inequalities are used to encode visibility. Assuming that $\delta$ is part of the input, the algorithm returns the optimal solution only if the vision-stability of $\mathcal P$ is larger or equal to $\delta$. The one-shot vision-stable algorithm is reliable, as it also verifies that its result is an optimal solution. 
 
@@ -29,7 +29,7 @@ Let $f_1$ be the optimisation fuction of the IP. The function $f_1$ uses variabl
 $$f_1 = \sum_{c \in \text{vertex}(C)} [[c]] + (1 + \varepsilon)\sum_{c \in \text{face}(C)} [[c]] + \varepsilon \sum_{w \in \text{face}(W)} [[w]].$$
 For every witness $w$, its visible set of candidates are denoted as $vis(w)$, where $face$ and $vertex$ refer to whether the candidate is a face or a vertex, respectively.
 
-Additionally, let $\text{vis}(w)$ be the set of candidates that see witness $w \in W$ completely. For every vertex-witness $w \in \text{vertex}(W)$, we formulate a constraint such that all $w in \text{vertex}(W)$ is seen: $$\sum_{[[c]] \in vis(w)} c \geq 1, \forall w \in \text{vertex}(W).$$ We similarly formulate a constraint for every face-witness $w \in \text{face}(W)$. However, we add $[[w]]$ as a variable to relax it, so that the focus is placed on first seeing all vertex-witnesses $$[[w]] + \sum_{[[c]] \in vis(w)} c \geq 1, \forall w \in \text{face}(W).$$
+Additionally, let $\text{vis}(w)$ be the set of candidates that see witness $w \in W$ completely. For every vertex-witness $w \in \text{vertex}(W)$, we formulate a constraint such that all $w \in \text{vertex}(W)$ is seen: $$\sum_{[[c]] \in vis(w)} c \geq 1, \forall w \in \text{vertex}(W).$$ We similarly formulate a constraint for every face-witness $w \in \text{face}(W)$. However, we add $[[w]]$ as a variable to relax it, so that the focus is placed on first seeing all vertex-witnesses $$[[w]] + \sum_{[[c]] \in vis(w)} c \geq 1, \forall w \in \text{face}(W).$$
 
 % for each vertex and face witness $w$ to be respectively seen by all candidates from $vis(w)$ is added. 
 % % \begin{equation}
@@ -44,7 +44,7 @@ Nonetheless, the one-shot vision-stable algorithm proves to be too slow for prac
 \subsubsection{Iterative Vision-Stable Algorithm}
 Starting with the smaller sets of candidates $C$ and witnesses $W$, another IP is deployed in order to find a minimum guard set $S \subseteq C$ that sees all vertex-witnesses. This algorithm is then called the Iterative Vision Stable Algorithm, as it changes $C$ and $W$ in each iteration.
 
-As the Iterative Vision Stable Algorithm is also named the Big IP, it also has an objective function $f_2$. The function $f_2$ minimises the number of face-guards used in $S$ and the number of unseen face-witnesses. If $S$ contains only point guards and sees all face-witnesses, the algorithm reports the optimal solution by using the One-Shot IP. As such, $f_2$ assures that all witnesses $w$ are seen by their set of candidates $vis(w)$, and enforces that only the number of guards $s$ resulted from the One-Shot IP is used. The optimisation function with its constraints of the Big IP becomes then 
+As the Iterative Vision Stable Algorithm is also named the Big IP, it also has an objective function $f_2$. The function $f_2$ minimises the number of face-guards used in $S$ and the number of unseen face-witnesses. If $S$ contains only point guards and sees all face-witnesses, the algorithm reports the optimal solution by using the One-Shot IP. As such, $f_2$ assures that all witnesses $w$ are seen by their set of candidates $vis(w)$, and enforces that only the number of guards $s$ resulted from the One-Shot IP is used. The optimisation function with its constraints of the Big IP becomes
 \begin{align}
 	f_2 &= \sum_{x \in splittable(W \cup C)} [[x]] \label{eq:f2}\\
 	\sum_{[[c]] \in C} c &= s, s \in \mathbb Z, s \text{ the number of used guards in the One-Shot IP} \\

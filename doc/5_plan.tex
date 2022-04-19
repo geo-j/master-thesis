@@ -1,0 +1,33 @@
+\section{Thesis Project Plan}
+\label{sec:thesis}
+The main goal of this thesis is to find an approximate solution to The Art Gallery Problem \cite{o1987art} using gradient descent. Therefore, we aim to create a theoretical algorithm, implement it and compare it to other already existing algorithms.
+
+\subsection{Progress So Far}
+The first four weeks of the project have been spent on doing literature research (section \ref{sec:literature}). Then, three weeks have been spent on creating the project coding skeleton. At first, the skeleton was used to try out already existing examples from the CGAL library (\url{https://www.cgal.org}). The skeleton was then extended with a testing pipeline and easy code running. The visualisations were created in order to check the guards' positions movements at each step. Scikit Geometry library (\url{https://scikit-geometry.github.io/scikit-geometry/}) was used to implement the graphics.
+
+Afterwards, four more weeks were spent on theoretically devising the gradient computation for one guard (section \ref{sec:theory}) and implementing it. The rest of the time has been spent on experimenting with it (section \ref{sec:experiments}), and writing this thesis report. The writing parts include asking for feedback and working on the feedback.
+% So far:
+% - literature research
+% - visualisations
+% - created the algorithm for one guard
+% - implemented the gradient computation for one guard
+% - get multiple polygons as test cases
+% - have results for polygons that require rational coordinates
+
+\subsection{Future Plan}
+The next step in the development of this thesis is to extend and implement the gradient descent computation algorithm to multiple guards. That is, moving the guards interdependently. 
+
+Then, a strategy for adding more guards when needed will have to be explored. When an optimum cannot be found with the current number of guards, we will add more, one by one. Multiple ways of doing so will be investigated. Firstly, we can start from one guard. If no solution can be found with it, we will add one mor guard. We will continue adding guards until the whole polygon in question is fully visible. Conversely, we can also start from an arbitrary number of guards and remove or add more as needed. The latter option could be however more computationally expensive. This could be the case because we would need to check whether a found solution is minimal.
+
+Next to the strategy of how to add new guards, we will need to devise a way to decide when we need to add new guards. That is, when a solution cannot be reached with the current number of guards. This will be a heuristic of observing whether we are stuck in either a local optimum, or are circling between multiple local optima.
+
+Additionally, we will explore initial guarding positions. Namely, how guards can be placed at the beginning of the algorithm. One such possibility would be to start with all guards on the same fixed starting position. Intuitively, this could deem suboptimal due to the fact that all guards would need to move away from each other anyway. Thus, a way to address this problem would be to start with the guards at arbitrary positions.
+
+Lastly, the algorithm will be tested with polygons of different sizes, shapes and properties to check its runtime performance. A comparison with \cite{DBLP:journals/corr/abs-2007-06920} will be done at the end. The comparison will take place both in terms of runtime performance, as well as the position of the guards. Because gradient descent is an approximation algorithm, the irrational guards' positions will be assessed using an error margin.
+
+% Future plans:
+% - algorithm for multiple guards
+% - implement algorithm for multiple guards
+% - test algorithm for multiple test cases 
+% - compare with other algorithms (error margin) + Simon's
+% - different ways of placing guards

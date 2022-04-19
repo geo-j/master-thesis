@@ -20,19 +20,19 @@
 #include "utils.hpp"
 
 
-typedef Arrangement_2::Face_handle                                          Face_handle;
-typedef Arrangement_2::Edge_const_iterator                                  Edge_const_iterator;
-typedef Arrangement_2::Ccb_halfedge_circulator                              Ccb_halfedge_circulator;
-typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_true>    NSPV;
-typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>  RSV;
-typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2>              TEV;
+typedef Arrangement_2::Face_handle                                                  Face_handle;
+typedef Arrangement_2::Edge_const_iterator                                          Edge_const_iterator;
+typedef Arrangement_2::Ccb_halfedge_circulator                                      Ccb_halfedge_circulator;
+typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_true>            NSPV;
+typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>          RSV;
+typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2, CGAL::Tag_true>      TEV;
 
-typedef Kernel::Ray_2                                                       Ray_2;
-typedef Kernel::Intersect_2                                                 Intersect_2;
-typedef Kernel::Object_2                                                    Object_2;
-typedef Kernel::Line_2                                                      Line_2;
-typedef Kernel::FT                                                          FT;
-typedef Kernel::Vector_2                                                    Vector_2;
+typedef Kernel::Ray_2                                                               Ray_2;
+typedef Kernel::Intersect_2                                                         Intersect_2;
+typedef Kernel::Object_2                                                            Object_2;
+typedef Kernel::Line_2                                                              Line_2;
+typedef Kernel::FT                                                                  FT;
+typedef Kernel::Vector_2                                                            Vector_2;
 
 
 
@@ -228,20 +228,21 @@ class Arrangement {
 
             auto obj = this->pl.locate(guard);
 
-            std::cout << "before face\n";
             // check if the query point is located in the interior of a face
             auto *face = boost::get<Arrangement_2::Face_const_handle>(&obj);
 
             if (face) {
-                // std::cout << (*face)->number_of_isolated_vertices() << std::endl;
-                // std::cout << &face << std::endl;
+                std::cout << "before face\n";
                 this->visibility.compute_visibility(guard, *face, visibility_arrangement);
+                // std::cout << (*face)->number_of_isolated_vertices() << std::endl;
+
                 std::cout << "after face\n";
 
             }
             // if the guard is on the arrangement boundary, then get the inner face of that edge to compute its visibility
             else {
-
+                std::cout << "before edge\n";
+                
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
                 if (edge) {
@@ -373,7 +374,6 @@ class Arrangement {
                         boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->target()->point(), orientation));
                     }
                 }
-
             } while (++ eit != *visibility_arrangement.unbounded_face()->inner_ccbs_begin());
 
             return boundary_intersections;
@@ -387,11 +387,14 @@ class Arrangement {
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
         Vector_2 gradient(Arrangement_2 visibility_arrangement, Point_2 guard) {
+            std::cout << "start gradient\n";
             Vector_2 Df;
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
             auto reflex_intersections = this->get_reflex_intersection_pairs(visibility_arrangement, guard);
+            // std::cout << reflex_intersections.size() << " intersections\n";
 
             for (auto i = 0; i < reflex_intersections.size(); i ++) {
+                // std::cout << i << ' ';
                 // unpack the tuple
                 Point_2 reflex_vertex = std::get<0>(reflex_intersections.at(i));
                 Point_2 intersection = std::get<1>(reflex_intersections.at(i));
@@ -424,6 +427,7 @@ class Arrangement {
                     Df += Dfr;
             }
         
+            std::cout << "end gradient\n";
             return Df;
         }
 
@@ -444,25 +448,30 @@ class Arrangement {
                     // compute visibility arrangement of each guard position
                     auto visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
 
+                    prev_guard_position.reset();
                     prev_guard_position = cur_guard_position;
 
                     // compute gradient of current guard position
                     gradient = this->gradient(visibility_arrangement, prev_guard_position);
 
+                    cur_guard_position.reset();
                     // update current guard position
                     cur_guard_position = Point_2(prev_guard_position.x() + learning_rate * gradient.x(), prev_guard_position.y() + learning_rate * gradient.y());
 
                     // std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (this->input_polygon.bounded_side(cur_guard_position) == CGAL::ON_UNBOUNDED_SIDE) {
-                        // std::cout << "not inside\n";
+                        std::cout << "not inside\n";
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard_position, cur_guard_position, new_guard_position))
                             cur_guard_position = new_guard_position;
+                        std::cout << "now inside\n";
                     }
 
                     if (this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE)
                         std::cout << cur_guard_position << std::endl;
+                    
+                    visibility_arrangement.clear();
                     
                 } while (prev_guard_position != cur_guard_position && this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE);
 
@@ -499,6 +508,7 @@ class Arrangement {
                 break;
             }
 
+            edge.reset();
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
         if (prev_guard == new_guard && placed) {

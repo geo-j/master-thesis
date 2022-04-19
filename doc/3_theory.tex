@@ -12,7 +12,7 @@ Thus, we consider $f(p)$ as the continuous objective function of The Art Gallery
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.4\textwidth]{sumf.png}
+    \includegraphics[width=0.4\textwidth]{theory/sumf.png}
     \caption{Global change in the area seen by $p$ when moved by $\partial y$ to a new position $p'$.}
     \label{fig:sumf}
 \end{figure}
@@ -20,15 +20,15 @@ Thus, we consider $f(p)$ as the continuous objective function of The Art Gallery
 
 % Gradient descent is an iterative optimisation algorithm for finding the local optimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. 
 Let $\bigtriangledown f$ be the gradient of $f$. The gradient $\vec{\bigtriangledown f}$ then indicates the direction of the steepest descent for the objective function $f(p)$.
+The learning rate (step size) $l$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
 
 After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $p'$ of guard $p$: $$p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.$$
 
-The learning rate (step size) $l$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
 % High learning rates result in faster approaching towards the optimum, but risks overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
 
 In later sections we will experiment with various learning rates. As such, we will explore how they influence the performance of our algorithm in relation to different test polygons. 
 
-
+\newpage
 \subsubsection{Computing the Gradient}
 
 Given that $f$ is a function that describes the visibility area of a point $p(x, y)$, we first need to define how its gradient is computed. We will simplify the gradient computation without losing generality. As such, we will analyse the gradient by fixing one of the coordinates of $p$ and varying the other one. In this case, fixing the $x$-coordinate and varying the $y$-coordinate. The computation of the gradient remains the same regardless of the rotation applied to the plane.
@@ -42,12 +42,12 @@ We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in
 
 to be the gradient of $f$ given that $\mathcal P$ is guarded by a point $p(x, y)$. 
 
-We will now create a canonical geometrical construction that allows us to further define and compute $\vec{\bigtriangledown f}$. In this case, we consider the normalised length of the gradient as $||\vec{\bigtriangledown f}|| = 1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
+We will now create a canonical geometrical construction that allows us to further define and compute $\vec{\bigtriangledown f}$. In this case, we consider the normalised length of the gradient as $||\vec{\bigtriangledown f}||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
 % We will then generalise this case to multiple reflex vertices and guards.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.6\textwidth]{gradient2.png}
+    \includegraphics[width = 0.6\textwidth]{theory/gradient2.png}
     \caption{Canonical gradient construction and for when the position of $p$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $p'$.}
     \label{fig:gradient}
 \end{figure}
@@ -140,7 +140,7 @@ We can now use the coordinates of the gradient $\bigtriangledown f$ to compute t
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.5\textwidth]{v_perp.png}
+    \includegraphics[width = 0.5\textwidth]{theory/v_perp.png}
     \caption{Computing the new position $p'$ of guard $p$ around reflex vertex $r$ based on the gradient $\bigtriangledown f$.}
     \label{fig:vperp}
 \end{figure}
@@ -153,7 +153,7 @@ The coordinates of $\vec v^\perp$ can then be computed using the construction fr
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.55\textwidth]{v_square.png}
+    \includegraphics[width = 0.35\textwidth]{theory/v_square.png}
     \caption{Computing the coordinates of $\vec v^\perp$ given the guard $p$ and the reflex vertex $r(x, y)$.}
     \label{fig:vsquare}
 \end{figure}
@@ -162,7 +162,11 @@ We know that the norm of the gradient is $||\vec{\bigtriangledown f}|| = \frac{\
 
 As mentioned before, the total gradient for guard $p$ and all the reflex vertices $r$ the guard can see is $$\vec{\bigtriangledown f} = \sum_r \vec{\bigtriangledown f_r}, \forall r \text{ reflex vertex } \in \mathcal P.$$
 
-The new position $p'$ of guard $p$ based on all the reflex vertices it can see is: $$p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.$$
+The new position $p'$ of guard $p$ based on all the reflex vertices it can see is: 
+\begin{equation}
+    p'(x', y') = p'(x, y) + l\bigtriangledown f, l - \text{ learning rate}.
+    \label{eq:l}
+\end{equation}
 
 
 
