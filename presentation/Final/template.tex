@@ -94,6 +94,13 @@
 % 	\end{itemize}
 % \end{frame}
 
+\begin{frame}{Gradient Descent}
+	\begin{figure}
+		\centering
+		\includegraphics[width = 0.7\textwidth]{Images/external-content.duckduckgo.com.jpeg}
+	\end{figure}
+\end{frame}
+
 \begin{frame}{Theory}
 		\begin{columns}[T, onlytextwidth] % T for top align, onlytextwidth to suppress the margin between columns
 		\column{0.55\textwidth}
@@ -103,8 +110,8 @@
 
 		\column{0.35\textwidth}
 			\centering
-			$$\bigtriangledown f_r = (0, \frac{\beta^2}{2\alpha})^\intercal$$
-			$$p'(x', y') = p'(x, y) + l\bigtriangledown f,$$
+			$$\bigtriangledown f = (0, \frac{\beta^2}{2\alpha})^\intercal$$
+			$$p' = p + l\bigtriangledown f,$$
 			$$l - \text{ learning rate}$$
 	\end{columns}
 \end{frame}
@@ -151,31 +158,31 @@
 \begin{frame}{Practice}
 	\begin{figure}[h!]
 		\centering
-		\begin{subfigure}{0.45\textwidth}
+		\begin{subfigure}{0.4\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/pentagram_gradient.png}
-			\caption{Star polygon gradient example.}
+			\caption{}
 			\label{fig:star_gradient}
 		\end{subfigure}
-		\begin{subfigure}{0.45\textwidth}
+		\begin{subfigure}{0.4\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_gradient.png}
 			% \caption{Arrowhead polygon gradient example.}
-			\caption{Learning rate $l = 0.2$.}
+			\caption{}
 			\label{fig:concave_gradient}
 		\end{subfigure}
-		\begin{subfigure}{0.45\textwidth}
+		\begin{subfigure}{0.4\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/comb_gradient.png}
 			% \caption{Comb polygon gradient example.}
-			\caption{Learning rate $l = 0.2$.}
+			\caption{}
 			\label{fig:comb_gradient}
 		\end{subfigure}
-		\begin{subfigure}{0.45\textwidth}
+		\begin{subfigure}{0.4\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/random_gradient.png}
 			% \caption{Arbitrary polygon gradient example.}
-			\caption{Learning rate $l = 0.2$.}
+			\caption{}
 			\label{fig:random_gradient}
 		\end{subfigure}
 		% \begin{subfigure}{\textwidth}
@@ -186,6 +193,7 @@
 		% 	\label{fig:love_gradient}
 		% \end{subfigure}
 		% \caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
+		\caption{Learning rate $l = 0.2$.}
 		\label{fig:gradients}
 	\end{figure}
 \end{frame}
@@ -233,11 +241,12 @@
 		\label{fig:multiple_gradients}
 	\end{figure}
 \end{frame}
-\begin{frame}{Conclusion and Future Remarks}
+\begin{frame}{Conclusion and Future Plans}
 	\begin{itemize}
-		\item gradient computation and implementation for multiple guards
-		\item multiple input polygons
-		\item testing against previously existing algorithms \cite{DBLP:journals/corr/abs-2007-06920}
+		\item gradient for multiple guards implementation
+		\item gradient experiments (momentum, weighted momentum)
+		\item guard addition in the comb polygon experiments
+		\item comparison with existing algorithms \cite{DBLP:journals/corr/abs-2007-06920}
 	% 	\setlength{\itemsep}{0.5pt}
 	% 	\item solve the Job-Shop Problem using Timed Automata
 	% 	\item model the Travelling Salesman problem as an instance of the Single-Machine Shop problem
