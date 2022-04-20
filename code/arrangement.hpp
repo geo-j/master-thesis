@@ -245,13 +245,25 @@ class Arrangement {
                 
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
-                if (edge)
+                if (edge) {
+                    std::cout << "before edge\n";
+
                     if ((*edge)->is_on_inner_ccb())
                         this->visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
                     else
                         this->visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
-                
-                // std::cout << "after edge\n";
+                    
+                    std::cout << "after edge\n";
+                } 
+                // TODO: find one of the halfedges where the vertex is located on
+                // else {
+                //     auto *vertex = boost::get<Arrangement_2::Vertex_const_handle>(&obj);
+
+                //     if (vertex) {
+                //         std::cout << "vertex " << (*vertex)->incident_halfedges()->source()->point() << std::endl;
+                //         this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->twin()->ccb(), visibility_arrangement);
+                //     }
+                // }
 
             }
 
@@ -428,14 +440,13 @@ class Arrangement {
             for (auto i = 0; i < this->guards.size(); i ++) {
                 Vector_2 gradient;
                 Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
-                Arrangement_2 visibility_arrangement;
                 std::cout << cur_guard_position << std::endl;
 
                 int j = 0;
                 // try to update the guard position until there are no more changes, or it goes outside the arrangement
                 do {
                     // compute visibility arrangement of each guard position
-                    visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
+                    auto visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
 
                     // prev_guard_position.reset();
                     prev_guard_position = cur_guard_position;

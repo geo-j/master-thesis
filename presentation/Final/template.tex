@@ -56,7 +56,7 @@
 
 \titlegraphic{\includegraphics[scale=0.2, trim=-10cm -20cm 2cm -12cm]{Images/UU logo.png}} % Optional title page image, comment this line to remove it
 
-\institute{Supervisor: \\ Tillman Miltzow \\ Second Examiner: \\ Frank Staals}
+\institute{Supervisor: Tillman Miltzow \\ Second Examiner: Frank Staals}
 
 \date{\today}
 
@@ -95,9 +95,18 @@
 % \end{frame}
 
 \begin{frame}{Theory}
-	\begin{figure}
-		\includegraphics[width = 0.7\textwidth]{Images/gradient2.png}
-	\end{figure}
+		\begin{columns}[T, onlytextwidth] % T for top align, onlytextwidth to suppress the margin between columns
+		\column{0.55\textwidth}
+			\begin{figure}
+				\includegraphics[width = \textwidth]{Images/gradient2.png}
+			\end{figure}
+
+		\column{0.35\textwidth}
+			\centering
+			$$\bigtriangledown f_r = (0, \frac{\beta^2}{2\alpha})^\intercal$$
+			$$p'(x', y') = p'(x, y) + l\bigtriangledown f,$$
+			$$l - \text{ learning rate}$$
+	\end{columns}
 \end{frame}
 
 \begin{frame}{Practice}
@@ -105,25 +114,25 @@
 		\centering
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/pentagram.png}
+			\includegraphics[width = 0.8\textwidth]{Images/pentagram.png}
 			\caption{Star polygon.}
 			\label{fig:star}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle.png}
+			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle.png}
 			\caption{Arrowhead polygon.}
 			\label{fig:concave}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/comb.png}
+			\includegraphics[width = 0.8\textwidth]{Images/comb.png}
 			\caption{Comb polygon.}
 			\label{fig:comb}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/random.png}
+			\includegraphics[width = 0.8\textwidth]{Images/random.png}
 			\caption{Arbitrary polygon.}
 			\label{fig:random}
 		\end{subfigure}
@@ -131,85 +140,93 @@
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Practice}
-	\begin{figure}
-		\centering
-		\includegraphics[width = \textwidth]{Images/fig-12-1.png}
-		\caption{Irrational guards polygon \cite{abrahamsen2021art}.}
-	\end{figure}
-\end{frame}
+% \begin{frame}{Practice}
+% 	\begin{figure}
+% 		\centering
+% 		\includegraphics[width = \textwidth]{Images/fig-12-1.png}
+% 		\caption{Irrational guards polygon \cite{abrahamsen2021art}.}
+% 	\end{figure}
+% \end{frame}
 
 \begin{frame}{Practice}
 	\begin{figure}[h!]
 		\centering
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/pentagram_gradient.png}
+			\includegraphics[width = 0.8\textwidth]{Images/pentagram_gradient.png}
 			\caption{Star polygon gradient example.}
 			\label{fig:star_gradient}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle_gradient.png}
-			\caption{Arrowhead polygon gradient example.}
+			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_gradient.png}
+			% \caption{Arrowhead polygon gradient example.}
+			\caption{Learning rate $l = 0.2$.}
 			\label{fig:concave_gradient}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/comb_gradient.png}
-			\caption{Comb polygon gradient example.}
+			\includegraphics[width = 0.8\textwidth]{Images/comb_gradient.png}
+			% \caption{Comb polygon gradient example.}
+			\caption{Learning rate $l = 0.2$.}
 			\label{fig:comb_gradient}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/random_gradient.png}
-			\caption{Arbitrary polygon gradient example.}
+			\includegraphics[width = 0.8\textwidth]{Images/random_gradient.png}
+			% \caption{Arbitrary polygon gradient example.}
+			\caption{Learning rate $l = 0.2$.}
 			\label{fig:random_gradient}
 		\end{subfigure}
-		\begin{subfigure}{\textwidth}
-			\centering
-			\includegraphics[width = \textwidth]{Images/love_gradient.png}
-			\caption{Arbitrary polygon gradient example.}
-			\label{fig:love_gradient}
-		\end{subfigure}
-		\caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
+		% \begin{subfigure}{\textwidth}
+		% 	\centering
+		% 	\includegraphics[width = \textwidth]{Images/love_gradient.png}
+		% 	% \caption{Arbitrary polygon gradient example.}
+		% 	\caption{Learning rate $l = 0.2$.}
+		% 	\label{fig:love_gradient}
+		% \end{subfigure}
+		% \caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
 		\label{fig:gradients}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Practice}
-	\begin{figure}
-		\centering
-		\includegraphics[width = \textwidth]{Images/love_gradient.png}
-		\caption{Irrational guards polygon \cite{abrahamsen2021art} gradient example.}
-	\end{figure}
-\end{frame}
+% \begin{frame}{Practice}
+% 	\begin{figure}
+% 		\centering
+% 		\includegraphics[width = \textwidth]{Images/love_gradient.png}
+% 		\caption{Irrational guards polygon \cite{abrahamsen2021art} gradient example.}
+% 	\end{figure}
+% \end{frame}
 
 \begin{frame}{Practice}
 	\begin{figure}[h!]
 		\centering
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle_gradient_045.png}
-			\caption{Arrowhead polygon gradient with learning rate $l = 0.45$ example}
+			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_gradient_045.png}
+			% \caption{Arrowhead polygon gradient with learning rate $l = 0.45$ example.}
+			\caption{Learning rate $l = 0.45$.}
 			\label{fig:concave_gradient_045}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/concave_triangle_gradient_06.png}
-			\caption{Arrowhead polygon gradient with learning rate $l = 0.6$ example.}
+			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_gradient_06.png}
+			% \caption{Arrowhead polygon gradient with learning rate $l = 0.6$ example.}
+			\caption{Learning rate $l = 0.6$.}
 			\label{fig:concave_gradient_06}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/random_gradient_045.png}
-			\caption{Arbitrary polygon gradient with learning rate $l = 0.45$ example.}
+			\includegraphics[width = 0.8\textwidth]{Images/random_gradient_045.png}
+			% \caption{Arbitrary polygon gradient with learning rate $l = 0.45$ example.}
+			\caption{Learning rate $l = 0.45$.}
 			\label{fig:random_gradient_045}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
-			\includegraphics[width = 0.7\textwidth]{Images/random_gradient_06.png}
-			\caption{Arbitrary polygon gradient with learning rate $l = 0.6$ example.}
+			\includegraphics[width = 0.8\textwidth]{Images/random_gradient_06.png}
+			% \caption{Arbitrary polygon gradient with learning rate $l = 0.6$ example.}
+			\caption{Learning rate $l = 0.6$.}
 			\label{fig:random_gradient_06}
 		\end{subfigure}
 		% \caption{Gradient descent examples with learning rate $l \in \{0.45, 0.6\}$ on the one-guard Arrowhead and multiple guards arbitrary input polygons.}
@@ -219,7 +236,7 @@
 \begin{frame}{Conclusion and Future Remarks}
 	\begin{itemize}
 		\item gradient computation and implementation for multiple guards
-		\item testing with multiple input polygons
+		\item multiple input polygons
 		\item testing against previously existing algorithms \cite{DBLP:journals/corr/abs-2007-06920}
 	% 	\setlength{\itemsep}{0.5pt}
 	% 	\item solve the Job-Shop Problem using Timed Automata
