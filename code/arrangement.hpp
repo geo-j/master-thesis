@@ -232,16 +232,16 @@ class Arrangement {
             auto *face = boost::get<Arrangement_2::Face_const_handle>(&obj);
 
             if (face) {
-                std::cout << "before face\n";
+                // std::cout << "before face\n";
                 this->visibility.compute_visibility(guard, *face, visibility_arrangement);
                 // std::cout << (*face)->number_of_isolated_vertices() << std::endl;
 
-                std::cout << "after face\n";
+                // std::cout << "after face\n";
 
             }
             // if the guard is on the arrangement boundary, then get the inner face of that edge to compute its visibility
             else {
-                std::cout << "before edge\n";
+                // std::cout << "before edge\n";
                 
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
@@ -251,7 +251,7 @@ class Arrangement {
                     else
                         this->visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
                 
-                std::cout << "after edge\n";
+                // std::cout << "after edge\n";
 
             }
 
@@ -375,7 +375,7 @@ class Arrangement {
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
         Vector_2 gradient(Arrangement_2 visibility_arrangement, Point_2 guard) {
-            std::cout << "start gradient\n";
+            // std::cout << "start gradient\n";
             Vector_2 Df;
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
             auto reflex_intersections = this->get_reflex_intersection_pairs(visibility_arrangement, guard);
@@ -415,7 +415,7 @@ class Arrangement {
                     Df += Dfr;
             }
         
-            std::cout << "end gradient\n";
+            // std::cout << "end gradient\n";
             return Df;
         }
 
@@ -431,36 +431,38 @@ class Arrangement {
                 Arrangement_2 visibility_arrangement;
                 std::cout << cur_guard_position << std::endl;
 
-                // int j = 10;
+                int j = 0;
                 // try to update the guard position until there are no more changes, or it goes outside the arrangement
                 do {
                     // compute visibility arrangement of each guard position
                     visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
 
-                    prev_guard_position.reset();
+                    // prev_guard_position.reset();
                     prev_guard_position = cur_guard_position;
 
                     // compute gradient of current guard position
                     gradient = this->gradient(visibility_arrangement, prev_guard_position);
 
-                    cur_guard_position.reset();
+                    // cur_guard_position.reset();
                     // update current guard position
                     cur_guard_position = Point_2(prev_guard_position.x() + learning_rate * gradient.x(), prev_guard_position.y() + learning_rate * gradient.y());
 
                     // std::cout << prev_guard_position << ';' << cur_guard_position << std::endl;
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (this->input_polygon.bounded_side(cur_guard_position) == CGAL::ON_UNBOUNDED_SIDE) {
-                        std::cout << "not inside\n";
+                        // std::cout << "not inside\n";
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard_position, cur_guard_position, new_guard_position))
                             cur_guard_position = new_guard_position;
-                        std::cout << "now inside\n";
+                        // std::cout << "now inside\n";
                     }
 
                     if (this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE)
                         std::cout << cur_guard_position << std::endl;
                     
                     visibility_arrangement.clear();
+
+                    j ++;
                     
                 } while (prev_guard_position != cur_guard_position && this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE);
 
@@ -500,6 +502,7 @@ class Arrangement {
             edge.reset();
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
+        // if the gradient is perpendicular with the arrangement edge, hence no move, then project the guard on the boundary and start from there
         if (prev_guard == new_guard && placed) {
             auto edge_line = edge.supporting_line();
             new_guard = edge_line.projection(guard);
