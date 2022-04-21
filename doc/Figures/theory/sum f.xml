@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220310113141" modified="D:20220325120709"/>
+<info created="D:20220421132423" modified="D:20220421132423"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -253,69 +253,74 @@ h
 </ipestyle>
 <page>
 <layer name="alpha"/>
-<layer name="beta"/>
 <layer name="gamma"/>
-<view layers="alpha beta gamma" active="beta"/>
+<layer name="beta"/>
+<view layers="alpha gamma beta" active="gamma"/>
+<path layer="beta" stroke="green" fill="green" opacity="30%" stroke-opacity="opaque">
+256 576 m
+299.586 673.104 l
+368 656 l
+256 576 l
+h
+</path>
+<path layer="gamma" stroke="black" dash="dashed">
+160 432 m
+256 448 l
+</path>
+<path layer="beta" stroke="green" fill="green" opacity="30%" stroke-opacity="opaque">
+256 448 m
+356.981 463.577 l
+304 400 l
+256 448 l
+h
+</path>
+<path layer="gamma" stroke="black" dash="dashed">
+160 528 m
+256 448 l
+</path>
 <path layer="alpha" stroke="black" pen="heavier">
-256 672 m
+256 448 m
+304 400 l
+384 496 l
+256 576 l
+368 656 l
 176 704 l
-160 624 l
-80 704 l
-144 528 l
-96 448 l
-256 528 l
+96 624 l
+48 480 l
+64 352 l
+192 352 l
 h
 </path>
-<use name="mark/disk(sx)" pos="128 624" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="160 592" size="large" stroke="black"/>
-<text matrix="1 0 0 1 -16 16" transformations="translations" pos="128 624" stroke="black" type="label" width="7.05" height="6.176" depth="2.79" valign="baseline" size="Large" style="math">p</text>
-<text matrix="1 0 0 1 16 -16" transformations="translations" pos="160 592" stroke="black" type="label" width="10.288" height="10.74" depth="2.79" valign="baseline" size="Large" style="math">p&apos;</text>
-<path layer="beta" stroke="black" fill="white" dash="dashed">
-128 624 m
-256 623.246 l
+<use matrix="1 0 0 1 -16 16" name="mark/disk(sx)" pos="176 416" size="large" stroke="black"/>
+<text matrix="1 0 0 1 -32 32" transformations="translations" pos="176 416" stroke="black" type="label" width="8.46" height="7.41" depth="3.35" valign="baseline" size="LARGE">$p$</text>
+<text matrix="1 0 0 1 39.4334 -30.6821" transformations="translations" pos="208 624" stroke="black" type="label" width="13.948" height="7.415" depth="2.58" valign="baseline" size="LARGE">$r_1$</text>
+<text matrix="1 0 0 1 0 -32" transformations="translations" pos="256 448" stroke="black" type="label" width="13.948" height="7.415" depth="2.58" valign="baseline" size="LARGE">$r_2$</text>
+<use name="mark/disk(sx)" pos="256 448" size="large" stroke="red"/>
+<path layer="gamma" stroke="black" dash="dashed">
+160 432 m
+256 576 l
+256 576 l
+256 576 l
 </path>
-<path stroke="black" fill="white" dash="dashed">
-128 624 m
-143.862 528.379 l
-150.432 475.216 l
+<use matrix="1 0 0 1 0 32" name="mark/disk(sx)" pos="160 496" size="large" stroke="black"/>
+<text matrix="1 0 0 1 -16 32" transformations="translations" pos="160 496" stroke="black" type="label" width="12.246" height="12.887" depth="3.35" valign="baseline" size="LARGE">$p&apos;$</text>
+<text matrix="1 0 0 1 -26.4378 7.47195" transformations="translations" pos="160 468.389" stroke="blue" type="label" width="15.56" height="9.962" depth="2.79" valign="baseline" size="Large">$\partial y$</text>
+<path stroke="black" dash="dashed" pen="heavier" arrow="normal/normal">
+160 432 m
+160 528 l
 </path>
-<path stroke="black" fill="white" dash="dashed" pen="heavier">
-160 592 m
-144 528 l
-130.136 465.068 l
+<path stroke="black" dash="dashed">
+160 528 m
+256 576 l
 </path>
-<path stroke="black" fill="white" dash="dashed">
-160 592 m
-159.477 623.815 l
-</path>
-<path layer="gamma" stroke="black" fill="green" dash="dashed" pen="heavier" opacity="30%" stroke-opacity="opaque">
-143.952 527.655 m
-130.136 465.068 l
-151.486 475.743 l
-144.272 525.058 l
+<path stroke="green" fill="green" cap="1">
+320 656 m
+320 656 l
 h
 </path>
-<path stroke="black" fill="green" dash="dashed" pen="heavier" opacity="30%" stroke-opacity="opaque">
-160.105 623.811 m
-176.169 703.932 l
-256 671.351 l
-255.001 623.252 l
-161.423 623.803 l
-h
-</path>
-<text matrix="1 0 0 1 -10.2247 17.8558" transformations="translations" pos="159.486 623.247" stroke="black" type="label" width="11.81" height="6.179" depth="2.15" valign="baseline" size="Large" style="math">r_1</text>
-<use name="mark/disk(sx)" pos="160.109 623.811" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="144.062 528.248" size="large" stroke="black"/>
-<text layer="alpha" transformations="translations" pos="192 656" stroke="black" type="label" width="34.362" height="10.761" depth="5.04" valign="baseline" size="Large" style="math">f&apos;_{r_1}(p)</text>
-<text matrix="1 0 0 1 16 16" transformations="translations" pos="144 496" stroke="black" type="label" width="34.362" height="10.761" depth="5.04" valign="baseline" size="Large" style="math">f&apos;_{r_2}(p)</text>
-<text matrix="1 0 0 1 -16 0" transformations="translations" pos="144 528" stroke="black" type="label" width="11.81" height="6.179" depth="2.15" valign="baseline" size="Large" style="math">r_2</text>
-<text layer="gamma" transformations="translations" pos="288 592" stroke="black" type="label" width="11.158" height="9.803" depth="0" valign="baseline" size="Large" style="math">\mathcal P</text>
-<path stroke="black" fill="green" dash="dashed" pen="heavier" arrow="normal/normal">
-128 624 m
-160 592 l
-</path>
-<text transformations="translations" pos="144 608" stroke="blue" type="label" width="12.966" height="8.307" depth="2.32" valign="baseline" size="large" style="math">\partial y</text>
-<use layer="beta" name="mark/disk(sx)" pos="160 624" size="large" stroke="red"/>
-<use name="mark/disk(sx)" pos="144 528" size="large" stroke="red"/>
+<use layer="alpha" matrix="1 0 0 1 48 -48" name="mark/disk(sx)" pos="208 624" size="large" stroke="red"/>
+<text layer="gamma" matrix="1 0 0 1 -21.2454 8.66109" transformations="translations" pos="309.691 635.767" stroke="black" type="label" width="60.023" height="8.965" depth="2.99" valign="baseline" size="large">$\bigtriangledown Area_{r_1}(p)$</text>
+<text matrix="1 0 0 1 -29.271 5.61193" transformations="translations" pos="303.101 431.487" stroke="black" type="label" width="60.023" height="8.965" depth="2.99" valign="baseline" size="large">$\bigtriangledown Area_{r_2}(p)$</text>
+<text layer="alpha" transformations="translations" pos="410.513 585.026" stroke="black" type="label" width="13.206" height="11.764" depth="0" valign="baseline" size="LARGE">$P$</text>
 </page>
 </ipe>
