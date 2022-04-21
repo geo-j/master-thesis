@@ -1,12 +1,12 @@
 \subsection[An Algorithm with Performance Guarantees]{A Practical Algorithm with Performance Guarantees for the Art Gallery Problem}
 Hengeveld and Miltzow \cite{DBLP:journals/corr/abs-2007-06920} introduce the idea of vision-stability, and describe an iterative algorithm that guarantees to find the optimal guard set for every vision-stable polygon in order to address the Art Gallery Problem \cite{o1987art}. Additionally, it proves that the set of vision-stable polygons admits an FPT algorithm when parametrised by the number of vertices visible from a chord of the polygon, and gives a one-shot algorithm for that matter.
 
-Hengeveld and Miltzow \cite{DBLP:journals/corr/abs-2007-06920} start by introducing the notion of vision-stability (see Figure \ref{fig:vis}). The figure was taken from \cite{DBLP:journals/corr/abs-2007-06920} and annotated to facilitate the understanding of this summary. The authors define guards as ``enhanced'' if they can ``see around the corner'' by an angle of $\delta$ ($vis_\delta(p)$), or ``diminished'' if their vision is ``blocked'' by reflex vertices by an angle of $\delta$ ($vis_{-\delta}(p)$). As such, the size of the minimum $\delta$-guarding set is defined as $opt(P, \delta)$. A polygon $P$ has vision-stability $\delta$ if the optimal number of enhanced guards is the same as the optimal number of diminished guards for that matter ($opt(P, -\delta) = opt(P, \delta)$). 
+Hengeveld and Miltzow \cite{DBLP:journals/corr/abs-2007-06920} start by introducing the notion of vision-stability (see Figure \ref{fig:vis}). The figure was taken from \cite{DBLP:journals/corr/abs-2007-06920} and annotated to facilitate the understanding of this summary. The authors define guards as ``enhanced'' if they can ``see around the corner'' by an angle of $\delta$ ($vis_\delta(q)$), or ``diminished'' if their vision is ``blocked'' by reflex vertices by an angle of $\delta$ ($vis_{-\delta}(q)$). As such, the size of the minimum $\delta$-guarding set is defined as $opt(P, \delta)$. A polygon $P$ has vision-stability $\delta$ if the optimal number of enhanced guards is the same as the optimal number of diminished guards for that matter ($opt(P, -\delta) = opt(P, \delta)$). 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth]{literature/vis_delta.png}
-    \caption{Enhanced ($vis_\delta(p)$) and Diminished ($vis_{-\delta}(p)$) Visibility Regions of $p$ \cite{DBLP:journals/corr/abs-2007-06920}.}
+    \caption{Enhanced ($vis_\delta(q)$) and diminished ($vis_{-\delta}(q)$) visibility regions of the one point $q$ \cite{DBLP:journals/corr/abs-2007-06920}.}
     \label{fig:vis}
 \end{figure}
 
