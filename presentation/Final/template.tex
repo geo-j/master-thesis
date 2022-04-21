@@ -103,16 +103,16 @@
 
 \begin{frame}{Theory}
 		\begin{columns}[T, onlytextwidth] % T for top align, onlytextwidth to suppress the margin between columns
-		\column{0.55\textwidth}
+		\column{0.65\textwidth}
 			\begin{figure}
 				\includegraphics[width = \textwidth]{Images/gradient2.png}
 			\end{figure}
 
-		\column{0.35\textwidth}
+		\column{0.25\textwidth}
 			\centering
-			$$\bigtriangledown f = (0, \frac{\beta^2}{2\alpha})^\intercal$$
-			$$p' = p + l\bigtriangledown f,$$
-			$$l - \text{ learning rate}$$
+			$$\bigtriangledown f = \left(0, \frac{\beta^2}{2\alpha}\right)^\intercal$$
+			$$p' = p + \alpha\bigtriangledown f,$$
+			$$\alpha - \text{ learning rate}$$
 	\end{columns}
 \end{frame}
 
@@ -243,9 +243,12 @@
 \end{frame}
 \begin{frame}{Conclusion and Future Plans}
 	\begin{itemize}
-		\item gradient for multiple guards implementation
+		\item gradient for multiple guards
+		\pause
 		\item gradient experiments (momentum, weighted momentum)
-		\item guard addition in the comb polygon experiments
+		\pause
+		\item guard addition strategy
+		\pause
 		\item comparison with existing algorithms \cite{DBLP:journals/corr/abs-2007-06920}
 	% 	\setlength{\itemsep}{0.5pt}
 	% 	\item solve the Job-Shop Problem using Timed Automata
