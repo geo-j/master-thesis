@@ -223,7 +223,7 @@ class Arrangement {
         * 
         *  This method computes the visibility region arrangement of a guard
         */
-        Arrangement_2 compute_guard_visibility(Point_2 guard) {
+        Arrangement_2 compute_guard_visibility(const Point_2 guard) {
             Arrangement_2 visibility_arrangement;
 
             auto obj = this->pl.locate(guard);
@@ -307,7 +307,7 @@ class Arrangement {
         * 
         * This method checks whether a point r is visible from p by checking whether r is in the visibility region of p.
         */
-        bool is_visible_from(Point_2 p, Point_2 r) {
+        bool is_visible_from(const Point_2 p, const Point_2 r) {
             // first compute the visibility region of the guard
             auto visibility_region = this->compute_guard_visibility(p);
 
@@ -343,7 +343,7 @@ class Arrangement {
         * 
         *  This method computes the tuples between all the reflex vertices a guard sees, their intersection points with the input arrangement boundaries and the orientation of the guard in relation to the boundary of the polygon and a specific reflex vertex
         */
-        std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> get_reflex_intersection_pairs(Arrangement_2 visibility_arrangement, Point_2 guard) {
+        std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> get_reflex_intersection_pairs(Arrangement_2 &visibility_arrangement, const Point_2 guard) {
             std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> boundary_intersections;
 
             auto eit = *visibility_arrangement.unbounded_face()->inner_ccbs_begin();
@@ -386,7 +386,7 @@ class Arrangement {
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
-        Vector_2 gradient(Arrangement_2 visibility_arrangement, Point_2 guard) {
+        Vector_2 gradient(Arrangement_2 &visibility_arrangement, const Point_2 guard) {
             // std::cout << "start gradient\n";
             Vector_2 Df;
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
