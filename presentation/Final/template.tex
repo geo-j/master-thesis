@@ -193,7 +193,7 @@
 		% 	\label{fig:love_gradient}
 		% \end{subfigure}
 		% \caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
-		\caption{Learning rate $l = 0.2$.}
+		\caption{Learning rate $\alpha = 0.2$.}
 		\label{fig:gradients}
 	\end{figure}
 \end{frame}
@@ -213,39 +213,40 @@
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_gradient_045.png}
 			% \caption{Arrowhead polygon gradient with learning rate $l = 0.45$ example.}
-			\caption{Learning rate $l = 0.45$.}
+			\caption{Learning rate $\alpha = 0.45$.}
 			\label{fig:concave_gradient_045}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_gradient_06.png}
 			% \caption{Arrowhead polygon gradient with learning rate $l = 0.6$ example.}
-			\caption{Learning rate $l = 0.6$.}
+			\caption{Learning rate $\alpha = 0.6$.}
 			\label{fig:concave_gradient_06}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/random_gradient_045.png}
 			% \caption{Arbitrary polygon gradient with learning rate $l = 0.45$ example.}
-			\caption{Learning rate $l = 0.45$.}
+			\caption{Learning rate $\alpha = 0.45$.}
 			\label{fig:random_gradient_045}
 		\end{subfigure}
 		\begin{subfigure}{0.45\textwidth}
 			\centering
 			\includegraphics[width = 0.8\textwidth]{Images/random_gradient_06.png}
 			% \caption{Arbitrary polygon gradient with learning rate $l = 0.6$ example.}
-			\caption{Learning rate $l = 0.6$.}
+			\caption{Learning rate $\alpha = 0.6$.}
 			\label{fig:random_gradient_06}
 		\end{subfigure}
 		% \caption{Gradient descent examples with learning rate $l \in \{0.45, 0.6\}$ on the one-guard Arrowhead and multiple guards arbitrary input polygons.}
 		\label{fig:multiple_gradients}
 	\end{figure}
 \end{frame}
+
 \begin{frame}{Conclusion and Future Plans}
 	\begin{itemize}
 		\item gradient for multiple guards
 		\pause
-		\item gradient experiments (momentum, weighted momentum)
+		\item gradient experiments (momentum)
 		\pause
 		\item guard addition strategy
 		\pause
@@ -262,6 +263,48 @@
 	\end{itemize}
 \end{frame}
 
+\begin{frame}[noframenumbering]{Practice with Momentum}
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}{0.4\textwidth}
+			\centering
+			\includegraphics[width = 0.8\textwidth]{Images/pentagram_momentum.png}
+			\caption{}
+			\label{fig:star_gradient}
+		\end{subfigure}
+		\begin{subfigure}{0.4\textwidth}
+			\centering
+			\includegraphics[width = 0.8\textwidth]{Images/concave_triangle_momentum.png}
+			% \caption{Arrowhead polygon gradient example.}
+			\caption{}
+			\label{fig:concave_gradient}
+		\end{subfigure}
+		\begin{subfigure}{0.4\textwidth}
+			\centering
+			\includegraphics[width = 0.8\textwidth]{Images/comb_momentum.png}
+			% \caption{Comb polygon gradient example.}
+			\caption{}
+			\label{fig:comb_gradient}
+		\end{subfigure}
+		\begin{subfigure}{0.4\textwidth}
+			\centering
+			\includegraphics[width = 0.8\textwidth]{Images/random_momentum.png}
+			% \caption{Arbitrary polygon gradient example.}
+			\caption{}
+			\label{fig:random_gradient}
+		\end{subfigure}
+		% \begin{subfigure}{\textwidth}
+		% 	\centering
+		% 	\includegraphics[width = \textwidth]{Images/love_gradient.png}
+		% 	% \caption{Arbitrary polygon gradient example.}
+		% 	\caption{Learning rate $l = 0.2$.}
+		% 	\label{fig:love_gradient}
+		% \end{subfigure}
+		% \caption{Gradient descent examples with learning rate $l = 0.2$ on the test polygons.}
+		\caption{Learning rate $\alpha = 0.2$.}
+		\label{fig:gradients}
+	\end{figure}
+\end{frame}
 %------------------------------------------------
 
 % \begin{frame}[plain]{Plain Slide}
