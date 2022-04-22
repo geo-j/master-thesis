@@ -211,7 +211,7 @@ class Arrangement {
         *  This method computes whether the whole input arrangement is completely seen by the visibility arrangement of one or multiple guards
         *  This is achieved by converting the visibility arrangement to a polygon and using the built-in == operator.
         */
-        bool is_completely_visible(Arrangement_2 visibility_arrangement) {
+        bool is_completely_visible(Arrangement_2 &visibility_arrangement) {
             Polygon_2 visibility_polygon = arrangement_to_polygon(visibility_arrangement);
 
             return visibility_polygon == this->input_polygon;
@@ -240,20 +240,18 @@ class Arrangement {
 
             }
             // if the guard is on the arrangement boundary, then get the inner face of that edge to compute its visibility
-            else {
-                // std::cout << "before edge\n";
-                
+            else {                
                 auto *edge = boost::get<Arrangement_2::Halfedge_const_handle>(&obj);
 
                 if (edge) {
-                    std::cout << "before edge\n";
+                    // std::cout << "before edge\n";
 
                     if ((*edge)->is_on_inner_ccb())
                         this->visibility.compute_visibility(guard, (*edge)->twin()->ccb(), visibility_arrangement);
                     else
                         this->visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
                     
-                    std::cout << "after edge\n";
+                    // std::cout << "after edge\n";
                 } 
                 // TODO: find one of the halfedges where the vertex is located on
                 // else {
@@ -440,19 +438,34 @@ class Arrangement {
             for (auto i = 0; i < this->guards.size(); i ++) {
                 Vector_2 gradient;
                 Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
+                std::vector<Vector_2> gradients;
+                Arrangement_2 visibility_arrangement;
                 std::cout << cur_guard_position << std::endl;
 
                 int j = 0;
                 // try to update the guard position until there are no more changes, or it goes outside the arrangement
                 do {
+                    visibility_arrangement.clear();
+
                     // compute visibility arrangement of each guard position
-                    auto visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
+                    visibility_arrangement = this->compute_guard_visibility(cur_guard_position);
 
                     // prev_guard_position.reset();
                     prev_guard_position = cur_guard_position;
 
                     // compute gradient of current guard position
                     gradient = this->gradient(visibility_arrangement, prev_guard_position);
+
+                    // gradient smoothening
+                    if (gradients.size() < 3)
+                        gradients.push_back(gradient);
+                    else {
+                        for (auto g : gradients)
+                            gradient += g;
+                        gradient /= gradients.size();
+                        gradients.erase(gradients.begin());
+                        gradients.push_back(gradient);
+                    }
 
                     // cur_guard_position.reset();
                     // update current guard position
@@ -471,11 +484,10 @@ class Arrangement {
                     if (this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE)
                         std::cout << cur_guard_position << std::endl;
                     
-                    visibility_arrangement.clear();
 
                     j ++;
                     
-                } while (prev_guard_position != cur_guard_position && this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE);
+                } while (!this->is_completely_visible(visibility_arrangement) && (prev_guard_position != cur_guard_position && this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE));
 
             }
         }
