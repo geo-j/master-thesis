@@ -15,11 +15,11 @@ It can happen that the gradient computes an optimised position of the guard outs
     \caption{Position Optimisation for One Guard}
     \label{alg:1g}
 
-    \State{\textbf{Input:} polygon $P$, guard $p(x, y)$}
-    \State{\textbf{Output:} optimised position $p'(x', y')$ of the guard}
+    \State{\textbf{Input:} polygon $P$, guard $g(x, y)$}
+    \State{\textbf{Output:} optimised position $g'(x', y')$ of the guard}
     \State{}
     % \For{\textbf{each} guard $p(x, y)$}
-    \State{\textit{cur\_guard\_position} $\gets p(x, y)$}
+    \State{\textit{cur\_guard\_position} $\gets g(x, y)$}
 
     \While{\textit{prev\_guard\_position} $\neq$ \textit{cur\_guard\_position}} %\Comment{continue as long as there are no more improvements in the guard's position}
         % \State{compute \textit{visibility\_region} of $p$}
@@ -31,9 +31,9 @@ It can happen that the gradient computes an optimised position of the guard outs
             \State{place \textit{cur\_guard\_position} on polygon boundary}
         \EndIf
     \EndWhile
-    \State{$p'(x', y') \gets \textit{cur\_guard\_position}$}
+    \State{$g'(x', y') \gets \textit{cur\_guard\_position}$}
     % \EndFor
-    \State \Return $p'$
+    \State \Return $g'$
     \end{algorithmic}
 \end{algorithm}
 
