@@ -4,25 +4,25 @@
 % \subsection{Guarding the Polygon with One Point}
 \subsection{Gradient Descent}
 
-Let $P$ be a polygon and $p = (x, y) \in P$ a guard. We are interested in computing the best direction for moving $p$ inside $P$ such that the visibility area $Vis(p)$ increases. That is, exploring what would be a better position $p'$ to move $p$ to such that $p$ ``sees more'' of the polygon $P$. 
+Let $P$ be a polygon and $g = (x, y) \in P$ a guard. We are interested in computing the best direction for moving $g$ inside $P$ such that the visibility area $Vis(g)$ increases. That is, exploring what would be a better position $g'$ to move $g$ to such that $g$ ``sees more'' of the polygon $P$. 
 
-We define $f(p) = \text{Area}(p)$ as the area seen by a guard $p$. Let $\bigtriangledown \text{Area}_r(p)$ be the local change in the area guarded by point $p$ around a reflex vertex $r$ seen by $p$ in $P$. Given all reflex vertices $i$, the total (global) change in the area seen by $p$ can be thus summed up to $\text{Area}(p) = \sum_i \text{Area}_i(p)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $P$ and its reflex vertices $r_1$ and $r_2$. The polygon $P$ is guarded by $p$, and its position is modified to $p'$ by a small change $\partial y$ in its $y$-coordinate. The visibility areas of $p$ are $Area_{r_1}$ and $Area_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $p$ is computed as $\bigtriangledown \text{Area}(p) = \bigtriangledown \text{Area}_{r_1}(p) + \bigtriangledown \text{Area}_{r_2}(p)$.
+We define $f(g) = \text{Area}(g)$ as the area seen by a guard $g$. Let $\bigtriangledown \text{Area}_r(g)$ be the local change in the area guarded by point $g$ around a reflex vertex $r$ seen by $g$ in $P$. Given all reflex vertices $i$, the total (global) change in the area seen by $g$ can be thus summed up to $\text{Area}(g) = \sum_i \text{Area}_i(g)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $P$ and its reflex vertices $r_1$ and $r_2$. The polygon $P$ is guarded by $g$, and its position is modified to $g'$ by a small change $\partial y$ in its $y$-coordinate. The visibility areas of $g$ are $Area_{r_1}$ and $Area_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $g$ is computed as $\bigtriangledown \text{Area}(g) = \bigtriangledown \text{Area}_{r_1}(g) + \bigtriangledown \text{Area}_{r_2}(g)$.
 
-Thus, we consider $f(p)$ as the continuous objective function of the Art Gallery Problem. We can then use gradient descent as a method to optimise the objective function $f$. We will define below what the methodology of gradient descent is comprised of.
+Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery Problem. We can then use gradient descent as a method to optimise the objective function $f$. We will define below what the methodology of gradient descent is comprised of.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{theory/sumf.png}
-    \caption{Global change in the area seen by $p$ when moved by $\partial y$ to a new position $p'$.}
+    \caption{Global change in the area seen by $g$ when moved by $\partial y$ to a new position $g'$.}
     \label{fig:sumf}
 \end{figure}
 
 
 % Gradient descent is an iterative optimisation algorithm for finding the local optimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. 
-Let $\bigtriangledown f$ be the gradient of $f$. The gradient then indicates the direction of the steepest descent for the objective function $f(p)$.
+Let $\bigtriangledown f$ be the gradient of $f$. The gradient then indicates the direction of the steepest descent for the objective function $f(g)$.
 The learning rate (step size) $\alpha$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
 
-After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $p'$ of guard $p$: $$p' = p + \alpha\bigtriangledown f.$$
+After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $g'$ of guard $g$: $$g' = g + \alpha\bigtriangledown f.$$
 
 % High learning rates result in faster approaching towards the optimum, but risks overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
 
@@ -31,16 +31,16 @@ In later sections we will experiment with various learning rates. As such, we wi
 \newpage
 \subsubsection{Computing the Gradient}
 
-Given that $f$ is a function that describes the visibility area of a point $p$, we first need to define how its gradient is computed. We will simplify the gradient computation without losing generality. As such, we will rotate the plane with rotation matrix $R$, so that $p$ and any reflex vertex $r$ have the same $x$-coordinate. In this way, we only need to compute the gradient when we vary the $y$-coordinate. The computation of the gradient remains the same regardless of the rotation applied to the plane.
+Given that $f$ is a function that describes the visibility area of a point $g$, we first need to define how its gradient is computed. We will simplify the gradient computation without losing generality. As such, we will rotate the plane with rotation matrix $R$, so that $g$ and any reflex vertex $r$ have the same $x$-coordinate. In this way, we only need to compute the gradient when we vary the $y$-coordinate. The computation of the gradient remains the same regardless of the rotation applied to the plane.
 
 
-We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in the visibility area $f(p)$ when the $y$-coordinate is modified by a small amount $\partial y \rightarrow 0$. Analogously, we will use $\frac{\partial f}{\partial x}$ to denote the small change in the $x$-coordinate of $p$. In this way, we define 
+We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in the visibility area $f(g)$ when the $y$-coordinate is modified by a small amount $\partial y \rightarrow 0$. Analogously, we will use $\frac{\partial f}{\partial x}$ to denote the small change in the $x$-coordinate of $g$. In this way, we define 
 
 \begin{equation}
     \bigtriangledown f = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)^\intercal \label{eq:gradient}
 \end{equation}
 
-to be the gradient of $f$ given that $P$ is guarded by a point $p$. 
+to be the gradient of $f$ given that $P$ is guarded by a point $g$. 
 
 We will now create a canonical geometrical construction that allows us to further define and compute $\bigtriangledown f$. In this case, we consider the normalised length of the gradient as $||\bigtriangledown f||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
 % We will then generalise this case to multiple reflex vertices and guards.
@@ -48,17 +48,17 @@ We will now create a canonical geometrical construction that allows us to furthe
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.6\textwidth]{theory/gradient2.png}
-    \caption{Canonical gradient construction and for when the position of $p$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $p'$.}
+    \caption{Canonical gradient construction and for when the position of $g$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $g'$.}
     \label{fig:gradient}
 \end{figure}
 
-Take a boundary line segment of $P$, $r$ a reflex vertex inside $P$ and $p$ a guard whose optimal position we are interested in. The reflex vertex $r$ is seen by $p$. Let $\overline{pr} = \alpha$ be known, and let $\triangle rpp' = \triangle_2$. Similarly, let $\beta$ be the known distance between $r$ and the polygon boundary in question.
+Take a boundary line segment of $P$, $r$ a reflex vertex inside $P$ and $g$ a guard whose optimal position we are interested in. The reflex vertex $r$ is seen by $g$. Let $\overline{pr} = \alpha$ be known, and let $\triangle rpp' = \triangle_2$. Similarly, let $\beta$ be the known distance between $r$ and the polygon boundary in question.
 % That is, the direction of the greatest increase of $f$. 
 
 % We consider the case where there is only a positive change in the $y$ position of $p$. The case with a negative coordinate change would be analogous.
 
 
-Let $\partial y$ be an extremely small change in the $y$-coordinate of $p$. Let $p'$ be the new position of $p$ given the change $\partial y$. The point $p'$ can see then up to a new point around $r$ on the polygon boundary. Let thus the new observed segment on the polygon boundary be $L$. As such, let $\triangle_1$ denote the increase in the visibility area of $p$ when it moves to position $p'$:
+Let $\partial y$ be an extremely small change in the $y$-coordinate of $g$. Let $g'$ be the new position of $g$ given the change $\partial y$. The point $g'$ can see then up to a new point around $r$ on the polygon boundary. Let thus the new observed segment on the polygon boundary be $L$. As such, let $\triangle_1$ denote the increase in the visibility area of $g$ when it moves to position $g'$:
 
 \begin{equation}
     \bigtriangledown \text{Area}_r = \triangle_1. \label{eq:derivative}
@@ -74,7 +74,7 @@ Let $\partial y$ be an extremely small change in the $y$-coordinate of $p$. Let 
 
 % In this canonical case we will consider the situation where the gradient is normalised as $||\bigtriangledown f|| = 1$. 
 
-We are now interested in computing how the area seen by guard $p$ increases given the change $\partial y$ in the position of $p$. The distances $\alpha$ and $\beta$ are known. As such, we aim at expressing the gradient $\bigtriangledown \text{Area}_r$ for point $p$ and reflex vertex $r \in Vis(p)$ using $\alpha$ and $\beta$. Since $\bigtriangledown \text{Area}_r$ depends on the change in the coordinates of $p$, computing it is tightly connected to the change in the area of triangle $\triangle_1$. We will proceed to calculate the area of $\triangle_1$ below.
+We are now interested in computing how the area seen by guard $g$ increases given the change $\partial y$ in the position of $g$. The distances $\alpha$ and $\beta$ are known. As such, we aim at expressing the gradient $\bigtriangledown \text{Area}_r$ for point $g$ and reflex vertex $r \in Vis(g)$ using $\alpha$ and $\beta$. Since $\bigtriangledown \text{Area}_r$ depends on the change in the coordinates of $g$, computing it is tightly connected to the change in the area of triangle $\triangle_1$. We will proceed to calculate the area of $\triangle_1$ below.
 % We are now interested in computing the distances $|\overline{df}|, |\overline{aa'}|, |\overline{pp''}|, L$ such that we can compute the increase in the area seen by $p$ and thus the gradient $\bigtriangledown f$. The two triangle areas that need to be computed in order to do so are $A_{\triangle rdd'}$ and $A_{\triangle rdd''}$.
 
 Given that triangles $\triangle_1$ and $\triangle_2$ are square triangles, their areas can be calculated as:
@@ -127,7 +127,7 @@ So, the area of $\triangle_1$ can be computed:
 % \end{equation}
 
 % We can now compute the change in the visibility area of $p$ ($\text{Area}_{\triangle rdd'}$) given the movement $\partial y$ around reflex vertex $r$. Since the $x$-coordinate of $p$ is fixed, $\frac{\partial f}{\partial x} = 0$. 
-We can now compute the gradient $\bigtriangledown \text{Area}_r$ in a plane rotated by $R$ for a point $p$ and a reflex guard $r$ seen by $p$ as
+We can now compute the gradient $\bigtriangledown \text{Area}_r$ in a plane rotated by $R$ for a point $g$ and a reflex guard $r$ seen by $g$ as
 
 \begin{align*}
     R\bigtriangledown \text{Area}_r \overset{(\ref{eq:gradient})}{=} &\left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)^\intercal \\
@@ -138,38 +138,38 @@ We can now compute the gradient $\bigtriangledown \text{Area}_r$ in a plane rota
 
 % Analogously, if we rotate the plane such that $p$ and reflex vertex $r$ have the same $y$-coordinate, the gradient becomes $$\bigtriangledown f = (\frac{\beta^2}{2\alpha}, 0)^\intercal.$$
 
-Therefore, for all the reflex vertices $r$ guard $p$ can see, the total gradient $\bigtriangledown f$ becomes the sum of all the partial gradients $\bigtriangledown f_r$ as $$\bigtriangledown f = \sum_{i \in R(p)} \bigtriangledown \text{Area}_i, R(p) = \{\text{reflex vertices of } P \text{ seen by }p\}.$$
+Therefore, for all the reflex vertices $r$ guard $g$ can see, the total gradient $\bigtriangledown f$ becomes the sum of all the partial gradients $\bigtriangledown f_r$ as $$\bigtriangledown f = \sum_{i \in R(g)} \bigtriangledown \text{Area}_i, R(g) = \{\text{reflex vertices of } P \text{ seen by }g\}.$$
 
 \subsubsection{Computing the New Guard's Position}
-We can now use the coordinates of the gradient $\bigtriangledown f$ to compute the movement direction of the guard $p$ given all the reflex vertices from $P$ seen by $p$. In order to do so, we will use the construction depicted in Figure \ref{fig:vperp}. 
+We can now use the coordinates of the gradient $\bigtriangledown f$ to compute the movement direction of the guard $g$ given all the reflex vertices from $P$ seen by $g$. In order to do so, we will use the construction depicted in Figure \ref{fig:vperp}. 
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.5\textwidth]{theory/v_perp.png}
-    \caption{Computing the new position $p'$ of guard $p$ around reflex vertex $r$ based on the gradient $\bigtriangledown f$.}
+    \caption{Computing the new position $g'$ of guard $g$ around reflex vertex $r$ based on the gradient $\bigtriangledown f$.}
     \label{fig:vperp}
 \end{figure}
 
-Let $\vec v$ be the vector corresponding to the direction of movement from guard $p$ to a reflex vertex $r$, such that $\vec{v} = (r - p) = (x, y)^\intercal$, with norm $||v|| = \alpha$. So, $||\frac{\vec v}{\alpha}|| = 1$.
+Let $\vec v$ be the vector corresponding to the direction of movement from guard $g$ to a reflex vertex $r$, such that $\vec{v} = (r - g) = (x, y)^\intercal$, with norm $||v|| = \alpha$. So, $||\frac{\vec v}{\alpha}|| = 1$.
 
-Let $\vec{v}^\perp  = (p' - p)$ be the vector corresponding to the direction of movement from guard $p$ to its new position $p'$. Vector $\vec v^\perp$ is orthogonal to $\vec{v}$, in the same direction as $\bigtriangledown f$, such that $||\vec{v}|| = ||\vec{v}^\perp|| = \alpha$. We will use the coordinates of $\vec{v}^\perp$ to compute the coordinates of $\bigtriangledown f$ and thus the direction in which $p$ needs to move.
+Let $\vec{v}^\perp  = (g' - g)$ be the vector corresponding to the direction of movement from guard $g$ to its new position $g'$. Vector $\vec v^\perp$ is orthogonal to $\vec{v}$, in the same direction as $\bigtriangledown f$, such that $||\vec{v}|| = ||\vec{v}^\perp|| = \alpha$. We will use the coordinates of $\vec{v}^\perp$ to compute the coordinates of $\bigtriangledown f$ and thus the direction in which $g$ needs to move.
 
-The coordinates of $\vec v^\perp$ can then be computed using the construction from Figure \ref{fig:vsquare}. Since $\vec v^\perp \perp \vec v$, and $p$ and $r$ are on the right-hand side of $\vec v^\perp$, the coordinates of $\vec v^\perp$ will be rotated by $-90^\circ$ so that $\vec v^\perp = (-y, x)^\intercal$. Analogously for the case when $p$ and $r$ are rotated by $180^\circ$ to the left-hand side of $\vec v^\perp$, the coordinates of $\vec v^\perp$ will be rotated by $90^\circ$ to $\vec v^\perp = (-x, y)^\intercal$.
+The coordinates of $\vec v^\perp$ can then be computed using the construction from Figure \ref{fig:vsquare}. Since $\vec v^\perp \perp \vec v$, and $g$ and $r$ are on the right-hand side of $\vec v^\perp$, the coordinates of $\vec v^\perp$ will be rotated by $-90^\circ$ so that $\vec v^\perp = (-y, x)^\intercal$. Analogously for the case when $g$ and $r$ are rotated by $180^\circ$ to the left-hand side of $\vec v^\perp$, the coordinates of $\vec v^\perp$ will be rotated by $90^\circ$ to $\vec v^\perp = (-x, y)^\intercal$.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.35\textwidth]{theory/v_square.png}
-    \caption{Computing the coordinates of $\vec v^\perp$ given the guard $p$ and the reflex vertex $r(x, y)$.}
+    \caption{Computing the coordinates of $\vec v^\perp$ given the guard $g$ and the reflex vertex $r(x, y)$.}
     \label{fig:vsquare}
 \end{figure}
 
-We know that the norm of the gradient is $||\bigtriangledown f|| = \frac{\beta^2}{2\alpha}$. Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 \alpha$. Therefore, the gradient for guard $p$ and one reflex vertex $r \in Vis(p)$ can be computed as $$\bigtriangledown f = \vec v^\perp \frac{\beta^2}{2\alpha} \frac 1 \alpha.$$
+We know that the norm of the gradient is $||\bigtriangledown f|| = \frac{\beta^2}{2\alpha}$. Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 \alpha$. Therefore, the gradient for guard $g$ and one reflex vertex $r \in Vis(g)$ can be computed as $$\bigtriangledown f = \vec v^\perp \frac{\beta^2}{2\alpha} \frac 1 \alpha.$$
 
-As mentioned before, the total gradient for guard $p$ and all the reflex vertices $r$ the guard can see is $$\bigtriangledown f = \sum_{r \in R(p)} \bigtriangledown \text{Area}_r, R(p) = \{\text{reflex vertices of } P \text{ seen by }p\}.$$
+As mentioned before, the total gradient for guard $g$ and all the reflex vertices $r$ the guard can see is $$\bigtriangledown f = \sum_{r \in R(g)} \bigtriangledown \text{Area}_r, R(g) = \{\text{reflex vertices of } P \text{ seen by }g\}.$$
 
-The new position $p'$ of guard $p$ based on all the reflex vertices it can see is: 
+The new position $g'$ of guard $g$ based on all the reflex vertices it can see is: 
 \begin{equation}
-    p' = p + \alpha\bigtriangledown f.
+    g' = g + \alpha\bigtriangledown f.
     \label{eq:l}
 \end{equation}
 
