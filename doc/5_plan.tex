@@ -7,7 +7,7 @@ The first four weeks of the project have been spent on doing literature research
 
 Afterwards, four more weeks were spent on theoretically devising the gradient computation for one guard (section \ref{sec:theory}) and implementing it. The rest of the time has been spent on experimenting with it (section \ref{sec:experiments}), and writing this thesis report. The writing parts include asking for feedback and working on the feedback.
 
-The programming progress has been overall smooth. Nonetheless, a major issue encountered was discovering about undocumented specificities and intricacies of the CGAL library (\url{https://www.cgal.org}). 
+In terms of problems encountering, programming issues have been the only ones. A major issue encountered was discovering about the undocumented specificities and intricacies of the CGAL library (\url{https://www.cgal.org}). 
 Currently, the implementation of the algorithm is significantly slow for polygons that need to be guarded by more than one point. One of the bottlenecks in this case was the visibility region computation. For every new position of a guard, its visibility region is computed. CGAL adds then every new visibility region to the initial arrangement. This creates an exponential increase in the memory use and future computation times, which slows down the algorithm as it progresses. This issue was partially mitigated by clearing the arrangement (\url{https://doc.cgal.org/latest/Arrangement_on_surface_2/classCGAL_1_1Arrangement__2.html#a4656fff7c7a5dd4ae3d3e9759ec05254}) after every guard position.
 Nonetheless, the continuous slowdown of the algorithm still persists in other parts of the code. This issue is still to be debugged in the second phase of the thesis. 
 % So far:
