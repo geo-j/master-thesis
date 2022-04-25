@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220421132423" modified="D:20220421132423"/>
+<info created="D:20220421132423" modified="D:20220425155656"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -292,9 +292,9 @@ h
 h
 </path>
 <use matrix="1 0 0 1 -16 16" name="mark/disk(sx)" pos="176 416" size="large" stroke="black"/>
-<text matrix="1 0 0 1 -32 32" transformations="translations" pos="176 416" stroke="black" type="label" width="8.46" height="7.41" depth="3.35" valign="baseline" size="LARGE">$p$</text>
-<text matrix="1 0 0 1 39.4334 -30.6821" transformations="translations" pos="208 624" stroke="black" type="label" width="13.948" height="7.415" depth="2.58" valign="baseline" size="LARGE">$r_1$</text>
-<text matrix="1 0 0 1 0 -32" transformations="translations" pos="256 448" stroke="black" type="label" width="13.948" height="7.415" depth="2.58" valign="baseline" size="LARGE">$r_2$</text>
+<text matrix="1 0 0 1 -32 32" transformations="translations" pos="176 416" stroke="black" type="label" width="8.689" height="7.41" depth="3.35" valign="baseline" size="LARGE" style="math">g</text>
+<text matrix="1 0 0 1 39.4334 -30.6821" transformations="translations" pos="208 624" stroke="black" type="label" width="13.948" height="7.415" depth="2.58" valign="baseline" size="LARGE" style="math">r_1</text>
+<text matrix="1 0 0 1 0 -32" transformations="translations" pos="256 448" stroke="black" type="label" width="13.948" height="7.415" depth="2.58" valign="baseline" size="LARGE" style="math">r_2</text>
 <use name="mark/disk(sx)" pos="256 448" size="large" stroke="red"/>
 <path layer="gamma" stroke="black" dash="dashed">
 160 432 m
@@ -303,8 +303,8 @@ h
 256 576 l
 </path>
 <use matrix="1 0 0 1 0 32" name="mark/disk(sx)" pos="160 496" size="large" stroke="black"/>
-<text matrix="1 0 0 1 -16 32" transformations="translations" pos="160 496" stroke="black" type="label" width="12.246" height="12.887" depth="3.35" valign="baseline" size="LARGE">$p&apos;$</text>
-<text matrix="1 0 0 1 -26.4378 7.47195" transformations="translations" pos="160 468.389" stroke="blue" type="label" width="15.56" height="9.962" depth="2.79" valign="baseline" size="Large">$\partial y$</text>
+<text matrix="1 0 0 1 -16 32" transformations="translations" pos="160 496" stroke="black" type="label" width="12.475" height="12.887" depth="3.35" valign="baseline" size="LARGE" style="math">g&apos;</text>
+<text matrix="1 0 0 1 -26.4378 7.47195" transformations="translations" pos="160 468.389" stroke="blue" type="label" width="15.56" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\partial y</text>
 <path stroke="black" dash="dashed" pen="heavier" arrow="normal/normal">
 160 432 m
 160 528 l
@@ -319,8 +319,8 @@ h
 h
 </path>
 <use layer="alpha" matrix="1 0 0 1 48 -48" name="mark/disk(sx)" pos="208 624" size="large" stroke="red"/>
-<text layer="gamma" matrix="1 0 0 1 -21.2454 8.66109" transformations="translations" pos="309.691 635.767" stroke="black" type="label" width="60.023" height="8.965" depth="2.99" valign="baseline" size="large">$\bigtriangledown Area_{r_1}(p)$</text>
-<text matrix="1 0 0 1 -29.271 5.61193" transformations="translations" pos="303.101 431.487" stroke="black" type="label" width="60.023" height="8.965" depth="2.99" valign="baseline" size="large">$\bigtriangledown Area_{r_2}(p)$</text>
-<text layer="alpha" transformations="translations" pos="410.513 585.026" stroke="black" type="label" width="13.206" height="11.764" depth="0" valign="baseline" size="LARGE">$P$</text>
+<text layer="gamma" matrix="1 0 0 1 -21.2454 8.66109" transformations="translations" pos="309.691 635.767" stroke="black" type="label" width="60.182" height="8.965" depth="2.99" valign="baseline" size="large" style="math">\bigtriangledown Area_{r_1}(g)</text>
+<text matrix="1 0 0 1 -29.271 5.61193" transformations="translations" pos="303.101 431.487" stroke="black" type="label" width="60.182" height="8.965" depth="2.99" valign="baseline" size="large" style="math">\bigtriangledown Area_{r_2}(g)</text>
+<text layer="alpha" transformations="translations" pos="410.513 585.026" stroke="black" type="label" width="13.206" height="11.764" depth="0" valign="baseline" size="LARGE" style="math">P</text>
 </page>
 </ipe>

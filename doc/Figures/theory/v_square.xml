@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220328144059" modified="D:20220328144059"/>
+<info created="D:20220328144059" modified="D:20220425155534"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -277,17 +277,17 @@ h
 287.945 512 m
 192 543.182 l
 </path>
-<text matrix="1 0 0 1 -11.3508 -0.0475499" transformations="translations" pos="308.832 573.538" stroke="black" type="label" width="7.306" height="10.226" depth="0" valign="baseline" size="Large">$\vec v$</text>
-<text matrix="1 0 0 1 16.6436 -5.40917" transformations="translations" pos="229.653 530.945" stroke="black" type="label" width="15.553" height="12.125" depth="0" valign="baseline" size="Large">$\vec v^\perp$</text>
-<text matrix="1 0 0 1 -1.73707 -16" transformations="translations" pos="305.078 512" stroke="black" type="label" width="7.982" height="6.177" depth="0" valign="baseline" size="Large">$x$</text>
-<text matrix="1 0 0 1 16 -0.315182" transformations="translations" pos="320 558.997" stroke="black" type="label" width="7.364" height="6.176" depth="2.79" valign="baseline" size="Large">$y$</text>
-<text matrix="1 0 0 1 -4.63806 -16" transformations="translations" pos="225.343 512" stroke="black" type="label" width="18.522" height="8.368" depth="2.79" valign="baseline" size="Large">$-y$</text>
-<text matrix="1 0 0 1 -16 -1.34378" transformations="translations" pos="192 527.367" stroke="black" type="label" width="7.982" height="6.177" depth="0" valign="baseline" size="Large">$x$</text>
+<text matrix="1 0 0 1 -11.3508 -0.0475499" transformations="translations" pos="308.832 573.538" stroke="black" type="label" width="7.306" height="10.226" depth="0" valign="baseline" size="Large" style="math">\vec v</text>
+<text matrix="1 0 0 1 16.6436 -5.40917" transformations="translations" pos="229.653 530.945" stroke="black" type="label" width="15.553" height="12.125" depth="0" valign="baseline" size="Large" style="math">\vec v^\perp</text>
+<text matrix="1 0 0 1 -1.73707 -16" transformations="translations" pos="305.078 512" stroke="black" type="label" width="7.982" height="6.177" depth="0" valign="baseline" size="Large" style="math">x</text>
+<text matrix="1 0 0 1 16 -0.315182" transformations="translations" pos="320 558.997" stroke="black" type="label" width="7.364" height="6.176" depth="2.79" valign="baseline" size="Large" style="math">y</text>
+<text matrix="1 0 0 1 -4.63806 -16" transformations="translations" pos="225.343 512" stroke="black" type="label" width="18.522" height="8.368" depth="2.79" valign="baseline" size="Large" style="math">-y</text>
+<text matrix="1 0 0 1 -16 -1.34378" transformations="translations" pos="192 527.367" stroke="black" type="label" width="7.982" height="6.177" depth="0" valign="baseline" size="Large" style="math">x</text>
 <use name="mark/disk(sx)" pos="287.945 512" size="large" stroke="black"/>
 <use name="mark/disk(sx)" pos="192 543.182" size="large" stroke="black"/>
 <use name="mark/disk(sx)" pos="320 606.443" size="large" stroke="black"/>
-<text matrix="1 0 0 1 -16 16.8179" transformations="translations" pos="192 543.182" stroke="black" type="label" width="10.288" height="10.74" depth="2.79" valign="baseline" size="Large">$p&apos;$</text>
-<text matrix="1 0 0 1 16 1.55721" transformations="translations" pos="320 606.443" stroke="black" type="label" width="6.721" height="6.177" depth="0" valign="baseline" size="Large">$r$</text>
-<text matrix="1 0 0 1 -15.945 -16" transformations="translations" pos="287.945 512" stroke="black" type="label" width="7.05" height="6.176" depth="2.79" valign="baseline" size="Large">$p$</text>
+<text matrix="1 0 0 1 -16 16.8179" transformations="translations" pos="192 543.182" stroke="black" type="label" width="10.288" height="10.74" depth="2.79" valign="baseline" size="Large" style="math">p&apos;</text>
+<text matrix="1 0 0 1 16 1.55721" transformations="translations" pos="320 606.443" stroke="black" type="label" width="6.721" height="6.177" depth="0" valign="baseline" size="Large" style="math">r</text>
+<text matrix="1 0 0 1 -15.945 -16" transformations="translations" pos="287.945 512" stroke="black" type="label" width="7.241" height="6.176" depth="2.79" valign="baseline" size="Large" style="math">g</text>
 </page>
 </ipe>
