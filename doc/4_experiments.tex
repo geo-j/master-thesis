@@ -1,11 +1,11 @@
 \section{Practice}
 \label{sec:experiments}
 
-This section will provide the implementation details of the theory part (section \ref{sec:theory}). The algorithm is implemented in C ++ and makes use of the CGAL library (\url{https://www.cgal.org}). Then, given the implementation, some preliminary experimental setup will be introduced. The experimental setup will include some basic test polygons to check the correct execution of the algorithm. Additionally, it will observe the behaviour of the algorithm and propose some preparatory experiments for the second phase of the thesis.
+This section will provide the implementation details of the theory part (Section \ref{sec:theory}). The algorithm is implemented in C ++ and makes use of the CGAL library (\url{https://www.cgal.org}). Then, given the implementation, a preliminary experimental setup will be introduced. The experimental setup will include some basic test polygons to check the correct execution of the algorithm. Additionally, we will observe the behaviour of the algorithm and propose preparatory experiments for the second phase of the thesis.
 % As such, we will devise an algorithm for optimising the positions of the guards inside the given Art Gallery polygon. 
 % The algorithm is coded in C ++ with the use of the CGAL library (\url{https://www.cgal.org}).
 \subsection{Implementation}
-In section \ref{sec:theory} we devised formula \ref{eq:l} for computing the gradient of one guard and the reflex vertices it can see. This section will show the implementation and use of the formula to iteratively optimise a guard's position. 
+In Section \ref{sec:theory} we devised formula \ref{eq:l} for computing the gradient of one guard and the reflex vertices it can see. This section will show the implementation and use of the formula to iteratively optimise a guard's position. 
 
 The implementation takes a polygon and a guard with an arbitrary position as input. The main idea of the algorithm is that the position of the guard is continuously improved until an optimum is found. That is, until the computed gradient does not change the position of the guard anymore.
 It can happen that the gradient computes an optimised position of the guard outside the polygon. In that case, the guard is placed and subsequently moved on the polygon boundary. The pseudo-code can be found in Algorithm \ref{alg:1g}.
@@ -21,7 +21,7 @@ It can happen that the gradient computes an optimised position of the guard outs
     % \For{\textbf{each} guard $p(x, y)$}
     \State{\textit{cur\_guard\_position} $\gets g(x, y)$}
 
-    \While{\textit{prev\_guard\_position} $\neq$ \textit{cur\_guard\_position}} %\Comment{continue as long as there are no more improvements in the guard's position}
+    \While{\textit{prev\_guard\_position} $\neq$ \textit{cur\_guard\_position} \textbf{and} the whole polygon is not seen} %\Comment{continue as long as there are no more improvements in the guard's position}
         % \State{compute \textit{visibility\_region} of $p$}
         \State{compute $\bigtriangledown f(\textit{cur\_guard\_position})$}
         \State{\textit{prev\_guard\_position} $\gets$ \textit{cur\_guard\_position}}
@@ -125,7 +125,7 @@ The experiments have a 1-minute run timeout. This amount of time was chosen in o
     \label{fig:gradients}
 \end{figure}
 
-This is not the case with the rest of the three input polygons. Currently, the implementation slows down in this case as the algorithm progresses when computing the visibility region and the gradient of the guard. This issue has been partially mitigated by manual memory clearing of the CGAL Arrangement class (\url{https://doc.cgal.org/latest/Arrangement_on_surface_2/classCGAL_1_1Arrangement__2.html}). Nonetheless, the final position of the guard in Subfigures \ref{fig:comb_gradient}, \ref{fig:random_gradient} and \ref{fig:love_gradient} is the last computed position at timeout. Additionally, these polygons require multiple guards to be fully visible. For this reason, we expect that gradient descent would either settle in a local optimum, or would continuously jump between multiple local optima given a large enough learning rate.
+This is not the case with the rest of the three input polygons. Currently, the implementation slows down in this case as the algorithm progresses when computing the visibility region and the gradient of the guard. This issue has been partially mitigated by manually resetting the CGAL Arrangement object (\url{https://doc.cgal.org/latest/Arrangement_on_surface_2/classCGAL_1_1Arrangement__2.html}) after every newly computed guard position. Nonetheless, the final position of the guard in Subfigures \ref{fig:comb_gradient}, \ref{fig:random_gradient} and \ref{fig:love_gradient} is the last computed position at timeout. Additionally, these polygons require multiple guards to be fully visible. For this reason, we expect that gradient descent would either settle in a local optimum, or would continuously jump between multiple local optima given a large enough learning rate.
 
 In the case of the comb polygon (Subfigure \ref{fig:comb_gradient}), the tendency of the guard is to move towards the lower boundary of the polygon. This maximises the area observed by the guard, although the guard alone will not able to see all the spikes at once. 
 When given a longer timeout, we expect that the algorithm would move the guard between the local optima below each of the spikes. 
@@ -134,7 +134,7 @@ When given a longer timeout, we expect that the algorithm would move the guard b
 The arbitrary polygon (Subfigure \ref{fig:random_gradient}) shows similar behaviour in terms of moving between local optima. Initially the guard takes a large jump from its initial position to a more fine-tuned path. After a few smoother steps, it takes another large jump close to the boundary of the polygon. We account the large uneven jumps to the nature of the gradient descent technique. Its computation is based only on the current position, irregardless of previous states. For this reason, when the guard approaches a reflex vertex and gains more visibility behind it, the larger jump happens. We will explore and attempt to mitigate this aspect in later subsections.
 % In order to explore this aspect, we will later look into how the jumps between local optima differ given the learning rate.
 
-Lastly, the algorithm managed to take the least number of steps within the time limit (slowest) in the irrational guard polygon (Subfigure \ref{fig:love_gradient}). That is expected, as it is also the largest polygon out of all the input ones. This polygon can also not be guarded by only 1 point. For this reason, we cannot gain informative observations about the performance of the algorithm for this particular polygon.
+Lastly, the algorithm managed to take the least number of steps within the time limit in the irrational guard polygon (Subfigure \ref{fig:love_gradient}). That is expected, as it is also the largest polygon out of all the input ones. This polygon can also not be guarded by only 1 point. For this reason, we cannot gain informative observations about the performance of the algorithm for this particular polygon.
 % So, we will explore in the next subsection how the algorithm performs when different learning rates are used. 
 % Moreover, we will also examine how well our approximation gradient descent algorithm performs when compared to the exact irrational positions of the guards.
 
@@ -189,7 +189,7 @@ Momentum \cite{goodfelow2016deep} builds upon the idea of considering past state
 
 There are several methods of implementing momentum in a gradient descent computation. One common approach is to use a moving average. That is, computing the gradient at the current point and then averaging it with the past $m$ values, where $m$ is a hyperparameter. As such, all previous states are given equal weights. Variations of these weights will be observed in the second stage of the thesis.
 
-In these experiments, we will use a moving average of the last 2 gradient descent values. The motivation for choosing this value is related to the total number of steps taken to achieve the optimum in the input polygons. That is, less than 20 steps are taken in total to achieve an optimum within the timeout in the previously discussed experiments. So, we decided to only take into account the last and the second to last position when computing a new one.
+In these experiments, we will use a moving average of the last 2 gradient descent values. The motivation for choosing this value is related to the total number of steps taken to achieve the optimum in the input polygons. That is, less than 10 steps are taken in total to achieve an optimum within the timeout in the previously discussed experiments. So, we decided to only take into account the last and the second to last position when computing a new one.
 
 \begin{figure}[h!]
     \centering
