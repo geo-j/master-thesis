@@ -34,7 +34,7 @@ In later sections we will experiment with various learning rates. As such, we wi
 Given that $f$ is a function that describes the visibility area of a point $g$, we first need to define how its gradient is computed. We will simplify the gradient computation without losing generality. As such, we will rotate the plane with rotation matrix $R$, so that $g$ and any reflex vertex $r$ have the same $x$-coordinate. In this way, we only need to compute the gradient when we vary the $y$-coordinate. The computation of the gradient remains the same regardless of the rotation applied to the plane.
 
 
-We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in the visibility area $f(g)$ when the $y$-coordinate is modified by a small amount $\partial y \rightarrow 0$. Analogously, we will use $\frac{\partial f}{\partial x}$ to denote the small change in the $x$-coordinate of $g$. In this way, we define 
+We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in the visibility area $f(g)$ when the plane is rotated and then the $y$-coordinate is modified by a small amount $\partial y \rightarrow 0$. In this way, we define 
 
 \begin{equation}
     \bigtriangledown f = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)^\intercal \label{eq:gradient}
@@ -42,7 +42,7 @@ We will use the notation $\frac{\partial f}{\partial y}$ to denote the change in
 
 to be the gradient of $f$ given that $P$ is guarded by a point $g$. 
 
-We will now create a canonical geometrical construction that allows us to further define and compute $\bigtriangledown f$. In this case, we consider the normalised length of the gradient as $||\bigtriangledown f||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
+We will now create a canonical geometrical construction that allows us to further define and compute $\bigtriangledown f$. In this case, we consider the normalised length of the gradient as $||~\bigtriangledown~f||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
 % We will then generalise this case to multiple reflex vertices and guards.
 
 \begin{figure}[h!]
@@ -79,17 +79,17 @@ We are now interested in computing how the area seen by guard $g$ increases give
 
 Given that triangles $\triangle_1$ and $\triangle_2$ are square triangles, their areas can be calculated as:
 
-\begin{align}
-    \text{Area}_{\triangle_1} &= \frac{b L}{2}, \label{eq:rdd}\\ 
-    \text{Area}_{\triangle_2} &= \frac{a \partial y}{2}. \label{eq:rpp}
-\end{align}
+\begin{align*}
+    \text{Area}_{\triangle_1} &= \frac{b L}{2},\\ 
+    \text{Area}_{\triangle_2} &= \frac{a \partial y}{2}.
+\end{align*}
 
 
 Given that $\overline{pp'}$ is parallel to polygon's boundary, we can use Thales's Theorem in triangles $\triangle_1$ and $\triangle_2$ to compute the length $L$: 
 
 \begin{align}
     % \frac{||\overline{pp'}||}{||\overline{dd'}||} &= \frac a b \\
-    \frac{\partial y}{L} &= \frac a b  \label{eq:dxL} \\
+    \frac{\partial y}{L} &= \frac a b \\
     L &= \frac{b \partial y}{a}. \label{eq:L}
 \end{align}
 
