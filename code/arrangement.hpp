@@ -399,11 +399,14 @@ class Arrangement {
                 CGAL::Oriented_side orientation = std::get<2>(reflex_intersections.at(i));
 
                 // compute distances between guard - reflex vertex - intersection point
-                auto alpha = CGAL::squared_distance(guard, reflex_vertex);
-                auto beta = CGAL::squared_distance(reflex_vertex, intersection);
+                // auto alpha = CGAL::squared_distance(guard, reflex_vertex);
+                auto alpha = (guard.x() - reflex_vertex.x()) * (guard.x() - reflex_vertex.x()) + (guard.y() - reflex_vertex.y()) * (guard.y() - reflex_vertex.y());
+                auto beta = (reflex_vertex.x() - intersection.x()) * (reflex_vertex.x() - intersection.x()) + (reflex_vertex.y() - intersection.y()) * (reflex_vertex.y() - intersection.y());
+                // auto beta = CGAL::squared_distance(reflex_vertex, intersection);
 
                 // compute guard-reflex vertex vector
                 Vector_2 v = Vector_2(guard, reflex_vertex);
+                // Vector_2 w = Vector_2(reflex_vertex, intersection);
 
                 // compute orthogonal vector to the guard-reflex vector
                 // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
@@ -415,7 +418,7 @@ class Arrangement {
                     vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
 
                 // compute Df for reflex vertex r
-                Vector_2 Dfr = vp * ((beta * beta) / (2 * alpha)) * (1 / alpha);
+                Vector_2 Dfr = vp * ((beta) / (2 * alpha));
 
                 // initialise total gradient Df if first reflex vertex,
                 //      otherwise just add all gradient vectors
@@ -457,15 +460,15 @@ class Arrangement {
                     gradient = this->gradient(visibility_arrangement, prev_guard_position);
 
                     // gradient smoothening
-                    if (gradients.size() < 3)
-                        gradients.push_back(gradient);
-                    else {
-                        for (auto g : gradients)
-                            gradient += g;
-                        gradient /= gradients.size();
-                        gradients.erase(gradients.begin());
-                        gradients.push_back(gradient);
-                    }
+                    // if (gradients.size() < 3)
+                    //     gradients.push_back(gradient);
+                    // else {
+                    //     for (auto g : gradients)
+                    //         gradient += g;
+                    //     gradient /= gradients.size();
+                    //     gradients.erase(gradients.begin());
+                    //     gradients.push_back(gradient);
+                    // }
 
                     // cur_guard_position.reset();
                     // update current guard position
@@ -501,6 +504,7 @@ class Arrangement {
     * 
     * This method computes the guard's position on the arrangement's boundary in the case when the gradient requires it to be outside of the polygon
     */
+   // TODO: no square roots; compute closest segment to point
     bool place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
         // std::cout << "prev guard " << prev_guard << " wished guard " << guard << std::endl;
         auto guard_movement = Segment_2(prev_guard, guard);
