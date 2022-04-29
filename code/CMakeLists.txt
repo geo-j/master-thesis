@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.1...3.20)
 project(main)
 
+set(CMAKE_BUILD_TYPE "Release")
+# set(CMAKE_CXX_FLAGS "-DCGAL_DISABLE_ROUNDING_MATH_CHECK")
+# set(CMAKE_C_FLAGS   "-DCGAL_DISABLE_ROUNDING_MATH_CHECK")
+
 include_directories(/usr/include/x86_64-linux-gnu/qt5/QtWidgets/)
 #CGAL_Qt5 is needed for the drawing.
 find_package(CGAL REQUIRED OPTIONAL_COMPONENTS Qt5)

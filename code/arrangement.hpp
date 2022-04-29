@@ -439,7 +439,7 @@ class Arrangement {
         */
         void optimise(double learning_rate) {
             for (auto i = 0; i < this->guards.size(); i ++) {
-                Vector_2 gradient;
+                Vector_2 gradient, prev_gradient;
                 Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
                 std::vector<Vector_2> gradients;
                 Arrangement_2 visibility_arrangement;
@@ -455,12 +455,15 @@ class Arrangement {
 
                     // prev_guard_position.reset();
                     prev_guard_position = cur_guard_position;
+                    // prev_gradient = gradient;
 
                     // compute gradient of current guard position
                     gradient = this->gradient(visibility_arrangement, prev_guard_position);
 
                     // gradient smoothening
                     // if (gradients.size() < 3)
+                    // gradient = prev_gradient * 0.3 + 0.7 * gradient;
+                    // if (gradients.size() < 2)
                     //     gradients.push_back(gradient);
                     // else {
                     //     for (auto g : gradients)
