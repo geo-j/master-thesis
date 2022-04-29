@@ -4,6 +4,7 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Arrangement_2.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Arr_segment_traits_2.h>
 
 
@@ -15,6 +16,9 @@ typedef Kernel::Segment_2                                                   Segm
 typedef CGAL::Arr_segment_traits_2<Kernel>                                  Traits_2;
 typedef CGAL::Arrangement_2<Traits_2>                                       Arrangement_2;
 
+typedef Kernel::FT                                                          FT;
+
+
 
 template<typename type>
 void push_back_unique(std::vector<type> &v, type element) {
@@ -24,6 +28,16 @@ void push_back_unique(std::vector<type> &v, type element) {
         v.push_back(element);
 }
 
+/* distance function
+* :in param Point_2 p1:		source point
+* :in param Point_2 p2:		destination point
+* :return FT:				square distance between the two input points
+*
+* This function compute the square distance p1^2 + p2^2 between two points p1 and p2.
+*/
+FT distance(Point_2 p1, Point_2 p2) {
+	return (p1.x() - p2.x()) * (p1.x() - p2.x()) + (p1.y() - p2.y()) * (p1.y() - p2.y());
+}
 /* get_number function
 * :in param string s:	string that needs to be converted to a double
 * :return double:		input string converted to a double
