@@ -3,14 +3,16 @@ from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, Tri
 import matplotlib.pyplot as plt
 from numpy import random, diff, sqrt
 from sys import stdin
+from collections import defaultdict
 
 class Drawing(object):
     def __init__(self) -> None:
         self.arrangement = arrangement.Arrangement()
         self.vs = TriangularExpansionVisibility(self.arrangement)
         self.guards = []
-        self.xs = []
-        self.ys = []
+        # dict for each guard's x and y coord
+        self.xs = defaultdict(list)
+        self.ys = defaultdict(list)
     
     ###########
     #  Input #
@@ -38,17 +40,19 @@ class Drawing(object):
     def read_input_guards(self) -> None:
         IV = int(input())
 
-        for _ in range(IV):
+        for i in range(IV):
             vertex = list(map(float, input().split()))
             q = Point2(*vertex)
+            # self.guards[f'g{i}'].append(q)
             self.guards.append(q)
     
     def read_guards_paths(self) -> None:
         for line in stdin:
-            x, y = map(float, line.strip().split())
+            i = int(line[1])    # get the guard index
+            x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
 
-            self.xs.append(x)
-            self.ys.append(y)
+            self.xs[f'g{i}'].append(x)
+            self.ys[f'g{i}'].append(y)
     
     def read_all_input(self) -> None:
         self.read_input_arrangement()
@@ -79,15 +83,16 @@ class Drawing(object):
             draw(he.curve(), visible_point = True)
 
     def draw_guards_paths(self) -> None:
-        plt.scatter(self.xs, self.ys, color = 'magenta')
+        for guard in self.xs.keys():
+            plt.scatter(self.xs[guard], self.ys[guard])
 
-        u = diff(self.xs)
-        v = diff(self.ys)
-        pos_x = self.xs[:-1] + u / 2
-        pos_y = self.ys[:-1] + v / 2
-        norm = sqrt(u ** 2 + v ** 2) 
+            u = diff(self.xs[guard])
+            v = diff(self.ys[guard])
+            pos_x = self.xs[guard][:-1] + u / 2
+            pos_y = self.ys[guard][:-1] + v / 2
+            norm = sqrt(u ** 2 + v ** 2) 
 
-        plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, scale = 5, scale_units = 'inches')
+            plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, scale = 5, scale_units = 'inches')
 
     def draw_all(self) -> None:
         self.draw_visibility_regions()
