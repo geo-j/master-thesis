@@ -406,34 +406,35 @@ class Arrangement {
                 // auto alpha = CGAL::squared_distance(guard, reflex_vertex);
                 auto alpha = distance(guard, reflex_vertex);
                 // auto beta = distance(reflex_vertex, intersection);
-                FT beta;
+                // FT beta;
                 // auto alpha = (guard.x() - reflex_vertex.x()) * (guard.x() - reflex_vertex.x()) + (guard.y() - reflex_vertex.y()) * (guard.y() - reflex_vertex.y());
-                // auto beta = (reflex_vertex.x() - intersection.x()) * (reflex_vertex.x() - intersection.x()) + (reflex_vertex.y() - intersection.y()) * (reflex_vertex.y() - intersection.y());
+                auto beta = (reflex_vertex.x() - intersection.x()) * (reflex_vertex.x() - intersection.x()) + (reflex_vertex.y() - intersection.y()) * (reflex_vertex.y() - intersection.y());
                 // auto beta = CGAL::squared_distance(reflex_vertex, intersection);
                 auto visible_segment = Segment_2(reflex_vertex, intersection);
 
                 // compute intersection points with other guards' visibility regions
                 for (auto i = 0; i < this->guards.size(); i ++) {
-                    auto left = guard < (this->guards.at(i)) ? 1 : -1;
+                    auto left = (guard < (this->guards.at(i))) ? 1 : -1;
                     std::vector<Point_2> intersection_points;
 
                     if (this->guards.at(i) != guard) {
                         auto eit = *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin();
                         do {
                             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
-                            // std::cout << edge << ' ' << visible_segment << std::endl;
                             const auto visibility_intersection = CGAL::intersection(edge, visible_segment);
 
-                            // std::cout << *visibility_intersection;
+                            // check if the reflex vertex - boundary intersection segment of the guard intersects the visibility region of any of the existing guards
                             if (visibility_intersection) {
                                 // std::cout << "here\n";
                                 auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
 
+                                // if it completely overlaps in a segment, add the 2 segment edges
                                 if (!intersection_point) {
                                     auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
                                     intersection_points.push_back(intersection_segment.source());
                                     intersection_points.push_back(intersection_segment.target());
                                 } else
+                                    // otherwise just add the point it intersects
                                     intersection_points.push_back(*intersection_point);
                             }
                         } while (++ eit != *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin());
@@ -442,16 +443,17 @@ class Arrangement {
                     auto minus = -1 * left;
                     for (auto j = 0; j < intersection_points.size(); j ++) {
                         auto b = distance(reflex_vertex, intersection_points.at(j));
+                        // TODO: check how to find out whether the first region is seen or not
                         if (j == 0)
                             beta = b;
                         else {
-                            beta = minus * b;
+                            beta += minus * b;
                             minus = -minus;
                         }
                     }
                 }
 
-                std::cout << "beta = " << beta << std::endl;
+                // std::cout << "beta = " << beta << std::endl;
                 // std::sort(intersection_points.begin(), intersection_points.end());
 
                 // compute guard-reflex vertex vector
@@ -495,13 +497,13 @@ class Arrangement {
                     Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
                     std::vector<Vector_2> gradients;
                     Arrangement_2 visibility_arrangement;
-                    std::cout << cur_guard_position << std::endl;
+                    std::cout << 'g' << i << '=' << cur_guard_position << std::endl;
 
                     // int j = 0;
                     // try to update the guard position until there are no more changes, or it goes outside the arrangement
                     // do {
-                        // this->visibility_regions.at(i).clear();
-                        std::cout << "here";
+                        this->visibility_regions[i].clear();
+                        // std::cout << "here";
 
                         // compute visibility arrangement of each guard position
                         this->visibility_regions[i] = this->compute_guard_visibility(cur_guard_position);
@@ -512,7 +514,7 @@ class Arrangement {
 
                         // compute gradient of current guard position
                         gradient = this->gradient(this->visibility_regions.at(i), prev_guard_position);
-                        std::cout << "Df = " << gradient << std::endl;
+                        // std::cout << "Df = " << gradient << std::endl;
 
                         // gradient smoothening
                         // if (gradients.size() < 3)
@@ -542,7 +544,7 @@ class Arrangement {
                         }
 
                         if (this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE) {
-                            std::cout << cur_guard_position << std::endl;
+                            std::cout << 'g' << i << '=' << cur_guard_position << std::endl;
                             this->guards[i] = cur_guard_position;
                             this->visibility_regions[i].clear();
                             this->visibility_regions[i] = this->compute_guard_visibility(cur_guard_position);
