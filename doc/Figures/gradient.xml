@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220427113612" modified="D:20220427113612"/>
+<info created="D:20220427113612" modified="D:20220504113156"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -262,64 +262,60 @@ h
 192 512 m
 480 512 l
 </path>
-<path matrix="1 0 0 1 0.00274443 0.286518" stroke="black" pen="heavier">
+<path matrix="1 0 0 1 0.00274443 -15.7135" stroke="black" pen="heavier">
 224 624 m
 104.307 0 0 104.307 328 632 432 624 a
 </path>
-<path stroke="black" dash="dashed">
-226.86 606.49 m
-226.661 512 l
-</path>
-<use name="mark/disk(sx)" pos="226.86 606.49" size="normal" stroke="black"/>
-<use name="mark/disk(sx)" pos="326.188 527.708" size="normal" stroke="black"/>
-<path stroke="black" dash="dashed">
-326.188 527.708 m
-326.165 512 l
-</path>
-<use name="mark/disk(sx)" pos="234.949 584.868" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="250.956 561.685" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="277.608 540.673" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="303.054 530.72" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="326.188 527.708" size="large" stroke="green"/>
-<use name="mark/disk(sx)" pos="226.86 606.49" size="large" stroke="blue"/>
-<use name="mark/disk(sx)" pos="263.097 550.344" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="242.439 572.341" size="large" stroke="black"/>
-<use name="mark/disk(sx)" pos="289.782 534.946" size="large" stroke="black"/>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="326.188 527.708" size="normal" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="234.949 584.868" size="large" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="250.956 561.685" size="large" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="277.608 540.673" size="large" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="303.054 530.72" size="large" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="263.097 550.344" size="large" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="242.439 572.341" size="large" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="289.782 534.946" size="large" stroke="black"/>
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 226.86 606.49 m
 11.8961 0 0 -11.8961 233.6 596.687 234.949 584.868 a
 </path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 234.949 584.868 m
 9.0996 0 0 -9.0996 243.359 581.394 242.439 572.341 a
 </path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 242.439 572.341 m
 9.8363 0 0 -9.8363 252.233 571.438 250.956 561.685 a
 </path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 250.956 561.685 m
 9.83237 0 0 -9.83237 260.617 559.859 263.097 550.344 a
 </path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 263.097 550.344 m
 9.91216 0 0 -9.91216 272.968 549.432 277.608 540.673 a
 </path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 277.608 540.673 m
 9.24422 0 0 -9.24422 286.394 543.547 289.782 534.946 a
 </path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
 289.782 534.946 m
 9.12309 0 0 -9.12309 298.206 538.449 303.054 530.72 a
-</path>
-<path stroke="black" dash="dashed" arrow="normal/normal">
-303.054 530.72 m
-12.3653 0 0 -12.3653 315.151 533.283 326.188 527.708 a
 </path>
 <use name="mark/disk(sx)" pos="326.165 512" size="normal" stroke="black"/>
 <use name="mark/disk(sx)" pos="226.661 512" size="normal" stroke="black"/>
 <text matrix="1 0 0 1 -58.1615 -13.9142" transformations="translations" pos="226.661 512" stroke="black" type="label" width="105.853" height="6.926" depth="1.93" valign="baseline">arbitrary initial position</text>
 <text matrix="1 0 0 1 -16.9754 -15.5839" transformations="translations" pos="326.165 512" stroke="black" type="label" width="41.234" height="6.654" depth="0" valign="baseline">minimum</text>
+<path stroke="black" dash="dashed">
+226.86 590.49 m
+226.661 512 l
+</path>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="226.86 606.49" size="normal" stroke="black"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="226.86 606.49" size="large" stroke="blue"/>
+<use matrix="1 0 0 1 0 -16" name="mark/disk(sx)" pos="326.188 527.708" size="large" stroke="green"/>
+<path matrix="1 0 0 1 0 -16" stroke="black" dash="dashed" arrow="normal/normal">
+303.054 530.72 m
+12.3653 0 0 -12.3653 315.151 533.283 326.188 527.708 a
+</path>
 </page>
 </ipe>
