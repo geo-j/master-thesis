@@ -2,14 +2,14 @@
 % Introduction and research questions: What is the problem? Illustrate with an example. What is/are your research questions/contributions? 
 \subsection{The Art Gallery Problem}
 
-The Art Gallery Problem \cite{o1987art} is a central problem in computational geometry. It can be introduced as follows: given a simple polygon $P$ with $n$ vertices, we are interested in finding the minimum number of guards (points) that are able to see the whole polygon. A simple polygon is a polygon that has no holes. Thus, we can define the visibility of a point $g$ in the polygon $P \subset \mathbb R^2$. The point (guard) $g \in P$ sees another point $q \in P$ if the line segment $\overline{gq} \subseteq P$. The points that are visible from $g$ form the visibility polygon (region) $Vis(g)$. In the Art Gallery Problem, we are looking for a minimum size guard set $S$ that can see the whole polygon $P$.
+The Art Gallery Problem \cite{o1987art} is a central problem in computational geometry. It can be introduced as follows: given a simple polygon $P$ with $n$ vertices, we are interested in finding the minimum number of guards (points) that are able to see the whole polygon. A simple polygon is a polygon that has no holes. Thus, we can define the visibility of a point $g$ in the polygon $P \subset \mathbb R^2$. The point (guard) $g \in P$ sees another point $q \in P$ if the line segment $\overline{gq} \subseteq P$. The points that are visible from $g$ form the visibility polygon (region) $\mathit{Vis}(g)$. In the Art Gallery Problem, we are looking for a minimum size guard set $S$ that can see the whole polygon $P$.
 
-Figure \ref{fig:art} displays an example of the Art Gallery Problem \cite{o1987art} with polygon $P$ guarded by 2 points ($|S| = 2$). The visibility region $Vis$ of each guard is marked with a different colour. For point $g \in S$, its visibility region $Vis(g)$ is emphasised with the pink contour. The vertex $r$ blocks part of the view of $g$. For this reason, it is called ``reflex'', because the angle it forms on the inside of the polygon is larger than $180^\circ$. Reflex vertices are only found in concave polygons, so convex polygons can be guarded by only one guard.
+Figure \ref{fig:art} displays an example of the Art Gallery Problem \cite{o1987art} with polygon $P$ guarded by 2 points ($|S| = 2$). The visibility region $\mathit{Vis}$ of each guard is marked with a different colour. For point $g \in S$, its visibility region $\mathit{Vis}(g)$ is emphasised with the pink contour. The vertex $r$ blocks part of the view of $g$. For this reason, it is called ``reflex'', because the angle it forms on the inside of the polygon is larger than $180^\circ$. Reflex vertices are only found in concave polygons, so convex polygons can be guarded by only one guard.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.6\textwidth]{p.png}
-    \caption{Example of an Art Gallery Problem instance with polygon $P$ guarded by 2 points. The visibility area $Vis(g)$ is emphasised in pink.}
+    \caption{Example of an Art Gallery Problem instance with polygon $P$ guarded by 2 points. The visibility area $\mathit{Vis}(g)$ is emphasised in pink.}
     \label{fig:art}
 \end{figure}
 
@@ -18,7 +18,7 @@ The Art Gallery Problem \cite{o1987art} is $\exists \mathbb R$-complete \cite{ab
 \newpage
 \subsection{Gradient Descent}
 
-Gradient descent is an iterative optimisation algorithm for finding the minimum of a continuous differentiable function. The core idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point using a specific step size (learning rate). High learning rates result in approaching the optimum faster, but risk overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
+Gradient descent is an iterative optimisation algorithm for finding the minimum of a continuous differentiable function. The core idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point using a specific step size (learning rate). High learning rates result in approaching a local optimum faster, but risk overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
 When there is no more change in the gradient, then the optimum has been reached. Gradient descent does not guarantee that the found optimum is global. For this reason, it can remain stuck in a local optima.
 
 Figure \ref{fig:gradient_descent} illustrates an intuitive example of applying gradient descent. The optimisation function takes the shape of a curve. Starting from an arbitrary point on the curve, the goal is to reach the minimum of the function (the bottom of the curve). This is done by computing the gradient (derivative) of the function at the current point and moving in its opposite direction. In this case, the gradient would indicate going up the curve. In order to reach the minimum, the point has to move down the curve with the given step size. Continuing from the new point on the curve, the process is repeated until the minimum is reached.
@@ -32,7 +32,7 @@ Figure \ref{fig:gradient_descent} illustrates an intuitive example of applying g
 
 \subsection{Thesis Goal}
 
-This thesis will thus be an algorithm engineering paper. The main goal is to create and implement an algorithm that uses gradient descent to approximate the solution to the Art Gallery Problem in reasonably fast time. The algorithm will be implemented in C++ using the CGAL library (\url{https://www.cgal.org}). It will be then compared to other existing algorithm implementations.
+This thesis will thus be an optimisation algorithm engineering paper. The main goal is to create and implement an algorithm that uses gradient descent to approximate the solution to the Art Gallery Problem. The explored research question will be whether the Art Gallery Problem can be efficiently solved using gradient descent. As such, we expect to be able to provide convergence guarantees for the algorithm. The algorithm will be implemented in C++ using the CGAL library (\url{https://www.cgal.org}). It will be then compared to other existing algorithm implementations.
 
 As such, preliminary research and its implementation is presented as preparation for the second phase of the thesis project. Section \ref{sec:literature} offers an existing literature overview. Next, Section \ref{sec:theory} describes the relevant theory in detail.
 As a preview, Section \ref{sec:experiments} shows some introductory algorithm implementations and their performance.
