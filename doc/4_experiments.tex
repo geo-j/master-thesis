@@ -79,7 +79,8 @@ The implementation has been tested with one guard and multiple input polygons. T
 \end{figure}
 % Timetable and planning What will you do with the remainder of my thesis? Give an approximate estimation/timetable for what you will do and when you will be done.
 \subsection{Preliminary Results}
-This subsection will provide some exploratory results based on the current implementation. The implementation is tested on the five previously mentioned input polygons and an arbitrarily placed guard. Firstly, we will validate the correct execution of the algorithm by checking whether the positions of guards is optimised as expected. Then, we will explore how different learning rates influence the results on different types of polygons. Lastly, we will aim to smoothen out the large noisy jumps in the gradient descent computation by using momentum \cite{goodfelow2016deep}. In this way, we will create an ``inertia'' effect by extending the gradient descent algorithm with a moving average of previously computed states.
+This subsection will provide some exploratory results based on the current implementation. The implementation is tested on the five previously mentioned input polygons and an arbitrarily placed guard. Firstly, we will validate the correct execution of the algorithm by checking whether the positions of guards is optimised as expected. Then, we will explore how different learning rates influence the results on different types of polygons. Lastly, we will aim to smoothen out the large noisy jumps in the gradient descent computation by using momentum \cite{goodfelow2016deep}. Momentum builds upon the idea of considering past states of the gradient descent computation. In this way, the past states act as ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother. 
+% In this way, we will create an ``inertia'' effect by extending the gradient descent algorithm with a moving average of previously computed states.
 
 \subsubsection{Checking Correct Execution}
 We will first validate that the implemented algorithm runs correctly. Thus, we expect that for the polygons that can be guarded by only one point, the algorithm will find an optimal position of the guard. For polygons that require multiple guards, we expect that the algorithm will either settle in local maxima, or will jump between local maxima depending on the learning rate.
@@ -184,8 +185,6 @@ Therefore, we expect that the choice of the learning rate will be closely intert
 
 \subsubsection{Gradient Descent with Momentum}
 We have previously observed that one of the drawbacks of gradient descent is that it is computed at every step irrespective of its past values. This can result in sudden irregular changes in the guard's position to optimality. Additionally, it can cause the guard to return to a previously non-optimal computed position, or to remain stuck in local optima. For these reasons, we will extend the computation of gradient descent with momentum \cite{goodfelow2016deep}.
-
-Momentum \cite{goodfelow2016deep} builds upon the idea of considering past states of the gradient descent computation. In this way, the past states act as ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother. 
 
 There are several methods of implementing momentum in a gradient descent computation. One common approach is to use a moving average. That is, computing the gradient at the current point and then averaging it with the past $m$ values, where $m$ is a hyperparameter. As such, all previous states are given equal weights. Variations of these weights will be observed in the second stage of the thesis.
 
