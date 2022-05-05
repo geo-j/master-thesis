@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220311122220" modified="D:20220425154924"/>
+<info created="D:20220311122220" modified="D:20220505111005"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -325,7 +325,7 @@ h
 160 528 l
 h
 </path>
-<text transformations="translations" pos="218.754 585.026" stroke="black" type="label" width="34.072" height="8.965" depth="2.99" valign="baseline" size="large" style="math">Vis(g)</text>
+<text transformations="translations" pos="218.754 585.026" stroke="black" type="label" width="33.185" height="8.965" depth="2.99" valign="baseline" size="large" style="math">\mathit{Vis}(g)</text>
 <use name="mark/disk(sx)" pos="144 592" size="normal" stroke="black"/>
 <text layer="alpha" matrix="1 0 0 1 16 0" transformations="translations" pos="144 592" stroke="black" type="label" width="8.689" height="7.41" depth="3.35" valign="baseline" size="LARGE" style="math">g</text>
 <use layer="beta" name="mark/disk(sx)" pos="128 608" size="large" stroke="black"/>
