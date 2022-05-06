@@ -406,7 +406,7 @@ class Arrangement {
                 // auto alpha = CGAL::squared_distance(guard, reflex_vertex);
                 auto alpha = distance(guard, reflex_vertex);
                 auto beta = distance(reflex_vertex, intersection);
-                std::cout << "beta = " << beta << std::endl;
+                // std::cout << "beta = " << beta << std::endl;
                 // bool first = true;
 
                 auto visible_segment = Segment_2(reflex_vertex, intersection);
@@ -432,49 +432,10 @@ class Arrangement {
                                 if (!intersection_point) {
                                     auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
                                     // std::cout << "segment\n";
-
-                                //     // if the whole reflex vertex - boundary intersection segment is seen by another guard, then do nothing
-                                //     if ((intersection_segment.source() == reflex_vertex && intersection_segment.target() == intersection)
-                                //         || (intersection_segment.target() == reflex_vertex && intersection_segment.source() == intersection)) {
-                                //             std::cout << "whole segment seen\n";
-                                //         // if the first guard that modifies the gradient
-                                //         // if (first) {
-                                //         //     beta = 0;
-                                //         //     first = false;
-                                //         // }
-                                //         beta = 0;
-                                //         break;
-                                //     } 
-                                //     // seen by other guard segment is reflex vertex - random intersection point
-                                //     else if (intersection_segment.source() == reflex_vertex) {
-                                //         std::cout << "reflex vertex seen\n";
-                                //         // if (first) {
-                                //         //     beta = -distance(intersection_segment.target(), intersection);
-                                //         //     first = false;
-                                //         // } else
-                                //         beta -= distance(intersection_segment.target(), intersection);
-                                //     }
-                                //     // seen by other guard segment is random intersection point - boundary intersection point
-                                //     else if (intersection_segment.target() == intersection) {
-                                //         std::cout << "boundary intersection seen\n";
-                                //         // if (first) {
-                                //         //     beta = distance(intersection_segment.target(), intersection);
-                                //         //     first = false;
-                                //         // } else
-                                //             beta += distance(intersection_segment.target(), intersection);
-                                //     } 
-                                //     // if there's 2 intersection points in between the reflex vertex and the boundary intersection point
-                                //     else {
-                                //         std::cout << "part of segment seen\n";
-                                //         beta -= distance(reflex_vertex, intersection_segment.source()) + distance(reflex_vertex, intersection_segment.target());
-                                //     }
-                                    
-                                    // intersection_points.push_back(intersection_segment.source());
-                                    // intersection_points.push_back(intersection_segment.target());
                                 }
                                 // otherwise just add the point it intersects
                                 else {
-                                    std::cout << *intersection_point << std::endl;
+                                    // std::cout << *intersection_point << std::endl;
                                     // intersection_points.push_back(*intersection_point);
                                     push_back_unique(intersection_points, *intersection_point);
                                 }
@@ -482,41 +443,54 @@ class Arrangement {
                         } while (++ eit != *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin());
                     }
 
-                    if (intersection_points.size() > 0) {
+                    if (intersection_points.size() > 1) {
                         std::sort(intersection_points.begin(), intersection_points.end());
                         
                         // TODO: I think I need to also rotate?
                         // case where the reflex vertex is seen
-                        if (intersection_points.at(0) == reflex_vertex) {
-                            // if the whole reflex vertex - boundary intersection segment is seen by another guard, then do nothing
-                            if (intersection_points.at(1) == intersection) {
-                                // std::cout << "whole segment seen\n";
-                                // beta = -beta;
-                            } 
-                            // if the reflex vertex is seen, but not the whole segment
-                            else {
-                                std::cout << "reflex vertex seen\n";
-                                std::cout << "size = " << intersection_points.size() << std::endl;
-                                std::cout << reflex_vertex << ',' << intersection << ',' << intersection_points.at(1) << std::endl;
-                                beta -= distance(intersection_points.at(1), intersection);
-                            }
-                        } 
-                        // case where the boundary intersection point is seen
-                        else if (intersection_points.at(1) == intersection) {
-                            // whole segment seen case already tackled
-                            if (intersection_points.at(0) != reflex_vertex) {
-                                // std::cout << "boundary intersection seen\n";
-                                beta += distance(intersection_points.at(0), intersection);
-                            }
+                        if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) != intersection) {
+                            // if the reflex vertex and another part of the reflex vertex - boundary intersection segment is seen, but not the whole segment
+                                // std::cout << "\treflex vertex seen\n";
+                                // std::cout << "size = " << intersection_points.size() << std::endl;
+                                // std::cout << reflex_vertex << ',' << intersection << ',' << intersection_points.at(1) << std::endl;
+                                beta -= distance(intersection_points.at(1), reflex_vertex);
+                        }
+                        // case where the boundary intersection point is seen, but not the reflex vertex
+                        else if (intersection_points.at(0) != reflex_vertex && intersection_points.at(1) == intersection) {
+                            // whole segment seen case already tackled (do nothing)
+                            // std::cout << "\tboundary intersection seen\n";
+                            beta -= distance(intersection_points.at(0), intersection);
+                        }
+                        //rotated case where the boundary is on the left side
+                        else if (intersection_points.at(0) != intersection && intersection_points.at(1) == reflex_vertex) {
+                                // std::cout << "\trotated seen reflex vertex\n";
+                                beta -= distance(intersection_points.at(0), reflex_vertex);
+                        }
+                        else if (intersection_points.at(1) != reflex_vertex && intersection_points.at(0) == intersection) {
+                            // std::cout << "rotated seen intersection\n";
+                            beta -= distance(intersection_points.at(1), intersection);
+                        }
+                        // rotated case where the intersection point is seen first, but not the rest of the segment up to the reflex vertex
+                        // else if (intersection_points.at(0) == intersection) {
+                        //     if (intersection_points.size() > 1 && intersection_points.at(1) != reflex_vertex) {
+                        //         beta -= distance(intersection_points.at(1), intersection);
+                        //     }
+                        // }
+                        else if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) == intersection) {
+                            std::cout << "\there\n";
+                            // beta = -beta;
                         }
                         // if only a small part of the segment is seen
                         else {
-                            // std::cout << "part of segment seen\n";
-                            beta -= distance(reflex_vertex, intersection_points.at(0)) + distance(reflex_vertex, intersection_points.at(1));
+                            // std::cout << "\tpart of segment seen\n";
+                            // beta -= distance(reflex_vertex, intersection_points.at(0)) + distance(reflex_vertex, intersection_points.at(1));
+                            beta -= distance(intersection_points.at(0), intersection_points.at(1));
                         }
+                        // else
+                        //     beta = 0;
                     }
 
-                    std::cout << "beta after = " << beta << std::endl;
+                    // std::cout << "beta after = " << beta << std::endl;
                     // auto minus = -1 * left;
                     // for (auto j = 0; j < intersection_points.size(); j ++) {
                     //     auto b = distance(reflex_vertex, intersection_points.at(j));
@@ -591,7 +565,7 @@ class Arrangement {
 
                         // compute gradient of current guard position
                         gradient = this->gradient(this->visibility_regions.at(i), prev_guard_position);
-                        std::cout << "Df = " << gradient << std::endl;
+                        // std::cout << "Df = " << gradient << std::endl;
 
                         // gradient smoothening
                         // if (gradients.size() < 3)
