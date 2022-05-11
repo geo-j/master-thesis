@@ -443,7 +443,11 @@ class Arrangement {
                         } while (++ eit != *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin());
                     }
 
-                    if (intersection_points.size() > 1) {
+                    if (intersection_points.size() == 1) {
+                        // beta = 0;
+                        // std::cout << "here, point: " << intersection_points.at(0) << ", reflex_vertex = " << reflex_vertex << ", intersection boundary = " << intersection << std::endl;
+                    }
+                    else if (intersection_points.size() > 1) {
                         std::sort(intersection_points.begin(), intersection_points.end());
                         
                         // TODO: I think I need to also rotate?
@@ -466,19 +470,16 @@ class Arrangement {
                                 // std::cout << "\trotated seen reflex vertex\n";
                                 beta -= distance(intersection_points.at(0), reflex_vertex);
                         }
+                        // rotated case where the intersection point is seen first, but not the rest of the segment up to the reflex vertex
                         else if (intersection_points.at(1) != reflex_vertex && intersection_points.at(0) == intersection) {
                             // std::cout << "rotated seen intersection\n";
                             beta -= distance(intersection_points.at(1), intersection);
                         }
-                        // rotated case where the intersection point is seen first, but not the rest of the segment up to the reflex vertex
-                        // else if (intersection_points.at(0) == intersection) {
-                        //     if (intersection_points.size() > 1 && intersection_points.at(1) != reflex_vertex) {
-                        //         beta -= distance(intersection_points.at(1), intersection);
-                        //     }
-                        // }
+                        // if the whole segment is seen (overlapping visibility regions), don't move the guard
                         else if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) == intersection) {
-                            std::cout << "\there\n";
+                            // std::cout << "\there\n";
                             // beta = -beta;
+                            beta = 0;
                         }
                         // if only a small part of the segment is seen
                         else {
