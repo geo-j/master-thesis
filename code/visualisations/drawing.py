@@ -1,5 +1,5 @@
 from skgeom.draw import draw
-from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility
+from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility, intersection
 import matplotlib.pyplot as plt
 from numpy import random, diff, sqrt
 from sys import stdin
@@ -10,6 +10,7 @@ class Drawing(object):
         self.arrangement = arrangement.Arrangement()
         self.vs = TriangularExpansionVisibility(self.arrangement)
         self.guards = []
+        self.halfedges = []
         # dict for each guard's x and y coord
         self.xs = defaultdict(list)
         self.ys = defaultdict(list)
@@ -36,6 +37,7 @@ class Drawing(object):
             p2 = Point2(*segment[2:])
 
             self.arrangement.insert(Segment2(p1, p2))
+            self.halfedges.append(Segment2(p1, p2))
 
     def read_input_guards(self) -> None:
         IV = int(input())
@@ -64,18 +66,40 @@ class Drawing(object):
     ###########
     def draw_visibility_regions(self) -> None:
         # draw the guards and their visibility regions
-        for guard in self.guards:
-            face = self.arrangement.find(guard)
-            vx = self.vs.compute_visibility(guard, face)
+        for guard in self.xs.keys():
+            g = Point2(self.xs[guard][-1], self.ys[guard][-1])
+            # print(g)
+            face = self.arrangement.find(g)
+            # print(face)
+            if type(face) is arrangement.Face and face.is_unbounded():
+                # for half_edge in self.halfedges:
+                for half_edge in self.arrangement.halfedges:
+                    segment = Segment2(half_edge.source().point(), half_edge.target().point())
+                    if segment.collinear_has_on(g):
+                        face = half_edge
+            
+            if type(face) is arrangement.Face:
+                        vx = self.vs.compute_visibility(g, face)
+            else:
+                # print(face.face().is_unbounded())
+                if not face.face().is_unbounded():
+                    try:
+                        vx = self.vs.compute_visibility(g, face)
+                    except:
+                        g = Point2((face.source().point().x() + face.target().point().x()) / 2, (face.source().point().y() + face.target().point().y()) / 2)
+                        vx = self.vs.compute_visibility(g, face)
+                else:
+                    vx = self.vs.compute_visibility(g, face.twin())
 
             # use a random colour for each guard
             color = random.rand(3, )
             for v in vx.halfedges:
-                draw(v.curve(), point = guard, color = color, visible_point = False, fill = True)
+                draw(v.curve(), point = g, color = color, visible_point = False, fill = True)
     
     def draw_guards(self) -> None:
-        for guard in self.guards:
-            draw(guard, color='magenta')
+        for guard in self.xs.keys():
+            g = Point2(self.xs[guard][-1], self.ys[guard][-1])
+            draw(g, color='magenta')
 
     def draw_arrangement(self) -> None:
         # draw the polygon's boundaries
