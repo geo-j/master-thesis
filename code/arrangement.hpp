@@ -397,16 +397,20 @@ class Arrangement {
 
             for (auto j = 0; j < reflex_intersections.size(); j ++) {
                 // unpack the tuple
-                Point_2 reflex_vertex = std::get<0>(reflex_intersections.at(j));
-                Point_2 intersection = std::get<1>(reflex_intersections.at(j));
-                CGAL::Oriented_side orientation = std::get<2>(reflex_intersections.at(j));
+                auto reflex_intersection = reflex_intersections.at(j);
+                Point_2 reflex_vertex = std::get<0>(reflex_intersection);
+                Point_2 intersection = std::get<1>(reflex_intersection);
+                CGAL::Oriented_side orientation = std::get<2>(reflex_intersection);
+
+                // vector holding which subsegments are seen by other guards for each reflex vertex
+                std::vector<std::pair<Point_2, Point_2>> seen_segments;
 
                 std::cout << "======= reflex vertex " << reflex_vertex << std::endl;
                 // compute distances between guard - reflex vertex - intersection point
                 // auto alpha = CGAL::squared_distance(guard, reflex_vertex);
                 auto alpha = distance(guard, reflex_vertex);
                 auto beta = distance(reflex_vertex, intersection);
-                // std::cout << "beta = " << beta << std::endl;
+                std::cout << "beta = " << beta << std::endl;
 
                 auto visible_segment = Segment_2(reflex_vertex, intersection);
 
@@ -427,7 +431,7 @@ class Arrangement {
                                 // std::cout << "intersect with " << edge << std::endl;
                                 auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
 
-                                // // if it completely overlaps in a segment, add the 2 segment edges
+                                // if it completely overlaps in a segment, add the 2 segment edges
                                 if (!intersection_point) {
                                     auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
                                     // std::cout << "segment\n";
@@ -443,52 +447,136 @@ class Arrangement {
                                 }
                             }
                         } while (++ eit != *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin());
-                    }
+                    // }
 
-                    if (intersection_points.size() == 1) {
-                        // beta = 0;
-                        std::cout << "point: " << intersection_points.at(0) << ",\n\treflex_vertex = " << reflex_vertex << ",\n\tintersection boundary = " << intersection << std::endl;
-                    }
-                    else if (intersection_points.size() > 1) {
-                        std::sort(intersection_points.begin(), intersection_points.end());
-                        
-                        // case where the reflex vertex is seen
-                        if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) != intersection) {
-                            // if the reflex vertex and another part of the reflex vertex - boundary intersection segment is seen, but not the whole segment
-                                // std::cout << "\treflex vertex seen\n";
-                                // std::cout << "size = " << intersection_points.size() << std::endl;
-                                // std::cout << reflex_vertex << ',' << intersection << ',' << intersection_points.at(1) << std::endl;
-                                beta -= distance(intersection_points.at(1), reflex_vertex);
+                        if (intersection_points.size() == 1) {
+                            // beta = 0;
+                            std::cout << "point: " << intersection_points.at(0) << ",\n\treflex_vertex = " << reflex_vertex << ",\n\tintersection boundary = " << intersection << std::endl;
                         }
-                        // case where the boundary intersection point is seen, but not the reflex vertex
-                        else if (intersection_points.at(0) != reflex_vertex && intersection_points.at(1) == intersection) {
-                            // std::cout << "\tboundary intersection seen\n";
-                            beta -= distance(intersection_points.at(0), intersection);
-                        }
-                        //rotated case where the boundary is on the left side
-                        else if (intersection_points.at(0) != intersection && intersection_points.at(1) == reflex_vertex) {
-                                // std::cout << "\trotated seen reflex vertex\n";
-                                beta -= distance(intersection_points.at(0), reflex_vertex);
-                        }
-                        // rotated case where the intersection point is seen first, but not the rest of the segment up to the reflex vertex
-                        else if (intersection_points.at(1) != reflex_vertex && intersection_points.at(0) == intersection) {
-                            // std::cout << "rotated seen intersection\n";
-                            beta -= distance(intersection_points.at(1), intersection);
-                        }
-                        // if the whole segment is seen (overlapping visibility regions), don't move the guard
-                        else if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) == intersection) {
-                            // std::cout << "\there\n";
-                            beta = 0;
-                        }
-                        // if only a small part of the segment is seen
-                        else {
-                            // std::cout << "\tpart of segment seen\n";
-                            beta -= distance(intersection_points.at(0), intersection_points.at(1));
+                        else if (intersection_points.size() == 2) {
+                            std::sort(intersection_points.begin(), intersection_points.end());
+
+                            auto unchanged = true;
+                            while (unchanged) {
+                                unchanged = true;
+                                // initialise pairs vector
+                                if (seen_segments.size() == 0) {
+                                    seen_segments.push_back(std::make_pair(intersection_points.at(0), intersection_points.at(1)));
+                                    unchanged = false;
+                                }
+                                else {
+                                    // try to see if the new interval can be merged into any of the already existing ones
+                                    for (auto k = 0; k < seen_segments.size(); k ++) {
+                                        auto seen_segment = seen_segments[k];
+                                        // if the largest new point is still smaller than the current pair, push it before the current pair
+                                        if (intersection_points.at(1) < seen_segment.first) {
+                                            seen_segments.insert(seen_segments.begin() + k, std::make_pair(intersection_points.at(0), intersection_points.at(1)));
+                                            unchanged = false;
+                                        }
+                                        // if the smallest new point is still bigger than the current pair, push it after the current pair
+                                        else if (intersection_points.at(0) > seen_segment.second) {
+                                            seen_segments.insert(seen_segments.begin() + k + 1, std::make_pair(intersection_points.at(0), intersection_points.at(1)));
+                                            unchanged = false;
+                                        }
+                                        // if new interval is contained in existing interval
+                                        else if (intersection_points.at(1) <= seen_segment.second &&
+                                                intersection_points.at(0) >= seen_segment.first) {
+                                                // do nothing
+                                        }
+                                        // if intervals overlap on the left side, extend the pair
+                                        else if (intersection_points.at(1) <= seen_segment.second &&
+                                                intersection_points.at(0) < seen_segment.first) {
+                                            seen_segment.first = intersection_points.at(0);
+                                            unchanged = false;
+                                        }
+                                        // if intervals overlap on the right side, extend the pair
+                                        else if (intersection_points.at(0) >= seen_segment.first &&
+                                                intersection_points.at(1) > seen_segment.second) {
+                                            seen_segment.second = intersection_points.at(1);
+                                            unchanged = false;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // try to merge already existing pairs
+                            if (seen_segments.size() >= 2) {
+                                auto unchanged = true;
+
+                                while (unchanged) {
+                                    for (auto k = 0; k < seen_segments.size() - 1; k ++) {
+                                        auto seen_segment_1 = seen_segments[k];
+
+                                        for (auto l = k + 1; k < seen_segments.size(); l ++) {
+                                            auto seen_segment_2 = seen_segments[l];
+
+                                            // if first interval is contained in existing interval
+                                            if (seen_segment_1.second <= seen_segment_2.second &&
+                                                seen_segment_1.first >= seen_segment_2.first) {
+                                                    // remove interval from vector
+                                                    unchanged = false;
+                                            }
+                                            // if intervals overlap on the left side, extend the pair
+                                            else if (seen_segment_1.second <= seen_segment_2.second &&
+                                                     seen_segment_1.first < seen_segment_2.first) {
+                                                        seen_segment_2.first = seen_segment_1.first;
+                                                        unchanged = false;
+                                            }
+                                            // if intervals overlap on the right side, extend the pair
+                                            else if (seen_segment_1.first >= seen_segment_2.first &&
+                                                     seen_segment_1.second > seen_segment_2.second) {
+                                                    seen_segment_2.second = seen_segment_1.second;
+                                                    unchanged = false;
+                                            }
+
+                                            if (!unchanged) {
+                                                seen_segments.erase(seen_segments.begin() + k);
+                                                k --;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            for (auto pair : seen_segments)
+                                beta -= distance(pair.first, pair.second);
+                            
+                            // case where the reflex vertex is seen
+                            // if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) != intersection) {
+                            //     // if the reflex vertex and another part of the reflex vertex - boundary intersection segment is seen, but not the whole segment
+                            //         beta -= distance(intersection_points.at(1), reflex_vertex);
+                            // }
+                            // // case where the boundary intersection point is seen, but not the reflex vertex
+                            // else if (intersection_points.at(0) != reflex_vertex && intersection_points.at(1) == intersection) {
+                            //     // std::cout << "\tboundary intersection seen\n";
+                            //     beta -= distance(intersection_points.at(0), intersection);
+                            // }
+                            // //rotated case where the boundary is on the left side
+                            // else if (intersection_points.at(0) != intersection && intersection_points.at(1) == reflex_vertex) {
+                            //         // std::cout << "\trotated seen reflex vertex\n";
+                            //         beta -= distance(intersection_points.at(0), reflex_vertex);
+                            // }
+                            // // rotated case where the intersection point is seen first, but not the rest of the segment up to the reflex vertex
+                            // else if (intersection_points.at(1) != reflex_vertex && intersection_points.at(0) == intersection) {
+                            //     // std::cout << "rotated seen intersection\n";
+                            //     beta -= distance(intersection_points.at(1), intersection);
+                            // }
+                            // // if the whole segment is seen (overlapping visibility regions), don't move the guard
+                            // else if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) == intersection) {
+                            //     // std::cout << "\there\n";
+                            //     beta = 0;
+                            // }
+                            // // if only a small part of the segment is seen
+                            // else {
+                            //     // std::cout << "\tpart of segment seen\n";
+                            //     beta -= distance(intersection_points.at(0), intersection_points.at(1));
+                            // }
                         }
                     }
                 }
 
-                // std::cout << "beta = " << beta << std::endl;
+                std::cout << "beta after = " << beta << std::endl;
+
                 // std::sort(intersection_points.begin(), intersection_points.end());
 
                 // compute guard-reflex vertex vector
@@ -505,6 +593,7 @@ class Arrangement {
 
                 // compute Df for reflex vertex r
                 Vector_2 Dfr = vp * (beta / (2 * alpha));
+                std::cout << "> Dfr = " << Dfr << std::endl;
 
                 // initialise total gradient Df if first reflex vertex,
                 //      otherwise just add all gradient vectors
