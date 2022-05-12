@@ -457,7 +457,7 @@ class Arrangement {
                             std::sort(intersection_points.begin(), intersection_points.end());
 
                             auto unchanged = true;
-                            while (unchanged) {
+                            do {
                                 unchanged = true;
                                 // initialise pairs vector
                                 if (seen_segments.size() == 0) {
@@ -497,13 +497,14 @@ class Arrangement {
                                         }
                                     }
                                 }
-                            }
+                            } while (!unchanged);
 
                             // try to merge already existing pairs
                             if (seen_segments.size() >= 2) {
                                 auto unchanged = true;
 
-                                while (unchanged) {
+                                do {
+                                    unchanged = true;
                                     for (auto k = 0; k < seen_segments.size() - 1; k ++) {
                                         auto seen_segment_1 = seen_segments[k];
 
@@ -535,7 +536,7 @@ class Arrangement {
                                             }
                                         }
                                     }
-                                }
+                                } while (!unchanged);
                             }
 
                             for (auto pair : seen_segments)
