@@ -7,7 +7,9 @@ drawing = Drawing()
 drawing.read_input_arrangement()
 drawing.draw_arrangement()
 drawing.read_guards_paths()
+# drawing.draw_guards()
 drawing.draw_guards_paths()
+# drawing.draw_visibility_regions()
 
 plt.axis('off')
 
