@@ -81,26 +81,34 @@ class Drawing(object):
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
             # print(g)
             face = self.arrangement.find(g)
+
             # print(face)
             if type(face) is arrangement.Face and face.is_unbounded():
-                # for half_edge in self.halfedges:
                 for half_edge in self.arrangement.halfedges:
                     segment = Segment2(half_edge.source().point(), half_edge.target().point())
                     if segment.collinear_has_on(g):
+                        # print('here')
                         face = half_edge
             
-            if type(face) is arrangement.Face:
-                        vx = self.vs.compute_visibility(g, face)
-            else:
-                # print(face.face().is_unbounded())
-                if not face.face().is_unbounded():
-                    try:
-                        vx = self.vs.compute_visibility(g, face)
-                    except:
-                        g = Point2((face.source().point().x() + face.target().point().x()) / 2, (face.source().point().y() + face.target().point().y()) / 2)
-                        vx = self.vs.compute_visibility(g, face)
-                else:
-                    vx = self.vs.compute_visibility(g, face.twin())
+            if type(face) is arrangement.Halfedge and face.face().is_unbounded():
+                # print('then')
+                face = face.twin()
+            
+            vx = self.vs.compute_visibility(g, face)
+            # if type(face) is arrangement.Face:
+            #             vx = self.vs.compute_visibility(g, face)
+            # else:
+            #     # print(face.face().is_unbounded())
+            #     if not face.face().is_unbounded():
+            #         try:
+            #             vx = self.vs.compute_visibility(g, face)
+            #         except:
+            #             g = Point2((face.source().point().x() + face.target().point().x()) / 2, (face.source().point().y() + face.target().point().y()) / 2)
+            #             vx = self.vs.compute_visibility(g, face)
+            #     else:
+            #         print(face.twin().face())
+            #         # if not face.twin().face().is_unbounded():
+            #         vx = self.vs.compute_visibility(g, face.twin().face())
 
             # use a random colour for each guard
             color = random.rand(3, )
