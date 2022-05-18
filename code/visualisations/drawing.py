@@ -14,6 +14,9 @@ class Drawing(object):
         # dict for each guard's x and y coord
         self.xs = defaultdict(list)
         self.ys = defaultdict(list)
+        self.dfs_x = defaultdict(lambda: defaultdict(list))
+        self.dfs_y = defaultdict(lambda: defaultdict(list))
+
     
     ###########
     #  Input #
@@ -50,11 +53,19 @@ class Drawing(object):
     
     def read_guards_paths(self) -> None:
         for line in stdin:
-            i = int(line[1])    # get the guard index
-            x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
+            if line.startswith('g'):
+                i = int(line[1])    # get the guard index
+                x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
 
-            self.xs[f'g{i}'].append(x)
-            self.ys[f'g{i}'].append(y)
+                self.xs[f'g{i}'].append(x)
+                self.ys[f'g{i}'].append(y)
+            else:
+                i = int(line[2])    # get guard index
+                x, y = map(float, line[4:].strip().split())     # get the coords after removing the guard info
+                # print(i, self.xs[f'g{i}'])
+                self.dfs_x[f'g{i}'][(len(self.xs[f'g{i}']) - 1)].append(x)
+                self.dfs_y[f'g{i}'][(len(self.xs[f'g{i}']) - 1)].append(y)
+
     
     def read_all_input(self) -> None:
         self.read_input_arrangement()
@@ -64,10 +75,10 @@ class Drawing(object):
     ###########
     #  Output #
     ###########
-    def draw_visibility_regions(self) -> None:
+    def draw_visibility_regions(self, pos: int = -1) -> None:
         # draw the guards and their visibility regions
         for guard in self.xs.keys():
-            g = Point2(self.xs[guard][-1], self.ys[guard][-1])
+            g = Point2(self.xs[guard][pos], self.ys[guard][pos])
             # print(g)
             face = self.arrangement.find(g)
             # print(face)
@@ -117,6 +128,16 @@ class Drawing(object):
             norm = sqrt(u ** 2 + v ** 2) 
 
             plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, scale = 5, scale_units = 'inches')
+
+    def draw_guards_dfs(self, pos: int = -1) -> None:
+        for guard in self.xs.keys():
+            plt.scatter(self.xs[guard][pos], self.ys[guard][pos])
+            # print(f'guard: {guard}')
+            # print(f'guard {guard}: {self.dfs_x[guard], self.dfs_y[guard]}')
+            # print(self.dfs_x[guard][pos])
+            # print([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]))
+            plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 2, scale_units = 'inches', width = 0.005, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
+
 
     def draw_all(self) -> None:
         self.draw_visibility_regions()
