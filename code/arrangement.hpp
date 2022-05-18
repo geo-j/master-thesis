@@ -218,6 +218,8 @@ class Arrangement {
         bool is_completely_visible(Arrangement_2 &visibility_arrangement) {
             Polygon_2 visibility_polygon = arrangement_to_polygon(visibility_arrangement);
 
+            // TODO: deal with inner holes of whole visibility arrangement
+            // visibility_arrangement.number_of_faces() == 2 && 
             return visibility_polygon == this->input_polygon;
         }
 
@@ -258,14 +260,16 @@ class Arrangement {
                     // std::cout << "after edge\n";
                 } 
                 // TODO: find one of the halfedges where the vertex is located on
-                // else {
-                //     auto *vertex = boost::get<Arrangement_2::Vertex_const_handle>(&obj);
+                else {
+                    auto *vertex = boost::get<Arrangement_2::Vertex_const_handle>(&obj);
+
+                    std::cout << "vertex\n";
 
                 //     if (vertex) {
                 //         std::cout << "vertex " << (*vertex)->incident_halfedges()->source()->point() << std::endl;
                 //         this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->twin()->ccb(), visibility_arrangement);
                 //     }
-                // }
+                }
 
             }
 
@@ -295,6 +299,36 @@ class Arrangement {
                     cur_visibility_arrangement = visibility_arrangement;
                     CGAL::overlay(prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement);
                     prev_visibility_arrangement = joined_visibility_arrangement;
+                }
+            }
+
+            return prev_visibility_arrangement;
+        }
+
+        /* compute_partial_visibility method
+        *  :in param Point_2 guard         : guard whose visibility region should be excluded from the computation
+        *  :return Arrangement_2           :arrangement visible from all guards except current guard
+        * 
+        *  This method computes the visibility region arrangement of all the guards except the current guard
+        *  This is achieved by computing the visibility region arrangement for each of the guards placed in the arrangement, and overlaying them
+        */
+        Arrangement_2 compute_partial_visibility(Point_2 guard) {
+            std::vector<Point_2> visible_points;
+            Arrangement_2 prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement;
+
+            for (auto i = 0; i < this->visibility_regions.size(); i ++) {
+                if (this->guards.at(i) != guard) {
+                    auto visibility_arrangement = this->visibility_regions.at(i);
+
+                    if (i == 0)
+                        // initialise first visibility polygon
+                        prev_visibility_arrangement = visibility_arrangement;
+                    else {
+                        // if there are multiple guards, join the previously computed visibility polygon with the current one
+                        cur_visibility_arrangement = visibility_arrangement;
+                        CGAL::overlay(prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement);
+                        prev_visibility_arrangement = joined_visibility_arrangement;
+                    }
                 }
             }
 
@@ -381,7 +415,7 @@ class Arrangement {
             return boundary_intersections;
         }
 
-        /* gradient method
+        /*
         * :in param Arrangement_2 visibility_arrangement:   the visibility region of the guard
         * :in param Point_2 guard:                          guard point whose gradient needs to be computed
         * :return Vector_2:                                 gradient of the guard as a vector
@@ -403,144 +437,201 @@ class Arrangement {
                 CGAL::Oriented_side orientation = std::get<2>(reflex_intersection);
 
                 // vector holding which subsegments are seen by other guards for each reflex vertex
-                std::vector<std::pair<Point_2, Point_2>> seen_segments;
+                // std::vector<std::pair<Point_2, Point_2>> seen_segments;
 
-                std::cout << "======= reflex vertex " << reflex_vertex << std::endl;
                 // compute distances between guard - reflex vertex - intersection point
-                // auto alpha = CGAL::squared_distance(guard, reflex_vertex);
                 auto alpha = distance(guard, reflex_vertex);
                 auto beta = distance(reflex_vertex, intersection);
-                std::cout << "beta = " << beta << std::endl;
-
+                // std::cout << "beta = " << beta << std::endl;
                 auto visible_segment = Segment_2(reflex_vertex, intersection);
+                std::vector<Point_2> intersection_points;
+                // std::cout << "======= guard " << guard << "||||| reflex vertex " << reflex_vertex << ", visible segment " << visible_segment << std::endl;
 
-                // compute intersection points with other guards' visibility regions
-                for (auto i = 0; i < this->guards.size(); i ++) {
-                    std::vector<Point_2> intersection_points;
+                if (this->guards.size() > 1) {
+                    auto guards_visibility_region = this->compute_partial_visibility(guard);
 
-                    // look at all the other guards but the current one
-                    if (this->guards.at(i) != guard) {
-                        std::cout << "=== looking at guard " << guard << " and " << this->guards.at(i) << std::endl;
-                        auto eit = *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin();
-                        do {
-                            auto edge = Segment_2(eit->source()->point(), eit->target()->point());
-                            const auto visibility_intersection = CGAL::intersection(edge, visible_segment);
+                    auto eit = *guards_visibility_region.unbounded_face()->inner_ccbs_begin();
 
-                            // check if the reflex vertex - boundary intersection segment of the guard intersects the visibility region of any of the existing guards
-                            if (visibility_intersection) {
-                                // std::cout << "intersect with " << edge << std::endl;
-                                auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
+                    do {
+                        auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+                        auto visibility_intersection = CGAL::intersection(edge, visible_segment);
 
-                                // if it completely overlaps in a segment, add the 2 segment edges
-                                if (!intersection_point) {
-                                    auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
-                                    // std::cout << "segment\n";
-                                    push_back_unique(intersection_points, intersection_segment.source());
-                                    push_back_unique(intersection_points, intersection_segment.target());
-                                }
-                                // otherwise just add the point it intersects
-                                else {
-                                    // std::cout << *intersection_point << std::endl;
-                                    std::cout << "intersection with " << edge << " in " << *intersection_point << std::endl;
-                                    // intersection_points.push_back(*intersection_point);
-                                    push_back_unique(intersection_points, *intersection_point);
-                                }
+                        if (visibility_intersection) {
+                            auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
+
+                            if (intersection_point) {
+                                push_back_unique(intersection_points, *intersection_point);
+                                // std::cout << "intersection with visibility edge " << *intersection_point << std::endl;
                             }
-                        } while (++ eit != *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin());
-                    // }
+                            
+                            else {
+                                auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
+                                // std::cout << "intersection with visibility edge " << intersection_segment << std::endl;
 
-                        if (intersection_points.size() == 1) {
-                            // beta = 0;
-                            std::cout << "point: " << intersection_points.at(0) << ",\n\treflex_vertex = " << reflex_vertex << ",\n\tintersection boundary = " << intersection << std::endl;
+
+                                push_back_unique(intersection_points, intersection_segment.source());
+                                push_back_unique(intersection_points, intersection_segment.target());
+                            }
                         }
-                        else if (intersection_points.size() == 2) {
-                            std::sort(intersection_points.begin(), intersection_points.end());
+                    } while (++ eit != *guards_visibility_region.unbounded_face()->inner_ccbs_begin());
 
-                            auto unchanged = true;
-                            do {
-                                unchanged = true;
-                                // initialise pairs vector
-                                if (seen_segments.size() == 0) {
-                                    seen_segments.push_back(std::make_pair(intersection_points.at(0), intersection_points.at(1)));
-                                    unchanged = false;
-                                }
-                                else {
-                                    // try to see if the new interval can be merged into any of the already existing ones
-                                    for (auto k = 0; k < seen_segments.size(); k ++) {
-                                        auto seen_segment = seen_segments[k];
-                                        // if the largest new point is still smaller than the current pair, push it before the current pair
-                                        if (intersection_points.at(1) < seen_segment.first) {
-                                            seen_segments.insert(seen_segments.begin() + k, std::make_pair(intersection_points.at(0), intersection_points.at(1)));
-                                            unchanged = false;
-                                        }
-                                        // if the smallest new point is still bigger than the current pair, push it after the current pair
-                                        else if (intersection_points.at(0) > seen_segment.second) {
-                                            seen_segments.insert(seen_segments.begin() + k + 1, std::make_pair(intersection_points.at(0), intersection_points.at(1)));
-                                            unchanged = false;
-                                        }
-                                        // if new interval is contained in existing interval
-                                        else if (intersection_points.at(1) <= seen_segment.second &&
-                                                intersection_points.at(0) >= seen_segment.first) {
-                                                // do nothing
-                                        }
-                                        // if intervals overlap on the left side, extend the pair
-                                        else if (intersection_points.at(1) <= seen_segment.second &&
-                                                intersection_points.at(0) < seen_segment.first) {
-                                            seen_segment.first = intersection_points.at(0);
-                                            unchanged = false;
-                                        }
-                                        // if intervals overlap on the right side, extend the pair
-                                        else if (intersection_points.at(0) >= seen_segment.first &&
-                                                intersection_points.at(1) > seen_segment.second) {
-                                            seen_segment.second = intersection_points.at(1);
-                                            unchanged = false;
-                                        }
-                                    }
-                                }
-                            } while (!unchanged);
+                    if (intersection_points.size() < 2) {
 
-                            // try to merge already existing pairs
-                            if (seen_segments.size() >= 2) {
-                                auto unchanged = true;
+                    } else {
+                        std::sort(intersection_points.begin(), intersection_points.end());
 
-                                do {
-                                    unchanged = true;
-                                    for (auto k = 0; k < seen_segments.size() - 1; k ++) {
-                                        auto seen_segment_1 = seen_segments[k];
+                        // if guard on the left-hand side of the visible segment
+                        if (guard < intersection_points.at(0)) {
+                            // if reflex vertex seen, switch the signs
+                            auto minus = intersection_points.at(0) == reflex_vertex ? 1 : -1;
+                            auto plus = intersection_points.at(intersection_points.size() - 1) == intersection ? 1 : -1;
 
-                                        for (auto l = k + 1; k < seen_segments.size(); l ++) {
-                                            auto seen_segment_2 = seen_segments[l];
-
-                                            // if first interval is contained in existing interval
-                                            if (seen_segment_1.second <= seen_segment_2.second &&
-                                                seen_segment_1.first >= seen_segment_2.first) {
-                                                    // remove interval from vector
-                                                    unchanged = false;
-                                            }
-                                            // if intervals overlap on the left side, extend the pair
-                                            else if (seen_segment_1.second <= seen_segment_2.second &&
-                                                     seen_segment_1.first < seen_segment_2.first) {
-                                                        seen_segment_2.first = seen_segment_1.first;
-                                                        unchanged = false;
-                                            }
-                                            // if intervals overlap on the right side, extend the pair
-                                            else if (seen_segment_1.first >= seen_segment_2.first &&
-                                                     seen_segment_1.second > seen_segment_2.second) {
-                                                    seen_segment_2.second = seen_segment_1.second;
-                                                    unchanged = false;
-                                            }
-
-                                            if (!unchanged) {
-                                                seen_segments.erase(seen_segments.begin() + k);
-                                                k --;
-                                            }
-                                        }
-                                    }
-                                } while (!unchanged);
+                            for (auto i = intersection_points.size() - 1; i > 0; i --) {
+                                beta -= distance(intersection_points.at(i), intersection_points.at(i - 1)) * minus * plus;
+                                plus = -plus;
                             }
+                        } else {
+                            // if reflex vertex seen, switch the signs
+                            auto minus = intersection_points.at(intersection_points.size() - 1) == reflex_vertex ? 1 : -1;
+                            auto plus = intersection_points.at(0) == intersection ? 1 : -1;
 
-                            for (auto pair : seen_segments)
-                                beta -= distance(pair.first, pair.second);
+                            for (auto i = 0; i < intersection_points.size() - 1; i ++) {
+                                beta -= distance(intersection_points.at(i), intersection_points.at(i + 1)) * minus * plus;
+                                plus = -plus;
+                            }
+                        }
+                    }
+                }
+
+                // std::cout << "beta after = " << beta << std::endl;
+
+                // // compute intersection points with other guards' visibility regions
+                // for (auto i = 0; i < this->guards.size(); i ++) {
+                //     std::vector<Point_2> intersection_points;
+
+                //     // look at all the other guards but the current one
+                //     if (this->guards.at(i) != guard) {
+                //         std::cout << "=== looking at guard " << guard << " and " << this->guards.at(i) << std::endl;
+                //         auto eit = *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin();
+                //         do {
+                //             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+                //             const auto visibility_intersection = CGAL::intersection(edge, visible_segment);
+
+                //             // check if the reflex vertex - boundary intersection segment of the guard intersects the visibility region of any of the existing guards
+                //             if (visibility_intersection) {
+                //                 // std::cout << "intersect with " << edge << std::endl;
+                //                 auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
+
+                //                 // if it completely overlaps in a segment, add the 2 segment edges
+                //                 if (!intersection_point) {
+                //                     auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
+                //                     // std::cout << "segment\n";
+                //                     push_back_unique(intersection_points, intersection_segment.source());
+                //                     push_back_unique(intersection_points, intersection_segment.target());
+                //                 }
+                //                 // otherwise just add the point it intersects
+                //                 else {
+                //                     // std::cout << *intersection_point << std::endl;
+                //                     std::cout << "intersection with " << edge << " in " << *intersection_point << std::endl;
+                //                     // intersection_points.push_back(*intersection_point);
+                //                     push_back_unique(intersection_points, *intersection_point);
+                //                 }
+                //             }
+                //         } while (++ eit != *this->visibility_regions.at(i).unbounded_face()->inner_ccbs_begin());
+                //     // }
+
+                //         if (intersection_points.size() == 1) {
+                //             // beta = 0;
+                //             std::cout << "point: " << intersection_points.at(0) << ",\n\treflex_vertex = " << reflex_vertex << ",\n\tintersection boundary = " << intersection << std::endl;
+                //         }
+                //         else if (intersection_points.size() == 2) {
+                //             std::sort(intersection_points.begin(), intersection_points.end());
+
+                //             auto unchanged = true;
+                //             do {
+                //                 unchanged = true;
+                //                 // initialise pairs vector
+                //                 if (seen_segments.size() == 0) {
+                //                     seen_segments.push_back(std::make_pair(intersection_points.at(0), intersection_points.at(1)));
+                //                     unchanged = false;
+                //                 }
+                //                 else {
+                //                     // try to see if the new interval can be merged into any of the already existing ones
+                //                     for (auto k = 0; k < seen_segments.size(); k ++) {
+                //                         auto seen_segment = seen_segments[k];
+                //                         // if the largest new point is still smaller than the current pair, push it before the current pair
+                //                         if (intersection_points.at(1) < seen_segment.first) {
+                //                             seen_segments.insert(seen_segments.begin() + k, std::make_pair(intersection_points.at(0), intersection_points.at(1)));
+                //                             unchanged = false;
+                //                         }
+                //                         // if the smallest new point is still bigger than the current pair, push it after the current pair
+                //                         else if (intersection_points.at(0) > seen_segment.second) {
+                //                             seen_segments.insert(seen_segments.begin() + k + 1, std::make_pair(intersection_points.at(0), intersection_points.at(1)));
+                //                             unchanged = false;
+                //                         }
+                //                         // if new interval is contained in existing interval
+                //                         else if (intersection_points.at(1) <= seen_segment.second &&
+                //                                 intersection_points.at(0) >= seen_segment.first) {
+                //                                 // do nothing
+                //                         }
+                //                         // if intervals overlap on the left side, extend the pair
+                //                         else if (intersection_points.at(1) <= seen_segment.second &&
+                //                                 intersection_points.at(0) < seen_segment.first) {
+                //                             seen_segment.first = intersection_points.at(0);
+                //                             unchanged = false;
+                //                         }
+                //                         // if intervals overlap on the right side, extend the pair
+                //                         else if (intersection_points.at(0) >= seen_segment.first &&
+                //                                 intersection_points.at(1) > seen_segment.second) {
+                //                             seen_segment.second = intersection_points.at(1);
+                //                             unchanged = false;
+                //                         }
+                //                     }
+                //                 }
+                //             } while (!unchanged);
+
+                //             // try to merge already existing pairs
+                //             if (seen_segments.size() >= 2) {
+                //                 auto unchanged = true;
+
+                //                 do {
+                //                     unchanged = true;
+                //                     for (auto k = 0; k < seen_segments.size() - 1; k ++) {
+                //                         auto seen_segment_1 = seen_segments[k];
+
+                //                         for (auto l = k + 1; k < seen_segments.size(); l ++) {
+                //                             auto seen_segment_2 = seen_segments[l];
+
+                //                             // if first interval is contained in existing interval
+                //                             if (seen_segment_1.second <= seen_segment_2.second &&
+                //                                 seen_segment_1.first >= seen_segment_2.first) {
+                //                                     // remove interval from vector
+                //                                     unchanged = false;
+                //                             }
+                //                             // if intervals overlap on the left side, extend the pair
+                //                             else if (seen_segment_1.second <= seen_segment_2.second &&
+                //                                      seen_segment_1.first < seen_segment_2.first) {
+                //                                         seen_segment_2.first = seen_segment_1.first;
+                //                                         unchanged = false;
+                //                             }
+                //                             // if intervals overlap on the right side, extend the pair
+                //                             else if (seen_segment_1.first >= seen_segment_2.first &&
+                //                                      seen_segment_1.second > seen_segment_2.second) {
+                //                                     seen_segment_2.second = seen_segment_1.second;
+                //                                     unchanged = false;
+                //                             }
+
+                //                             if (!unchanged) {
+                //                                 seen_segments.erase(seen_segments.begin() + k);
+                //                                 k --;
+                //                             }
+                //                         }
+                //                     }
+                //                 } while (!unchanged);
+                //             }
+
+                            // for (auto pair : seen_segments)
+                            //     beta -= distance(pair.first, pair.second);
                             
                             // case where the reflex vertex is seen
                             // if (intersection_points.at(0) == reflex_vertex && intersection_points.at(1) != intersection) {
@@ -572,13 +663,10 @@ class Arrangement {
                             //     // std::cout << "\tpart of segment seen\n";
                             //     beta -= distance(intersection_points.at(0), intersection_points.at(1));
                             // }
-                        }
-                    }
-                }
+                        // }
+                    // }
+                // }
 
-                std::cout << "beta after = " << beta << std::endl;
-
-                // std::sort(intersection_points.begin(), intersection_points.end());
 
                 // compute guard-reflex vertex vector
                 Vector_2 v = Vector_2(guard, reflex_vertex);
@@ -594,7 +682,10 @@ class Arrangement {
 
                 // compute Df for reflex vertex r
                 Vector_2 Dfr = vp * (beta / (2 * alpha));
-                std::cout << "> Dfr = " << Dfr << std::endl;
+
+                auto it = std::find(this->guards.begin(), this->guards.end(), guard);
+
+                std::cout << "Df" << it - this->guards.begin() << "=" << Dfr << std::endl;
 
                 // initialise total gradient Df if first reflex vertex,
                 //      otherwise just add all gradient vectors
@@ -604,6 +695,9 @@ class Arrangement {
                     Df += Dfr;
             }
         
+            auto it = std::find(this->guards.begin(), this->guards.end(), guard);
+
+            std::cout << "Df" << it - this->guards.begin() << "=" << Df << std::endl;
             // std::cout << "end gradient\n";
             return Df;
         }
