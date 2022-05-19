@@ -1,8 +1,13 @@
 \section{Theory}
 \label{sec:theory}
 
-% \subsection{Guarding the Polygon with One Point}
-\subsection{Gradient Descent}
+This section will investigate the theory aspects of solving the Art Gallery Problem using gradient descent. Namely, we will explain what the optimisation function in the context of the Art Gallery problem is, and how it can be solved with gradient descent. We will initially apply gradient descent to only one guard, then extend it to multiple guards.
+
+\subsection{Guarding the Polygon with One Point}
+
+First, we will explore how gradient descent can be applied for the case that we want to guard the polygon using only one guard.
+
+\subsubsection{Gradient Descent}
 
 Let $P$ be a polygon and $g = (x, y) \in P$ a guard. We are interested in computing the best direction for moving $g$ inside $P$ such that the visibility area $\mathit{Vis}(g)$ increases. That is, exploring what would be a better position $g'$ to move $g$ to such that $g$ ``sees more'' of the polygon $P$. 
 
@@ -18,13 +23,11 @@ Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery
 \end{figure}
 
 
-% Gradient descent is an iterative optimisation algorithm for finding the local optimum of a continuous differentiable function. The idea of gradient descent is to repeatedly move in the opposite direction of the gradient of the function at the current point. 
 Let $\bigtriangledown f$ be the gradient of $f$. The gradient then indicates the direction of the steepest descent for the objective function $f(g)$.
 The learning rate (step size) $\alpha$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
 
 After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $g'$ of guard $g$: $$g' = g + \alpha\bigtriangledown f.$$
 
-% High learning rates result in faster approaching towards the optimum, but risks overshooting it. Conversely, small learning rates are more precise, with the compromise of a longer computation and convergence time.
 
 In later sections we will experiment with various learning rates. As such, we will explore how they influence the performance of our algorithm in relation to different test polygons. 
 
@@ -48,14 +51,11 @@ We will now create a canonical geometrical construction that allows us to furthe
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.6\textwidth]{theory/gradient2.png}
-    \caption{Canonical gradient construction and for when the position of $g$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $g'$.}
+    \caption{Canonical gradient construction for when the position of $g$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $g'$.}
     \label{fig:gradient}
 \end{figure}
 
 Take a boundary line segment of $P$, $r$ a reflex vertex inside $P$ and $g$ a guard whose optimal position we are interested in. The reflex vertex $r$ is seen by $g$. Let $\overline{pr} = a$ be known, and let $\triangle rpp' = \triangle_2$. Similarly, let $b$ be the known distance between $r$ and the polygon boundary in question.
-% That is, the direction of the greatest increase of $f$. 
-
-% We consider the case where there is only a positive change in the $y$ position of $p$. The case with a negative coordinate change would be analogous.
 
 
 Let $\partial y$ be an extremely small change in the $y$-coordinate of $g$. Let $g'$ be the new position of $g$ given the change $\partial y$. The point $g'$ can see then up to a new point around $r$ on the polygon boundary. Let thus the new observed segment on the polygon boundary be $L$. As such, let $\triangle_1$ denote the increase in the visibility area of $g$ when it moves to position $g'$:
@@ -63,19 +63,8 @@ Let $\partial y$ be an extremely small change in the $y$-coordinate of $g$. Let 
 \begin{equation}
     \bigtriangledown \text{Area}_r = \triangle_1. \label{eq:derivative}
 \end{equation}
-% Let $a''$ be the projection of $p'$ on $p''r$, and $a$ the projection of $a''$ on the line $pr$ such that the distance from $a$ to $r$ is $|\overline{ar}| = a$. Take the distance between $p$ and $p'$ to be $x$. Since $a''$ is the projection of $p'$ on $pr$, then $|\overline{pp'}| = |\overline{aa''}| = x$.
-
-
-
-
-
-% \subsection{Canonical Case}
-% Consider the geometrical construction in Figure \ref{fig:gradient}. The construction was created for ease of computation, and the general case can be translated and rotated to this case.
-
-% In this canonical case we will consider the situation where the gradient is normalised as $||\bigtriangledown f|| = 1$. 
 
 We are now interested in computing how the area seen by guard $g$ increases given the change $\partial y$ in the position of $g$. The distances $a$ and $b$ are known. As such, we aim at expressing the gradient $\bigtriangledown \text{Area}_r$ for point $g$ and reflex vertex $r \in \mathit{Vis}(g)$ using $a$ and $b$. Since $\bigtriangledown \text{Area}_r$ depends on the change in the coordinates of $g$, computing it is tightly connected to the change in the area of triangle $\triangle_1$. We will proceed to calculate the area of $\triangle_1$ below.
-% We are now interested in computing the distances $|\overline{df}|, |\overline{aa'}|, |\overline{pp''}|, L$ such that we can compute the increase in the area seen by $p$ and thus the gradient $\bigtriangledown f$. The two triangle areas that need to be computed in order to do so are $A_{\triangle rdd'}$ and $A_{\triangle rdd''}$.
 
 Given that triangles $\triangle_1$ and $\triangle_2$ are square triangles, their areas can be calculated as:
 
@@ -99,34 +88,7 @@ So, the area of $\triangle_1$ can be computed:
     &\overset{(\ref{eq:L})}{=} \frac{\frac{b \partial y}{a}b}{2} \\
     \text{Area}_{\triangle_1} &= \frac{b^2 \partial y}{2a}. \label{eq:ardd}
 \end{align}
-% we can compute the length $L$: $$\frac{\text{Area}_{\triangle rdd'}}{\text{Area}_{\triangle rpp'}} = \frac{\frac{b L}{2}}{\frac{a \partial x}{2}} = \frac{b L}{a \partial x} \Rightarrow L = \frac{\partial x b}{a}.$$
 
-% We are now interested in how areas $\text{Area}_{\triangle rpp'}$ and $\text{Area}_{\triangle rdd'}$ change depending on how $a$ and $b$. That is, $\frac{\text{Area}_{\triangle rdd'}}{\text{Area}_{\triangle rpp'}}$ as a function of $a$ and $b$: 
-
-% \begin{align}
-%     \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} \overset{(\ref{eq:rpp}), (\ref{eq:rdd})}{=} &\frac{\frac{a \partial y}{2}}{\frac{b L}{2}} \\
-%     = &\frac{a \partial y}{b L} \\
-%     \overset{(\ref{eq:dxL})}{=} &\frac{a a}{b b} \\
-%     \frac{\text{Area}_{\triangle rpp'}}{\text{Area}_{\triangle rdd'}} = &{(\frac a b)}^2 \label{eq:rddrpp}
-% \end{align}
-
-% We can now express the area of $\triangle rdd'$ as only dependent on $a, b$, the small position change $\partial y$ and the already known area of $\triangle rpp'$:
-
-% \begin{align}
-%     \text{Area}_{\triangle rdd'} \overset{(\ref{eq:rddrpp})}{=} &{(\frac b a)}^2 \text{Area}_{\triangle rpp'} \\
-%     \overset{(\ref{eq:rpp})}{=} &{(\frac b a)}^2 \frac{a \partial y}{2} \\
-%     \text{Area}_{\triangle rdd'} = &\frac{b^2 \partial y}{2a}. \label{eq:ardd}
-% \end{align}
-% \end{align*}
-% $$\frac{\partial f}{\partial x} = \frac{\text{Area}_{\triangle rdd'}}{\partial x}$$
-
-% Analogously, we can compute the change in the $y$-coordinate by rotating the plane with $90^\circ$ and follow the same steps. This procedure will result in
-
-% \begin{equation}
-%     \text{Area}_{\triangle_1} = \frac{b^2 \partial y}{2a}. \label{eq:ardd2}
-% \end{equation}
-
-% We can now compute the change in the visibility area of $p$ ($\text{Area}_{\triangle rdd'}$) given the movement $\partial y$ around reflex vertex $r$. Since the $x$-coordinate of $p$ is fixed, $\frac{\partial f}{\partial x} = 0$. 
 We can now compute the gradient $\bigtriangledown \text{Area}_r$ in a plane rotated by $R$ for a point $g$ and a reflex guard $r$ seen by $g$ as
 
 \begin{align*}
@@ -173,72 +135,42 @@ The new position $g'$ of guard $g$ based on all the reflex vertices it can see i
     \label{eq:l}
 \end{equation}
 
-% After we computed
+\newpage
+\subsection{Guarding the Polygon with Multiple Points}
+In this subsection we will investigate how to generalise the computation of gradient descent to multiple guards.
 
+\subsubsection{Computing the Gradient for Two Guards}
+Let point $g_1$ be the guard we have previously computed the gradient for. Let point $g_2$ be another guard in the polygon whose position needs to be optimised around reflex vertex $r_2$, as seen in Figure \ref{fig:poly_gradient}. Guard $g_2$ sees a part of the visibility region already seen by $g_1$. Let the shared seen region be $\triangle_2$, and the region that is only visible by $g_1$ be $\triangle_1$.
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{theory/gradient3.png}
+    \caption{Canonical gradient construction for when the visible area of $g_1'$ is also seen by guard $g_2$.}
+    \label{fig:poly_gradient}
+\end{figure}
 
-% Given that $pp''$ is parallel to $g$, we can use the Intercept Theorem to compute the lengths of the segments as follows:
+We know the intersection point between the visibility regions of guards $g_1$ and $g_2$. For this reason, we can compute that this point divides the segment seen by $g_1$ into two subsegments of lengths $b_1$ and $b_2$, where $b_1 + b_2 = b$. The length $b_2$ corresponds to the shared seen segment.
 
-% \begin{itemize}
-%     \item in $\triangle raa'$, $\triangle rpp'$, with $aa' || pp'$: $$\frac{|\overline{pp'}|}{|\overline{dd'}|} = \frac{|\overline{pr}|}{|\overline{rd}|} \iff \frac{x}{|\overline{dd'}|} = \frac{1}{b} \Rightarrow |\overline{dd'}| = xb$$
-    
-%     $$\frac{|\overline{aa'}|}{|\overline{pp'}|} = \frac{a}{1} = \frac{|\overline{aa'}|}{x} \Rightarrow |\overline{aa'}| = xa$$
+As before in \ref{eq:ardd}, the area seen by $g_1$ is $$\text{Area}_{\triangle_1 + \triangle_2} = \frac{(b_1 + b_2)^2 \partial y}{2a}.$$
+However, we are now only interested in the area that is exclusively seen by $g_1$. Since $\triangle_2$ is also seen by $g_2$, we need to ignore it from the gradient computation of $g_1$. 
 
-%     \item in $\triangle rpp''$, $\triangle raa''$, with $pp'' || aa''$: $$\frac{|\overline{aa''}|}{pp''} = \frac{|\overline{ar}|}{|\overline{pr}|} \iff \frac{x}{|\overline{pp''}|} = \frac{a}{1} \Rightarrow |\overline{pp''}| = \frac{x}{a}$$
-    
-%     \item in $\triangle rpp''$, $\triangle rdd''$, with $pp'' || dd''$: $$\frac{|\overline{pp''}|}{|\overline{dd''}|} = \frac{|\overline{pr}|}{|\overline{rd}|} \iff \frac{\frac{x}{a}}{L} = \frac{1}{b} \Rightarrow L = \frac{xb}{a}$$
-% \end{itemize}
+The shared seen area is $$\text{Area}_{\triangle_2} = \frac{b_2^2\partial y}{2a}.$$
+Thus, the area seen exclusively by $g_1$ can be computed by subtracting the shared area from the total area: 
+\begin{align}
+    \text{Area}_{\triangle_1} &= \text{Area}_{\triangle_1 + \triangle_2} - \text{Area}_{\triangle_2} \\
+                              &= \frac{(b_1 + b_2)^2 \partial y}{2a} - \frac{b_2^2\partial y}{2a} \\
+    \text{Area}_{\triangle_1} &= \frac{((b_1 + b_2)^2 - b_2^2)\partial y}{2a}. \label{eq:multiple_areas} 
+\end{align}
 
-% Now the area of the square triangle $\triangle rdd''$ corresponding to the gradient $\bigtriangledown f$ can be computed as: $$\bigtriangledown f = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{b L}{2} = \frac{b \frac{xb}{a}}{2} = \frac{b^2x}{2a}, ||x|| = 1$$
+\subsubsection{Computing the Gradient for Multiple Guards}
+We can now generalise to multiple guards and intersection points. Let $g$ be the guard whose position we wish to optimise as before. Let the areas highlighted in pink in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by other guards. Let there be $n$ intersection points with each of the other guards' visibility regions are known. Hence the distance from the reflex vertex $r$ to them can be computed as $b_1, b_2, ..., b_n$.
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{theory/gradient4.png}
+    \caption{Canonical gradient construction for when the visible area of $g_1'$ is also seen by guard $g_2$.}
+    \label{fig:general_gradient}
+\end{figure}
 
-% \subsection{General Case}
-
-
-% - we will only look at one coordinate (vary $y$), since varying $x$ is symmetrical, but rotated $90^\circ$
-
-% - we will first look at a canonical situation $||\bigtriangledown f|| = 1, a = b = 1$
-
-% Let:
-
-% - $f(p)$ - area seen by guard $p$
-
-% - $f'_i(p)$ - the change in the area seen locally by guard $p$, as given by its derivative
-
-% - $f'(p) = \sum_i f'_i(p)$ - the change in the area seen globally by guard $p$
-
-% - $\bigtriangledown f = (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})$ - the direction of the greatest increase of $f$
-
-% - $r$ - reflex vertex
-
-% - $p$ - guard whose position needs to be optimised
-
-% - $|\overline{pr}| = 1$
-
-% - $p', p''$ - the new positions of the guard where the $y$-coord is varied
-
-    % - $|\overline{pp'}| = |\overline{aa''}| = x$
-
-% - $\overline{ar} = a, a \in \overline{pr}$ - additional guard construction
-
-% - $\triangle rde$ - area seen by $p$
-
-    % - $\triangle rdf$ - area seen by $p'$
-
-% - $|\overline{rd}| = b$ - distance between reflex vertex and polygon boundary
-
-% - $|\overline{de}| = L$
-
-% Using the Intercept Theorem:
-
-% - in $\triangle ra'a$, $\triangle rp'p$: $\frac{|\overline{pp'}|}{|\overline{df}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{x}{|\overline{df}|} = \frac{1}{b} \Rightarrow |\overline{df}| = xb$
-
-% - in $\triangle pp'r$, $\triangle aa'r$: $\frac{|\overline{aa'}|}{|\overline{pp'}|} = \frac{a}{1} = \frac{|\overline{aa'}|}{x} \Rightarrow |\overline{aa'}| = xa$
-
-% - in $\triangle pp''r$, $\triangle aa''r$: $\frac{|\overline{aa''}|}{pp''} = \frac{|\overline{ar}|}{|\overline{pr}|} = \frac{x}{|\overline{pp''}|} = \frac{a}{1} \Rightarrow |\overline{pp''}| = \frac{x}{a}$
-
-% - in $\triangle pp''r$, $\triangle rde$: $\frac{|\overline{pp''}|}{|\overline{de}|} = \frac{|\overline{pr}|}{|\overline{rd}|} = \frac{\frac{x}{a}}{L} = \frac{1}{b} \Rightarrow L = \frac{xb}{a}$
-
-% Computing the area of the square triangle $\triangle rde$:
-
-% - $A = \frac{|\overline{rd}||\overline{de}|}{2} = \frac{b L}{2} = \frac{b \frac{xb}{a}}{2} = \frac{b^2x}{2a}$
+Generalising equation \ref{eq:multiple_areas}, the area seen by $g$ exclusively can be computed as $$\text{Area}_{\triangle_1 + \triangle_2 + ... + \triangle_n} = (b - b_n + b_{n - 1} - ... + b_1)\frac{\partial y}{2a}.$$
+Alternatively, if $\triangle_1$ is seen by other guards, then all signs are flipped.
