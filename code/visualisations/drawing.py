@@ -144,7 +144,7 @@ class Drawing(object):
             # print(f'guard {guard}: {self.dfs_x[guard], self.dfs_y[guard]}')
             # print(self.dfs_x[guard][pos])
             # print([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]))
-            plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 2, scale_units = 'inches', width = 0.005, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
+            plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 5, scale_units = 'inches', width = 0.005, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
 
 
     def draw_all(self) -> None:
