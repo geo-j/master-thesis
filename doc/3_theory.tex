@@ -140,7 +140,7 @@ The new position $g'$ of guard $g$ based on all the reflex vertices it can see i
 In this subsection we will investigate how to generalise the computation of gradient descent to multiple guards.
 
 \subsubsection{Computing the Gradient for Two Guards}
-Let point $g_1$ be the guard we have previously computed the gradient for. Let point $g_2$ be another guard in the polygon whose position needs to be optimised around reflex vertex $r_2$, as seen in Figure \ref{fig:poly_gradient}. Guard $g_2$ sees a part of the visibility region already seen by $g_1$. Let the shared seen region be $\triangle_2$, and the region that is only visible by $g_1$ be $\triangle_1$.
+Let point $g_1$ be the guard we have previously computed the gradient for. Let point $g_2$ be another guard in the polygon. The position of $g_2$ is optimised around reflex vertex $r_2$, as seen in Figure \ref{fig:poly_gradient}. Guard $g_2$ sees a part of the visibility region already seen by $g_1$. Let the shared seen region be $\triangle_2$, and the region that is only visible by $g_1$ be $\triangle_1$.
 
 \begin{figure}[h!]
     \centering
@@ -163,12 +163,12 @@ Thus, the area seen exclusively by $g_1$ can be computed by subtracting the shar
 \end{align}
 
 \subsubsection{Computing the Gradient for Multiple Guards}
-We can now generalise to multiple guards and intersection points. Let $g$ be the guard whose position we wish to optimise as before. Let the areas highlighted in pink in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by other guards. Let there be $n$ intersection points with each of the other guards' visibility regions are known. Hence the distance from the reflex vertex $r$ to them can be computed as $b_1, b_2, ..., b_n$.
+We can now generalise the gradient computation to multiple guards and intersection points. Let $g$ be the guard whose position we wish to optimise as before. Let the areas highlighted in pink in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by other guards. Let there be $n$ intersection points with each of the other guards' visibility regions be known. Hence the distance from the reflex vertex $r$ to them can be computed as $b_1, b_2, ..., b_n$.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.8\textwidth]{theory/gradient4.png}
-    \caption{Canonical gradient construction for when the visible area of $g_1'$ is also seen by guard $g_2$.}
+    \caption{Canonical gradient construction for where the pink parts of the visible area of $g$ are also seen by other guards. The gray triangles $\triangle_1, ..., \triangle_n$}
     \label{fig:general_gradient}
 \end{figure}
 
