@@ -1,9 +1,11 @@
 from skgeom.draw import draw
-from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility, intersection
+from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility, intersection, Vector2
 import matplotlib.pyplot as plt
 from numpy import random, diff, sqrt
 from sys import stdin
 from collections import defaultdict
+import time
+import os
 
 class Drawing(object):
     def __init__(self) -> None:
@@ -77,6 +79,8 @@ class Drawing(object):
     ###########
     def draw_visibility_regions(self, pos: int = -1) -> None:
         # draw the guards and their visibility regions
+        color_list = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        i = 0
         for guard in self.xs.keys():
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
             # print(g)
@@ -94,26 +98,17 @@ class Drawing(object):
                 # print('then')
                 face = face.twin()
             
-            vx = self.vs.compute_visibility(g, face)
-            # if type(face) is arrangement.Face:
-            #             vx = self.vs.compute_visibility(g, face)
-            # else:
-            #     # print(face.face().is_unbounded())
-            #     if not face.face().is_unbounded():
-            #         try:
-            #             vx = self.vs.compute_visibility(g, face)
-            #         except:
-            #             g = Point2((face.source().point().x() + face.target().point().x()) / 2, (face.source().point().y() + face.target().point().y()) / 2)
-            #             vx = self.vs.compute_visibility(g, face)
-            #     else:
-            #         print(face.twin().face())
-            #         # if not face.twin().face().is_unbounded():
-            #         vx = self.vs.compute_visibility(g, face.twin().face())
+            try:
+                vx = self.vs.compute_visibility(g, face)
+            except:
+                pass
 
             # use a random colour for each guard
             color = random.rand(3, )
+            color = color_list[i]
+            i += 1
             for v in vx.halfedges:
-                draw(v.curve(), point = g, color = color, visible_point = False, fill = True)
+                draw(v.curve(), point = g, visible_point = False, fill = True, color = color)
     
     def draw_guards(self) -> None:
         for guard in self.xs.keys():
@@ -123,7 +118,7 @@ class Drawing(object):
     def draw_arrangement(self) -> None:
         # draw the polygon's boundaries
         for he in self.arrangement.halfedges:
-            draw(he.curve(), visible_point = True)
+            draw(he.curve(), visible_point = True, color = 'gray')
 
     def draw_guards_paths(self) -> None:
         for guard in self.xs.keys():
@@ -140,11 +135,27 @@ class Drawing(object):
     def draw_guards_dfs(self, pos: int = -1) -> None:
         for guard in self.xs.keys():
             plt.scatter(self.xs[guard][pos], self.ys[guard][pos])
+
             # print(f'guard: {guard}')
             # print(f'guard {guard}: {self.dfs_x[guard], self.dfs_y[guard]}')
             # print(self.dfs_x[guard][pos])
             # print([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]))
-            plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 5, scale_units = 'inches', width = 0.005, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
+            plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
+
+
+    def draw_guard_visibility_dfs(self) -> None:
+        for pos in range(0, len(self.xs['g0']), 2):
+            self.draw_visibility_regions(pos)
+            self.draw_guards_dfs(pos)
+            plt.title(f'Gradient Computation for Iteration #{int(pos / 2)}')
+
+            path = 'results/'
+            date = time.strftime("%Y-%m-%d")
+            if not os.path.exists(path + date):
+                os.makedirs(path + date)
+            plt.savefig(f'{path + date}/{time.strftime("%H%M")}_pos{int(pos / 2)}.pdf', format = 'pdf')
+            # plt.show()
+            self.draw_arrangement()
 
 
     def draw_all(self) -> None:
