@@ -348,7 +348,7 @@ class Arrangement {
         }
 
         double compute_area(Arrangement_2 &arrangement) {
-            std::cout << "here\n";
+            // std::cout << "here\n";
             // auto total_visibility_arrangement = this->compute_full_visibility();
             auto visibility_polygon = arrangement_to_polygon(arrangement);
             return -CGAL::to_double(visibility_polygon.area());
@@ -562,8 +562,6 @@ class Arrangement {
         void optimise(double learning_rate) {
             auto full_arrangement = this->compute_full_visibility();
             do {
-                std::cout << "area=" << this->compute_area(full_arrangement) << std::endl;
-
                 for (auto i = 0; i < this->guards.size(); i ++) {
                     Vector_2 gradient, prev_gradient, prev_prev_gradient;
                     Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
@@ -580,7 +578,7 @@ class Arrangement {
                         // compute visibility arrangement of each guard position
                         this->visibility_regions[i] = this->compute_guard_visibility(cur_guard_position);
                         this->areas[i] = this->compute_partial_area(cur_guard_position);
-                        std::cout << "guard " << i << " sees area " << this->areas.at(i) << std::endl;
+                        // std::cout << "guard " << i << " sees area " << this->areas.at(i) << std::endl;
 
                         // prev_guard_position.reset();
                         prev_guard_position = cur_guard_position;
@@ -631,6 +629,8 @@ class Arrangement {
                     // } while (!this->is_completely_visible(visibility_arrangement) && (prev_guard_position != cur_guard_position && this->input_polygon.bounded_side(cur_guard_position) != CGAL::ON_UNBOUNDED_SIDE));
                 }
                 full_arrangement = this->compute_full_visibility();
+                std::cout << "area=" << this->compute_area(full_arrangement) << std::endl;
+
             } while(!this->is_completely_visible(full_arrangement));
         }
 
