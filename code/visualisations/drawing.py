@@ -18,6 +18,7 @@ class Drawing(object):
         self.ys = defaultdict(list)
         self.dfs_x = defaultdict(lambda: defaultdict(list))
         self.dfs_y = defaultdict(lambda: defaultdict(list))
+        self.areas = []
 
     
     ###########
@@ -61,12 +62,15 @@ class Drawing(object):
 
                 self.xs[f'g{i}'].append(x)
                 self.ys[f'g{i}'].append(y)
-            else:
+            elif line.startswith('D'):
                 i = int(line[2])    # get guard index
                 x, y = map(float, line[4:].strip().split())     # get the coords after removing the guard info
                 # print(i, self.xs[f'g{i}'])
                 self.dfs_x[f'g{i}'][(len(self.xs[f'g{i}']) - 1)].append(x)
                 self.dfs_y[f'g{i}'][(len(self.xs[f'g{i}']) - 1)].append(y)
+            else:
+                area = float(line[5:].strip())
+                self.areas.append(area)
 
     
     def read_all_input(self) -> None:
@@ -157,6 +161,9 @@ class Drawing(object):
             # plt.show()
             self.draw_arrangement()
 
+    def plot_area_time(self) -> None:
+        plt.plot(self.areas)
+        plt.show()
 
     def draw_all(self) -> None:
         self.draw_visibility_regions()

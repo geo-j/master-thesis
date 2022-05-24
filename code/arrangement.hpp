@@ -16,7 +16,7 @@
 #include <CGAL/Object.h>
 #include <CGAL/squared_distance_2.h>
 #include <CGAL/Vector_2.h>
-#include <CGAL/Polygon_with_holes_2.h>
+#include <CGAL/Polygon_2_algorithms.h>
 
 #include "utils.hpp"
 
@@ -196,6 +196,7 @@ class Arrangement {
         void add_guard(const Point_2 q, const Arrangement_2 visibility_region) {
             this->guards.push_back(q);
             this->visibility_regions.push_back(visibility_region);
+            this->areas.push_back(this->compute_partial_area(q));
         }
 
 
@@ -335,6 +336,23 @@ class Arrangement {
             return prev_visibility_arrangement;
         }
 
+        double compute_partial_area(Point_2 guard) {
+            for (auto i = 0; i < this->guards.size(); i ++)
+                if (guard == this->guards.at(i)) {
+                    auto visibility_polygon = arrangement_to_polygon(this->visibility_regions[i]);
+                    
+                    // area returned is negative because polygon is clockwise
+                    return -CGAL::to_double(visibility_polygon.area());
+                }
+            // std::cout << "here1\n";
+        }
+
+        double compute_area(Arrangement_2 &arrangement) {
+            std::cout << "here\n";
+            // auto total_visibility_arrangement = this->compute_full_visibility();
+            auto visibility_polygon = arrangement_to_polygon(arrangement);
+            return -CGAL::to_double(visibility_polygon.area());
+        }
         /* is_visible_from method
         * :in param Point_2 p:  the viewpoint
         * :in param Point_2 r:  the point that needs to be checked for visibility from viewpoint p
@@ -435,9 +453,6 @@ class Arrangement {
                 Point_2 reflex_vertex = std::get<0>(reflex_intersection);
                 Point_2 intersection = std::get<1>(reflex_intersection);
                 CGAL::Oriented_side orientation = std::get<2>(reflex_intersection);
-
-                // vector holding which subsegments are seen by other guards for each reflex vertex
-                // std::vector<std::pair<Point_2, Point_2>> seen_segments;
 
                 // compute distances between guard - reflex vertex - intersection point
                 auto alpha = distance(guard, reflex_vertex);
@@ -547,8 +562,10 @@ class Arrangement {
         void optimise(double learning_rate) {
             auto full_arrangement = this->compute_full_visibility();
             do {
+                std::cout << "area=" << this->compute_area(full_arrangement) << std::endl;
+
                 for (auto i = 0; i < this->guards.size(); i ++) {
-                    Vector_2 gradient, prev_gradient;
+                    Vector_2 gradient, prev_gradient, prev_prev_gradient;
                     Point_2 cur_guard_position = this->guards.at(i), prev_guard_position;
                     std::vector<Vector_2> gradients;
                     Arrangement_2 visibility_arrangement;
@@ -562,10 +579,13 @@ class Arrangement {
 
                         // compute visibility arrangement of each guard position
                         this->visibility_regions[i] = this->compute_guard_visibility(cur_guard_position);
+                        this->areas[i] = this->compute_partial_area(cur_guard_position);
+                        std::cout << "guard " << i << " sees area " << this->areas.at(i) << std::endl;
 
                         // prev_guard_position.reset();
                         prev_guard_position = cur_guard_position;
-                        // prev_gradient = gradient;
+                        prev_prev_gradient = prev_gradient;
+                        prev_gradient = gradient;
 
                         // compute gradient of current guard position
                         gradient = this->gradient(this->visibility_regions.at(i), prev_guard_position);
@@ -573,7 +593,7 @@ class Arrangement {
 
                         // gradient smoothening
                         // if (gradients.size() < 3)
-                        // gradient = prev_gradient * 0.3 + 0.7 * gradient;
+                        gradient = prev_prev_gradient * 0.3 + prev_gradient * 0.3 + gradient * 0.4;
                         // if (gradients.size() < 2)
                         //     gradients.push_back(gradient);
                         // else {
@@ -672,5 +692,6 @@ class Arrangement {
         // TODO: maybe guards class in the future?
         std::vector<Point_2> guards;
         std::vector<Arrangement_2> visibility_regions;
+        std::vector<double> areas;
         std::vector<Point_2> reflex_vertices;
 };
