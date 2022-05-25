@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220519173845" modified="D:20220525152308"/>
+<info created="D:20220519173845" modified="D:20220525152828"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -299,10 +299,10 @@ h
 <text matrix="1 0 0 1 -89.9765 6.63017" transformations="translations" pos="112 592" stroke="black" type="label" width="21.208" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\bigtriangledown f</text>
 <text matrix="1 0 0 1 -82.2939 13.9922" transformations="translations" pos="112 612.431" stroke="blue" type="label" width="12.966" height="8.307" depth="2.32" valign="baseline" size="large" style="math">\partial y</text>
 <text matrix="1 0 0 1 -70.9742 -1.4511" transformations="translations" pos="192.089 576" stroke="black" type="label" width="7.374" height="6.177" depth="0" valign="baseline" size="Large" style="math">a</text>
-<text matrix="1 0 0 1 -152.235 -174.85" transformations="translations" pos="376.809 576" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_1</text>
+<text matrix="1 0 0 1 -152.235 -174.85" transformations="translations" pos="376.809 576" stroke="blue" type="label" width="16.433" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_{11}</text>
 <use matrix="1 0 0 1 128.057 -62.5611" name="mark/disk(sx)" pos="448 496" size="large" stroke="black"/>
 <use matrix="1 0 0 1 128 16" name="mark/disk(sx)" pos="448 576" size="large" stroke="black"/>
-<text matrix="1 0 0 1 -176 -224" transformations="translations" pos="400 592" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_2</text>
+<text matrix="1 0 0 1 -176 -224" transformations="translations" pos="400 592" stroke="blue" type="label" width="16.433" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_{12}</text>
 <path stroke="black" pen="fat">
 384 592 m
 576 592 l
@@ -360,8 +360,8 @@ h
 192 352 m
 320 352 l
 </path>
-<text transformations="translations" pos="224 336" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_3</text>
-<text transformations="translations" pos="224 304" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_4</text>
+<text transformations="translations" pos="224 336" stroke="blue" type="label" width="16.433" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_{21}</text>
+<text transformations="translations" pos="224 304" stroke="blue" type="label" width="16.433" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_{22}</text>
 <use matrix="1 0 0 1 96 0" name="mark/disk(sx)" pos="368 640" size="normal" stroke="black"/>
 <use matrix="1 0 0 1 96 0" name="mark/disk(sx)" pos="384 640" size="normal" stroke="black"/>
 <use matrix="1 0 0 1 96 0" name="mark/disk(sx)" pos="400 640" size="normal" stroke="black"/>
@@ -380,7 +380,7 @@ h
 192 208 m
 528 208 l
 </path>
-<text transformations="translations" pos="224 224" stroke="blue" type="label" width="12.451" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_n</text>
+<text transformations="translations" pos="224 224" stroke="blue" type="label" width="17.432" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_{n1}</text>
 <path stroke="black" fill="black" opacity="30%" stroke-opacity="opaque">
 320 592 m
 320 538.667 l
