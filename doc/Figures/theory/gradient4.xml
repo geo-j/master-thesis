@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220519173845" modified="D:20220519175915"/>
+<info created="D:20220519173845" modified="D:20220525152308"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -360,8 +360,8 @@ h
 192 352 m
 320 352 l
 </path>
-<text transformations="translations" pos="224 336" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large">$b_3$</text>
-<text transformations="translations" pos="224 304" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large">$b_4$</text>
+<text transformations="translations" pos="224 336" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_3</text>
+<text transformations="translations" pos="224 304" stroke="blue" type="label" width="11.452" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_4</text>
 <use matrix="1 0 0 1 96 0" name="mark/disk(sx)" pos="368 640" size="normal" stroke="black"/>
 <use matrix="1 0 0 1 96 0" name="mark/disk(sx)" pos="384 640" size="normal" stroke="black"/>
 <use matrix="1 0 0 1 96 0" name="mark/disk(sx)" pos="400 640" size="normal" stroke="black"/>
@@ -380,8 +380,7 @@ h
 192 208 m
 528 208 l
 </path>
-<text transformations="translations" pos="224 224" stroke="blue" type="label" width="12.451" height="9.965" depth="2.15" valign="baseline" size="Large">$b_n$</text>
-<text matrix="1 0 0 1 -16 0" transformations="translations" pos="256 576" stroke="black" type="label" width="15.359" height="8.307" depth="2.32" valign="baseline" size="large">$\triangle_1$</text>
+<text transformations="translations" pos="224 224" stroke="blue" type="label" width="12.451" height="9.965" depth="2.15" valign="baseline" size="Large" style="math">b_n</text>
 <path stroke="black" fill="black" opacity="30%" stroke-opacity="opaque">
 320 592 m
 320 538.667 l
@@ -390,7 +389,7 @@ h
 320 592 l
 320 592 l
 </path>
-<text matrix="1 0 0 1 0 -16" transformations="translations" pos="336 576" stroke="black" type="label" width="18.232" height="9.962" depth="2.79" valign="baseline" size="Large">$\triangle_2$</text>
+<text matrix="1 0 0 1 0 -16" transformations="translations" pos="336 576" stroke="black" type="label" width="18.232" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\triangle_2</text>
 <path stroke="black" fill="black" opacity="30%" stroke-opacity="opaque">
 416 592 m
 528 592 l
@@ -398,6 +397,14 @@ h
 416 498.913 l
 416 592 l
 </path>
-<text transformations="translations" pos="464 544" stroke="black" type="label" width="19.23" height="9.962" depth="2.79" valign="baseline" size="Large">$\triangle_n$</text>
+<text transformations="translations" pos="464 544" stroke="black" type="label" width="19.23" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\triangle_n</text>
+<path stroke="black" fill="black" opacity="30%" stroke-opacity="opaque">
+192 592 m
+272 592 l
+272 560 l
+192 592 l
+h
+</path>
+<text matrix="1 0 0 1 -16 0" transformations="translations" pos="256 576" stroke="black" type="label" width="15.359" height="8.307" depth="2.32" valign="baseline" size="large" style="math">\triangle_1</text>
 </page>
 </ipe>
