@@ -28,18 +28,6 @@ void push_back_unique(std::vector<type> &v, type element) {
     if (it == v.end())
         v.push_back(element);
 }
-
-/* compute_area function
-* :in param Arrangement_2 arrangement:	the arrangement whose area needs to be computed
-* :return double:						the area of the arrangement
-*
-* This function computes the area of an arrangement without holes. It first converts it to a simple polygon, then uses the built-in CGAL function to compute its area and return it.
-*/
-double compute_area(Arrangement_2 &arrangement) {
-	auto visibility_polygon = arrangement_to_polygon(arrangement);
-	return -CGAL::to_double(visibility_polygon.area());
-}
-
 /* distance function
 * :in param Point_2 p1:		source point
 * :in param Point_2 p2:		destination point
@@ -185,4 +173,15 @@ bool is_inside_arrangement(Arrangement_2 arrangement, Point_2 p) {
 	}
 
 	return false;
+}
+
+/* compute_area function
+* :in param Arrangement_2 arrangement:	the arrangement whose area needs to be computed
+* :return double:						the area of the arrangement
+*
+* This function computes the area of an arrangement without holes. It first converts it to a simple polygon, then uses the built-in CGAL function to compute its area and return it.
+*/
+double compute_area(Arrangement_2 &arrangement) {
+	auto visibility_polygon = arrangement_to_polygon(arrangement);
+	return -CGAL::to_double(visibility_polygon.area());
 }
