@@ -28,6 +28,48 @@ class Guard {
             this->area = g.area;
         }
 
+        // visibility region getter
+        Arrangement_2 get_visibility_region() const {
+            return this->visibility_region;
+        }
+
+        // current coordinates getter
+        Point_2 get_cur_coords() const {
+            return this->cur_coords;
+        }
+
+        // current coordinates setter
+        void set_cur_coords(Point_2 p) {
+            this->cur_coords = p;
+        }
+        /* overloaded equality operator
+        *
+        * The equality is established if the previous, and current coordinates, as well as the area seen are the same. 
+        * The visibility regions equality is not checked due to a lack of arrangement equality check from CGAL.
+        */
+        bool operator ==(Guard g) {
+            if (this->prev_coords == g.prev_coords && this->cur_coords == g.cur_coords && this->area == g.area)
+                return true;
+            
+            return false;
+        }
+
+        // overloaded inequality operator
+        bool operator !=(Guard g) {
+            return !operator==(g);
+        }
+
+        // TODO: should probably output all guard info
+        /* overloaded output operator
+        *
+        * The output operator only outputs the current position of the guard
+        */
+        friend std::ostream &operator<<(std::ostream &f, const Guard &g) {
+            f << g.cur_coords;
+
+            return f;
+        }
+
         /* *****************
            *    update     *
            *****************
