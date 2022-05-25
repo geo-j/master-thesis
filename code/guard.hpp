@@ -28,6 +28,15 @@ class Guard {
             this->area = g.area;
         }
 
+        // copy constructor
+        Guard(const Guard &g, double alpha) {
+            this->prev_coords = g.prev_coords;
+            this->cur_coords = g.cur_coords;
+            this->visibility_region = g.visibility_region;
+            this->area = g.area;
+            this->learning_rate = alpha;
+        }
+
         // visibility region getter
         Arrangement_2 get_visibility_region() const {
             return this->visibility_region;
