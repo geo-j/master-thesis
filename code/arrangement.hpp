@@ -130,7 +130,7 @@ class Arrangement {
         * q2.x q2.y     
         */
         template<typename stream>
-        void read_guards(stream &f) {
+        void read_guards(stream &f, double learning_rate) {
             std::size_t n_guards;
             f >> n_guards;
 
@@ -138,9 +138,8 @@ class Arrangement {
                 double x, y;
                 f >> x >> y;
                 Point_2 q(x, y);
-                Arrangement_2 visibility_region = this->compute_guard_visibility(q);
 
-                this->add_guard(q, visibility_region);
+                this->add_guard(q, learning_rate);
 
             }
         }
@@ -194,8 +193,9 @@ class Arrangement {
         * 
         * This method adds the guard with its corresponding visibility region to the guard vector
         */
-        void add_guard(const Point_2 q, const Arrangement_2 visibility_region) {
-            this->guards.push_back(Guard(q, visibility_region));
+        void add_guard(const Point_2 q, const double learning_rate) {
+            Arrangement_2 visibility_region = this->compute_guard_visibility(q);
+            this->guards.push_back(Guard(q, visibility_region, learning_rate));
         }
 
 
@@ -536,20 +536,32 @@ class Arrangement {
         /* optimise method
         *
         * This method optimises the position of all guards using gradient descent.
-        * The optimisation process stops when the guard position cannot be changed, or the guard is moved outside of the polygon
+        * 
+        * The algorithm steps are:
+        *   - as long as the polygon is not fully seen:
+        *       - for each guard:
+        *           - compute its visibility region for its current coordinates
+        *           - update its visibility region for its current coordinates
+        *           - compute the gradient for its current coordinates
+        *           - update its coordinates based on its gradient
+        *           - if the new position of the guard is outside of the polygon, place it on the boundary
+        *           - update guard in the guards vector
         */
-        void optimise(double learning_rate) {
+        void optimise() {
             auto full_arrangement = this->compute_full_visibility();
             do {
                 for (auto i = 0; i < this->guards.size(); i ++) {
                     Vector_2 gradient, prev_gradient, prev_prev_gradient;
-                    Guard cur_guard = Guard(this->guards.at(i), learning_rate), prev_guard = Guard(cur_guard, learning_rate);
+                    Guard cur_guard = Guard(this->guards.at(i)), prev_guard = Guard(cur_guard);
                     std::vector<Vector_2> gradients;
-                    Arrangement_2 visibility_arrangement = this->compute_guard_visibility(cur_guard.get_cur_coords());
+                    // Arrangement_2 visibility_arrangement = this->compute_guard_visibility(cur_guard.get_cur_coords());
                     std::cout << 'g' << i << '=' << cur_guard << std::endl;
 
-                    // compute visibility arrangement of each guard position
-                    cur_guard.update_visibility(visibility_arrangement);
+                    // if (compute_area(visibility_arrangement) >= cur_guard.get_area()) {
+                        // cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.02);
+                    
+                        // compute visibility arrangement of each guard position
+                        // cur_guard.update_visibility(visibility_arrangement);
 
                     prev_prev_gradient = prev_gradient;
                     prev_gradient = gradient;
@@ -561,7 +573,7 @@ class Arrangement {
 
                     // gradient smoothening
                     // if (gradients.size() < 3)
-                    gradient = prev_prev_gradient * 0.3 + prev_gradient * 0.3 + gradient * 0.4;
+                    // gradient = prev_prev_gradient * 0.3 + prev_gradient * 0.3 + gradient * 0.4;
                     // if (gradients.size() < 2)
                     //     gradients.push_back(gradient);
                     // else {
@@ -577,20 +589,28 @@ class Arrangement {
 
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (this->input_polygon.bounded_side(cur_guard.get_cur_coords()) == CGAL::ON_UNBOUNDED_SIDE) {
-                        // std::cout << "not inside\n";
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position))
                             cur_guard.set_cur_coords(new_guard_position);
-                        // std::cout << "now inside\n";
                     }
 
                     // if the guard is now inside the arrangement, update the guard position in the vector
                     if (this->input_polygon.bounded_side(cur_guard.get_cur_coords()) != CGAL::ON_UNBOUNDED_SIDE) {
                         std::cout << 'g' << i << '=' << cur_guard << std::endl;
                         auto visibility_region = this->compute_guard_visibility(cur_guard.get_cur_coords());
+
+                        if (compute_area(visibility_region) >= cur_guard.get_area())
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
+                        else
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
+
                         cur_guard.update_visibility(visibility_region);
                         this->guards[i] = Guard(cur_guard);
                     }
+                // } else {
+                //     cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
+
+                // }
                     
                 }
                 full_arrangement = this->compute_full_visibility();
@@ -614,8 +634,8 @@ class Arrangement {
         auto guard_movement = Segment_2(prev_guard, guard);
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         Segment_2 edge;
-        // std::cout << guard_movement << std::endl;
         bool placed = false;
+        Point_2 tmp_guard;
 
         do {
             // std::cout<<"here";

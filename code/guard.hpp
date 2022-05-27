@@ -26,6 +26,7 @@ class Guard {
             this->cur_coords = g.cur_coords;
             this->visibility_region = g.visibility_region;
             this->area = g.area;
+            this->learning_rate = g.learning_rate;
         }
 
         // copy constructor
@@ -47,10 +48,25 @@ class Guard {
             return this->cur_coords;
         }
 
+        // area getter
+        double get_area() const {
+            return this->area;
+        }
+
+        double get_learning_rate() const {
+            return this->learning_rate;
+        }
+
         // current coordinates setter
         void set_cur_coords(Point_2 p) {
             this->cur_coords = p;
         }
+
+        // learning rate setter
+        void set_learning_rate(double alpha) {
+            this->learning_rate = alpha;
+        }
+
         /* overloaded equality operator
         *
         * The equality is established if the previous, and current coordinates, as well as the area seen are the same. 

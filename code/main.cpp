@@ -6,11 +6,11 @@ int main() {
     double learning_rate;
 
     std::cin >> learning_rate >> arrangement;
-    arrangement.read_guards(std::cin);
+    arrangement.read_guards(std::cin, learning_rate);
     // arrangement.print_reflex_intersections();
     std::cout << arrangement;
     // arrangement.print_guards(std::cout);
-    arrangement.optimise(learning_rate);
+    arrangement.optimise();
 
     // auto visible_vertices = arrangement.compute_full_visibility();
     // for (auto v : visible_vertices)
