@@ -104,15 +104,15 @@ class Drawing(object):
             
             try:
                 vx = self.vs.compute_visibility(g, face)
+                # use a random colour for each guard
+                # color = random.rand(3, )
+                color = color_list[i]
+                i += 1
+                for v in vx.halfedges:
+                    draw(v.curve(), point = g, visible_point = False, fill = True, color = color)
             except:
                 pass
 
-            # use a random colour for each guard
-            color = random.rand(3, )
-            color = color_list[i]
-            i += 1
-            for v in vx.halfedges:
-                draw(v.curve(), point = g, visible_point = False, fill = True, color = color)
     
     def draw_guards(self) -> None:
         for guard in self.xs.keys():
@@ -137,8 +137,13 @@ class Drawing(object):
             plt.quiver(pos_x, pos_y, u / norm, v / norm, angles = 'xy', pivot = 'mid', width = 0.005, scale = 5, scale_units = 'inches')
 
     def draw_guards_dfs(self, pos: int = -1) -> None:
+        color_list = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        i = 0
+
         for guard in self.xs.keys():
-            plt.scatter(self.xs[guard][pos], self.ys[guard][pos])
+            color = color_list[i]
+            i += 1
+            plt.scatter(self.xs[guard][pos], self.ys[guard][pos], color = color)
 
             # print(f'guard: {guard}')
             # print(f'guard {guard}: {self.dfs_x[guard], self.dfs_y[guard]}')
@@ -157,7 +162,8 @@ class Drawing(object):
             date = time.strftime("%Y-%m-%d")
             if not os.path.exists(path + date):
                 os.makedirs(path + date)
-            plt.savefig(f'{path + date}/{time.strftime("%H%M")}_pos{int(pos / 2)}.pdf', format = 'pdf')
+            plt.savefig(f'{path + date}/{time.strftime("%H%M")}_pos{int(pos / 2)}.png', format = 'png')
+            plt.clf()
             # plt.show()
             self.draw_arrangement()
 
