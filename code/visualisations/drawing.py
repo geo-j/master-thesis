@@ -153,16 +153,16 @@ class Drawing(object):
 
 
     def draw_guard_visibility_dfs(self) -> None:
-        for pos in range(0, len(self.xs['g0']), 2):
+        for pos in range(0, len(self.xs['g0'])):
             self.draw_visibility_regions(pos)
             self.draw_guards_dfs(pos)
-            plt.title(f'Gradient Computation for Iteration #{int(pos / 2)}')
+            plt.title(f'Gradient Computation for Iteration #{int(pos)}')
 
             path = 'results/'
             date = time.strftime("%Y-%m-%d")
             if not os.path.exists(path + date):
                 os.makedirs(path + date)
-            plt.savefig(f'{path + date}/{time.strftime("%H%M")}_pos{int(pos / 2)}.png', format = 'png')
+            plt.savefig(f'{path + date}/{time.strftime("%H%M")}_pos{int(pos)}.png', format = 'png')
             plt.clf()
             # plt.show()
             self.draw_arrangement()
