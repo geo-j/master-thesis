@@ -601,7 +601,7 @@ class Arrangement {
                         auto visibility_region = this->compute_guard_visibility(cur_guard.get_cur_coords());
 
                         if (compute_area(visibility_region) > cur_guard.get_area())
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.05);
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
                         else
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
 
