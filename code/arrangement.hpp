@@ -586,6 +586,7 @@ class Arrangement {
 
                     // update current guard position
                     cur_guard.update_coords(gradient);
+                    // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
 
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (this->input_polygon.bounded_side(cur_guard.get_cur_coords()) == CGAL::ON_UNBOUNDED_SIDE) {
@@ -596,22 +597,17 @@ class Arrangement {
 
                     // if the guard is now inside the arrangement, update the guard position in the vector
                     if (this->input_polygon.bounded_side(cur_guard.get_cur_coords()) != CGAL::ON_UNBOUNDED_SIDE) {
-                        std::cout << 'g' << i << '=' << cur_guard << std::endl;
+                        // std::cout << 'g' << i << '=' << cur_guard << std::endl;
                         auto visibility_region = this->compute_guard_visibility(cur_guard.get_cur_coords());
 
-                        if (compute_area(visibility_region) >= cur_guard.get_area())
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
+                        if (compute_area(visibility_region) > cur_guard.get_area())
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.05);
                         else
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
 
                         cur_guard.update_visibility(visibility_region);
                         this->guards[i] = Guard(cur_guard);
-                    }
-                // } else {
-                //     cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
-
-                // }
-                    
+                    } 
                 }
                 full_arrangement = this->compute_full_visibility();
                 std::cout << "area=" << compute_area(full_arrangement) << std::endl;
@@ -630,24 +626,35 @@ class Arrangement {
     */
    // TODO: no square roots; compute closest segment to point
     bool place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
-        // std::cout << "prev guard " << prev_guard << " wished guard " << guard << std::endl;
-        auto guard_movement = Segment_2(prev_guard, guard);
+        // std::cout << "prev guard " << prev_guard << std::endl;
+        auto guard_movement = Ray_2(prev_guard, guard);
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
-        Segment_2 edge;
+        Segment_2 min_edge;
         bool placed = false;
-        Point_2 tmp_guard;
+        // Point_2 tmp_guard;
 
         do {
             // std::cout<<"here";
-            edge = Segment_2(eit->source()->point(), eit->target()->point());
+            auto edge = Segment_2(eit->source()->point(), eit->target()->point());
             // compute the intersection between the guard's gradient direction and the arrangement boundary
             auto intersection = CGAL::intersection(edge, guard_movement);
 
             if (intersection) {
-                new_guard = *boost::get<Point_2>(&*intersection);
-                placed = true;
-                // std::cout << "hello???\n";
-                break;
+                auto tmp_guard = *boost::get<Point_2>(&*intersection);
+                // std::cout << "guard " << prev_guard << " wants to move to " << guard << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
+
+                if (!placed) {
+                    new_guard = Point_2(tmp_guard);
+                    min_edge = Segment_2(edge);
+                    placed = true;
+                }
+                else if (distance(prev_guard, tmp_guard) < distance(prev_guard, new_guard)) {
+                    new_guard = Point_2(tmp_guard);
+                    placed = true;
+                    min_edge = Segment_2(edge);
+                }
+                // std::cout << "hello??? this is guard " << new_guard << std::endl;
+                // break;
             }
 
             // edge.reset();
@@ -655,7 +662,7 @@ class Arrangement {
 
         // if the gradient is perpendicular with the arrangement edge, hence no move, then project the guard on the boundary and start from there
         if (prev_guard == new_guard && placed) {
-            auto edge_line = edge.supporting_line();
+            auto edge_line = min_edge.supporting_line();
             new_guard = edge_line.projection(guard);
             // std::cout << "boundary guard " << new_guard << std::endl;
         }
