@@ -59,7 +59,7 @@ class Guard {
 
         // current coordinates setter
         void set_cur_coords(Point_2 p) {
-            this->cur_coords = p;
+            this->cur_coords = Point_2(p);
         }
 
         // learning rate setter
@@ -117,7 +117,7 @@ class Guard {
         * This method updates the guard position based on the gradient, and saves the previous position
         */
         void update_coords(Vector_2 gradient) {
-            this->prev_coords = this->cur_coords;
+            this->prev_coords = Point_2(this->cur_coords);
             this->cur_coords = Point_2(this->prev_coords.x() + this->learning_rate * gradient.x(), this->prev_coords.y() + this->learning_rate * gradient.y());
         }
 
