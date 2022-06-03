@@ -7,6 +7,11 @@ from collections import defaultdict
 import time
 import os
 
+PATH = 'results/'
+DATE = time.strftime("%Y-%m-%d")
+if not os.path.exists(PATH + DATE):
+    os.makedirs(PATH + DATE)
+
 class Drawing(object):
     def __init__(self) -> None:
         self.arrangement = arrangement.Arrangement()
@@ -81,7 +86,7 @@ class Drawing(object):
                 area = float(line[6:].strip())
                 self.local_areas[f'g{i}'][iteration].append(area)
         
-        self.n_iterations = iteration
+        self.n_iterations = iteration - 1
 
     
     def read_all_input(self) -> None:
@@ -97,8 +102,8 @@ class Drawing(object):
         color_list = plt.rcParams['axes.prop_cycle'].by_key()['color']
         i = 0
         for guard in self.xs.keys():
+            # print(guard, pos)
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
-            # print(g)
             face = self.arrangement.find(g)
 
             # print(face)
@@ -106,11 +111,9 @@ class Drawing(object):
                 for half_edge in self.arrangement.halfedges:
                     segment = Segment2(half_edge.source().point(), half_edge.target().point())
                     if segment.collinear_has_on(g):
-                        # print('here')
                         face = half_edge
             
             if type(face) is arrangement.Halfedge and face.face().is_unbounded():
-                # print('then')
                 face = face.twin()
             
             try:
@@ -118,11 +121,13 @@ class Drawing(object):
                 # use a random colour for each guard
                 # color = random.rand(3, )
                 color = color_list[i]
-                i += 1
                 for v in vx.halfedges:
                     draw(v.curve(), point = g, visible_point = False, fill = True, color = color)
             except:
                 pass
+
+            i += 1
+
 
     
     def draw_guards(self) -> None:
@@ -169,12 +174,9 @@ class Drawing(object):
             self.draw_visibility_regions(pos)
             self.draw_guards_dfs(pos)
             plt.title(f'Gradient Computation for Iteration #{pos}')
+            # plt.axis('off')
 
-            path = 'results/'
-            date = time.strftime("%Y-%m-%d")
-            if not os.path.exists(path + date):
-                os.makedirs(path + date)
-            plt.savefig(f'{path + date}/{time.strftime("%H%M")}_pos{pos}.png', format = 'png')
+            plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_pos{pos}.png', format = 'png')
             plt.clf()
             # plt.show()
             self.draw_arrangement()
@@ -182,7 +184,13 @@ class Drawing(object):
 
     def plot_area_time(self) -> None:
         plt.plot(self.areas)
-        plt.show()
+        plt.axhline(y = max(self.areas), color = 'r', linestyle = '--')
+        plt.ylim(0, max(self.areas) + 1)
+        plt.xlabel('# iterations')
+        plt.ylabel('total area seen')
+        plt.title('Total Area Seen')
+        plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png')
+        # plt.show()
 
     def draw_all(self) -> None:
         self.draw_visibility_regions()
