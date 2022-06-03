@@ -549,40 +549,26 @@ class Arrangement {
         */
         void optimise() {
             auto full_arrangement = this->compute_full_visibility();
+            auto l = 0;
             do {
+                std::cout << "i=" << l << std::endl;
+                std::cout << "area=" << compute_area(full_arrangement) << std::endl;
+
                 for (auto i = 0; i < this->guards.size(); i ++) {
                     Vector_2 gradient, prev_gradient, prev_prev_gradient;
                     Guard cur_guard = Guard(this->guards.at(i)), prev_guard = Guard(cur_guard);
                     std::vector<Vector_2> gradients;
                     // Arrangement_2 visibility_arrangement = this->compute_guard_visibility(cur_guard.get_cur_coords());
                     std::cout << 'g' << i << '=' << cur_guard << std::endl;
+                    std::cout << "alpha" << i << '=' << cur_guard.get_learning_rate() << std::endl;
 
-                    // if (compute_area(visibility_arrangement) >= cur_guard.get_area()) {
-                        // cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.02);
-                    
-                        // compute visibility arrangement of each guard position
-                        // cur_guard.update_visibility(visibility_arrangement);
-
-                    prev_prev_gradient = prev_gradient;
-                    prev_gradient = gradient;
+                    // prev_prev_gradient = prev_gradient;
+                    // prev_gradient = gradient;
 
                     // compute gradient of current guard position
                     auto cur_visibility = cur_guard.get_visibility_region();
-                    gradient = this->gradient(cur_visibility, prev_guard);
+                    gradient = this->gradient(cur_visibility, cur_guard);
                         // std::cout << "Df = " << gradient << std::endl;
-
-                    // gradient smoothening
-                    // if (gradients.size() < 3)
-                    // gradient = prev_prev_gradient * 0.3 + prev_gradient * 0.3 + gradient * 0.4;
-                    // if (gradients.size() < 2)
-                    //     gradients.push_back(gradient);
-                    // else {
-                    //     for (auto g : gradients)
-                    //         gradient += g;
-                    //     gradient /= gradients.size();
-                    //     gradients.erase(gradients.begin());
-                    //     gradients.push_back(gradient);
-                    // }
 
                     // update current guard position
                     cur_guard.update_coords(gradient);
@@ -593,15 +579,20 @@ class Arrangement {
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position))
                             cur_guard.set_cur_coords(new_guard_position);
+                        else
+                            cur_guard.set_cur_coords(prev_guard.get_cur_coords());
                     }
 
                     // if the guard is now inside the arrangement, update the guard position in the vector
                     if (this->input_polygon.bounded_side(cur_guard.get_cur_coords()) != CGAL::ON_UNBOUNDED_SIDE) {
                         // std::cout << 'g' << i << '=' << cur_guard << std::endl;
                         auto visibility_region = this->compute_guard_visibility(cur_guard.get_cur_coords());
+                        std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
 
-                        if (compute_area(visibility_region) > cur_guard.get_area())
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
+                        if (compute_area(visibility_region) > cur_guard.get_area()) {
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
+                            std::cout << "event" << i << "=overshooting\n";
+                        }
                         else
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
 
@@ -610,9 +601,16 @@ class Arrangement {
                     } 
                 }
                 full_arrangement = this->compute_full_visibility();
-                std::cout << "area=" << compute_area(full_arrangement) << std::endl;
-
+                l ++;
             } while(!this->is_completely_visible(full_arrangement));
+
+            std::cout << "i=" << l + 1 << std::endl;
+            std::cout << "area=" << compute_area(full_arrangement) << std::endl;
+            for (auto i = 0; i < this->guards.size(); i ++) {
+                std::cout << 'g' << i << '=' << this->guards[i] << std::endl;
+                std::cout << "alpha" << i << '=' << this->guards[i].get_learning_rate() << std::endl;
+                std::cout << "area" << i << '=' << this->guards[i].get_area() << std::endl;
+            }
         }
 
     /* place_guard_on_boundary method
@@ -650,14 +648,13 @@ class Arrangement {
                 }
                 else if (distance(prev_guard, tmp_guard) < distance(prev_guard, new_guard)) {
                     new_guard = Point_2(tmp_guard);
-                    placed = true;
                     min_edge = Segment_2(edge);
+                    placed = true;
                 }
                 // std::cout << "hello??? this is guard " << new_guard << std::endl;
                 // break;
             }
 
-            // edge.reset();
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
         // if the gradient is perpendicular with the arrangement edge, hence no move, then project the guard on the boundary and start from there
