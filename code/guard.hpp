@@ -12,30 +12,32 @@ class Guard {
            *     I/O       *
            *****************
         */
-        Guard(Point_2 g, Arrangement_2 vis) : prev_coords(g), cur_coords(g), visibility_region(vis) {
+        Guard(Point_2 g, Arrangement_2 vis) : cur_coords(g), visibility_region(vis) {
             this->area = compute_area(vis);
         }
 
-        Guard(Point_2 g, Arrangement_2 vis, double alpha) : prev_coords(g), cur_coords(g), visibility_region(vis), learning_rate(alpha) {
+        Guard(Point_2 g, Arrangement_2 vis, double alpha) : cur_coords(g), visibility_region(vis), learning_rate(alpha) {
             this->area = compute_area(vis);
         }
 
         // copy constructor
         Guard(const Guard &g) {
-            this->prev_coords = g.prev_coords;
+            // this->prev_coords = g.prev_coords;
             this->cur_coords = g.cur_coords;
             this->visibility_region = g.visibility_region;
             this->area = g.area;
             this->learning_rate = g.learning_rate;
+            this->momentum = g.momentum;
         }
 
         // copy constructor
         Guard(const Guard &g, double alpha) {
-            this->prev_coords = g.prev_coords;
+            // this->prev_coords = g.prev_coords;
             this->cur_coords = g.cur_coords;
             this->visibility_region = g.visibility_region;
             this->area = g.area;
             this->learning_rate = alpha;
+            this->momentum = g.momentum;
         }
 
         // visibility region getter
@@ -73,7 +75,7 @@ class Guard {
         * The visibility regions equality is not checked due to a lack of arrangement equality check from CGAL.
         */
         bool operator ==(Guard g) {
-            if (this->prev_coords == g.prev_coords && this->cur_coords == g.cur_coords && this->area == g.area)
+            if (this->cur_coords == g.cur_coords && this->area == g.area)
                 return true;
             
             return false;
@@ -117,12 +119,15 @@ class Guard {
         * This method updates the guard position based on the gradient, and saves the previous position
         */
         void update_coords(Vector_2 gradient) {
-            this->prev_coords = Point_2(this->cur_coords);
-            this->cur_coords = Point_2(this->prev_coords.x() + this->learning_rate * gradient.x(), this->prev_coords.y() + this->learning_rate * gradient.y());
+            // this->prev_coords = Point_2(this->cur_coords);
+            this->momentum = this->gamma * this->momentum + (1 - this->gamma) * gradient;
+            // this->cur_coords = Point_2(this->cur_coords.x() + this->learning_rate * gradient.x(), this->cur_coords.y() + this->learning_rate * gradient.y());
+            this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
         }
 
     private:
-        Point_2 prev_coords, cur_coords;
+        Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5};
+        double area, learning_rate{0.5}, gamma{0.9};
+        Vector_2 momentum{0, 0};
 };
