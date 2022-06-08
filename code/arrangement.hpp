@@ -571,19 +571,7 @@ class Arrangement {
                     gradient = this->gradient(cur_visibility, prev_guard);
                         // std::cout << "Df = " << gradient << std::endl;
 
-                    // gradient smoothening
-                    // if (gradients.size() < 3)
-                    // gradient = prev_prev_gradient * 0.3 + prev_gradient * 0.3 + gradient * 0.4;
-                    // if (gradients.size() < 2)
-                    //     gradients.push_back(gradient);
-                    // else {
-                    //     for (auto g : gradients)
-                    //         gradient += g;
-                    //     gradient /= gradients.size();
-                    //     gradients.erase(gradients.begin());
-                    //     gradients.push_back(gradient);
-                    // }
-
+                    // auto pull = gradient - 0.3 * gradient;
                     // update current guard position
                     cur_guard.update_coords(gradient);
                     // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
@@ -593,6 +581,8 @@ class Arrangement {
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position))
                             cur_guard.set_cur_coords(new_guard_position);
+                        else
+                            cur_guard = Guard(prev_guard);
                     }
 
                     // if the guard is now inside the arrangement, update the guard position in the vector
@@ -601,7 +591,7 @@ class Arrangement {
                         auto visibility_region = this->compute_guard_visibility(cur_guard.get_cur_coords());
 
                         if (compute_area(visibility_region) > cur_guard.get_area())
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
                         else
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
 
