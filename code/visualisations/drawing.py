@@ -145,10 +145,6 @@ class Drawing(object):
             i += 1
             plt.scatter(self.xs[guard][pos], self.ys[guard][pos], color = color)
 
-            # print(f'guard: {guard}')
-            # print(f'guard {guard}: {self.dfs_x[guard], self.dfs_y[guard]}')
-            # print(self.dfs_x[guard][pos])
-            # print([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]))
             plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
 
 
