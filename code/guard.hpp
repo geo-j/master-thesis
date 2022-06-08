@@ -27,6 +27,7 @@ class Guard {
             this->visibility_region = g.visibility_region;
             this->area = g.area;
             this->learning_rate = g.learning_rate;
+            this->momentum = g.momentum;
         }
 
         // copy constructor
@@ -36,6 +37,7 @@ class Guard {
             this->visibility_region = g.visibility_region;
             this->area = g.area;
             this->learning_rate = alpha;
+            this->momentum = g.momentum;
         }
 
         // visibility region getter
@@ -118,13 +120,13 @@ class Guard {
         */
         void update_coords(Vector_2 gradient) {
             // this->prev_coords = Point_2(this->cur_coords);
-            // this->cur_coords = Point_2(this->cur_coords.x() + this->learning_rate * gradient.x(), this->cur_coords.y() + this->learning_rate * gradient.y());
             this->momentum = this->gamma * this->momentum + (1 - this->gamma) * gradient;
+            // this->cur_coords = Point_2(this->cur_coords.x() + this->learning_rate * gradient.x(), this->cur_coords.y() + this->learning_rate * gradient.y());
             this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
         }
 
     private:
-        Point_2 prev_coords, cur_coords;
+        Point_2 cur_coords;
         Arrangement_2 visibility_region;
         double area, learning_rate{0.5}, gamma{0.9};
         Vector_2 momentum{0, 0};
