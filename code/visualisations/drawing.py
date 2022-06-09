@@ -61,7 +61,7 @@ class Drawing(object):
             # self.guards[f'g{i}'].append(q)
             self.guards.append(q)
     
-    def read_guards_paths(self) -> None:
+    def read_iteration(self) -> None:
         iteration = None
 
         for line in stdin:
@@ -185,6 +185,7 @@ class Drawing(object):
         plt.xlabel('# iterations')
         plt.ylabel('total area seen')
         plt.title('Total Area Seen')
+        plt.grid()
         plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png')
         # plt.show()
 
