@@ -3,7 +3,6 @@ from sys import stdin
 import numpy as np
 from drawing import Drawing
 
-pos = -1
 
 drawing = Drawing()
 drawing.read_input_arrangement()
@@ -18,4 +17,4 @@ drawing.plot_area_time()
 
 # plt.axis('off')
 
-plt.show()
+# plt.show()
