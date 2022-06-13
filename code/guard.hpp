@@ -59,6 +59,10 @@ class Guard {
             return this->learning_rate;
         }
 
+        Vector_2 get_momentum() const {
+            return this->momentum;
+        }
+
         // current coordinates setter
         void set_cur_coords(Point_2 p) {
             this->cur_coords = Point_2(p);
@@ -118,11 +122,15 @@ class Guard {
         *
         * This method updates the guard position based on the gradient, and saves the previous position
         */
-        void update_coords(Vector_2 gradient) {
-            // this->prev_coords = Point_2(this->cur_coords);
-            this->momentum = this->gamma * this->momentum + (1 - this->gamma) * gradient;
-            // this->cur_coords = Point_2(this->cur_coords.x() + this->learning_rate * gradient.x(), this->cur_coords.y() + this->learning_rate * gradient.y());
-            this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
+        void update_coords(Vector_2 gradient, std::vector<Point_2> reflex_vertices) {
+            if (reflex_vertices.size() > 1) {
+                this->cur_coords = Point_2(reflex_vertices.at(1).x() - 0.001, reflex_vertices.at(1).y());
+            } else {
+                this->momentum = this->gamma * this->momentum + (1 - this->gamma) * gradient;
+
+                this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
+                // std::cout << this->momentum << std::endl;
+            }
         }
 
     private:
