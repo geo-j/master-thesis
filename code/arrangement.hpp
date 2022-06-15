@@ -608,6 +608,7 @@ class Arrangement {
 
                         // if the new visibility area is larger than what it was already, the guard is overshooting (so doing a good job), so we can increase its learning rate
                         if (compute_area(visibility_region) > cur_guard.get_area()) {
+                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
                             std::cout << "event" << i << "=overshooting\n";
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
                         }
@@ -650,7 +651,6 @@ class Arrangement {
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         Segment_2 min_edge;
         bool placed = false;
-        // Point_2 tmp_guard;
 
         do {
             // std::cout<<"here";
@@ -681,6 +681,7 @@ class Arrangement {
             auto edge_line = min_edge.supporting_line();
             new_guard = edge_line.projection(guard);
 
+            // if the projection is outside the polygon, place the guard on the closest edge vertex
             if (this->input_polygon.has_on_unbounded_side(new_guard)) {
                 if (distance(new_guard, min_edge.source()) <= distance(new_guard, min_edge.target()))
                     new_guard = min_edge.source();
@@ -689,7 +690,6 @@ class Arrangement {
             }
         }
 
-        // std::cout << "placed? " << placed << std::endl;
         return placed;
     }
 
