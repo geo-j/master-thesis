@@ -425,9 +425,11 @@ class Arrangement {
         std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>> gradient(Arrangement_2 &visibility_arrangement, const Guard g) {
             // std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, Point_2> result;
             std::vector<Vector_2> Dfs, hs;
-            std::vector<Point_2> reflex_vertices{Point_2(0, 0)};
-            Vector_2 Df(0, 0);
+            std::vector<Point_2> reflex_vertices;
+            Vector_2 Df(0, 0), h(0, 0);
             Point_2 guard = g.get_cur_coords(), r;
+            auto it = std::find(this->guards.begin(), this->guards.end(), g);
+
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
             auto reflex_intersections = this->get_reflex_intersection_pairs(visibility_arrangement, g);
 
@@ -520,26 +522,25 @@ class Arrangement {
                 hs.push_back(hr);
 
 
-                auto it = std::find(this->guards.begin(), this->guards.end(), g);
-
-                std::cout << "Df" << it - this->guards.begin() << "=" << 0.9 * g.get_momentum() + 0.1 * Dfr << std::endl;
+                // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
 
                 // initialise total gradient Df if first reflex vertex,
                 //      otherwise just add all gradient vectors
-                if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) {
+                if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) //{
                     // std::cout << "====================move on reflex\n";
                     reflex_vertices.push_back(reflex_vertex);
-                } else {
-                    Dfr += 0.5 * hr;
-                }
+                // } else {
+                //     Dfr += 0.5 * hr;
+                // }
 
                 Df += Dfr;
+                h += hr;
             }
         
             Dfs.push_back(Df);
-            auto it = std::find(this->guards.begin(), this->guards.end(), g);
+            hs.push_back(h);
 
-            std::cout << "Df" << it - this->guards.begin() << "=" << 0.9 * g.get_momentum() + 0.1 * Df << std::endl;
+            // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Df) * g.get_learning_rate() << std::endl;
 
             return std::make_tuple(Dfs, hs, reflex_vertices);
         }
@@ -585,7 +586,7 @@ class Arrangement {
                         // std::cout << "Df = " << gradient << std::endl;
 
                     // update current guard position
-                    cur_guard.update_coords(gradient, reflex_vertices);
+                    cur_guard.update_coords(gradients, pulls, reflex_vertices);
                     // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
 
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
@@ -608,7 +609,6 @@ class Arrangement {
 
                         // if the new visibility area is larger than what it was already, the guard is overshooting (so doing a good job), so we can increase its learning rate
                         if (compute_area(visibility_region) > cur_guard.get_area()) {
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.1);
                             std::cout << "event" << i << "=overshooting\n";
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
                         }
