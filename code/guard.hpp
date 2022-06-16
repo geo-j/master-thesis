@@ -123,42 +123,55 @@ class Guard {
         * This method updates the guard position based on the gradient, and saves the previous position
         */
         void update_coords(std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices) {
+            // print gradients
+            for (auto i = 0; i < gradients.size() - 1; i ++) {
+                std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + 0.1 * pulls.at(i))) * this->learning_rate << std::endl;
+            }
+
             bool placed = false;
-            // for (auto i = 0; i < gradients.size(); i ++) {
-                // std::cout << 
+
+            // place the guard on the reflex vertex, if the pull makes it go past it.
             if (reflex_vertices.size() > 0) {
                 for (auto reflex_vertex : reflex_vertices) {
                     for (auto j = 0; j < pulls.size(); j ++) {
                         if (distance(this->cur_coords, Point_2(this->cur_coords + this->learning_rate * pulls.at(j))) >= distance(this->cur_coords, reflex_vertex) 
                         // &&  (pulls.at(j) * pulls.at(pulls.size() - 1)) / (pulls.at(j).squared_length() * pulls.at(pulls.size() - 1).squared_length()) > 0.8
                         ) {
-                            this->cur_coords = Point_2(reflex_vertex.x() - 0.0001, reflex_vertex.y());
+
+                            // update the momentum based on the move to the reflex vertex
+                            this->momentum = Vector_2(pulls.at(j));
+
+                            // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+
+                            // create a vector between the guard and the reflex vertex, s.t. we can get a coordinate close enough to the reflex vertex that is not the reflex vertex; otherwise visibility doesn't work.
+                            auto new_reflex = Vector_2(this->cur_coords, reflex_vertex) * 0.5;
+                            // std::cout << new_reflex << std::endl;
+
+                            this->cur_coords = Point_2(this->cur_coords.x() + new_reflex.x(), this->cur_coords.y() + new_reflex.y());
                             placed = true;
-                            std::cout << "event=placed on reflex vertex " << reflex_vertex << std::endl;
+                            std::cout << "event=placed on reflex vertex " << reflex_vertex << " with actual coords " << this->cur_coords << std::endl;
                             break;
                         }
                     }
                 }
             }
-            // }
+
+            // if the guard wasn't placed on a reflex vertex, place it normally based on its momentum
             if (!placed) {
-                for (auto i = 0; i < gradients.size(); i ++) {
-                    std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + 0.1 * pulls.at(i))) * this->learning_rate << std::endl;
-                }
-                this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + 0.1 * pulls.at(pulls.size() - 1));
+                this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + this->pull_attraction * pulls.at(pulls.size() - 1));
+                // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
 
                 this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
             }
-            // if (reflex_vertices.size() > 1) {
-            //     this->cur_coords = Point_2(reflex_vertices.at(1).x() - 0.001, reflex_vertices.at(1).y());
-            // } else {
-            //     // std::cout << this->momentum << std::endl;
-            // }
+
+            // print last gradient
+            std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+
         }
 
     private:
         Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5}, gamma{0.9};
+        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{0.5};
         Vector_2 momentum{0, 0};
 };

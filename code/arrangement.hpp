@@ -605,9 +605,11 @@ class Arrangement {
                     if (!this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())) {
                         // std::cout << 'g' << i << '=' << cur_guard << std::endl;
                         auto visibility_region = this->compute_guard_visibility(cur_guard.get_cur_coords());
+                        // auto new_visibility_arrangement = this->compute_full_visibility();
                         std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
 
                         // if the new visibility area is larger than what it was already, the guard is overshooting (so doing a good job), so we can increase its learning rate
+                        // if (compute_area(new_visibility_arrangement) - compute_area(visibility_region) > compute_area(full_arrangement) - cur_guard.get_area()) {
                         if (compute_area(visibility_region) > cur_guard.get_area()) {
                             std::cout << "event" << i << "=overshooting\n";
                             cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
@@ -626,6 +628,7 @@ class Arrangement {
                 l ++;
             } while(!this->is_completely_visible(full_arrangement));
 
+            // print fully visible details, as they don't get printed if the while loop finishes (when everything is seen)
             std::cout << "i=" << l + 1 << std::endl;
             std::cout << "area=" << compute_area(full_arrangement) << std::endl;
             for (auto i = 0; i < this->guards.size(); i ++) {
