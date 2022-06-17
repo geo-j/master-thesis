@@ -125,7 +125,7 @@ class Guard {
         void update_coords(std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices) {
             // print gradients
             for (auto i = 0; i < gradients.size() - 1; i ++) {
-                std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + 0.1 * pulls.at(i))) * this->learning_rate << std::endl;
+                std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + this->pull_attraction * pulls.at(i))) * this->learning_rate << std::endl;
             }
 
             bool placed = false;
@@ -139,12 +139,12 @@ class Guard {
                         ) {
 
                             // update the momentum based on the move to the reflex vertex
-                            this->momentum = Vector_2(pulls.at(j));
+                            this->momentum = Vector_2(this->cur_coords, reflex_vertex);
 
                             // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
 
                             // create a vector between the guard and the reflex vertex, s.t. we can get a coordinate close enough to the reflex vertex that is not the reflex vertex; otherwise visibility doesn't work.
-                            auto new_reflex = Vector_2(this->cur_coords, reflex_vertex) * 0.5;
+                            auto new_reflex = this->momentum * this->learning_rate;
                             // std::cout << new_reflex << std::endl;
 
                             this->cur_coords = Point_2(this->cur_coords.x() + new_reflex.x(), this->cur_coords.y() + new_reflex.y());
