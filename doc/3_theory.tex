@@ -208,10 +208,12 @@ Alternatively, if $\triangle_1$ is first seen by other guards (so $b_{11} = 0$),
 
 In this section we introduce the concept of momentum. Its aim is to smoothen out the large noisy jumps in the gradient descent computation \cite{goodfelow2016deep}. Momentum builds upon the idea of considering the past states of the gradient descent computation. In this way, the past states create ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother.
 
-Let $M_i$ be the momentum for a guard per iteration $i$. In order to compute the momentum, we want to take past gradient descent computations into account with a weight. Let this weight be a hyperparameter $\gamma$. Let $\Delta f_i$ be the computation of the gradient descent in iteration $i$. 
-As such, we can take into account the value of the previous gradient $\Delta_{i - 1}$ with weight $\gamma$. However, we still want the gradient $\Delta f_i$ to influence our current movement. This can happen with a weight of $1 - \gamma$. So, the computation for the momentum at iteration $i$ becomes $$M_i = \gamma M_{i - 1} + (1 - \gamma)\Delta f_i.$$
+So, the position $g_i$ at iteration $i$ of a guard $g$ will not be calculated anymore based only on the current computation of gradient descent. Instead, it will also take into account past values of gradient descent. In order to decide how much past states influence the value of the current position, we will take each gradient value with a weight.
 
-Let $$M_0 = (1 - \gamma) \Delta f_0.$$. We can then observe how  the next iterations of the momentum are carried out:
+Let $M_i$ be the momentum for a guard per iteration $i$. Let $\Delta f_i$ be the computation of the gradient descent in iteration $i$. Let the weight of a gradient descent value be a hyperparameter $\gamma$. 
+As such, we can take into account the value of the previous gradient $\Delta_{i - 1}$ with weight $\gamma$. However, we still want the current gradient $\Delta f_i$ to influence the guard's movement. This can happen with a weight of $1 - \gamma$. So, the computation for the momentum at iteration $i$ becomes $$M_i = \gamma M_{i - 1} + (1 - \gamma)\Delta f_i.$$
+
+Let $$M_0 = (1 - \gamma) \Delta f_0.$$. We can then check for correctness how  the next iterations of the momentum are carried out:
 \begin{align*}
     M_1 &= \gamma M_0 + (1 - \gamma) \Delta f_1 \\
         &= \gamma (1 - \gamma) \Delta f_0 + (1 - \gamma) \Delta f_1 \\
@@ -223,3 +225,7 @@ Let $$M_0 = (1 - \gamma) \Delta f_0.$$. We can then observe how  the next iterat
     M_i &= \gamma M_{i - 1} + (1 - \gamma) \Delta f_i \\
         &= (1 - \gamma) (\gamma^i \Delta f_0 + \gamma^{i - 1} \Delta f_1 + ... + \gamma \Delta f_{i - 1} + \Delta f_i) \\
 \end{align*}
+
+In this way, our momentum computation exponentially decreases the influence of a past state over the guard's current movement. So, the previous value of the momentum will exert its inertia with $\gamma$ influence over the new value of the momentum.
+
+Similarly, the new position $g_i$ of guard $g$ will now be calculated as $$g_i = g_{i - 1} + \alpha M_i.$$
