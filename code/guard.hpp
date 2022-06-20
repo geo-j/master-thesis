@@ -132,12 +132,14 @@ class Guard {
 
             // place the guard on the reflex vertex, if the pull makes it go past it.
             if (reflex_vertices.size() > 0) {
+                auto j = -1;
                 for (auto reflex_vertex : reflex_vertices) {
-                    for (auto j = 0; j < pulls.size(); j ++) {
-                        if (distance(this->cur_coords, Point_2(this->cur_coords + this->learning_rate * pulls.at(j))) >= distance(this->cur_coords, reflex_vertex) 
+                    while (j < pulls.size()) {
+                        j ++;
+
+                        if (distance(this->cur_coords, Point_2(this->cur_coords + pulls.at(j))) >= distance(this->cur_coords, reflex_vertex) 
                         // &&  (pulls.at(j) * pulls.at(pulls.size() - 1)) / (pulls.at(j).squared_length() * pulls.at(pulls.size() - 1).squared_length()) > 0.8
                         ) {
-
                             // update the momentum based on the move to the reflex vertex
                             this->momentum = Vector_2(this->cur_coords, reflex_vertex);
 
@@ -172,6 +174,6 @@ class Guard {
     private:
         Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{0.5};
+        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{0.25};
         Vector_2 momentum{0, 0};
 };

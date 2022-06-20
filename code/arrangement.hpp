@@ -524,14 +524,11 @@ class Arrangement {
 
                 // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
 
-                // initialise total gradient Df if first reflex vertex,
-                //      otherwise just add all gradient vectors
-                if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) //{
+                // if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) //{
+                if (distance(guard, Point_2(guard + hr)) >= distance(guard, reflex_vertex)) //{
+
                     // std::cout << "====================move on reflex\n";
                     reflex_vertices.push_back(reflex_vertex);
-                // } else {
-                //     Dfr += 0.5 * hr;
-                // }
 
                 Df += Dfr;
                 h += hr;
@@ -647,7 +644,7 @@ class Arrangement {
     * 
     * This method computes the guard's position on the arrangement's boundary in the case when the gradient requires it to be outside of the polygon
     */
-   // TODO: no square roots; compute closest segment to point
+   // FIXME: guard goes through wall if still inside polygon
     bool place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
         // std::cout << "prev guard " << prev_guard << std::endl;
         auto guard_movement = Ray_2(prev_guard, guard);
@@ -686,7 +683,7 @@ class Arrangement {
 
             // if the projection is outside the polygon, place the guard on the closest edge vertex
             if (this->input_polygon.has_on_unbounded_side(new_guard)) {
-                if (distance(new_guard, min_edge.source()) <= distance(new_guard, min_edge.target()))
+                if (distance(new_guard, min_edge.source()) < distance(new_guard, min_edge.target()))
                     new_guard = min_edge.source();
                 else
                     new_guard = min_edge.target();
