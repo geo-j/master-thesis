@@ -467,8 +467,6 @@ class Arrangement {
                             else {
                                 auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
                                 // std::cout << "intersection with visibility edge " << intersection_segment << std::endl;
-
-
                                 push_back_unique(intersection_points, intersection_segment.source());
                                 push_back_unique(intersection_points, intersection_segment.target());
                             }
@@ -517,7 +515,7 @@ class Arrangement {
 
                 // compute Df for reflex vertex r
                 Vector_2 Dfr = vp * (beta / (2 * alpha));
-                Vector_2 hr = v * -(beta / (2 * alpha * sqrt(alpha)));
+                Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
                 Dfs.push_back(Dfr);
                 hs.push_back(hr);
 
@@ -525,10 +523,10 @@ class Arrangement {
                 // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
 
                 // if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) //{
-                if (distance(guard, Point_2(guard + hr)) >= distance(guard, reflex_vertex)) //{
+                // if (distance(guard, Point_2(guard + hr)) >= distance(guard, reflex_vertex)) //{
 
                     // std::cout << "====================move on reflex\n";
-                    reflex_vertices.push_back(reflex_vertex);
+                    // reflex_vertices.push_back(reflex_vertex);
 
                 Df += Dfr;
                 h += hr;
@@ -583,11 +581,16 @@ class Arrangement {
                         // std::cout << "Df = " << gradient << std::endl;
 
                     // update current guard position
+
                     cur_guard.update_coords(gradients, pulls, reflex_vertices);
+                    // std::cout << "herehere\n";
+                    auto ray = Segment_2(Point_2(prev_guard.get_cur_coords()), Point_2(cur_guard.get_cur_coords()));
                     // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
 
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
-                    if (this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())) {
+                    if (this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
+                        || this->intersects_boundary(ray)
+                    ) {
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position)) {
                             cur_guard.set_cur_coords(new_guard_position);
@@ -607,15 +610,15 @@ class Arrangement {
 
                         // if the new visibility area is larger than what it was already, the guard is overshooting (so doing a good job), so we can increase its learning rate
                         // if (compute_area(new_visibility_arrangement) - compute_area(visibility_region) > compute_area(full_arrangement) - cur_guard.get_area()) {
-                        if (compute_area(visibility_region) > cur_guard.get_area()) {
-                            std::cout << "event" << i << "=overshooting\n";
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
-                        }
-                        // otherwise, decrease its learning rate
-                        else {
-                            std::cout << "event" << i << "=undershooting\n";
-                            cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
-                        }
+                        // if (compute_area(visibility_region) > cur_guard.get_area()) {
+                        //     std::cout << "event" << i << "=overshooting\n";
+                        //     cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
+                        // }
+                        // // otherwise, decrease its learning rate
+                        // else {
+                        //     std::cout << "event" << i << "=undershooting\n";
+                        //     cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
+                        // }
 
                         cur_guard.update_visibility(visibility_region);
                         this->guards[i] = Guard(cur_guard);
@@ -683,7 +686,7 @@ class Arrangement {
 
             // if the projection is outside the polygon, place the guard on the closest edge vertex
             if (this->input_polygon.has_on_unbounded_side(new_guard)) {
-                if (distance(new_guard, min_edge.source()) < distance(new_guard, min_edge.target()))
+                if (distance(new_guard, min_edge.source()) <= distance(new_guard, min_edge.target()))
                     new_guard = min_edge.source();
                 else
                     new_guard = min_edge.target();
@@ -693,6 +696,28 @@ class Arrangement {
         return placed;
     }
 
+    bool intersects_boundary(Segment_2 ray) {
+        // std::cout << "here\n";
+        auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
+        
+        do {
+            // std::cout<<"here";
+            auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+            // compute the intersection between the guard's gradient direction and the arrangement boundary
+            auto intersection = CGAL::intersection(edge, ray);
+
+            if (intersection) {
+                auto tmp_guard = *boost::get<Point_2>(&*intersection);
+
+                // std::cout << "ray " << ray << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
+
+                return true;
+            }
+
+        } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+
+        return false;
+    }
 
     private:
         Arrangement_2 input_arrangement;
