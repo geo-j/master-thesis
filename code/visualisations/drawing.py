@@ -63,6 +63,7 @@ class Drawing(object):
     
     def read_guards_paths(self) -> None:
         iteration = None
+        i = None
 
         for line in stdin:
             if line.startswith('i='):   # get current iteration
@@ -74,15 +75,15 @@ class Drawing(object):
                 self.xs[f'g{i}'].append(x)
                 self.ys[f'g{i}'].append(y)
             elif line.startswith('D'):  # get current guard gradient info
-                i = int(line[2])    # get guard index
-                x, y = map(float, line[4:].strip().split())     # get the coords after removing the guard info
+                # i = int(line[2])    # get guard index
+                x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
                 self.dfs_x[f'g{i}'][iteration].append(x)
                 self.dfs_y[f'g{i}'][iteration].append(y)
             elif line.startswith('area='):  # get current total seen area
                 area = float(line[5:].strip())
                 self.areas.append(area)
             elif line.startswith('area'):   # get current guard's area
-                i = int(line[4])
+                # i = int(line[4])
                 area = float(line[6:].strip())
                 self.local_areas[f'g{i}'][iteration].append(area)
         
