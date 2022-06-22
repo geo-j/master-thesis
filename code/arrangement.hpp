@@ -415,9 +415,74 @@ class Arrangement {
             return boundary_intersections;
         }
 
-        /*
+        /* compute_overlapping_beta method
+        * :in param Point_2 guard:                      the guard whose overlapping beta needs to be computed
+        * :in param Point_2 intersection:               the intersection point on the polygon's boundary that the guard sees behind the reflex vertex
+        * :in param Point_2 reflex_vertex:              the reflex vertex around which the guard needs to move
+        * :in param double beta:                        the initial beta without any overlapping seen regions
+        * :return double:                               the value of beta given that the guard's visibility region is also seen by other guards
+        */
+        double compute_overlapping_beta(Guard guard, Point_2 intersection, Point_2 reflex_vertex, double beta) {
+            auto visible_segment = Segment_2(reflex_vertex, intersection);
+            std::vector<Point_2> intersection_points;
+
+            if (this->guards.size() > 1) {
+                auto guards_visibility_region = this->compute_partial_visibility(guard);
+
+                auto eit = *guards_visibility_region.unbounded_face()->inner_ccbs_begin();
+
+                do {
+                    auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+                    auto visibility_intersection = CGAL::intersection(edge, visible_segment);
+
+                    if (visibility_intersection) {
+                        auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
+
+                        if (intersection_point) {
+                            push_back_unique(intersection_points, *intersection_point);
+                            // std::cout << "intersection with visibility edge " << *intersection_point << std::endl;
+                        }
+                        
+                        else {
+                            auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
+                            // std::cout << "intersection with visibility edge " << intersection_segment << std::endl;
+                            push_back_unique(intersection_points, intersection_segment.source());
+                            push_back_unique(intersection_points, intersection_segment.target());
+                        }
+                    }
+                } while (++ eit != *guards_visibility_region.unbounded_face()->inner_ccbs_begin());
+
+                if (intersection_points.size() >= 2) {
+                    std::sort(intersection_points.begin(), intersection_points.end());
+
+                    // if guard on the left-hand side of the visible segment
+                    if (guard.get_cur_coords() < intersection_points.at(0)) {
+                        // if reflex vertex seen, switch the signs
+                        auto minus = intersection_points.at(0) == reflex_vertex ? 1 : -1;
+                        auto plus = intersection_points.at(intersection_points.size() - 1) == intersection ? 1 : -1;
+
+                        for (auto i = intersection_points.size() - 1; i > 0; i --) {
+                            beta -= distance(intersection_points.at(i), intersection_points.at(i - 1)) * minus * plus;
+                            plus = -plus;
+                        }
+                    } else {
+                        // if reflex vertex seen, switch the signs
+                        auto minus = intersection_points.at(intersection_points.size() - 1) == reflex_vertex ? 1 : -1;
+                        auto plus = intersection_points.at(0) == intersection ? 1 : -1;
+
+                        for (auto i = 0; i < intersection_points.size() - 1; i ++) {
+                            beta -= distance(intersection_points.at(i), intersection_points.at(i + 1)) * minus * plus;
+                            plus = -plus;
+                        }
+                    }
+                }
+            }
+
+            return beta;
+        }
+        /* gradient method
         * :in param Arrangement_2 visibility_arrangement:   the visibility region of the guard
-        * :in param Point_2 guard:                          guard point whose gradient needs to be computed
+        * :in param Guard guard:                            guard point whose gradient needs to be computed
         * :return Vector_2:                                 gradient of the guard as a vector
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
@@ -444,62 +509,7 @@ class Arrangement {
                 auto alpha = distance(guard, reflex_vertex);
                 auto beta = distance(reflex_vertex, intersection);
 
-                auto visible_segment = Segment_2(reflex_vertex, intersection);
-                std::vector<Point_2> intersection_points;
-
-                if (this->guards.size() > 1) {
-                    auto guards_visibility_region = this->compute_partial_visibility(g);
-
-                    auto eit = *guards_visibility_region.unbounded_face()->inner_ccbs_begin();
-
-                    do {
-                        auto edge = Segment_2(eit->source()->point(), eit->target()->point());
-                        auto visibility_intersection = CGAL::intersection(edge, visible_segment);
-
-                        if (visibility_intersection) {
-                            auto *intersection_point = boost::get<Point_2>(&*visibility_intersection);
-
-                            if (intersection_point) {
-                                push_back_unique(intersection_points, *intersection_point);
-                                // std::cout << "intersection with visibility edge " << *intersection_point << std::endl;
-                            }
-                            
-                            else {
-                                auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
-                                // std::cout << "intersection with visibility edge " << intersection_segment << std::endl;
-                                push_back_unique(intersection_points, intersection_segment.source());
-                                push_back_unique(intersection_points, intersection_segment.target());
-                            }
-                        }
-                    } while (++ eit != *guards_visibility_region.unbounded_face()->inner_ccbs_begin());
-
-                    if (intersection_points.size() < 2) {
-
-                    } else {
-                        std::sort(intersection_points.begin(), intersection_points.end());
-
-                        // if guard on the left-hand side of the visible segment
-                        if (guard < intersection_points.at(0)) {
-                            // if reflex vertex seen, switch the signs
-                            auto minus = intersection_points.at(0) == reflex_vertex ? 1 : -1;
-                            auto plus = intersection_points.at(intersection_points.size() - 1) == intersection ? 1 : -1;
-
-                            for (auto i = intersection_points.size() - 1; i > 0; i --) {
-                                beta -= distance(intersection_points.at(i), intersection_points.at(i - 1)) * minus * plus;
-                                plus = -plus;
-                            }
-                        } else {
-                            // if reflex vertex seen, switch the signs
-                            auto minus = intersection_points.at(intersection_points.size() - 1) == reflex_vertex ? 1 : -1;
-                            auto plus = intersection_points.at(0) == intersection ? 1 : -1;
-
-                            for (auto i = 0; i < intersection_points.size() - 1; i ++) {
-                                beta -= distance(intersection_points.at(i), intersection_points.at(i + 1)) * minus * plus;
-                                plus = -plus;
-                            }
-                        }
-                    }
-                }
+                auto new_beta = this->compute_overlapping_beta(g, intersection, reflex_vertex, beta);
 
                 // compute guard-reflex vertex vector
                 Vector_2 v = Vector_2(guard, reflex_vertex);
@@ -522,11 +532,10 @@ class Arrangement {
 
                 // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
 
-                // if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) //{
-                // if (distance(guard, Point_2(guard + hr)) >= distance(guard, reflex_vertex)) //{
-
-                    // std::cout << "====================move on reflex\n";
-                    // reflex_vertices.push_back(reflex_vertex);
+                if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) {
+                    std::cout << "====================move on reflex\n";
+                    reflex_vertices.push_back(reflex_vertex);
+                }
 
                 Df += Dfr;
                 h += hr;
