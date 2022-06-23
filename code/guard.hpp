@@ -139,8 +139,10 @@ class Guard {
             // if the guard is close enough (less than the min distance between 2 vertices) to a reflex vertex, then save the reflex vertex to place the guard later on it
             for (auto i = 0; i < reflex_vertices.size(); i ++) {
                 auto d = distance(this->cur_coords, reflex_vertices.at(i));
+                std::cout << d << std::endl;
+                std::cout << pulls.at(i).squared_length() << " " << (2 / 3.0) * d << std::endl;
                 if ((d < D / 2 || D == -1)
-                    && pulls.at(i).squared_length() > (2 / 3) * d * (2 / 3) * d
+                    && pulls.at(i).squared_length() > (2 / 3.0) * d
                 ) {
                     this->momentum = Vector_2(0, 0);
 
@@ -199,6 +201,6 @@ class Guard {
     private:
         Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{1.5};
+        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{0.2};
         Vector_2 momentum{0, 0};
 };
