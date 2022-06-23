@@ -24,6 +24,8 @@ class Drawing(object):
         self.ys = defaultdict(list)
         self.dfs_x = defaultdict(lambda: defaultdict(list))
         self.dfs_y = defaultdict(lambda: defaultdict(list))
+        self.hs_x = defaultdict(lambda: defaultdict(list))
+        self.hs_y = defaultdict(lambda: defaultdict(list))
         self.local_areas = defaultdict(lambda: defaultdict(list))
         self.areas = []
 
@@ -79,6 +81,11 @@ class Drawing(object):
                 x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
                 self.dfs_x[f'g{i}'][iteration].append(x)
                 self.dfs_y[f'g{i}'][iteration].append(y)
+            elif line.startswith('h'):  # get current guard gradient info
+                # i = int(line[2])    # get guard index
+                x, y = map(float, line[2:].strip().split())     # get the coords after removing the guard info
+                self.hs_x[f'g{i}'][iteration].append(x)
+                self.hs_y[f'g{i}'][iteration].append(y)
             elif line.startswith('area='):  # get current total seen area
                 area = float(line[5:].strip())
                 self.areas.append(area)
@@ -163,6 +170,9 @@ class Drawing(object):
             plt.scatter(self.xs[guard][pos], self.ys[guard][pos], color = color)
 
             plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
+
+            plt.quiver([self.xs[guard][pos]] * len(self.hs_x[guard][pos]), [self.ys[guard][pos]] * len(self.hs_x[guard][pos]), [self.hs_x[guard][pos]], [self.hs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['b'] * (len(self.hs_x[guard][pos]) - 1) + ['purple'])
+
 
 
     def draw_guard_visibility_dfs(self) -> None:
