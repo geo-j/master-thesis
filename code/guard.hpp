@@ -125,20 +125,21 @@ class Guard {
         void update_coords(std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices) {
             // print gradients
             for (auto i = 0; i < gradients.size() - 1; i ++) {
+                std::cout << "h=" << this->pull_attraction * pulls.at(i) << std::endl;
                 std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + this->pull_attraction * pulls.at(i))) * this->learning_rate << std::endl;
             }
 
+            std::cout << gradients.size() << " " << pulls.size() << " " << reflex_vertices.size() << std::endl;
             bool placed = false;
-
-
             // compute the min distance between all reflex vertices seen by the guard
             double D = min_dist_reflex_vertices(reflex_vertices);
+            std::cout << D << std::endl;
 
             // if the guard is close enough (less than the min distance between 2 vertices) to a reflex vertex, then save the reflex vertex to place the guard later on it
             for (auto i = 0; i < reflex_vertices.size(); i ++) {
                 auto d = distance(this->cur_coords, reflex_vertices.at(i));
-                if (d < D / 2
-                    && pulls.at(i).squared_length() > (2 / 3) * d
+                if ((d < D / 2 || D == -1)
+                    && this->pull_attraction *pulls.at(i).squared_length() > d
                 ) {
                     this->momentum = Vector_2(0, 0);
 
@@ -189,12 +190,14 @@ class Guard {
 
             // print last gradient
             std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+            std::cout << "h=" << this->pull_attraction * pulls.at(pulls.size() - 1) << std::endl;
+
 
         }
 
     private:
         Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{4};
+        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{0.2};
         Vector_2 momentum{0, 0};
 };
