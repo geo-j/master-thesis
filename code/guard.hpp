@@ -136,8 +136,9 @@ class Guard {
 
             // if the guard is close enough (less than the min distance between 2 vertices) to a reflex vertex, then save the reflex vertex to place the guard later on it
             for (auto i = 0; i < reflex_vertices.size(); i ++) {
-                if (distance(this->cur_coords, reflex_vertices.at(i)) < D / 2
-                    && pulls.at(i).squared_length() > (2 / 3) * D
+                auto d = distance(this->cur_coords, reflex_vertices.at(i));
+                if (d < D / 2
+                    && pulls.at(i).squared_length() > (2 / 3) * d
                 ) {
                     this->momentum = Vector_2(0, 0);
 
