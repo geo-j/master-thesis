@@ -550,23 +550,11 @@ class Arrangement {
 
 
                     // compute partial Df and h for reflex vertex r
-                    // if (alpha == 0) {
-                    //     Vector_2 Dfr = vp * (beta / (2 * alpha));
-                    //     Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
-                    // } else 
-                        
                     Vector_2 Dfr = vp * (beta / (2 * alpha));
                     Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
                     Dfs.push_back(Dfr);
                     hs.push_back(hr);
-
-
                     // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
-
-                    // if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) {
-                    //     std::cout << "====================move on reflex\n";
-                    //     reflex_vertices.push_back(reflex_vertex);
-                    // }
 
                     // compute pull for reflex vertex r
                     Df += Dfr;
@@ -574,6 +562,7 @@ class Arrangement {
                 }
             }
         
+            // the sum of the partials is on the last index of the array
             Dfs.push_back(Df);
             hs.push_back(h);
 
@@ -626,14 +615,17 @@ class Arrangement {
                     // update current guard position
 
                     cur_guard.update_coords(gradients, pulls, reflex_vertices);
-                    // std::cout << "herehere\n";
                     auto ray = Segment_2(Point_2(prev_guard.get_cur_coords()), Point_2(cur_guard.get_cur_coords()));
                     // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
 
+                    // auto it = std::find(reflex_vertices)
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
-                    if (this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
-                        || this->intersects_boundary(ray)
+                    if (
+                        // this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
+                        // || 
+                        this->intersects_boundary(ray)
                     ) {
+                        // std::cout << "herehere\n";
                         Point_2 new_guard_position;
                         if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position)) {
                             cur_guard.set_cur_coords(new_guard_position);
@@ -690,22 +682,21 @@ class Arrangement {
     * 
     * This method computes the guard's position on the arrangement's boundary in the case when the gradient requires it to be outside of the polygon
     */
-   // FIXME: guard goes through wall if still inside polygon
     bool place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
         // std::cout << "prev guard " << prev_guard << std::endl;
-        auto guard_movement = Ray_2(prev_guard, guard);
+        auto guard_movement = Segment_2(prev_guard, guard);
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         Segment_2 min_edge;
         bool placed = false;
 
         do {
-            // std::cout<<"here";
             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
             // compute the intersection between the guard's gradient direction and the arrangement boundary
             auto intersection = CGAL::intersection(edge, guard_movement);
 
             if (intersection) {
                 auto tmp_guard = *boost::get<Point_2>(&*intersection);
+                // std::cout<<"here\n";
                 // std::cout << "guard " << prev_guard << " wants to move to " << guard << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
 
                 if (!placed) {
@@ -721,6 +712,7 @@ class Arrangement {
             }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+
 
         // if the gradient is perpendicular with the arrangement edge, hence no move, then project the guard on the boundary and start from there
         if (prev_guard == new_guard && placed) {
