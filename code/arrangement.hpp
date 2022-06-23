@@ -526,9 +526,9 @@ class Arrangement {
                 Point_2 reflex_vertex = std::get<0>(reflex_intersection);
                 Point_2 intersection = std::get<1>(reflex_intersection);
                 CGAL::Oriented_side orientation = std::get<2>(reflex_intersection);
-                reflex_vertices.push_back(reflex_vertex);
 
                 if (guard != reflex_vertex) {
+                    reflex_vertices.push_back(reflex_vertex);
                     // compute distances between guard - reflex vertex - intersection point
                     auto alpha = distance(guard, reflex_vertex);
                     auto beta = distance(reflex_vertex, intersection);
