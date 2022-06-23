@@ -256,19 +256,37 @@ class Arrangement {
                         this->visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
                 } else {
                     auto *vertex = boost::get<Arrangement_2::Vertex_const_handle>(&obj);
-                    // std::cout << "vertex\n";
+                    std::cout << "vertex\n";
 
                     if (vertex) {
-                        // auto he = this->input_arrangement.halfedges_begin();
-                        // while (he->source()->point() != (*vertex)->point() || he->target()->point() != (*vertex)->point())
-                        //     he ++;
+                        auto he = this->input_arrangement.halfedges_begin();
+                        while (
+                        he->target()->point() != (*vertex)->point() 
+                        || 
+                        he->face()->is_unbounded()
+                        ) {
+                            he ++;
+                            // std::cout << Segment_2(he->source()->point(), he->target()->point()) << std::endl;
+                        }
+
+                        // std::cout << (he->target()->point() == (*vertex)->point()) << std::endl;
                         
-                        // this->visibility.compute_visibility(guard, he, visibility_arrangement);
+                        this->visibility.compute_visibility(guard, he, visibility_arrangement);
+                        // auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
+
+                        // do {
+                        //     auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+                        //     std::cout << edge << std::endl;
+
+                        //     if (eit->target()->point() == vertex && eit->is_on_inner_ccb())
+
+                            
+                        // } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
                         // std::cout << "vertex " << (*vertex)->incident_halfedges()->source()->point() << std::endl;
-                        if ((*vertex)->incident_halfedges()->is_on_inner_ccb())
-                            this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->twin()->ccb(), visibility_arrangement);
-                        else
-                            this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->ccb(), visibility_arrangement);
+                        // if ((*vertex)->incident_halfedges()->is_on_inner_ccb())
+                        //     this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->twin()->ccb(), visibility_arrangement);
+                        // else
+                        //     this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->ccb(), visibility_arrangement);
                     }
                 }
 
@@ -421,6 +439,8 @@ class Arrangement {
         * :in param Point_2 reflex_vertex:              the reflex vertex around which the guard needs to move
         * :in param double beta:                        the initial beta without any overlapping seen regions
         * :return double:                               the value of beta given that the guard's visibility region is also seen by other guards
+        * 
+        * This method computes the value of beta for the area seen exclusively by the guard.
         */
         double compute_overlapping_beta(Guard guard, Point_2 intersection, Point_2 reflex_vertex, double beta) {
             auto visible_segment = Segment_2(reflex_vertex, intersection);
@@ -480,6 +500,7 @@ class Arrangement {
 
             return beta;
         }
+
         /* gradient method
         * :in param Arrangement_2 visibility_arrangement:   the visibility region of the guard
         * :in param Guard guard:                            guard point whose gradient needs to be computed
@@ -490,10 +511,11 @@ class Arrangement {
         std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>> gradient(Arrangement_2 &visibility_arrangement, const Guard g) {
             // std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, Point_2> result;
             std::vector<Vector_2> Dfs, hs;
-            std::vector<Point_2> reflex_vertices;
+            std::vector<Point_2> reflex_vertices, pulled_reflex_vertices;
             Vector_2 Df(0, 0), h(0, 0);
             Point_2 guard = g.get_cur_coords(), r;
             auto it = std::find(this->guards.begin(), this->guards.end(), g);
+            double D;
 
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
             auto reflex_intersections = this->get_reflex_intersection_pairs(visibility_arrangement, g);
@@ -504,45 +526,57 @@ class Arrangement {
                 Point_2 reflex_vertex = std::get<0>(reflex_intersection);
                 Point_2 intersection = std::get<1>(reflex_intersection);
                 CGAL::Oriented_side orientation = std::get<2>(reflex_intersection);
+                reflex_vertices.push_back(reflex_vertex);
 
-                // compute distances between guard - reflex vertex - intersection point
-                auto alpha = distance(guard, reflex_vertex);
-                auto beta = distance(reflex_vertex, intersection);
+                if (guard != reflex_vertex) {
+                    // compute distances between guard - reflex vertex - intersection point
+                    auto alpha = distance(guard, reflex_vertex);
+                    auto beta = distance(reflex_vertex, intersection);
 
-                auto new_beta = this->compute_overlapping_beta(g, intersection, reflex_vertex, beta);
+                    auto new_beta = this->compute_overlapping_beta(g, intersection, reflex_vertex, beta);
 
-                // compute guard-reflex vertex vector
-                Vector_2 v = Vector_2(guard, reflex_vertex);
-
-                // compute orthogonal vector to the guard-reflex vector
-                // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
-                //      otherwise, counterclockwise
-                Vector_2 vp;
-                if (orientation == CGAL::ON_POSITIVE_SIDE)
-                    vp = v.perpendicular(CGAL::CLOCKWISE);
-                else
-                    vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
-
-                // compute Df for reflex vertex r
-                Vector_2 Dfr = vp * (beta / (2 * alpha));
-                Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
-                Dfs.push_back(Dfr);
-                hs.push_back(hr);
+                    // compute guard-reflex vertex vector
+                    Vector_2 v = Vector_2(guard, reflex_vertex);
 
 
-                // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
+                    // compute orthogonal vector to the guard-reflex vector
+                    // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
+                    //      otherwise, counterclockwise
+                    Vector_2 vp;
+                    if (orientation == CGAL::ON_POSITIVE_SIDE)
+                        vp = v.perpendicular(CGAL::CLOCKWISE);
+                    else
+                        vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
 
-                if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) {
-                    std::cout << "====================move on reflex\n";
-                    reflex_vertices.push_back(reflex_vertex);
+
+                    // compute partial Df and h for reflex vertex r
+                    // if (alpha == 0) {
+                    //     Vector_2 Dfr = vp * (beta / (2 * alpha));
+                    //     Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
+                    // } else 
+                        
+                    Vector_2 Dfr = vp * (beta / (2 * alpha));
+                    Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
+                    Dfs.push_back(Dfr);
+                    hs.push_back(hr);
+
+
+                    // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
+
+                    // if (distance(guard, Point_2(guard + g.get_learning_rate() * hr)) >= distance(guard, reflex_vertex)) {
+                    //     std::cout << "====================move on reflex\n";
+                    //     reflex_vertices.push_back(reflex_vertex);
+                    // }
+
+                    // compute pull for reflex vertex r
+                    Df += Dfr;
+                    h += hr;
                 }
-
-                Df += Dfr;
-                h += hr;
             }
         
             Dfs.push_back(Df);
             hs.push_back(h);
+
 
             // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Df) * g.get_learning_rate() << std::endl;
 

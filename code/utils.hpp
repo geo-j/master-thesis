@@ -28,6 +28,7 @@ void push_back_unique(std::vector<type> &v, type element) {
     if (it == v.end())
         v.push_back(element);
 }
+
 /* distance function
 * :in param Point_2 p1:		source point
 * :in param Point_2 p2:		destination point
@@ -36,8 +37,32 @@ void push_back_unique(std::vector<type> &v, type element) {
 * This function computes the square distance p1^2 + p2^2 between two points p1 and p2.
 */
 double distance(Point_2 p1, Point_2 p2) {
-	return CGAL::to_double((p1.x() - p2.x()) * (p1.x() - p2.x()) + (p1.y() - p2.y()) * (p1.y() - p2.y()));
+	return CGAL::to_double(((p1.x() - p2.x()) * (p1.x() - p2.x()) + (p1.y() - p2.y()) * (p1.y() - p2.y())).exact());
 }
+
+/* min_dist_reflex_vertices method
+* :in param std::vector<Point_2> reflex_vertices:       the vector of all reflex vertices seen by a guard
+* :return double:                                       the minimum distance between all pairs of reflex vertices seen by a guard
+* 
+* This method computes the minimum distance between all pairs of reflex vertices seen by a guard
+*/
+double min_dist_reflex_vertices(std::vector<Point_2> reflex_vertices) {
+	double D = -1;
+	for (auto q : reflex_vertices)
+		for (auto r : reflex_vertices)
+			if (q != r) {
+				if (D == -1)
+					D = distance(q, r);
+				else {
+					double d = distance(q, r);
+					if (d < D)
+						D = d;
+				}
+			}
+	
+	return D;
+}
+
 /* get_number function
 * :in param string s:	string that needs to be converted to a double
 * :return double:		input string converted to a double

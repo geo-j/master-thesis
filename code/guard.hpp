@@ -130,33 +130,53 @@ class Guard {
 
             bool placed = false;
 
-            // place the guard on the reflex vertex, if the pull makes it go past it.
-            if (reflex_vertices.size() > 0) {
-                auto j = -1;
-                for (auto reflex_vertex : reflex_vertices) {
-                    while (j < pulls.size()) {
-                        j ++;
 
-                        if (distance(this->cur_coords, Point_2(this->cur_coords + pulls.at(j))) >= distance(this->cur_coords, reflex_vertex) 
-                        // &&  (pulls.at(j) * pulls.at(pulls.size() - 1)) / (pulls.at(j).squared_length() * pulls.at(pulls.size() - 1).squared_length()) > 0.8
-                        ) {
-                            // update the momentum based on the move to the reflex vertex
-                            this->momentum = Vector_2(this->cur_coords, reflex_vertex);
+            // compute the min distance between all reflex vertices seen by the guard
+            double D = min_dist_reflex_vertices(reflex_vertices);
 
-                            // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+            // if the guard is close enough (less than the min distance between 2 vertices) to a reflex vertex, then save the reflex vertex to place the guard later on it
+            for (auto i = 0; i < reflex_vertices.size(); i ++) {
+                if (distance(this->cur_coords, reflex_vertices.at(i)) < D / 2
+                    && pulls.at(i).squared_length() > (2 / 3) * D
+                ) {
+                    this->momentum = Vector_2(0, 0);
 
-                            // create a vector between the guard and the reflex vertex, s.t. we can get a coordinate close enough to the reflex vertex that is not the reflex vertex; otherwise visibility doesn't work.
-                            auto new_reflex = this->momentum * this->learning_rate;
-                            // std::cout << new_reflex << std::endl;
+                    this->cur_coords = Point_2(reflex_vertices.at(i));
+                    placed = true;
+                    std::cout << "event=placed on reflex vertex " << this->cur_coords << std::endl;
 
-                            this->cur_coords = Point_2(this->cur_coords.x() + new_reflex.x(), this->cur_coords.y() + new_reflex.y());
-                            placed = true;
-                            std::cout << "event=placed on reflex vertex " << reflex_vertex << " with actual coords " << this->cur_coords << std::endl;
-                            break;
-                        }
-                    }
+                    break;
+
                 }
             }
+
+            // place the guard on the reflex vertex, if the pull makes it go past it.
+            // if (reflex_vertices.size() > 0) {
+            //     auto j = -1;
+            //     for (auto reflex_vertex : reflex_vertices) {
+            //         while (j < pulls.size()) {
+            //             j ++;
+
+            //             if (distance(this->cur_coords, Point_2(this->cur_coords + pulls.at(j))) >= distance(this->cur_coords, reflex_vertex) 
+            //             // &&  (pulls.at(j) * pulls.at(pulls.size() - 1)) / (pulls.at(j).squared_length() * pulls.at(pulls.size() - 1).squared_length()) > 0.8
+            //             ) {
+            //                 // update the momentum based on the move to the reflex vertex
+            //                 this->momentum = Vector_2(0, 0);
+
+            //                 // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+
+            //                 // create a vector between the guard and the reflex vertex, s.t. we can get a coordinate close enough to the reflex vertex that is not the reflex vertex; otherwise visibility doesn't work.
+            //                 auto new_reflex = this->momentum * this->learning_rate;
+            //                 // std::cout << new_reflex << std::endl;
+
+            //                 this->cur_coords = Point_2(this->cur_coords.x() + new_reflex.x(), this->cur_coords.y() + new_reflex.y());
+            //                 placed = true;
+            //                 std::cout << "event=placed on reflex vertex " << reflex_vertex << " with actual coords " << this->cur_coords << std::endl;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
 
             // if the guard wasn't placed on a reflex vertex, place it normally based on its momentum
             if (!placed) {
@@ -174,6 +194,6 @@ class Guard {
     private:
         Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{0.25};
+        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{4};
         Vector_2 momentum{0, 0};
 };
