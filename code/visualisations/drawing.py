@@ -114,15 +114,31 @@ class Drawing(object):
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
             face = self.arrangement.find(g)
 
-            # print(face)
-            if type(face) is arrangement.Face and face.is_unbounded():
+            
+            if (type(face) is arrangement.Face and face.is_unbounded()) or (type(face) is arrangement.Halfedge and face.face().is_unbounded()):
                 for half_edge in self.arrangement.halfedges:
                     segment = Segment2(half_edge.source().point(), half_edge.target().point())
-                    if segment.collinear_has_on(g):
+                    # print(segment)
+                    # print(f'trying to place {g} on {segment}')
+
+                    if half_edge.target().point() == guard and not half_edge.face().is_unbounded():
+                    # if segment.collinear_has_on(g):
                         face = half_edge
+                        # print(f'placed {guard} on {segment}')
+                        break
+                # else:
+                #     for half_edge in self.arrangement.halfedges:
+                #         segment = Segment2(half_edge.source().point(), half_edge.target().point())
+                #         # print(segment)
+                #         print(f'trying to place {g} on {segment}')
+
+                #         if half_edge.target().point() < g and half_edge.source().point() < g and not half_edge.face().is_unbounded():
+                #         # if segment.collinear_has_on(g):
+                #             face = half_edge
+                #             g = half_edge.target().point()
+                #             print(f'placed {guard} on {segment}')
+                #             break
             
-            if type(face) is arrangement.Halfedge and face.face().is_unbounded():
-                face = face.twin()
             
             try:
                 vx = self.vs.compute_visibility(g, face)
