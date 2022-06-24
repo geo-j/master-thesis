@@ -130,7 +130,7 @@ class Arrangement {
         * q2.x q2.y     
         */
         template<typename stream>
-        void read_guards(stream &f, double learning_rate) {
+        void read_guards(stream &f, double learning_rate, double pull_attraction) {
             std::size_t n_guards;
             f >> n_guards;
 
@@ -139,7 +139,7 @@ class Arrangement {
                 f >> x >> y;
                 Point_2 q(x, y);
 
-                this->add_guard(q, learning_rate);
+                this->add_guard(q, learning_rate, pull_attraction);
 
             }
         }
@@ -193,9 +193,9 @@ class Arrangement {
         * 
         * This method adds the guard with its corresponding visibility region to the guard vector
         */
-        void add_guard(const Point_2 q, const double learning_rate) {
+        void add_guard(const Point_2 q, const double learning_rate, double pull_attraction) {
             Arrangement_2 visibility_region = this->compute_guard_visibility(q);
-            this->guards.push_back(Guard(q, visibility_region, learning_rate));
+            this->guards.push_back(Guard(q, visibility_region, learning_rate, pull_attraction));
         }
 
 
@@ -256,15 +256,12 @@ class Arrangement {
                         this->visibility.compute_visibility(guard, (*edge)->ccb(), visibility_arrangement);
                 } else {
                     auto *vertex = boost::get<Arrangement_2::Vertex_const_handle>(&obj);
-                    std::cout << "vertex\n";
+                    // std::cout << "vertex\n";
 
                     if (vertex) {
                         auto he = this->input_arrangement.halfedges_begin();
-                        while (
-                        he->target()->point() != (*vertex)->point() 
-                        || 
-                        he->face()->is_unbounded()
-                        ) {
+                        while (he->target()->point() != (*vertex)->point()
+                               || he->face()->is_unbounded()) {
                             he ++;
                             // std::cout << Segment_2(he->source()->point(), he->target()->point()) << std::endl;
                         }
@@ -272,21 +269,6 @@ class Arrangement {
                         // std::cout << (he->target()->point() == (*vertex)->point()) << std::endl;
                         
                         this->visibility.compute_visibility(guard, he, visibility_arrangement);
-                        // auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
-
-                        // do {
-                        //     auto edge = Segment_2(eit->source()->point(), eit->target()->point());
-                        //     std::cout << edge << std::endl;
-
-                        //     if (eit->target()->point() == vertex && eit->is_on_inner_ccb())
-
-                            
-                        // } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
-                        // std::cout << "vertex " << (*vertex)->incident_halfedges()->source()->point() << std::endl;
-                        // if ((*vertex)->incident_halfedges()->is_on_inner_ccb())
-                        //     this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->twin()->ccb(), visibility_arrangement);
-                        // else
-                        //     this->visibility.compute_visibility(guard, (*vertex)->incident_halfedges()->ccb(), visibility_arrangement);
                     }
                 }
 
@@ -332,10 +314,13 @@ class Arrangement {
         Arrangement_2 compute_partial_visibility(Guard guard) {
             std::vector<Point_2> visible_points;
             Arrangement_2 prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement;
+            bool computed_visibility = false;
 
             for (auto i = 0; i < this->guards.size(); i ++) {
                 if (this->guards.at(i) != guard) {
+                    // std::cout << "different guards " << this->guards.at(i) << " and " << guard << std::endl;
                     auto visibility_arrangement = this->guards.at(i).get_visibility_region();
+                    computed_visibility = true;
 
                     if (i == 0)
                         // initialise first visibility polygon
@@ -349,6 +334,9 @@ class Arrangement {
                 }
             }
 
+            if (!computed_visibility)
+                return guard.get_visibility_region();
+            
             return prev_visibility_arrangement;
         }
 
@@ -448,10 +436,18 @@ class Arrangement {
 
             if (this->guards.size() > 1) {
                 auto guards_visibility_region = this->compute_partial_visibility(guard);
+                // std::cout << guards_visibility_region.number_of_edges() << std::endl;
+                // for (auto he = guards_visibility_region.halfedges_begin(); he != guards_visibility_region.halfedges_end(); ++ he) {
+                //     std::cout << Segment_2(he->source()->point(), he->target()->point()) << std::endl;
+                // }
 
                 auto eit = *guards_visibility_region.unbounded_face()->inner_ccbs_begin();
 
                 do {
+
+                    // std::cout << "segment " << eit->source()->point() << std::endl;
+
+                    // std::cout << "yo\n";
                     auto edge = Segment_2(eit->source()->point(), eit->target()->point());
                     auto visibility_intersection = CGAL::intersection(edge, visible_segment);
 
@@ -462,7 +458,6 @@ class Arrangement {
                             push_back_unique(intersection_points, *intersection_point);
                             // std::cout << "intersection with visibility edge " << *intersection_point << std::endl;
                         }
-                        
                         else {
                             auto intersection_segment = *boost::get<Segment_2>(&*visibility_intersection);
                             // std::cout << "intersection with visibility edge " << intersection_segment << std::endl;
@@ -498,6 +493,7 @@ class Arrangement {
                 }
             }
 
+            // std::cout << "beta " << beta << std::endl;
             return beta;
         }
 
@@ -550,8 +546,8 @@ class Arrangement {
 
 
                     // compute partial Df and h for reflex vertex r
-                    Vector_2 Dfr = vp * (beta / (2 * alpha));
-                    Vector_2 hr = v * (beta / (2 * alpha * sqrt(alpha)));
+                    Vector_2 Dfr = vp * (new_beta / (2 * alpha));
+                    Vector_2 hr = v * (new_beta / (2 * alpha * sqrt(alpha)));
                     Dfs.push_back(Dfr);
                     hs.push_back(hr);
                     // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
@@ -621,8 +617,8 @@ class Arrangement {
                     // auto it = std::find(reflex_vertices)
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                     if (
-                        // this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
-                        // || 
+                        this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
+                        || 
                         this->intersects_boundary(ray)
                     ) {
                         // std::cout << "herehere\n";
