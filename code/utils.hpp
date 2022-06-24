@@ -51,7 +51,7 @@ double min_dist_reflex_vertices(std::vector<Point_2> reflex_vertices) {
 	for (auto q : reflex_vertices)
 		for (auto r : reflex_vertices)
 			if (q != r) {
-				std::cout << "more vertices\n";
+				// std::cout << "more vertices\n";
 				if (D == -1)
 					D = distance(q, r);
 				else {

@@ -531,6 +531,9 @@ class Arrangement {
 
                     auto new_beta = this->compute_overlapping_beta(g, intersection, reflex_vertex, beta);
 
+                    // if (new_beta == 0)
+                    //     new_beta = beta;
+
                     // compute guard-reflex vertex vector
                     Vector_2 v = Vector_2(guard, reflex_vertex);
 
