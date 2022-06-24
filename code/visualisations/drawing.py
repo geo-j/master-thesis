@@ -1,5 +1,5 @@
 from skgeom.draw import draw
-from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility, intersection, Vector2
+from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility, intersection, Vector2, Line2
 import matplotlib.pyplot as plt
 from numpy import random, diff, sqrt
 from sys import stdin
@@ -11,6 +11,9 @@ PATH = 'results/'
 DATE = time.strftime("%Y-%m-%d")
 if not os.path.exists(PATH + DATE):
     os.makedirs(PATH + DATE)
+
+def distance(p1: Point2, p2: Point2) -> float:
+    return (p1.x() - p2.x()) * (p1.x() - p2.x()) + (p1.y() - p2.y()) * (p1.y() - p2.y())
 
 class Drawing(object):
     def __init__(self) -> None:
@@ -114,41 +117,64 @@ class Drawing(object):
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
             face = self.arrangement.find(g)
 
-            
-            if (type(face) is arrangement.Face and face.is_unbounded()) or (type(face) is arrangement.Halfedge and face.face().is_unbounded()):
+            if (type(face) is arrangement.Face and face.is_unbounded()) or (type(face) is arrangement.Halfedge and face.face().is_unbounded()) or (type(face) is arrangement.Vertex):
                 for half_edge in self.arrangement.halfedges:
                     segment = Segment2(half_edge.source().point(), half_edge.target().point())
                     # print(segment)
                     # print(f'trying to place {g} on {segment}')
 
                     if half_edge.target().point() == guard and not half_edge.face().is_unbounded():
-                    # if segment.collinear_has_on(g):
                         face = half_edge
-                        # print(f'placed {guard} on {segment}')
                         break
-                # else:
-                #     for half_edge in self.arrangement.halfedges:
-                #         segment = Segment2(half_edge.source().point(), half_edge.target().point())
-                #         # print(segment)
-                #         print(f'trying to place {g} on {segment}')
+                else:
+                    # if the point is sliiightly outside the boundary due to rounding
+                    min_edge = None
+                    min_p = None
+                    for half_edge in self.arrangement.halfedges:
+                        # take inner half-edges
+                        if not half_edge.face().is_unbounded():
+                            segment = Segment2(half_edge.source().point(), half_edge.target().point())
+                            line = Line2(half_edge.source().point(), half_edge.target().point())
+                            # project the guard on the boundary segment
+                            p = line.projection(g)
+                            # print(f'looking at {segment}')
 
-                #         if half_edge.target().point() < g and half_edge.source().point() < g and not half_edge.face().is_unbounded():
-                #         # if segment.collinear_has_on(g):
-                #             face = half_edge
-                #             g = half_edge.target().point()
-                #             print(f'placed {guard} on {segment}')
-                #             break
+                            # init min with the first half-edge found; if it's not a good one, it will be overwritten anyway
+                            if min_edge is None:
+                                min_edge = half_edge
+                                min_p = p
+
+                            # if the projection of the guard is still inside the polygon
+                            if segment.collinear_has_on(p):
+                                if distance(p, g) <= distance(min_p, g):
+                                    # the projection has to be either on the target edge of the segment, or anywhere in between
+                                    if half_edge.target().point() == g or (half_edge.target().point() != g and half_edge.source().point() != g):
+                                        min_edge = half_edge
+                                        min_p = p
+                                        # print(f'\tplaced {g} on {p}')
+                            else:
+                                # if the projection is outside of the polygon, place it on the closest half-edge target edge
+                                if distance(half_edge.target().point(), g) <= distance(min_p, g):
+                                    min_edge = half_edge
+                                    min_p = half_edge.target().point()
+                                    # print(f'\tplaced {g} on {p}')
+
+                    face = min_edge
+                    g = min_p
+                    self.xs[guard][pos] = float(g.x())
+                    self.ys[guard][pos] = float(g.y())
+
             
             
-            try:
-                vx = self.vs.compute_visibility(g, face)
-                # use a random colour for each guard
-                # color = random.rand(3, )
-                color = color_list[i]
-                for v in vx.halfedges:
-                    draw(v.curve(), point = g, visible_point = False, fill = True, color = color)
-            except:
-                pass
+            # try:
+            vx = self.vs.compute_visibility(g, face)
+            # use a random colour for each guard
+            # color = random.rand(3, )
+            color = color_list[i]
+            for v in vx.halfedges:
+                draw(v.curve(), point = g, visible_point = False, fill = True, color = color)
+            # except:
+            #     pass
 
             i += 1
 
