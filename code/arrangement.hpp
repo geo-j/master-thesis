@@ -617,12 +617,14 @@ class Arrangement {
                     auto ray = Segment_2(Point_2(prev_guard.get_cur_coords()), Point_2(cur_guard.get_cur_coords()));
                     // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
 
-                    // auto it = std::find(reflex_vertices)
+                    auto it = std::find(reflex_vertices.begin(), reflex_vertices.end(), cur_guard.get_cur_coords());
                     // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
+                    // exception for when the guard is on a reflex vertex
                     if (
-                        this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
-                        || 
+                        // this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
+                        // || 
                         this->intersects_boundary(ray)
+                        && it == reflex_vertices.end()
                     ) {
                         // std::cout << "herehere\n";
                         Point_2 new_guard_position;
@@ -744,8 +746,8 @@ class Arrangement {
                 auto tmp_guard = *boost::get<Point_2>(&*intersection);
 
                 // std::cout << "ray " << ray << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
-
-                return true;
+                // if (tmp_guard != eit->source()->point() && tmp_guard != eit->target()->point())
+                    return true;
             }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
@@ -762,7 +764,6 @@ class Arrangement {
         TEV visibility;
         // find the face of the guard
         CGAL::Arr_naive_point_location<Arrangement_2> pl;
-        // TODO: maybe guards class in the future?
         std::vector<Guard> guards;
         std::vector<Point_2> reflex_vertices;
 };
