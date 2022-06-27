@@ -31,6 +31,7 @@ class Drawing(object):
         self.hs_y = defaultdict(lambda: defaultdict(list))
         self.local_areas = defaultdict(lambda: defaultdict(list))
         self.areas = []
+        self.max_area = None
 
     
     ###########
@@ -71,7 +72,10 @@ class Drawing(object):
         i = None
 
         for line in stdin:
-            if line.startswith('i='):   # get current iteration
+            if line.startswith('total'):
+                self.max_area = float(line[11:].strip())
+                print(self.max_area)
+            elif line.startswith('i='):   # get current iteration
                 iteration = int(line[2:].strip())
             elif line.startswith('g'):  # get current guard coords
                 i = int(line[1])    # get the guard index
@@ -233,7 +237,7 @@ class Drawing(object):
 
     def plot_area_time(self) -> None:
         plt.plot(self.areas)
-        plt.axhline(y = max(self.areas), color = 'r', linestyle = '--')
+        plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
         plt.ylim(0, max(self.areas) + 1)
         plt.xlabel('# iterations')
         plt.ylabel('total area seen')

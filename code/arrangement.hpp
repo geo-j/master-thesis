@@ -589,6 +589,8 @@ class Arrangement {
         void optimise() {
             auto full_arrangement = this->compute_full_visibility();
             auto l = 0;
+            std::cout << "total area=" << compute_area(this->input_arrangement) << std::endl;
+
             do {
                 std::cout << "i=" << l << std::endl;
                 std::cout << "area=" << compute_area(full_arrangement) << std::endl;
