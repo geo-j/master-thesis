@@ -236,9 +236,9 @@ class Drawing(object):
         plt.clf()
 
     def plot_area_time(self) -> None:
-        plt.plot(self.areas / self.max_area)
-        plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
-        plt.ylim(0, 100)
+        plt.plot([x * 100 / float(self.max_area) for x in self.areas])
+        # plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
+        plt.ylim(0, 101)
         plt.xlabel('# iterations')
         plt.ylabel('total area seen (%)')
         plt.title('Total Area Seen')
