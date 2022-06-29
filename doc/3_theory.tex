@@ -1,6 +1,9 @@
 \section{Theory}
 \label{sec:theory}
 
+% The first derivative primarily tells us about the direction the function is going. That is, it tells us if the function is increasing or decreasing.
+
+% the second derivative tells us if there is an increase in the increase of the function
 This section will investigate the theory aspects of solving the Art Gallery Problem using gradient descent. Namely, we will explain what the optimisation function in the context of the Art Gallery problem is, and how it can be solved with gradient descent. We will initially apply gradient descent to only one guard, then extend it to multiple guards.
 
 \subsection{Guarding the Polygon with One Point}
@@ -74,7 +77,7 @@ Given that triangles $\triangle_1$ and $\triangle_2$ are square triangles, their
 \end{align*}
 
 
-Given that $\overline{pp'}$ is parallel to polygon's boundary, we can use Thales's Theorem in triangles $\triangle_1$ and $\triangle_2$ to compute the length $L$: 
+Given that $\overline{gg'}$ is parallel to polygon's boundary, we can use Thales's Theorem in triangles $\triangle_1$ and $\triangle_2$ to compute the length $L$: 
 
 \begin{align}
     % \frac{||\overline{pp'}||}{||\overline{dd'}||} &= \frac a b \\
