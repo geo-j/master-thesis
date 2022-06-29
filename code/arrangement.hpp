@@ -398,6 +398,7 @@ class Arrangement {
                 if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
                     // identify reflex vertex
                     Point_2 reflex_vertex = eit->source()->point();
+                    // std::cout << "found reflex vertex " << reflex_vertex << std::endl;
 
                     // check the clockwise orientation of the reflex vertex and the guard
                     // whether we're in the order intersection point - reflex vertex - guard
@@ -436,18 +437,10 @@ class Arrangement {
 
             if (this->guards.size() > 1) {
                 auto guards_visibility_region = this->compute_partial_visibility(guard);
-                // std::cout << guards_visibility_region.number_of_edges() << std::endl;
-                // for (auto he = guards_visibility_region.halfedges_begin(); he != guards_visibility_region.halfedges_end(); ++ he) {
-                //     std::cout << Segment_2(he->source()->point(), he->target()->point()) << std::endl;
-                // }
 
                 auto eit = *guards_visibility_region.unbounded_face()->inner_ccbs_begin();
 
                 do {
-
-                    // std::cout << "segment " << eit->source()->point() << std::endl;
-
-                    // std::cout << "yo\n";
                     auto edge = Segment_2(eit->source()->point(), eit->target()->point());
                     auto visibility_intersection = CGAL::intersection(edge, visible_segment);
 
@@ -467,27 +460,71 @@ class Arrangement {
                     }
                 } while (++ eit != *guards_visibility_region.unbounded_face()->inner_ccbs_begin());
 
-                if (intersection_points.size() >= 2) {
-                    std::sort(intersection_points.begin(), intersection_points.end());
+                beta = 0;
+                auto it = std::find(intersection_points.begin(), intersection_points.end(), reflex_vertex);
+                auto minus = (it == intersection_points.end()) ? 1 : 1;
+
+                it = std::find(intersection_points.begin(), intersection_points.end(), intersection);
+                if (it == intersection_points.end()) {
+                    intersection_points.push_back(intersection);
+                    std::cout << "intersection point " << intersection << " not found and pushed\n";
+                }
+                else {
+                    intersection_points.erase(it);
+                    std::cout << "intersection point " << intersection << " found and erased\n";
+                }
+
+                std::sort(intersection_points.begin(), intersection_points.end());
+
+                if (intersection_points.size() >= 1) {
+                    // std::sort(intersection_points.begin(), intersection_points.end());
+                    // beta = 0;
 
                     // if guard on the left-hand side of the visible segment
                     if (guard.get_cur_coords() < intersection_points.at(0)) {
                         // if reflex vertex seen, switch the signs
-                        auto minus = intersection_points.at(0) == reflex_vertex ? 1 : -1;
-                        auto plus = intersection_points.at(intersection_points.size() - 1) == intersection ? 1 : -1;
+                        std::cout << "on left-side of visible segment " << intersection_points.at(0) << ' ' << intersection_points.at(intersection_points.size() - 1)<< std::endl;
+                        // auto minus = intersection_points.at(0) == reflex_vertex ? 1 : -1;
+                        std::cout << "reflex vertex seen by other guard? " << minus << std::endl;
+                        // auto seen = intersection_points.at(intersection_points.size() - 1) == intersection;
+                        // if (!seen)
+                        //     intersection_points.push_back(intersection);
+                        // std::cout << "boundary intersection point seen by other guard? " << (it != intersection_points.end()) << std::endl;
+                        // int plus = 1;
 
-                        for (auto i = intersection_points.size() - 1; i > 0; i --) {
-                            beta -= distance(intersection_points.at(i), intersection_points.at(i - 1)) * minus * plus;
-                            plus = -plus;
+
+
+                        for (int i = intersection_points.size() - 1; i >= 0; i --) {
+                            std::cout << i << std::endl;
+                            beta += (distance(intersection_points.at(i), reflex_vertex)) * minus;
+                            std::cout << "adding distance up to " << intersection_points.at(i) << " = " << distance(intersection_points.at(i), reflex_vertex) * minus << std::endl;
+                            minus = -minus;
+                        //     beta -= distance(intersection_points.at(i), intersection_points.at(i - 1)) * minus * plus;
+                        //     plus = -plus;
                         }
                     } else {
-                        // if reflex vertex seen, switch the signs
-                        auto minus = intersection_points.at(intersection_points.size() - 1) == reflex_vertex ? 1 : -1;
-                        auto plus = intersection_points.at(0) == intersection ? 1 : -1;
+                        std::cout << "on right-side of visible segment " << intersection_points.at(0) << ' ' << intersection_points.at(intersection_points.size() - 1) << std::endl;
 
-                        for (auto i = 0; i < intersection_points.size() - 1; i ++) {
-                            beta -= distance(intersection_points.at(i), intersection_points.at(i + 1)) * minus * plus;
-                            plus = -plus;
+                        // if reflex vertex seen, switch the signs
+                        // auto minus = intersection_points.at(intersection_points.size() - 1) == reflex_vertex ? 1 : -1;
+                        std::cout << "reflex vertex seen by other guard? " << minus << std::endl;
+
+                        // auto seen = intersection_points.at(0) == intersection;
+                        // std::cout << "boundary intersection point seen by other guard? " << (it != intersection_points.end()) << std::endl;
+                        // if (!seen)
+                        //     intersection_points.push_back(intersection);
+                        // int plus = 1;
+
+
+                        for (auto i = 0; i <= intersection_points.size() - 1; i ++) {
+                            std::cout << i << std::endl;
+                            std::cout << "adding distance up to " << intersection_points.at(i) << " = " << distance(intersection_points.at(i), reflex_vertex) * minus << std::endl;
+                            beta += (distance(intersection_points.at(i), reflex_vertex)) * minus;
+                            minus = -minus;
+
+
+                            // beta -= distance(intersection_points.at(i), intersection_points.at(i + 1)) * minus * plus;
+                            // plus = -plus;
                         }
                     }
                 }
@@ -530,6 +567,8 @@ class Arrangement {
                     auto beta = distance(reflex_vertex, intersection);
 
                     auto new_beta = this->compute_overlapping_beta(g, intersection, reflex_vertex, beta);
+                    std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
+                    std::cout << beta << ' ' << new_beta << std::endl;
 
                     // if (new_beta == 0)
                     //     new_beta = beta;
@@ -553,7 +592,6 @@ class Arrangement {
                     Vector_2 hr = v * (new_beta / (2 * alpha * sqrt(alpha)));
                     Dfs.push_back(Dfr);
                     hs.push_back(hr);
-                    // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Dfr) * g.get_learning_rate() << std::endl;
 
                     // compute pull for reflex vertex r
                     Df += Dfr;
@@ -564,9 +602,6 @@ class Arrangement {
             // the sum of the partials is on the last index of the array
             Dfs.push_back(Df);
             hs.push_back(h);
-
-
-            // std::cout << "Df" << it - this->guards.begin() << "=" << (0.9 * g.get_momentum() + 0.1 * Df) * g.get_learning_rate() << std::endl;
 
             return std::make_tuple(Dfs, hs, reflex_vertices);
         }
@@ -595,6 +630,8 @@ class Arrangement {
                 std::cout << "i=" << l << std::endl;
                 std::cout << "area=" << compute_area(full_arrangement) << std::endl;
 
+                std::vector<Guard> new_guards(this->guards);
+
                 for (auto i = 0; i < this->guards.size(); i ++) {
                     Vector_2 gradient;
                     Guard cur_guard = Guard(this->guards.at(i)), prev_guard = Guard(cur_guard);
@@ -611,7 +648,6 @@ class Arrangement {
                     auto pulls = std::get<1>(gradient_pair);
                     auto reflex_vertices = std::get<2>(gradient_pair);
                     gradient = gradients.at(gradients.size() - 1);
-                        // std::cout << "Df = " << gradient << std::endl;
 
                     // update current guard position
 
@@ -646,24 +682,14 @@ class Arrangement {
                         // auto new_visibility_arrangement = this->compute_full_visibility();
                         std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
 
-                        // if the new visibility area is larger than what it was already, the guard is overshooting (so doing a good job), so we can increase its learning rate
-                        // if (compute_area(new_visibility_arrangement) - compute_area(visibility_region) > compute_area(full_arrangement) - cur_guard.get_area()) {
-                        // if (compute_area(visibility_region) > cur_guard.get_area()) {
-                        //     std::cout << "event" << i << "=overshooting\n";
-                        //     cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 1.2);
-                        // }
-                        // // otherwise, decrease its learning rate
-                        // else {
-                        //     std::cout << "event" << i << "=undershooting\n";
-                        //     cur_guard.set_learning_rate(cur_guard.get_learning_rate() * 0.9);
-                        // }
-
                         cur_guard.update_visibility(visibility_region);
-                        this->guards[i] = Guard(cur_guard);
+                        new_guards[i] = Guard(cur_guard);
                     }
                 }
                 full_arrangement = this->compute_full_visibility();
                 l ++;
+
+                this->guards = std::vector<Guard>(new_guards);
             } while(!this->is_completely_visible(full_arrangement));
 
             // print fully visible details, as they don't get printed if the while loop finishes (when everything is seen)
