@@ -502,7 +502,7 @@ class Arrangement {
 
                         // starting from the rightmost point, sequentially add and subtract every beta s.t. the beta pairs resembling the triangles are created
                         for (int i = shared_visibility_intersection_points.size() - 1; i >= 0; i --) {
-                            std::cout << i << std::endl;
+                            // std::cout << i << std::endl;
                             beta += (distance(shared_visibility_intersection_points.at(i), reflex_vertex)) * minus;
                             // std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
                             minus = -minus;
@@ -524,7 +524,7 @@ class Arrangement {
 
 
                         for (auto i = 0; i <= shared_visibility_intersection_points.size() - 1; i ++) {
-                            std::cout << i << std::endl;
+                            // std::cout << i << std::endl;
                             // std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
                             beta += (distance(shared_visibility_intersection_points.at(i), reflex_vertex)) * minus;
                             minus = -minus;
@@ -549,61 +549,76 @@ class Arrangement {
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
         std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>> gradient(Arrangement_2 &visibility_arrangement, const Guard g) {
-            // std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, Point_2> result;
             std::vector<Vector_2> Dfs, hs;
             std::vector<Point_2> reflex_vertices;
             Vector_2 Df(0, 0), h(0, 0);
-            Point_2 guard = g.get_cur_coords();
+            auto guard = g.get_cur_coords();
+            auto exclude_other_guards = false, guard_on_reflex_vertex = false;
 
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
             auto reflex_vertex_pairs = this->reflex_vertex_pairs(visibility_arrangement, g);
 
-            for (auto j = 0; j < reflex_vertex_pairs.size(); j ++) {
-                // unpack the tuple
-                auto reflex_intersection_orientation_pair = reflex_vertex_pairs.at(j);
-                Point_2 reflex_vertex = std::get<0>(reflex_intersection_orientation_pair);
-                Point_2 intersection = std::get<1>(reflex_intersection_orientation_pair);
-                CGAL::Oriented_side orientation = std::get<2>(reflex_intersection_orientation_pair);
+            do {
+                for (auto j = 0; j < reflex_vertex_pairs.size(); j ++) {
+                    // unpack the tuple
+                    auto reflex_intersection_orientation_pair = reflex_vertex_pairs.at(j);
+                    Point_2 reflex_vertex = std::get<0>(reflex_intersection_orientation_pair);
+                    Point_2 intersection = std::get<1>(reflex_intersection_orientation_pair);
+                    CGAL::Oriented_side orientation = std::get<2>(reflex_intersection_orientation_pair);
 
-                if (guard != reflex_vertex) {
-                    reflex_vertices.push_back(reflex_vertex);
-                    // compute distances between guard - reflex vertex - intersection point
-                    auto alpha = distance(guard, reflex_vertex);
-                    auto beta = distance(reflex_vertex, intersection);
+                    if (guard != reflex_vertex) {
+                        guard_on_reflex_vertex = false;
+                        reflex_vertices.push_back(reflex_vertex);
+                        // compute distances between guard - reflex vertex - intersection point
+                        auto alpha = distance(guard, reflex_vertex);
+                        auto beta = distance(reflex_vertex, intersection);
+                        auto new_beta = beta;
 
-                    auto new_beta = this->exclusive_beta(g, intersection, reflex_vertex);
-                    // std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
-                    // std::cout << beta << ' ' << new_beta << std::endl;
+                        if (!exclude_other_guards)
+                            new_beta = this->exclusive_beta(g, intersection, reflex_vertex);
+                        // std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
+                        // std::cout << beta << ' ' << new_beta << std::endl;
 
-                    // compute guard-reflex vertex vector
-                    Vector_2 v = Vector_2(guard, reflex_vertex);
-
-
-                    // compute orthogonal vector to the guard-reflex vector
-                    // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
-                    //      otherwise, counterclockwise
-                    Vector_2 vp;
-                    if (orientation == CGAL::ON_POSITIVE_SIDE)
-                        vp = v.perpendicular(CGAL::CLOCKWISE);
-                    else
-                        vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
+                        // compute guard-reflex vertex vector
+                        Vector_2 v = Vector_2(guard, reflex_vertex);
 
 
-                    // compute partial Df and h for reflex vertex r
-                    Vector_2 Dfr = vp * (new_beta / (2 * alpha));
-                    Vector_2 hr = v * (new_beta / (2 * alpha * sqrt(alpha)));
-                    Dfs.push_back(Dfr);
-                    hs.push_back(hr);
+                        // compute orthogonal vector to the guard-reflex vector
+                        // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
+                        //      otherwise, counterclockwise
+                        Vector_2 vp;
+                        if (orientation == CGAL::ON_POSITIVE_SIDE)
+                            vp = v.perpendicular(CGAL::CLOCKWISE);
+                        else
+                            vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
 
-                    // compute pull for reflex vertex r
-                    Df += Dfr;
-                    h += hr;
+
+                        // compute partial Df and h for reflex vertex r
+                        Vector_2 Dfr = vp * (new_beta / (2 * alpha));
+                        Vector_2 hr = v * (new_beta / (2 * alpha * sqrt(alpha)));
+                        // std::cout << Dfr << std::endl;
+                        Dfs.push_back(Dfr);
+                        hs.push_back(hr);
+
+                        // compute pull for reflex vertex r
+                        Df += Dfr;
+                        h += hr;
+                    } else
+                        guard_on_reflex_vertex = true;
                 }
-            }
+                // the sum of the partials is on the last index of the array
+                Dfs.push_back(Df);
+                hs.push_back(h);
+
+                // std::cout << "here\n";
+                // if (Df == Vector_2(0, 0) && (reflex_vertex_pairs.size() >= 1 && !guard_on_reflex_vertex)) {
+                //     exclude_other_guards = true;
+                //     Dfs.clear();
+                //     hs.clear();
+                // } else
+                //     exclude_other_guards = false;
+            } while(exclude_other_guards);
         
-            // the sum of the partials is on the last index of the array
-            Dfs.push_back(Df);
-            hs.push_back(h);
 
             return std::make_tuple(Dfs, hs, reflex_vertices);
         }
