@@ -49,11 +49,38 @@ class Drawing(object):
     """
     def read_input_arrangement(self) -> None:
         E = int(input())
+        p1 = None
+        p2 = None
 
         for _ in range(E):
-            segment = list(map(float, input().split()))
-            p1 = Point2(*segment[:2])
-            p2 = Point2(*segment[2:])
+            line_segment = input().split()
+            x = None
+            y = None
+            for i in range(len(line_segment)):
+                if '/' in line_segment[i]:
+                    fraction = list(map(float, line_segment[i].split('/')))
+                    fraction_result = fraction[0] / fraction[1]
+                    if i % 2 == 0:
+                        x = fraction_result
+                    else:
+                        y = fraction_result
+                else:
+                    if i % 2 == 0:
+                        x = float(line_segment[i])
+                    else:
+                        y = float(line_segment[i])
+                if x is not None and y is not None:
+                    if i == 1:
+                        p1 = Point2(x, y)
+                    else:
+                        p2 = Point2(x, y)
+                
+
+
+
+            # segment = list(map(float, input().split()))
+            # p1 = Point2(*segment[:2])
+            # p2 = Point2(*segment[2:])
 
             self.arrangement.insert(Segment2(p1, p2))
             self.halfedges.append(Segment2(p1, p2))
