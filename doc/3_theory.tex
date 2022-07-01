@@ -250,7 +250,9 @@ We can achieve a more rapid increase in the seen area if we move a guard closer 
     \label{fig:top_reflex_vertex}
 \end{figure}
 
-We will now explore how the pull towards a reflex vertex $r$ can be computed. Let $h_r$ be the pull in question. The pull is thus the second derivative of the gradient, so $h_r = \bigtriangledown (\bigtriangledown f_r)$. Given that the norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a}$, we can calculate the norm of the second gradient as 
+We will now explore how the pull towards a reflex vertex $r$ can be computed. Let $h_r$ be the pull in question, as shown in Figure \ref{fig:pull}. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards in the direction of the reflex vertex pull. As previously, and without losing generality, we are interested in a rotation of the plane $R$ such that $g$ and $r$ have the same $x$-coordinate. 
+
+The pull is thus the second derivative of the gradient, so $$h_r = \bigtriangledown (\bigtriangledown f_r) = \left(\frac{\partial \bigtriangledown f}{\partial x}, \frac{\partial \bigtriangledown f}{\partial y}\right)^\intercal = \left(\frac{\partial \bigtriangledown f}{\partial x}, 0\right)^\intercal.$$  We can now calculate $h_r$ as follows: the norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a}$, so the norm of the second gradient as 
 \begin{align*}
 ||h_r||&= ||\bigtriangledown (\bigtriangledown f)|| \\
        &= \bigtriangledown (\frac{b^2}{2a}) \\
@@ -259,4 +261,15 @@ We will now explore how the pull towards a reflex vertex $r$ can be computed. Le
 ||h_r||&= -b^2\frac{1}{2a^2}.
 \end{align*}
 
+\begin{figure*}[!h]
+    \includegraphics[width = 0.7\textwidth]{theory/pull.png}
+    \centering
+    \caption{Computing the movements of the guard based on both the gradient and the pull towards a reflex vertex. When only taking the reflex vertex pull into account, $g$ would need to move to $g'_x$. Similarly for when taking only the gradient into account, $g$ would need to move to $g'_y$. Combining the two movements together results in $g'$ being the final position of $g$.}
+    \label{fig:pull}
+\end{figure*}
+
 The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the same orientation as vector $\vec{v} = (x, y)^\intercal$  from Figure \ref{fig:vperp}. We will normalise $h_r$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, $$h_r = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}.$$
+
+Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is $$h = \sum_{r \in R(g)} h_r, R(g) = \{\text{reflex vertices of $P$ seen by $g$\}}.$$
+
+Therefore, the movement of a guard $g$ to the new position $g'$ becomes $$$$
