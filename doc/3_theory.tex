@@ -1,9 +1,6 @@
 \section{Theory}
 \label{sec:theory}
 
-% The first derivative primarily tells us about the direction the function is going. That is, it tells us if the function is increasing or decreasing.
-
-% the second derivative tells us if there is an increase in the increase of the function
 This section will investigate the theory aspects of solving the Art Gallery Problem using gradient descent. Namely, we will explain what the optimisation function in the context of the Art Gallery problem is, and how it can be solved with gradient descent. We will initially apply gradient descent to only one guard, then extend it to multiple guards.
 
 \subsection{Guarding the Polygon with One Point}
@@ -11,6 +8,7 @@ This section will investigate the theory aspects of solving the Art Gallery Prob
 First, we will explore how gradient descent can be applied for the case that we want to guard the polygon using only one guard.
 
 \subsubsection{Gradient Descent}
+\label{sec:gradient}
 
 Let $P$ be a polygon and $g = (x, y) \in P$ a guard. We are interested in computing the best direction for moving $g$ inside $P$ such that the visibility area $\mathit{Vis}(g)$ increases. That is, exploring what would be a better position $g'$ to move $g$ to such that $g$ ``sees more'' of the polygon $P$. 
 
@@ -209,7 +207,7 @@ Alternatively, if $\triangle_1$ is first seen by other guards (so $b_{11} = 0$),
 
 \subsection{Momentum}
 
-In this section we introduce the concept of momentum. Its aim is to smoothen out the large noisy jumps in the gradient descent computation \cite{goodfelow2016deep}. Momentum builds upon the idea of considering the past states of the gradient descent computation. In this way, the past states create ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother.
+In this section we introduce an improvement to the regular gradient descent algorithm: momentum. Its aim is to smoothen out the large noisy jumps in the gradient descent computation \cite{goodfelow2016deep}. Momentum builds upon the idea of considering the past states of the gradient descent computation. In this way, the past states create ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother.
 
 So, the position $g_i$ at iteration $i$ of a guard $g$ will not be calculated anymore based only on the current computation of gradient descent. Instead, it will also take into account past values of gradient descent. In order to decide how much past states influence the value of the current position, we will take each gradient value with a weight.
 
@@ -232,3 +230,33 @@ Let $$M_0 = (1 - \gamma) \Delta f_0.$$. We can then check for correctness how  t
 In this way, our momentum computation exponentially decreases the influence of a past state over the guard's current movement. So, the previous value of the momentum will exert its inertia with $\gamma$ influence over the new value of the momentum.
 
 Similarly, the new position $g_i$ of guard $g$ will now be calculated as $$g_i = g_{i - 1} + \alpha M_i.$$
+
+\subsection{Reflex Vertex Pull}
+
+In this section we introduce an additional improvement to our gradient descent algorithm with momentum: pulling a guard towards reflex vertices. The pull strategy makes use of the second derivative of our optimisation function $f(g) = \text{Area}(g)$.
+
+% The first derivative primarily tells us about the direction the function is going. That is, it tells us if the function is increasing or decreasing.
+
+% the second derivative tells us what the rate of change of a quantity is
+
+As mentioned previously, we are using the first derivative to compute the gradient of a guard's movement. That is, we use the first derivative of $f$ to find the direction of a guard's movement that increases its seen area. Additionally, we can also make use of the second derivative of $f$ to explore what the rate of change of the area increase is. 
+
+We can achieve a more rapid increase in the seen area if we move a guard closer to a reflex vertex. The closer a guard is moved to a reflex vertex, the larger the increase in the area seen past the vertex. If a guard is moved directly on a reflex vertex, then the area seen past the vertex is maximised. An example of the latter case can be seen in Figure \ref{fig:top_reflex_vertex}. There, the guard $g$ has been moved on top of reflex vertex $r$ such that it can see the whole area behind it.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{theory/pull2.png}
+    \caption{Guard placed on top of a reflex vertex can now see the whole area behind the reflex vertex.}
+    \label{fig:top_reflex_vertex}
+\end{figure}
+
+We will now explore how the pull towards a reflex vertex $r$ can be computed. Let $h_r$ be the pull in question. The pull is thus the second derivative of the gradient, so $h_r = \bigtriangledown (\bigtriangledown f_r)$. Given that the norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a}$, we can calculate the norm of the second gradient as 
+\begin{align*}
+||h_r||&= ||\bigtriangledown (\bigtriangledown f)|| \\
+       &= \bigtriangledown (\frac{b^2}{2a}) \\
+       &= \frac{b^2}{2a}\frac{d}{da} \\
+       &= b^2\frac{1}{2a}\frac{d}{da} \\
+||h_r||&= -b^2\frac{1}{2a^2}.
+\end{align*}
+
+The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the same orientation as vector $\vec{v} = (x, y)^\intercal$  from Figure \ref{fig:vperp}. We will normalise $h_r$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, $$h_r = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}.$$
