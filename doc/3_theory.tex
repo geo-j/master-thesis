@@ -272,4 +272,4 @@ The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the s
 
 Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is $$h = \sum_{r \in R(g)} h_r, R(g) = \{\text{reflex vertices of $P$ seen by $g$\}}.$$
 
-Therefore, the movement of a guard $g$ to the new position $g'$ becomes $$$$
+Therefore, the movement of a guard $g$ to the new position $g'$ will take both the gradient and the pull into account: $$g' = g + \alpha (\bigtriangledown f + h).$$ Additionally, we can choose how much influence the pull itself can have in the movement of the guard by adding a hyperparameter $\beta$: $$g' = g + \alpha (\bigtriangledown f + \beta h).$$
