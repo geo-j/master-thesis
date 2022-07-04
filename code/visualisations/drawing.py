@@ -256,7 +256,7 @@ class Drawing(object):
             plt.title(f'Gradient Computation for Iteration #{pos}')
             # plt.axis('off')
 
-            plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_pos{pos}.png', format = 'png')
+            plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_pos{pos}.png', format = 'png', dpi = 300)
             plt.clf()
             # plt.show()
             self.draw_arrangement()
@@ -265,12 +265,12 @@ class Drawing(object):
     def plot_area_time(self) -> None:
         plt.plot([x * 100 / float(self.max_area) for x in self.areas])
         # plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
-        plt.ylim(0, 101)
+        plt.ylim(min(self.areas) * 100 / float(self.max_area), 101)
         plt.xlabel('# iterations')
         plt.ylabel('total area seen (%)')
         plt.title('Total Area Seen')
         plt.grid()
-        plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png')
+        plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png', dpi = 300)
         # plt.show()
 
     def draw_all(self) -> None:
