@@ -384,9 +384,10 @@ class Arrangement {
         * 
         *  This method computes the tuples between all the reflex vertices a guard sees, their intersection points with the input arrangement boundaries and the orientation of the guard in relation to the boundary of the polygon and a specific reflex vertex
         */
-        std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> reflex_vertex_pairs(Arrangement_2 &visibility_arrangement, const Guard g) {
+        std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> reflex_vertex_pairs(const Guard g) {
             std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> boundary_intersections;
             Point_2 guard = g.get_cur_coords();
+            auto visibility_arrangement = g.get_visibility_region();
 
             auto eit = *visibility_arrangement.unbounded_face()->inner_ccbs_begin();
 
@@ -402,7 +403,7 @@ class Arrangement {
 
                     // check the clockwise orientation of the reflex vertex and the guard
                     // whether we're in the order intersection point - reflex vertex - guard
-                    if (CGAL::collinear(guard, reflex_vertex, eit->prev()->source()->point())) {
+                    if (CGAL::collinear(eit->prev()->source()->point(), reflex_vertex, guard)) {
                         Line_2 boundary(reflex_vertex, eit->target()->point());
 
                         CGAL::Oriented_side orientation = boundary.oriented_side(guard);
@@ -464,8 +465,6 @@ class Arrangement {
                     }
                 } while (++ eit != *guard_exclusive_visibility_region.unbounded_face()->inner_ccbs_begin());
 
-                // auto it = std::find(shared_visibility_intersection_points.begin(), shared_visibility_intersection_points.end(), reflex_vertex);
-                // auto minus = (it == shared_visibility_intersection_points.end()) ? 1 : 1;
                 auto minus = 1;
 
                 // check if the polygon boundary intersection point is seen. If it is seen, then it is removed. Otherwise, it is added to the intersection points vertex. 
@@ -484,8 +483,6 @@ class Arrangement {
                 std::sort(shared_visibility_intersection_points.begin(), shared_visibility_intersection_points.end());
 
                 if (shared_visibility_intersection_points.size() >= 1) {
-                    // std::sort(intersection_points.begin(), intersection_points.end());
-                    // beta = 0;
 
                     // if guard on the left-hand side of the visible segment
                     if (guard.get_cur_coords() < shared_visibility_intersection_points.at(0)) {
@@ -541,6 +538,29 @@ class Arrangement {
             return beta;
         }
 
+        Point_2 point_behind_reflex_vertex(const Guard guard, Point_2 reflex_vertex) {
+            // std::cout << "here\n";
+            auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
+
+            // Identify reflex vertices
+            // use do/while for circular loop
+            // The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
+            do {
+                // if we're on the segment with the reflex vertex
+                if (eit->target()->point() == reflex_vertex) {
+                    // get boundary segment whose end is the reflex vertex
+                    Line_2 boundary(eit->source()->point(), reflex_vertex);
+                    auto orientation = boundary.oriented_side(guard.get_cur_coords());
+
+                    // if the guard is on the positive (right) side, take the end of the boundary segment whose beginning is the reflex vertex
+                    if (orientation == CGAL::ON_POSITIVE_SIDE)
+                        return eit->next()->target()->point();
+                    // otherwise return the beginning of the current segment
+                    else 
+                        return eit->source()->point();
+                }
+            } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
+        }
         /* gradient method
         * :in param Arrangement_2 visibility_arrangement:   the visibility region of the guard
         * :in param Guard guard:                            guard point whose gradient needs to be computed
@@ -548,7 +568,7 @@ class Arrangement {
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
-        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>> gradient(Arrangement_2 &visibility_arrangement, const Guard g) {
+        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>> gradient(const Guard g) {
             std::vector<Vector_2> Dfs, hs;
             std::vector<Point_2> reflex_vertices;
             Vector_2 Df(0, 0), h(0, 0);
@@ -556,7 +576,7 @@ class Arrangement {
             auto exclude_other_guards = false, guard_on_reflex_vertex = false;
 
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
-            auto reflex_vertex_pairs = this->reflex_vertex_pairs(visibility_arrangement, g);
+            auto reflex_vertex_pairs = this->reflex_vertex_pairs(g);
 
             do {
                 for (auto j = 0; j < reflex_vertex_pairs.size(); j ++) {
@@ -565,6 +585,7 @@ class Arrangement {
                     Point_2 reflex_vertex = std::get<0>(reflex_intersection_orientation_pair);
                     Point_2 intersection = std::get<1>(reflex_intersection_orientation_pair);
                     CGAL::Oriented_side orientation = std::get<2>(reflex_intersection_orientation_pair);
+                    auto point_behind_reflex_vertex = this->point_behind_reflex_vertex(g, reflex_vertex);
 
                     if (guard != reflex_vertex) {
                         guard_on_reflex_vertex = false;
@@ -574,9 +595,9 @@ class Arrangement {
                         auto beta = distance(reflex_vertex, intersection);
                         auto new_beta = beta;
 
+                        std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
                         if (!exclude_other_guards)
                             new_beta = this->exclusive_beta(g, intersection, reflex_vertex);
-                        std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
                         std::cout << beta << ' ' << new_beta << std::endl;
 
                         // compute guard-reflex vertex vector
@@ -593,9 +614,16 @@ class Arrangement {
                             vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
 
 
+                        Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
+                        double angle = acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length())) * sqrt(CGAL::to_double(v2.squared_length()))))) / (2 * M_PI);
+                        std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
+                        
+                        // only take the angle if no overlapping visibility regions
+                        if (new_beta != beta)
+                            angle = 1;
                         // compute partial Df and h for reflex vertex r
-                        Vector_2 Dfr = vp * (new_beta / (2 * alpha));
-                        Vector_2 hr = v * (new_beta / (2 * alpha * sqrt(alpha)));
+                        Vector_2 Dfr = angle * vp * (new_beta / (2 * alpha));
+                        Vector_2 hr = angle * v * (new_beta / (2 * alpha * sqrt(alpha)));
                         // std::cout << Dfr << std::endl;
                         Dfs.push_back(Dfr);
                         hs.push_back(hr);
@@ -660,7 +688,7 @@ class Arrangement {
                     // compute gradient of current guard position
                     auto cur_visibility = cur_guard.get_visibility_region();
 
-                    auto gradient_pair = this->gradient(cur_visibility, cur_guard);
+                    auto gradient_pair = this->gradient(cur_guard);
                     auto gradients = std::get<0>(gradient_pair);
                     auto pulls = std::get<1>(gradient_pair);
                     auto reflex_vertices = std::get<2>(gradient_pair);
