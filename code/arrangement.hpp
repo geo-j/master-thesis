@@ -504,7 +504,7 @@ class Arrangement {
                         for (int i = shared_visibility_intersection_points.size() - 1; i >= 0; i --) {
                             // std::cout << i << std::endl;
                             beta += (distance(shared_visibility_intersection_points.at(i), reflex_vertex)) * minus;
-                            // std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
+                            std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
                             minus = -minus;
                         //     beta -= distance(intersection_points.at(i), intersection_points.at(i - 1)) * minus * plus;
                         //     plus = -plus;
@@ -525,7 +525,7 @@ class Arrangement {
 
                         for (auto i = 0; i <= shared_visibility_intersection_points.size() - 1; i ++) {
                             // std::cout << i << std::endl;
-                            // std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
+                            std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
                             beta += (distance(shared_visibility_intersection_points.at(i), reflex_vertex)) * minus;
                             minus = -minus;
 
@@ -576,8 +576,8 @@ class Arrangement {
 
                         if (!exclude_other_guards)
                             new_beta = this->exclusive_beta(g, intersection, reflex_vertex);
-                        // std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
-                        // std::cout << beta << ' ' << new_beta << std::endl;
+                        std::cout << "======looking at reflex vertex " << reflex_vertex << std::endl;
+                        std::cout << beta << ' ' << new_beta << std::endl;
 
                         // compute guard-reflex vertex vector
                         Vector_2 v = Vector_2(guard, reflex_vertex);

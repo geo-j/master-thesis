@@ -176,6 +176,6 @@ class Guard {
     private:
         Point_2 cur_coords;
         Arrangement_2 visibility_region;
-        double area, learning_rate{0.5}, gamma{0.9}, pull_attraction{2};
+        double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
         Vector_2 momentum{0, 0};
 };
