@@ -129,8 +129,8 @@ class Guard {
             for (auto i = 0; i < gradients.size() - 1; i ++) {
                 // std::cout << "h=" << this->pull_attraction * pulls.at(i) << std::endl;
                 // std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + this->pull_attraction * pulls.at(i))) * this->learning_rate << std::endl;
-                std::cout << "Df=" << gradients.at(i) << std::endl;
-                std::cout << "h=" << pulls.at(i) << std::endl;
+                std::cout << "Df=" << gradients.at(i) * this->learning_rate << std::endl;
+                std::cout << "h=" << pulls.at(i) * this->learning_rate << std::endl;
             }
 
             // std::cout << gradients.size() << " " << pulls.size() << " " << reflex_vertices.size() << std::endl;
@@ -145,7 +145,7 @@ class Guard {
                 // std::cout << d << std::endl;
                 // std::cout << pulls.at(i).squared_length() << " " << (2 / 3.0) * d << std::endl;
                 if ((d < D / 2 || D == -1)
-                    && pulls.at(i).squared_length() > (2 / 3.0) * d
+                    && pulls.at(i).squared_length() * this->learning_rate > (2 / 3.0) * d
                 ) {
                     this->momentum = Vector_2(0, 0);
 
@@ -168,7 +168,7 @@ class Guard {
 
             // print last gradient
             std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
-            std::cout << "h=" << pulls.at(pulls.size() - 1) << std::endl;
+            std::cout << "h=" << pulls.at(pulls.size() - 1) * this->learning_rate << std::endl;
 
 
         }
