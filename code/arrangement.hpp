@@ -652,15 +652,15 @@ class Arrangement {
             auto l = 0;
             std::cout << "total area=" << compute_area(this->input_arrangement) << std::endl;
 
-            do {
-                std::cout << "i=" << l << std::endl;
-                std::cout << "area=" << compute_area(full_arrangement) << std::endl;
-                
+            do {                
                 std::vector<Guard> zero_df_guards(this->guards);
                 std::vector<Guard> new_guards(this->guards);
+                std::cout << "i=" << l << std::endl;
+                std::cout << "area=" << compute_area(full_arrangement) << std::endl;
 
                 while (!zero_df_guards.empty()) {
-                    std::cout << zero_df_guards.size() << " guards with gradient 0" << std::endl;
+                    std::cout << zero_df_guards.size() << " guards with gradient 0\n";
+
                     for (auto j = 0; j < zero_df_guards.size(); j ++) {
                         auto itr = std::find(this->guards.begin(), this->guards.end(), zero_df_guards.at(j));
                         auto i = std::distance(this->guards.begin(), itr);
@@ -684,9 +684,14 @@ class Arrangement {
                         pull = pulls.at(pulls.size() - 1);
 
                         if (gradient != Vector_2(0, 0) || pull != Vector_2(0, 0)) {
+                            std::cout << "removing guard " << cur_guard << std::endl;
                             zero_df_guards.erase(zero_df_guards.begin() + j);
                             j --;
                         // }
+
+                            std::cout << 'g' << i << '=' << cur_guard << std::endl;
+                            std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
+                            std::cout << "alpha" << i << '=' << cur_guard.get_learning_rate() << std::endl;
 
                             // update current guard position
                             cur_guard.update_coords(gradients, pulls, reflex_vertices);
@@ -715,24 +720,26 @@ class Arrangement {
 
                             // if the guard is now inside the arrangement, update the guard position in the vector
                             if (!this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())) {
-                                // std::cout << 'g' << i << '=' << cur_guard << std::endl;
+                                // std::cout << "i=" << l << std::endl;
+                                // std::cout << "area=" << compute_area(full_arrangement) << std::endl;
                                 auto visibility_region = this->visibility(cur_guard.get_cur_coords());
                                 // auto new_visibility_arrangement = this->full_visibility();
-                                std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
 
                                 cur_guard.update_visibility(visibility_region);
                                 new_guards[i] = Guard(cur_guard);
                             }
 
-                            std::cout << 'g' << i << '=' << cur_guard << std::endl;
-                            std::cout << "alpha" << i << '=' << cur_guard.get_learning_rate() << std::endl;
+                            // std::cout << 'g' << i << '=' << cur_guard << std::endl;
+
                             break;
                         }
                     }
-                }
 
-                full_arrangement = this->full_visibility();
+                    if (zero_df_guards.size() == this->guards.size())
+                        break;
+                }
                 l ++;
+                full_arrangement = this->full_visibility();
 
                 this->guards = std::vector<Guard>(new_guards);
             } while(!this->is_completely_visible(full_arrangement));
