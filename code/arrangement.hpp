@@ -533,17 +533,17 @@ class Arrangement {
             // The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
             do {
                 // if we're on the segment with the reflex vertex
-                if (eit->target()->point() == reflex_vertex) {
+                if (eit->source()->point() == reflex_vertex) {
                     // get boundary segment whose end is the reflex vertex
-                    Line_2 boundary(eit->source()->point(), reflex_vertex);
-                    auto orientation = boundary.oriented_side(guard.get_cur_coords());
+                    // Line_2 boundary(eit->target()->point(), reflex_vertex);
+                    // auto orientation = boundary.oriented_side(guard.get_cur_coords());
 
-                    // if the guard is on the positive (right) side, take the end of the boundary segment whose beginning is the reflex vertex
-                    if (orientation == CGAL::ON_POSITIVE_SIDE)
-                        return eit->next()->target()->point();
-                    // otherwise return the beginning of the current segment
+                    // if the guard sees the other end of the segment, we need to take the beginning of the previous segment
+                    if (this->is_visible_from(guard.get_cur_coords(), eit->target()->point()))
+                        return eit->prev()->source()->point();
+                    // otherwise take current segment end
                     else 
-                        return eit->source()->point();
+                        return eit->target()->point();
                 }
             } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
         }
