@@ -7,6 +7,10 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Arr_segment_traits_2.h>
 #include <CGAL/number_utils.h>
+#include <CGAL/MP_Float.h>
+#include <CGAL/Lazy_exact_nt.h>
+#include <CGAL/Quotient.h>
+#include <CGAL/Cartesian.h>
 
 
 // TODO: think about how the kernel would need to be changed
@@ -18,6 +22,8 @@ typedef CGAL::Arr_segment_traits_2<Kernel>                                  Trai
 typedef CGAL::Arrangement_2<Traits_2>                                       Arrangement_2;
 
 typedef Kernel::FT                                                          FT;
+typedef CGAL::Lazy_exact_nt<CGAL::Quotient<CGAL::MP_Float> > NT;
+typedef CGAL::Cartesian<NT> K;
 
 
 
