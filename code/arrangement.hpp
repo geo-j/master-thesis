@@ -25,9 +25,9 @@
 typedef Arrangement_2::Face_handle                                                  Face_handle;
 typedef Arrangement_2::Edge_const_iterator                                          Edge_const_iterator;
 typedef Arrangement_2::Ccb_halfedge_circulator                                      Ccb_halfedge_circulator;
-typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_true>            NSPV;
-typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_true>          RSV;
-typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2, CGAL::Tag_true>      TEV;
+typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_false>            NSPV;
+typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_false>          RSV;
+typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2, CGAL::Tag_false>      TEV;
 
 typedef Kernel::Ray_2                                                               Ray_2;
 typedef Kernel::Intersect_2                                                         Intersect_2;
@@ -101,7 +101,6 @@ class Arrangement {
             }
 
             CGAL::insert_non_intersecting_curves(a.input_arrangement, segments.begin(), segments.end());
-
             a.visibility_algo.attach(a.input_arrangement);
             a.pl = CGAL::Arr_naive_point_location<Arrangement_2>(a.input_arrangement);
 
@@ -201,7 +200,25 @@ class Arrangement {
             this->guards.push_back(Guard(q, visibility_region, learning_rate, pull_attraction));
         }
 
+        void add_reflex_vertices() {
+            // std::cout << "here\n";
+            auto eit = *(this->input_arrangement).unbounded_face()->inner_ccbs_begin();
 
+            // Identify reflex vertices
+            // use do/while for circular loop
+            // The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
+            do {
+                //Left turn, because the boundary is clockwise...
+                // std::cout << "++++++ checking left turn for " << eit->prev()->source()->point() << ',' << eit->prev()->target()->point() << ',' << eit->target()->point() << std::endl;
+                if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
+                    // identify reflex vertex
+                    Point_2 reflex_vertex = eit->source()->point();
+                    // std::cout << "found reflex vertex " << reflex_vertex << std::endl;
+
+                    this->reflex_vertices.push_back(reflex_vertex);
+                }
+            } while (++ eit != *(this->input_arrangement).unbounded_face()->inner_ccbs_begin());
+        }
 
         /* *****************
            *  Visibility   *
@@ -399,28 +416,90 @@ class Arrangement {
             // The polygon is a "hole" in the unbounded face of the arrangement, thus a clockwise inner_ccb
             do {
                 //Left turn, because the boundary is clockwise...
-                if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN) {
+                std::cout << "++++++ checking left turn for " << eit->prev()->source()->point() << ',' << eit->prev()->target()->point() << ',' << eit->target()->point() << std::endl;
+                Point_2 reflex_vertex = eit->source()->point();
+                auto it = std::find(this->reflex_vertices.begin(), this->reflex_vertices.end(), reflex_vertex);
+
+                if (CGAL::orientation(eit->prev()->source()->point(), eit->prev()->target()->point(), eit->target()->point()) == CGAL::LEFT_TURN
+                    ||
+                    it != this->reflex_vertices.end()
+                ) {
                     // identify reflex vertex
-                    Point_2 reflex_vertex = eit->source()->point();
-                    // std::cout << "found reflex vertex " << reflex_vertex << std::endl;
+                    std::cout << "found reflex vertex " << reflex_vertex << std::endl;
 
                     // check the clockwise orientation of the reflex vertex and the guard
                     // whether we're in the order intersection point - reflex vertex - guard
                     if (CGAL::collinear(eit->prev()->source()->point(), reflex_vertex, guard)) {
+                        std::cout << "collinear vertices " << eit->prev()->source()->point() << ',' << reflex_vertex << ',' << guard << std::endl;
+
                         Line_2 boundary(reflex_vertex, eit->target()->point());
 
                         CGAL::Oriented_side orientation = boundary.oriented_side(guard);
                         boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->prev()->source()->point(), orientation));
                     }
-
                     // or whether we're in the order guard - reflex vertex - intersection point
                     else if (CGAL::collinear(guard, reflex_vertex, eit->target()->point())) {
+                        std::cout << "collinear vertices " << eit->target()->point() << ',' << reflex_vertex << ',' << guard << std::endl;
+
                         Line_2 boundary(reflex_vertex, eit->prev()->source()->point());
 
                         CGAL::Oriented_side orientation = boundary.oriented_side(guard);
                         boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->target()->point(), orientation));
                     }
                 }
+                // check if reflex vertex is on one of the visibility region segments; and if so, add it 
+                // for (auto reflex_vertex : this->reflex_vertices) {
+                //     Line_2 visibility_line(eit->prev()->source()->point(), eit->prev()->target()->point());
+                //     std::cout << "++++++ checking reflex vertex " << reflex_vertex << " on visibility boundary " << eit->prev()->source()->point() << ' ' << eit->prev()->target()->point() << std::endl;
+                //     std::cout << "collinear? " << (CGAL::collinear(eit->prev()->source()->point(), reflex_vertex, eit->prev()->target()->point())
+                //         // ||
+                //         // (visibility_line.is_horizontal() && eit->prev()->source()->point().x() == reflex_vertex.x() && eit->prev()->target()->point().x() == reflex_vertex.x())
+                //         // ||
+                //         // (visibility_line.is_vertical() && eit->prev()->source()->point().y() == reflex_vertex.y() && eit->prev()->target()->point().y() == reflex_vertex.y())
+                //         ) << std::endl;
+                //     std::cout << "x coords matching? " << eit->prev()->source()->point().x() << '=' << reflex_vertex.x() << '?' << (eit->prev()->source()->point().x() == reflex_vertex.x()) << std::endl;
+                //     std::cout << "x coords matching? " << eit->prev()->target()->point().x() << '=' << reflex_vertex.x() << '?' << (eit->prev()->target()->point().x() == reflex_vertex.x()) << std::endl;
+                //     // std::cout << "distance " << sqrt(distance(reflex_vertex, eit->prev()->source()->point())) << '+' << sqrt(distance(reflex_vertex, eit->prev()->target()->point())) << '=' << sqrt(distance(eit->prev()->target()->point(), eit->prev()->source()->point())) << '?' << (sqrt(distance(reflex_vertex, eit->prev()->source()->point())) + sqrt(distance(reflex_vertex, eit->prev()->target()->point())) == sqrt(distance(eit->prev()->target()->point(), eit->prev()->source()->point()))) << std::endl;
+
+
+                //     if (
+                //         // (
+                //         CGAL::collinear(eit->prev()->source()->point(), reflex_vertex, eit->prev()->target()->point())
+                //         // ||
+                //         // (visibility_line.is_vertical() && eit->prev()->source()->point().x() == reflex_vertex.x() && eit->prev()->target()->point().x() == reflex_vertex.x())
+                //         // ||
+                //         // (visibility_line.is_horizontal() && eit->prev()->source()->point().y() == reflex_vertex.y() && eit->prev()->target()->point().y() == reflex_vertex.y())
+                //         // )
+                //         // &&
+                //         // (sqrt(distance(reflex_vertex, eit->prev()->source()->point())) + sqrt(distance(reflex_vertex, eit->prev()->target()->point())) == sqrt(distance(eit->prev()->target()->point(), eit->prev()->source()->point())))
+                //         &&
+                //         reflex_vertex != eit->prev()->source()->point()
+                //         &&
+                //         reflex_vertex != eit->prev()->target()->point()
+                //         &&
+                //         reflex_vertex != guard
+                //     ) {
+                //         std::cout << "found reflex vertex " << reflex_vertex << " on visibility boundary " << eit->prev()->source()->point() << ' ' << eit->prev()->target()->point() << std::endl;
+                //         // check the clockwise orientation of the reflex vertex and the guard
+                //         // whether we're in the order intersection point - reflex vertex - guard
+                //         if (CGAL::collinear(eit->prev()->source()->point(), reflex_vertex, guard)) {
+                //             std::cout << "collinear vertices " << eit->prev()->source()->point() << ',' << reflex_vertex << ',' << guard << std::endl;
+                //             Line_2 boundary(reflex_vertex, eit->prev()->target()->point());
+
+                //             CGAL::Oriented_side orientation = boundary.oriented_side(guard);
+                //             boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->prev()->source()->point(), orientation));
+                //         }                    
+                //         // or whether we're in the order guard - reflex vertex - intersection point
+                //         else if (CGAL::collinear(guard, reflex_vertex, eit->prev()->target()->point())) {
+                //             std::cout << "collinear vertices " << eit->prev()->target()->point() << ',' << reflex_vertex << ',' << guard << std::endl;
+
+                //             Line_2 boundary(reflex_vertex, eit->prev()->source()->point());
+
+                //             CGAL::Oriented_side orientation = boundary.oriented_side(guard);
+                //             boundary_intersections.push_back(std::make_tuple(reflex_vertex, eit->prev()->target()->point(), orientation));
+                //         }
+                //     }
+                // }
             } while (++ eit != *visibility_arrangement.unbounded_face()->inner_ccbs_begin());
 
             return boundary_intersections;
@@ -495,8 +574,8 @@ class Arrangement {
                     // starting from the rightmost point, sequentially add and subtract every beta s.t. the beta pairs resembling the triangles are created
                     for (int i = shared_visibility_intersection_points.size() - 1; i >= 0; i --) {
                         // std::cout << i << std::endl;
-                        beta += (distance(shared_visibility_intersection_points.at(i), reflex_vertex)) * minus;
-                        std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
+                        beta += (CGAL::to_double(CGAL::squared_distance(shared_visibility_intersection_points.at(i), reflex_vertex))) * minus;
+                        std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << CGAL::squared_distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
                         minus = -minus;
                     }
                 } else {
@@ -505,8 +584,8 @@ class Arrangement {
 
                     for (auto i = 0; i <= shared_visibility_intersection_points.size() - 1; i ++) {
                         // std::cout << i << std::endl;
-                        std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
-                        beta += (distance(shared_visibility_intersection_points.at(i), reflex_vertex)) * minus;
+                        std::cout << "adding distance up to " << shared_visibility_intersection_points.at(i) << " = " << CGAL::squared_distance(shared_visibility_intersection_points.at(i), reflex_vertex) * minus << std::endl;
+                        beta += (CGAL::to_double(CGAL::squared_distance(shared_visibility_intersection_points.at(i), reflex_vertex))) * minus;
                         minus = -minus;
                     }
                 }
@@ -577,8 +656,8 @@ class Arrangement {
                     guard_on_reflex_vertex = false;
                     reflex_vertices.push_back(reflex_vertex);
                     // compute distances between guard - reflex vertex - intersection point
-                    auto alpha = distance(guard, reflex_vertex);
-                    auto beta = distance(reflex_vertex, intersection);
+                    auto alpha = CGAL::to_double(CGAL::squared_distance(guard, reflex_vertex));
+                    auto beta = CGAL::to_double(CGAL::squared_distance(reflex_vertex, intersection));
                     auto new_beta = beta;
 
                     std::cout << "looking at reflex vertex " << reflex_vertex << std::endl;
@@ -609,11 +688,11 @@ class Arrangement {
                     std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
-                    // if (new_beta != beta)
+                    if (new_beta != beta)
                         angle = 1;
                     // compute partial Df and h for reflex vertex r
                     Vector_2 Dfr = angle * vp * (new_beta / (2 * alpha));
-                    Vector_2 hr = angle * v * (new_beta / (2 * alpha * sqrt(alpha)));
+                    Vector_2 hr = angle * v * (new_beta / (2 * alpha * sqrt(CGAL::to_double(alpha))));
                     // std::cout << Dfr << std::endl;
                     Dfs.push_back(Dfr);
                     hs.push_back(hr);
@@ -650,6 +729,7 @@ class Arrangement {
         void optimise() {
             auto full_arrangement = this->full_visibility();
             auto l = 0;
+            this->add_reflex_vertices();
             std::cout << "total area=" << compute_area(this->input_arrangement) << std::endl;
 
             do {                
@@ -735,11 +815,12 @@ class Arrangement {
                         }
                     }
 
-                    if (zero_df_guards.size() == this->guards.size())
+                    full_arrangement = this->full_visibility();
+                    
+                    if (zero_df_guards.size() == this->guards.size() || this->is_completely_visible(full_arrangement))
                         break;
                 }
                 l ++;
-                full_arrangement = this->full_visibility();
 
                 this->guards = std::vector<Guard>(new_guards);
             } while(!this->is_completely_visible(full_arrangement));
