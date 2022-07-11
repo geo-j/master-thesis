@@ -99,6 +99,8 @@ class Drawing(object):
         i = None
 
         for line in stdin:
+            if iteration is not None and iteration < 10:
+                print(iteration, line)
             if line.startswith('total'):
                 self.max_area = float(line[11:].strip())
                 print(self.max_area)
@@ -128,7 +130,7 @@ class Drawing(object):
                 area = float(line[6:].strip())
                 self.local_areas[f'g{i}'][iteration].append(area)
         
-        self.n_iterations = iteration - 1
+        self.n_iterations = iteration
 
     
     def read_all_input(self) -> None:
