@@ -169,8 +169,6 @@ class Guard {
             // print last gradient
             std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
             std::cout << "h=" << pulls.at(pulls.size() - 1) * this->learning_rate << std::endl;
-
-
         }
 
     private:
