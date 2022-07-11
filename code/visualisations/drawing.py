@@ -146,7 +146,9 @@ class Drawing(object):
         color_list = plt.rcParams['axes.prop_cycle'].by_key()['color']
         i = 0
         for guard in self.xs.keys():
-            # print(guard, pos)
+            print(guard, pos, self.xs[guard])
+            if len(self.xs[guard]) <= pos:
+                pos = -1
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
             face = self.arrangement.find(g)
 
@@ -242,6 +244,8 @@ class Drawing(object):
         for guard in self.xs.keys():
             color = color_list[i]
             i += 1
+            if len(self.xs[guard]) <= pos:
+                pos = -1
             plt.scatter(self.xs[guard][pos], self.ys[guard][pos], color = color)
 
             plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
