@@ -745,15 +745,15 @@ class Arrangement {
                                 // this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
                                 // || 
                                 it == reflex_vertices.end() &&
-                                this->intersects_boundary(ray)
-                                Point_2 new_guard_position;
-                                if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position)) {
-                                    cur_guard.set_cur_coords(new_guard_position);
-                                    // std::cout << cur_guard << std::endl;
-                                } else {
-                                    // std::cout << "YO\n";
-                                    cur_guard.set_cur_coords(prev_guard.get_cur_coords());
-                                }
+                                this->intersects_boundary(ray)) {
+                                    Point_2 new_guard_position;
+                                    if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position)) {
+                                        cur_guard.set_cur_coords(new_guard_position);
+                                        // std::cout << cur_guard << std::endl;
+                                    } else {
+                                        // std::cout << "YO\n";
+                                        cur_guard.set_cur_coords(prev_guard.get_cur_coords());
+                                    }
                             }
 
                             // if the guard is now inside the arrangement, update the guard position in the vector
