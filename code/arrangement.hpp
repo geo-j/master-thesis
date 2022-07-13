@@ -25,15 +25,16 @@
 typedef Arrangement_2::Face_handle                                                  Face_handle;
 typedef Arrangement_2::Edge_const_iterator                                          Edge_const_iterator;
 typedef Arrangement_2::Ccb_halfedge_circulator                                      Ccb_halfedge_circulator;
-typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_false>            NSPV;
-typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_false>          RSV;
-typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2, CGAL::Tag_false>      TEV;
+typedef CGAL::Simple_polygon_visibility_2<Arrangement_2, CGAL::Tag_false>           NSPV;
+typedef CGAL::Rotational_sweep_visibility_2<Arrangement_2, CGAL::Tag_false>         RSV;
+typedef CGAL::Triangular_expansion_visibility_2<Arrangement_2, CGAL::Tag_false>     TEV;
 
 typedef Kernel::Ray_2                                                               Ray_2;
 typedef Kernel::Intersect_2                                                         Intersect_2;
 typedef Kernel::Object_2                                                            Object_2;
 typedef Kernel::Line_2                                                              Line_2;
 typedef CGAL::Polygon_with_holes_2<Kernel>                                          Polygon_with_holes_2;
+typedef std::list<Polygon_with_holes_2>                                             Pwh_list_2;
 
 
 
@@ -146,6 +147,37 @@ class Arrangement {
             }
         }
 
+        template<typename stream>
+        void init_guards(stream &f, double learning_rate, double pull_attraction) {
+            std::size_t n_guards;
+            f >> n_guards;
+
+            for (auto i = 0; i < n_guards; i ++) {
+                if (i == 0) {
+                    auto eit = *(this->input_arrangement).unbounded_face()->inner_ccbs_begin();
+                    auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+
+                    Point_2 q((eit->source()->point().x() + eit->target()->point().x()) / 2, (eit->source()->point().y() + eit->target()->point().y()) / 2);
+                    this->add_guard(q, learning_rate, pull_attraction);
+                } else {
+                    auto full_visibility_arrangement = this->full_visibility();
+                    auto full_visibility_polygon = arrangement_to_polygon(full_visibility_arrangement);
+                    if (this->input_polygon.is_clockwise_oriented())
+                        this->input_polygon.reverse_orientation();
+                    if (full_visibility_polygon.is_clockwise_oriented())
+                        full_visibility_polygon.reverse_orientation();
+
+                    Pwh_list_2 symmR;
+                    CGAL::symmetric_difference (this->input_polygon, full_visibility_polygon, std::back_inserter(symmR));
+
+                    auto v = symmR.begin()->outer_boundary().edge(0);
+
+                    Point_2 q((v.source().x() + v.target().x()) / 2, (v.source().y() + v.target().y()) / 2);
+                    this->add_guard(q, learning_rate, pull_attraction);
+
+                }
+            }
+        }
         /* print_polygon method
         * :out param stream f: data stream where the arrangement should be output
         *
@@ -737,8 +769,8 @@ class Arrangement {
 
                             auto it = std::find(reflex_vertices.begin(), reflex_vertices.end(), cur_guard.get_cur_coords());
                             // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
-                            std::cout << "is guard reflex vertex? " << (it == reflex_vertices.end()) << std::endl;
-                            std::cout << "does guard intersect boundary ray " << ray << '?' << std::endl;
+                            std::cout << "is guard reflex vertex? " << (it != reflex_vertices.end()) << std::endl;
+                            std::cout << "does guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
                             // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                             // exception for when the guard is on a reflex vertex
                             if (
@@ -749,7 +781,7 @@ class Arrangement {
                                     Point_2 new_guard_position;
                                     if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position)) {
                                         cur_guard.set_cur_coords(new_guard_position);
-                                        // std::cout << cur_guard << std::endl;
+                                        std::cout << cur_guard << std::endl;
                                     } else {
                                         // std::cout << "YO\n";
                                         cur_guard.set_cur_coords(prev_guard.get_cur_coords());
@@ -774,14 +806,16 @@ class Arrangement {
                     }
 
                     full_arrangement = this->full_visibility();
+                    std::cout << "is completely visible? " << this->is_completely_visible(full_arrangement) << std::endl;
+                    std::cout << "are areas equal? " <<  compute_area(this->input_arrangement) << '=' << compute_area(full_arrangement) << '?' << (compute_area(this->input_arrangement) == compute_area(full_arrangement)) << std::endl;
                     
-                    if (zero_df_guards.size() == this->guards.size() || this->is_completely_visible(full_arrangement))
+                    if (zero_df_guards.size() == this->guards.size() || this->is_completely_visible(full_arrangement) || (compute_area(this->input_arrangement) - compute_area(full_arrangement)) <= 0.005)
                         break;
                 }
                 l ++;
 
                 this->guards = std::vector<Guard>(new_guards);
-            } while(!this->is_completely_visible(full_arrangement));
+            } while(!this->is_completely_visible(full_arrangement) && compute_area(this->input_arrangement) - compute_area(full_arrangement) > 0.005);
 
             // print fully visible details, as they don't get printed if the while loop finishes (when everything is seen)
             std::cout << "i=" << l + 1 << std::endl;
