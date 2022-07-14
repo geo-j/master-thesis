@@ -624,9 +624,10 @@ class Arrangement {
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
-        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>> gradient(const Guard g, std::vector<Guard> zero_df_guards) {
+        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>, std::vector<Line_2>> gradient(const Guard g, std::vector<Guard> zero_df_guards) {
             std::vector<Vector_2> Dfs, hs;
             std::vector<Point_2> reflex_vertices;
+            std::vector<Line_2> segments_behind_reflex_vertices;
             Vector_2 Df(0, 0), h(0, 0);
             auto guard = g.get_cur_coords();
 
@@ -684,6 +685,7 @@ class Arrangement {
                     // std::cout << Dfr << std::endl;
                     Dfs.push_back(Dfr);
                     hs.push_back(hr);
+                    segments_behind_reflex_vertices.push_back(Line_2(reflex_vertex, point_behind_reflex_vertex));
 
                     // compute pull for reflex vertex r
                     Df += Dfr;
@@ -695,7 +697,7 @@ class Arrangement {
             hs.push_back(h);
         
 
-            return std::make_tuple(Dfs, hs, reflex_vertices);
+            return std::make_tuple(Dfs, hs, reflex_vertices, segments_behind_reflex_vertices);
         }
 
         /* optimise method
@@ -747,6 +749,7 @@ class Arrangement {
                         auto gradients = std::get<0>(gradient_pair);
                         auto pulls = std::get<1>(gradient_pair);
                         auto reflex_vertices = std::get<2>(gradient_pair);
+                        auto segment_behind_reflex_vertices = std::get<3>(gradient_pair);
                         gradient = gradients.at(gradients.size() - 1);
                         pull = pulls.at(pulls.size() - 1);
                         std::cout << "computed gradient " << gradient << " and pull " << pull << std::endl;
@@ -765,16 +768,19 @@ class Arrangement {
                             cur_guard.update_coords(gradients, pulls, reflex_vertices);
                             auto ray = Segment_2(Point_2(prev_guard.get_cur_coords()), Point_2(cur_guard.get_cur_coords()));
 
-                            auto it = std::find(reflex_vertices.begin(), reflex_vertices.end(), cur_guard.get_cur_coords());
+                            // auto cur_it = std::find(reflex_vertices.begin(), reflex_vertices.end(), cur_guard.get_cur_coords());
+                            // auto it = std::find(reflex_vertices.begin(), reflex_vertices.end(), cur_guard.get_cur_coords());
+
                             // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
-                            std::cout << "is guard reflex vertex? " << (it != reflex_vertices.end()) << std::endl;
+                            std::cout << "is guard reflex vertex? " << cur_guard.is_reflex_vertex() << std::endl;
                             // std::cout << "does guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
                             // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                             // exception for when the guard is on a reflex vertex
+                            // TODO: if guard was reflex vertex, don't let it move away from the reflex vertex line
                             if (
                                 // this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
-                                // || 
-                                it == reflex_vertices.end() &&
+
+                                !cur_guard.is_reflex_vertex() &&
                                 this->intersects_boundary(ray)) {
                                     Point_2 new_guard_position;
                                     if (this->place_guard_on_boundary(prev_guard.get_cur_coords(), cur_guard.get_cur_coords(), new_guard_position)) {

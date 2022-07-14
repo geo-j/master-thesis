@@ -75,6 +75,9 @@ class Guard {
             this->learning_rate = alpha;
         }
 
+        bool is_reflex_vertex() {
+            return this->reflex_vertex;
+        }
         /* overloaded equality operator
         *
         * The equality is established if the previous, and current coordinates, as well as the area seen are the same. 
@@ -151,6 +154,7 @@ class Guard {
 
                     this->cur_coords = Point_2(reflex_vertices.at(i));
                     placed = true;
+                    this->reflex_vertex = true;
                     std::cout << "event=placed on reflex vertex " << this->cur_coords << std::endl;
 
                     break;
@@ -164,6 +168,7 @@ class Guard {
                 // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
 
                 this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
+                this->reflex_vertex = false;
             }
 
             // print last gradient
@@ -176,4 +181,5 @@ class Guard {
         Arrangement_2 visibility_region;
         double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
         Vector_2 momentum{0, 0};
+        bool reflex_vertex;
 };
