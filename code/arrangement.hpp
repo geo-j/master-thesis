@@ -629,7 +629,6 @@ class Arrangement {
             std::vector<Point_2> reflex_vertices;
             Vector_2 Df(0, 0), h(0, 0);
             auto guard = g.get_cur_coords();
-            auto guard_on_reflex_vertex = false;
 
             // get all (reflex vertex, boundary intersection point, orientation) tuples for the guard
             auto reflex_vertex_pairs = this->reflex_vertex_pairs(g);
@@ -643,7 +642,6 @@ class Arrangement {
                 auto point_behind_reflex_vertex = this->point_behind_reflex_vertex(g, reflex_vertex);
 
                 if (guard != reflex_vertex) {
-                    guard_on_reflex_vertex = false;
                     reflex_vertices.push_back(reflex_vertex);
                     // compute distances between guard - reflex vertex - intersection point
                     auto alpha = distance(guard, reflex_vertex);
@@ -674,7 +672,7 @@ class Arrangement {
 
 
                     Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
-                    double angle = acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length())) * sqrt(CGAL::to_double(v2.squared_length()))))) / (2 * M_PI);
+                    double angle = acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact())))));
                     std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
@@ -690,8 +688,7 @@ class Arrangement {
                     // compute pull for reflex vertex r
                     Df += Dfr;
                     h += hr;
-                } else
-                    guard_on_reflex_vertex = true;
+                }
             }
             // the sum of the partials is on the last index of the array
             Dfs.push_back(Df);
