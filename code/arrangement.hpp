@@ -162,13 +162,14 @@ class Arrangement {
                 } else {
                     auto full_visibility_arrangement = this->full_visibility();
                     auto full_visibility_polygon = arrangement_to_polygon(full_visibility_arrangement);
+
                     if (this->input_polygon.is_clockwise_oriented())
                         this->input_polygon.reverse_orientation();
                     if (full_visibility_polygon.is_clockwise_oriented())
                         full_visibility_polygon.reverse_orientation();
 
                     Pwh_list_2 symmR;
-                    CGAL::symmetric_difference (this->input_polygon, full_visibility_polygon, std::back_inserter(symmR));
+                    CGAL::difference(this->input_polygon, full_visibility_polygon, std::back_inserter(symmR));
 
                     auto v = symmR.begin()->outer_boundary().edge(0);
 
@@ -770,7 +771,7 @@ class Arrangement {
                             auto it = std::find(reflex_vertices.begin(), reflex_vertices.end(), cur_guard.get_cur_coords());
                             // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
                             std::cout << "is guard reflex vertex? " << (it != reflex_vertices.end()) << std::endl;
-                            std::cout << "does guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
+                            // std::cout << "does guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
                             // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                             // exception for when the guard is on a reflex vertex
                             if (
@@ -885,6 +886,7 @@ class Arrangement {
         return placed;
     }
 
+    // FIXME: for some reason crashes when a guard is to be placed again on a reflex vertex
     bool intersects_boundary(Segment_2 ray) {
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         
