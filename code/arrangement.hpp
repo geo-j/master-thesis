@@ -773,10 +773,14 @@ class Arrangement {
 
                             // std::cout << "-------prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
                             std::cout << "is guard reflex vertex? " << cur_guard.is_reflex_vertex() << std::endl;
-                            // std::cout << "does guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
+                            std::cout << "does guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
                             // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                             // exception for when the guard is on a reflex vertex
                             // TODO: if guard was reflex vertex, don't let it move away from the reflex vertex line
+
+                            if (prev_guard.is_reflex_vertex()) {
+
+                            }
                             if (
                                 // this->input_polygon.has_on_unbounded_side(cur_guard.get_cur_coords())
 
@@ -857,16 +861,16 @@ class Arrangement {
                 // std::cout<<"here\n";
                 // std::cout << "guard " << prev_guard << " wants to move to " << guard << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
 
-                if (!placed) {
+                if (!placed || distance(prev_guard, tmp_guard) < distance(prev_guard, new_guard)) {
                     new_guard = Point_2(tmp_guard);
                     min_edge = Segment_2(edge);
                     placed = true;
                 }
-                else if (distance(prev_guard, tmp_guard) < distance(prev_guard, new_guard)) {
-                    new_guard = Point_2(tmp_guard);
-                    min_edge = Segment_2(edge);
-                    placed = true;
-                }
+                // else if (distance(prev_guard, tmp_guard) < distance(prev_guard, new_guard)) {
+                //     new_guard = Point_2(tmp_guard);
+                //     min_edge = Segment_2(edge);
+                //     placed = true;
+                // }
             }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
@@ -889,7 +893,14 @@ class Arrangement {
         return placed;
     }
 
-    // FIXME: for some reason crashes when a guard is to be placed again on a reflex vertex
+    // bool intersects_line(Segment_2 ray, Segment_2 line, bool is_line) {
+    //     if (is_line)
+
+    //     auto intersection = CGAL::intersection(ray, line);
+
+    //     return (intersection ? true : false);
+    // }
+
     bool intersects_boundary(Segment_2 ray) {
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         
@@ -898,15 +909,17 @@ class Arrangement {
             // std::cout<<"here";
             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
             // compute the intersection between the guard's gradient direction and the arrangement boundary
-            auto intersection = CGAL::intersection(edge, ray);
+            if (CGAL::do_intersect(edge, ray))
+                return true;
+            // auto intersection = CGAL::intersection(edge, ray);
 
-            if (intersection) {
-                auto tmp_guard = *boost::get<Point_2>(&*intersection);
+            // if (intersection) {
+            //     auto tmp_guard = *boost::get<Point_2>(&*intersection);
 
-                // std::cout << "ray " << ray << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
-                // if (tmp_guard != eit->source()->point() && tmp_guard != eit->target()->point())
-                    return true;
-            }
+            //     // std::cout << "ray " << ray << " intersection with edge " << edge << " in " << tmp_guard << std::endl;
+            //     // if (tmp_guard != eit->source()->point() && tmp_guard != eit->target()->point())
+            //         return true;
+            // }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
