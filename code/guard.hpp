@@ -29,6 +29,7 @@ class Guard {
             this->learning_rate = g.learning_rate;
             this->pull_attraction = g.pull_attraction;
             this->momentum = g.momentum;
+            this->reflex_vertex = g.reflex_vertex;
         }
 
         // copy constructor
@@ -40,6 +41,7 @@ class Guard {
             this->learning_rate = alpha;
             this->pull_attraction = g.pull_attraction;
             this->momentum = g.momentum;
+            this->reflex_vertex = g.reflex_vertex;
         }
 
         // visibility region getter
@@ -48,7 +50,7 @@ class Guard {
         }
 
         // current coordinates getter
-        Point_2 get_cur_coords() const {
+        Point_2 get_coords() const {
             return this->cur_coords;
         }
 
@@ -65,19 +67,23 @@ class Guard {
             return this->momentum;
         }
 
+        bool is_reflex_vertex() const {
+            return this->reflex_vertex;
+        }
+
         // current coordinates setter
-        void set_cur_coords(Point_2 p) {
+        void set_coords(Point_2 p) {
             this->cur_coords = Point_2(p);
         }
 
+        void set_reflex_vertex() {
+            this->reflex_vertex = true;
+        }
         // learning rate setter
         void set_learning_rate(double alpha) {
             this->learning_rate = alpha;
         }
 
-        bool is_reflex_vertex() {
-            return this->reflex_vertex;
-        }
         /* overloaded equality operator
         *
         * The equality is established if the previous, and current coordinates, as well as the area seen are the same. 
@@ -156,6 +162,7 @@ class Guard {
                     placed = true;
                     this->reflex_vertex = true;
                     std::cout << "event=placed on reflex vertex " << this->cur_coords << std::endl;
+                    std::cout << "reflex vertex? " << this->is_reflex_vertex() << std::endl;
 
                     break;
 
@@ -181,5 +188,5 @@ class Guard {
         Arrangement_2 visibility_region;
         double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
         Vector_2 momentum{0, 0};
-        bool reflex_vertex;
+        bool reflex_vertex = false;
 };
