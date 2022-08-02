@@ -22,7 +22,6 @@ class Guard {
 
         // copy constructor
         Guard(const Guard &g) {
-            // this->prev_coords = g.prev_coords;
             this->cur_coords = g.cur_coords;
             this->visibility_region = g.visibility_region;
             this->area = g.area;
@@ -30,11 +29,12 @@ class Guard {
             this->pull_attraction = g.pull_attraction;
             this->momentum = g.momentum;
             this->reflex_vertex = g.reflex_vertex;
+            this->reflex_area = g.reflex_area;
+            this->reflex_area_vertex = g.reflex_area_vertex;
         }
 
         // copy constructor
         Guard(const Guard &g, double alpha) {
-            // this->prev_coords = g.prev_coords;
             this->cur_coords = g.cur_coords;
             this->visibility_region = g.visibility_region;
             this->area = g.area;
@@ -42,6 +42,8 @@ class Guard {
             this->pull_attraction = g.pull_attraction;
             this->momentum = g.momentum;
             this->reflex_vertex = g.reflex_vertex;
+            this->reflex_area = g.reflex_area;
+            this->reflex_area_vertex = g.reflex_area_vertex;
         }
 
         // visibility region getter
@@ -67,8 +69,16 @@ class Guard {
             return this->momentum;
         }
 
+        Point_2 get_reflex_area_vertex() const {
+            return this->reflex_area_vertex;
+        }
+
         bool is_reflex_vertex() const {
             return this->reflex_vertex;
+        }
+
+        bool is_in_reflex_area() const {
+            return this->reflex_area;
         }
 
         // current coordinates setter
@@ -161,6 +171,8 @@ class Guard {
                     this->cur_coords = Point_2(reflex_vertices.at(i));
                     placed = true;
                     this->reflex_vertex = true;
+                    this->reflex_area = true;
+                    this->reflex_area_vertex = Point_2(this->cur_coords);
                     std::cout << "event=placed on reflex vertex " << this->cur_coords << std::endl;
                     std::cout << "reflex vertex? " << this->is_reflex_vertex() << std::endl;
 
@@ -184,9 +196,9 @@ class Guard {
         }
 
     private:
-        Point_2 cur_coords;
+        Point_2 cur_coords, reflex_area_vertex;
         Arrangement_2 visibility_region;
         double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
         Vector_2 momentum{0, 0};
-        bool reflex_vertex = false;
+        bool reflex_vertex = false, reflex_area = false;
 };
