@@ -680,7 +680,7 @@ class Arrangement {
                     // std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
-                    // if (new_beta != beta)
+                    if (new_beta != beta)
                         angle = 1;
                     // compute partial Df and h for reflex vertex r
                     Vector_2 Dfr = angle * vp * (new_beta / (2 * alpha));
@@ -783,7 +783,8 @@ class Arrangement {
 
                             if (prev_guard.is_in_reflex_area()) {
                                 Point_2 new_guard_position;
-                                if (this->place_guard_on_reflex_line(prev_guard, cur_guard, new_guard_position) && this->input_polygon.has_on_bounded_side(new_guard_position) > 0) {
+                                if (this->place_guard_on_reflex_line(prev_guard, cur_guard, new_guard_position) && this->input_polygon.has_on_bounded_side(new_guard_position)) {
+                                    std::cout << "\tnew position is inside polygon? " << this->input_polygon.has_on_bounded_side(new_guard_position) << std::endl;
                                     std::cout << "\tnew reflex coords who dis\n";
                                     cur_guard.set_coords(new_guard_position);
                                     // cur_guard.set_reflex_vertex();
@@ -900,39 +901,54 @@ class Arrangement {
         return placed;
     }
 
-    int place_guard_on_reflex_line(Guard prev_guard, Guard guard, Point_2 &new_guard) {
+    bool place_guard_on_reflex_line(Guard prev_guard, Guard guard, Point_2 &new_guard) {
         std::cout << "reflex vertex guard " << prev_guard << " tries to move to " << guard << std::endl;
         int n_placed = 0;
+        Line_2 edge1, edge2;
 
         auto guard_movement = Segment_2(prev_guard.get_coords(), guard.get_coords());
 
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         do {
             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
-            std::cout << "intersection with reflex line " << edge << " ? " << CGAL::do_intersect(edge, guard_movement) << std::endl;
 
-            if (CGAL::do_intersect(edge, guard_movement)) {
-                auto intersection = CGAL::intersection(edge, guard_movement);
-                if (intersection) {
-                    auto tmp_guard = *boost::get<Point_2>(&*intersection);
+            if (eit->target()->point() == prev_guard.get_reflex_area_vertex() || eit->source()->point() == prev_guard.get_reflex_area_vertex()) {
+                std::cout << "reflex segment1 " << edge << std::endl;
 
-                    if (n_placed == 0 || distance(prev_guard.get_coords(), tmp_guard) < distance(prev_guard.get_coords(), new_guard)) {
-                        if (tmp_guard != prev_guard.get_coords()) {
-                            std::cout << "placed at intersection on reflex line at " << tmp_guard << std::endl; 
-                            new_guard = Point_2(tmp_guard);
-                        } else {
-                            new_guard = Point_2(edge.supporting_line().projection(guard.get_coords()));
-                            std::cout << "projected on reflex line at " << new_guard << std::endl;
-                        }
-                        n_placed ++;
-                        // std::cout << "wot\n";
-                    }
-                }
+                edge1 = edge.supporting_line();
+            }
+            else if (eit->source()->point() == prev_guard.get_reflex_area_vertex()) {
+                std::cout << "reflex segment2 " << edge << std::endl;
+                edge2 = edge.supporting_line();
+
             }
 
-        } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin() && n_placed < 2);
+        } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
-        return n_placed;
+        std::cout << "on positive side edge2? " << edge2.has_on_positive_side(guard.get_coords()) << std::endl;
+        // if desired guard position is in between reflex lines, let it be
+        if (edge1.has_on_negative_side(guard.get_coords()) && edge2.has_on_positive_side(guard.get_coords())
+            ||
+            edge2.has_on_negative_side(guard.get_coords()) && edge1.has_on_positive_side(guard.get_coords())) {
+            
+            std::cout << "placement between reflex lines\n";
+            new_guard = guard.get_coords();
+            return true;
+        } else {
+            std::cout << "projecting\n";
+            auto guard1 = edge1.projection(Point_2(guard.get_coords()));
+            auto guard2 = edge2.projection(Point_2(guard.get_coords()));
+            std::cout << "projection placements " << guard1 << " and " << guard2 << std::endl;
+
+            if (distance(guard.get_coords(), guard1) < distance(guard.get_coords(), guard2))
+                new_guard = guard1;
+            else
+                new_guard = guard2;
+            
+            return true;
+        }
+
+        return false;
     }
 
     bool intersects_boundary(Segment_2 ray) {
