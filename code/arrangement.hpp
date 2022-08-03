@@ -676,7 +676,7 @@ class Arrangement {
 
 
                     Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
-                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact())))));
+                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))); // / (2 * M_PI);
                     // std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
@@ -736,9 +736,6 @@ class Arrangement {
                         auto itr = std::find(this->guards.begin(), this->guards.end(), zero_df_guards.at(j));
                         auto i = std::distance(this->guards.begin(), itr);
 
-                        // }
-                    // }
-                    // for (auto i = 0; i < this->guards.size(); i ++) {
                         Vector_2 gradient, pull;
                         Guard cur_guard = Guard(this->guards.at(i)), prev_guard = Guard(cur_guard);
                         std::cout << "\t======== guard " << cur_guard << std::endl;
@@ -762,7 +759,6 @@ class Arrangement {
                             std::cout << "\t------- removing guard " << cur_guard << std::endl;
                             zero_df_guards.erase(zero_df_guards.begin() + j);
                             j --;
-                        // }
 
                             std::cout << 'g' << i << '=' << cur_guard << std::endl;
                             std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
@@ -777,17 +773,15 @@ class Arrangement {
                             std::cout << "\twas guard reflex vertex? " << prev_guard.is_reflex_vertex() << std::endl;
                             std::cout << "\twas guard in reflex area? " << prev_guard.is_in_reflex_area() << std::endl;
                             std::cout << "\tdoes guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
+
                             // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
                             // exception for when the guard is on a reflex vertex
-                            // TODO: if guard was reflex vertex, don't let it move away from the reflex vertex line
-
                             if (prev_guard.is_in_reflex_area()) {
                                 Point_2 new_guard_position;
                                 if (this->place_guard_on_reflex_line(prev_guard, cur_guard, new_guard_position) && this->input_polygon.has_on_bounded_side(new_guard_position)) {
                                     std::cout << "\tnew position is inside polygon? " << this->input_polygon.has_on_bounded_side(new_guard_position) << std::endl;
                                     std::cout << "\tnew reflex coords who dis\n";
                                     cur_guard.set_coords(new_guard_position);
-                                    // cur_guard.set_reflex_vertex();
                                 } else {
                                     std::cout << "\told reflex coords\n";
                                     cur_guard.set_coords(prev_guard.get_coords());
@@ -796,7 +790,6 @@ class Arrangement {
 
                             if (
                                 // this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())
-
                                 !cur_guard.is_reflex_vertex() &&
                                 this->intersects_boundary(ray)) {
                                     Point_2 new_guard_position;
@@ -811,16 +804,11 @@ class Arrangement {
 
                             // if the guard is now inside the arrangement, update the guard position in the vector
                             if (!this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())) {
-                                // std::cout << "i=" << l << std::endl;
-                                // std::cout << "area=" << compute_area(full_arrangement) << std::endl;
                                 auto visibility_region = this->visibility(cur_guard.get_coords());
-                                // auto new_visibility_arrangement = this->full_visibility();
 
                                 cur_guard.update_visibility(visibility_region);
                                 new_guards[i] = Guard(cur_guard);
                             }
-
-                            // std::cout << 'g' << i << '=' << cur_guard << std::endl;
 
                             break;
                         }
@@ -926,6 +914,13 @@ class Arrangement {
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
 
         std::cout << "on positive side edge2? " << edge2.has_on_positive_side(guard.get_coords()) << std::endl;
+        std::cout << "on positive side edge1? " << edge1.has_on_positive_side(guard.get_coords()) << std::endl;
+        std::cout << "on negative side edge2? " << edge2.has_on_negative_side(guard.get_coords()) << std::endl;
+        std::cout << "on negative side edge1? " << edge1.has_on_negative_side(guard.get_coords()) << std::endl;
+        std::cout << "on edge2? " << edge2.has_on(guard.get_coords()) << std::endl;
+        std::cout << "on edge1? " << edge1.has_on(guard.get_coords()) << std::endl;
+
+
         // if desired guard position is in between reflex lines, let it be
         if (edge1.has_on_negative_side(guard.get_coords()) && edge2.has_on_positive_side(guard.get_coords())
             ||
@@ -935,17 +930,40 @@ class Arrangement {
             new_guard = guard.get_coords();
             return true;
         } else {
-            std::cout << "projecting\n";
-            auto guard1 = edge1.projection(Point_2(guard.get_coords()));
-            auto guard2 = edge2.projection(Point_2(guard.get_coords()));
-            std::cout << "projection placements " << guard1 << " and " << guard2 << std::endl;
+            std::cout << "new position still inside the polygon? " << !this->input_polygon.has_on_unbounded_side(guard.get_coords()) << std::endl;
+            std::cout << "new position ON polygon? " << this->input_polygon.has_on_boundary(guard.get_coords()) << std::endl;
 
-            if (distance(guard.get_coords(), guard1) < distance(guard.get_coords(), guard2))
-                new_guard = guard1;
-            else
-                new_guard = guard2;
-            
-            return true;
+            // only move the guard if its new position is still inside the polygon
+            if (!this->input_polygon.has_on_unbounded_side(guard.get_coords())) {
+                std::cout << "projecting\n";
+
+                // FIXME: for some reason it still crashes, so I just catch the error and revert
+                try {
+                    auto guard1 = edge1.projection(guard.get_coords());
+                    auto guard2 = edge2.projection(guard.get_coords());
+
+                    std::cout << "1 projection still inside polygon? " << !this->input_polygon.has_on_unbounded_side(guard1) << std::endl;
+                    std::cout << "2 projection still inside polygon? " << !this->input_polygon.has_on_unbounded_side(guard2) << std::endl;
+
+                    // only move the guard if its projections are inside the polygon
+                    if (!this->input_polygon.has_on_unbounded_side(guard1) && !this->input_polygon.has_on_unbounded_side(guard2)) {
+
+                        std::cout << "projection placements " << guard1 << " and " << guard2 << std::endl;
+
+                        if (distance(guard.get_coords(), guard1) < distance(guard.get_coords(), guard2))
+                            new_guard = guard1;
+                        else
+                            new_guard = guard2;
+                        
+                        return true;
+                    } else if (!this->input_polygon.has_on_unbounded_side(guard1))
+                        new_guard = guard1;
+                        else if (!this->input_polygon.has_on_unbounded_side(guard2))
+                            new_guard = guard2;
+                } catch (...) {
+                    return false;
+                }
+            }
         }
 
         return false;
