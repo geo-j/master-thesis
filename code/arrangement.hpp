@@ -503,8 +503,6 @@ class Arrangement {
             std::vector<Point_2> shared_visibility_intersection_points;
             double beta = 0;
 
-
-            // if (zero_df_guards.size() > 1) {
             auto guard_exclusive_visibility_region = this->exclusive_visibility(guard, zero_df_guards);
 
             auto eit = *guard_exclusive_visibility_region.unbounded_face()->inner_ccbs_begin();
@@ -659,7 +657,7 @@ class Arrangement {
                         // std::cout << "multiple guards to be considered\n";
                         new_beta = this->exclusive_beta(g, intersection, reflex_vertex, zero_df_guards);
                     }
-                    // std::cout << beta << ' ' << new_beta << std::endl;
+                    std::cout << beta << ' ' << new_beta << std::endl;
 
                     // compute guard-reflex vertex vector
                     Vector_2 v = Vector_2(guard, reflex_vertex);
@@ -668,6 +666,7 @@ class Arrangement {
                     // compute orthogonal vector to the guard-reflex vector
                     // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
                     //      otherwise, counterclockwise
+                    // std::cout << "WOOO??\n";
                     Vector_2 vp;
                     if (orientation == CGAL::ON_POSITIVE_SIDE)
                         vp = v.perpendicular(CGAL::CLOCKWISE);
@@ -676,7 +675,9 @@ class Arrangement {
 
 
                     Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
-                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))); // / (2 * M_PI);
+                    
+                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))) / (2 * M_PI);
+                    
                     // std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
@@ -741,8 +742,6 @@ class Arrangement {
                         std::cout << "\t======== guard " << cur_guard << std::endl;
                         std::cout << "\twas guard reflex vertex? " << cur_guard.is_reflex_vertex() << std::endl;
 
-
-
                         // compute gradient of current guard position
                         auto cur_visibility = cur_guard.get_visibility_region();
 
@@ -756,6 +755,7 @@ class Arrangement {
                         std::cout << "\tcomputed gradient " << gradient << " and pull " << pull << std::endl;
 
                         if (gradient != Vector_2(0, 0) || pull != Vector_2(0, 0)) {
+                            bool placed = true;
                             std::cout << "\t------- removing guard " << cur_guard << std::endl;
                             zero_df_guards.erase(zero_df_guards.begin() + j);
                             j --;
@@ -764,51 +764,68 @@ class Arrangement {
                             std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
                             std::cout << "alpha" << i << '=' << cur_guard.get_learning_rate() << std::endl;
 
-                            // update current guard position
-                            cur_guard.update_coords(gradients, pulls, reflex_vertices);
-                            auto ray = Segment_2(Point_2(prev_guard.get_coords()), Point_2(cur_guard.get_coords()));
+                            do {
+                                // update current guard position
+                                cur_guard.update_coords(gradients, pulls, reflex_vertices, placed);
+                                auto ray = Segment_2(Point_2(prev_guard.get_coords()), Point_2(cur_guard.get_coords()));
 
+                                placed = true;
 
-                            std::cout << "\t>>>> prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
-                            std::cout << "\twas guard reflex vertex? " << prev_guard.is_reflex_vertex() << std::endl;
-                            std::cout << "\twas guard in reflex area? " << prev_guard.is_in_reflex_area() << std::endl;
-                            std::cout << "\tdoes guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
+                                std::cout << "\t>>>> prev guard " << prev_guard << " cur guard " << cur_guard << std::endl;
+                                std::cout << "\twas guard reflex vertex? " << prev_guard.is_reflex_vertex() << std::endl;
+                                std::cout << "\twas guard in reflex area? " << prev_guard.is_in_reflex_area() << std::endl;
+                                std::cout << "\tdoes guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
 
-                            // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
-                            // exception for when the guard is on a reflex vertex
-                            if (prev_guard.is_in_reflex_area()) {
-                                Point_2 new_guard_position;
-                                if (this->place_guard_on_reflex_line(prev_guard, cur_guard, new_guard_position) && this->input_polygon.has_on_bounded_side(new_guard_position)) {
-                                    std::cout << "\tnew position is inside polygon? " << this->input_polygon.has_on_bounded_side(new_guard_position) << std::endl;
-                                    std::cout << "\tnew reflex coords who dis\n";
-                                    cur_guard.set_coords(new_guard_position);
-                                } else {
-                                    std::cout << "\told reflex coords\n";
-                                    cur_guard.set_coords(prev_guard.get_coords());
-                                }
-                            }
-
-                            if (
-                                // this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())
-                                !cur_guard.is_reflex_vertex() &&
-                                this->intersects_boundary(ray)) {
+                                // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
+                                // exception for when the guard is on a reflex vertex
+                                if (prev_guard.is_in_reflex_area()) {
                                     Point_2 new_guard_position;
-                                    if (this->place_guard_on_boundary(prev_guard.get_coords(), cur_guard.get_coords(), new_guard_position)) {
+                                    if (this->place_guard_on_reflex_line(prev_guard, cur_guard, new_guard_position) && this->input_polygon.has_on_bounded_side(new_guard_position)) {
+                                        // std::cout << "\tnew position is inside polygon? " << this->input_polygon.has_on_bounded_side(new_guard_position) << std::endl;
+                                        std::cout << "\tnew reflex coords who dis\n";
                                         cur_guard.set_coords(new_guard_position);
-                                        // std::cout << cur_guard << std::endl;
                                     } else {
-                                        // std::cout << "YO\n";
+                                        std::cout << "\told reflex coords\n";
                                         cur_guard.set_coords(prev_guard.get_coords());
                                     }
-                            }
+                                }
 
-                            // if the guard is now inside the arrangement, update the guard position in the vector
-                            if (!this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())) {
-                                auto visibility_region = this->visibility(cur_guard.get_coords());
+                                for (auto guard : new_guards)
+                                    std::cout << "\t guard " << guard << ';';
+                                std::cout << std::endl;
 
-                                cur_guard.update_visibility(visibility_region);
-                                new_guards[i] = Guard(cur_guard);
-                            }
+
+                                if (
+                                    // this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())
+                                    !cur_guard.is_reflex_vertex() &&
+                                    this->intersects_boundary(ray)) {
+                                        Point_2 new_guard_position;
+                                        if (this->place_guard_on_boundary(prev_guard.get_coords(), cur_guard.get_coords(), new_guard_position)) {
+                                            cur_guard.set_coords(new_guard_position);
+                                            // std::cout << cur_guard << std::endl;
+                                        } else {
+                                            // std::cout << "YO\n";
+                                            cur_guard.set_coords(prev_guard.get_coords());
+                                        }
+                                }
+
+                                // if the guard is now inside the arrangement, update the guard position in the vector
+                                if (!this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())) {
+                                    auto visibility_region = this->visibility(cur_guard.get_coords());
+
+                                    cur_guard.update_visibility(visibility_region);
+                                    new_guards[i] = Guard(cur_guard);
+                                }
+
+                                std::cout << std::count(new_guards.begin(), new_guards.end(), cur_guard) << " other guards have coords " << cur_guard.get_coords() << std::endl;
+                                if (std::count(new_guards.begin(), new_guards.end(), cur_guard) > 1) {
+                                    // reflex_vertices.clear();
+                                    // pulls.clear();
+                                    cur_guard = Guard(prev_guard);
+                                    placed = false; 
+                                }
+                            } while (!placed);
+
 
                             break;
                         }
@@ -961,6 +978,7 @@ class Arrangement {
                         else if (!this->input_polygon.has_on_unbounded_side(guard2))
                             new_guard = guard2;
                 } catch (...) {
+                    std::cout << "crashed whatever\n";
                     return false;
                 }
             }
@@ -973,7 +991,6 @@ class Arrangement {
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         
         do {
-            // std::cout << "bhere\n";
             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
             // compute the intersection between the guard's gradient direction and the arrangement boundary
             if (ray.source() != eit->source()->point() && ray.source() != eit->target()->point() && ray.target() != eit->source()->point() && ray.target() != eit->target()->point() && CGAL::do_intersect(edge, ray))
@@ -989,7 +1006,6 @@ class Arrangement {
         // TODO: should probably adapt it to polygons with holes
         Polygon_2 input_polygon;
         // define type of visibility algorithm used
-        // TODO: should make it changeable at invocation time
         TEV visibility_algo;
         // find the face of the guard
         CGAL::Arr_naive_point_location<Arrangement_2> pl;

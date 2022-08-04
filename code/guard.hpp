@@ -86,8 +86,12 @@ class Guard {
             this->cur_coords = Point_2(p);
         }
 
-        void set_reflex_vertex() {
-            this->reflex_vertex = true;
+        void set_reflex_vertex(bool b) {
+            this->reflex_vertex = b;
+        }
+
+        void set_in_reflex_area(bool b) {
+            this->reflex_area = b;
         }
         // learning rate setter
         void set_learning_rate(double alpha) {
@@ -100,7 +104,7 @@ class Guard {
         * The visibility regions equality is not checked due to a lack of arrangement equality check from CGAL.
         */
         bool operator ==(Guard g) {
-            if (this->cur_coords == g.cur_coords && this->area == g.area)
+            if (this->cur_coords == g.cur_coords) // && this->area == g.area)
                 return true;
             
             return false;
@@ -143,23 +147,23 @@ class Guard {
         *
         * This method updates the guard position based on the gradient, and saves the previous position
         */
-        void update_coords(std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices) {
+        void update_coords(std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices, bool place_on_reflex_vertex) {
             // print gradients
-            for (auto i = 0; i < gradients.size() - 1; i ++) {
+            std::cout << gradients.size() << " " << (int) pulls.size() - 1 << " " << reflex_vertices.size() << std::endl;
+            for (int i = 0; i < (int) pulls.size() - 1; i ++) {
                 // std::cout << "h=" << this->pull_attraction * pulls.at(i) << std::endl;
                 // std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + this->pull_attraction * pulls.at(i))) * this->learning_rate << std::endl;
                 std::cout << "Df=" << gradients.at(i) * this->learning_rate << std::endl;
                 std::cout << "h=" << pulls.at(i) * this->learning_rate << std::endl;
             }
 
-            // std::cout << gradients.size() << " " << pulls.size() << " " << reflex_vertices.size() << std::endl;
             bool placed = false;
             // compute the min distance between all reflex vertices seen by the guard
             double D = min_dist_reflex_vertices(reflex_vertices);
             // std::cout << D << std::endl;
 
             // if the guard is close enough (less than the min distance between 2 vertices) to a reflex vertex and far enough from the other one then save the reflex vertex to place the guard later on it
-            for (auto i = 0; i < reflex_vertices.size(); i ++) {
+            for (int i = 0; i < reflex_vertices.size() && place_on_reflex_vertex; i ++) {
                 auto d = distance(this->cur_coords, reflex_vertices.at(i));
                 // std::cout << d << std::endl;
                 // std::cout << pulls.at(i).squared_length() << " " << (2 / 3.0) * d << std::endl;
@@ -174,7 +178,7 @@ class Guard {
                     this->reflex_area = true;
                     this->reflex_area_vertex = Point_2(this->cur_coords);
                     std::cout << "event=placed on reflex vertex " << this->cur_coords << std::endl;
-                    std::cout << "reflex vertex? " << this->is_reflex_vertex() << std::endl;
+                    // std::cout << "reflex vertex? " << this->is_reflex_vertex() << std::endl;
 
                     break;
 
@@ -183,7 +187,16 @@ class Guard {
 
             // if the guard wasn't placed on a reflex vertex, place it normally based on its momentum
             if (!placed) {
-                this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + this->pull_attraction * pulls.at(pulls.size() - 1));
+                // if (pulls.size() > 0)
+                // if (CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) > CGAL::to_double(this->momentum.squared_length()) + 0.1) {
+                //     std::cout << "pull reduced from " << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << " to ";
+                //     pulls[pulls.size() - 1] = pulls.at(pulls.size() - 1) * CGAL::to_double(this->momentum.squared_length()) / CGAL::to_double(pulls.at(pulls.size() - 1).squared_length());
+                //     std::cout << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << std::endl;
+
+                // }
+                    this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + this->pull_attraction * pulls.at(pulls.size() - 1));
+                // else
+                //      this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1));
                 // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
 
                 this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
@@ -191,8 +204,11 @@ class Guard {
             }
 
             // print last gradient
-            std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
-            std::cout << "h=" << pulls.at(pulls.size() - 1) * this->learning_rate << std::endl;
+            if (pulls.size() > 0) {
+                std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+                std::cout << "h=" << pulls.at(pulls.size() - 1) * this->learning_rate << std::endl;
+            }
+                
         }
 
     private:
