@@ -686,7 +686,7 @@ class Arrangement {
                     // compute the angle between the point on the polygon boundary seen by the guard, the reflex vertex, and the unseen segment behind the reflex vertex as:
                     // let v1 be the vector between the reflex vertex and the polygon intersection, and v2 be the vector corresponding to the unseen segment behind the reflex vertex
                     // the angle between these two vectors is computed as acos(v1 * v2 / ||v1||||v2||) / 3Pi, where * marks the dot product. The angle is normalised by 3Pi
-                    // N.B.: for some reason CGAL doesn't offer a method to exactly compute the angle between two vectors/lines/segments. Only whether it's acute/right/obtuse
+                    // BUG: for some reason CGAL doesn't offer a method to exactly compute the angle between two vectors/lines/segments. Only whether it's acute/right/obtuse
                     Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
         
                     double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))) / (2 * M_PI);
@@ -723,18 +723,23 @@ class Arrangement {
         * 
         * The algorithm steps are:
         *   - as long as the polygon is not fully seen:
-        *       - for each guard:
-        *           - compute its visibility region for its current coordinates
-        *           - update its visibility region for its current coordinates
-        *           - compute the gradient for its current coordinates
-        *           - update its coordinates based on its gradient
-        *           - if the new position of the guard is outside of the polygon, place it on the boundary
-        *           - if it's overshooting, increase the learning rate of the guard; otherwise, decrease it
-        *           - update guard in the guards vector
+        *       - as long as not all guards have a gradient, or the polygon is not completely seen
+        *           - for each guard:
+        *               - compute its visibility region for its current coordinates
+        *               - update its visibility region for its current coordinates
+        *               - compute the gradient and the pull for its current coordinates
+        *               - if both the gradient and the pull are 0, skip the guard, otherwise
+        *                   - update its coordinates based on its gradient
+        *                   - if the new position of the guard is outside of the reflex area (when it's supposed to be inside it), place it on the boundary of the reflex area; if not possible, don't move the guard
+        *                   - if the new position of the guard is outside of the polygon, place it on the boundary; if not possible, don't move the guard
+        *                   - update guard in the guards vector
+        *                   - if the guard has the same coords as another guard, don't move the guard and recompute its gradient without the pull (edge-case for when multiple guards are placed on top of the same reflex vertex and they cannot escape the reflex region)
         */
         void optimise() {
+            // at beginning, compute the full visibility of the polygon and initialise reflex vertex vector
             auto full_arrangement = this->full_visibility();
             auto l = 0;
+
             this->add_reflex_vertices();
             std::cout << "total area=" << compute_area(this->input_arrangement) << std::endl;
 
@@ -744,10 +749,11 @@ class Arrangement {
                 std::cout << "i=" << l << std::endl;
                 std::cout << "area=" << compute_area(full_arrangement) << std::endl;
 
-                while (!zero_df_guards.empty()) {
+                do {
                     std::cout << "+++++" << zero_df_guards.size() << " guards with gradient 0\n";
 
                     for (auto j = 0; j < zero_df_guards.size(); j ++) {
+                        // compute the index of the current guard in guard vector
                         auto itr = std::find(this->guards.begin(), this->guards.end(), zero_df_guards.at(j));
                         auto i = std::distance(this->guards.begin(), itr);
 
@@ -757,20 +763,25 @@ class Arrangement {
                         std::cout << "\twas guard reflex vertex? " << cur_guard.is_reflex_vertex() << std::endl;
 
                         // compute gradient of current guard position
-                        auto cur_visibility = cur_guard.get_visibility_region();
-
                         auto gradient_pair = this->gradient(cur_guard, zero_df_guards);
+
+                        // unpack the tuple
                         auto gradients = std::get<0>(gradient_pair);
                         auto pulls = std::get<1>(gradient_pair);
                         auto reflex_vertices = std::get<2>(gradient_pair);
                         auto segment_behind_reflex_vertex = std::get<3>(gradient_pair);
+
+                        // total gradient and pull are the last element of each of the respective vectors
                         gradient = gradients.at(gradients.size() - 1);
                         pull = pulls.at(pulls.size() - 1);
                         std::cout << "\tcomputed gradient " << gradient << " and pull " << pull << std::endl;
 
+                        // check if the guard has a gradient or a pull
                         if (gradient != Vector_2(0, 0) || pull != Vector_2(0, 0)) {
-                            bool placed = true;
                             std::cout << "\t------- removing guard " << cur_guard << std::endl;
+                            bool placed = true;
+
+                            // if so, remove guard from the vector of guards with no gradient and count one index back (s.t. we don't skip a guard)
                             zero_df_guards.erase(zero_df_guards.begin() + j);
                             j --;
 
@@ -790,12 +801,13 @@ class Arrangement {
                                 std::cout << "\twas guard in reflex area? " << prev_guard.is_in_reflex_area() << std::endl;
                                 std::cout << "\tdoes guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
 
-                                // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
-                                // exception for when the guard is on a reflex vertex
+
+                                // if the guard is a reflex vertex, or has been on the reflex vertex and is now only allowed to move in the reflex area
+                                // if its new position is outside the reflex area, place it on the closest reflex line, still inside the polygon
+                                // if the placement doesn't work (CGAL bug...), don't move the guard
                                 if (prev_guard.is_in_reflex_area()) {
                                     Point_2 new_guard_position;
                                     if (this->place_guard_on_reflex_line(prev_guard, cur_guard, new_guard_position) && this->input_polygon.has_on_bounded_side(new_guard_position)) {
-                                        // std::cout << "\tnew position is inside polygon? " << this->input_polygon.has_on_bounded_side(new_guard_position) << std::endl;
                                         std::cout << "\tnew reflex coords who dis\n";
                                         cur_guard.set_coords(new_guard_position);
                                     } else {
@@ -804,11 +816,12 @@ class Arrangement {
                                     }
                                 }
 
-                                for (auto guard : new_guards)
-                                    std::cout << "\t guard " << guard << ';';
-                                std::cout << std::endl;
+                                // for (auto guard : new_guards)
+                                //     std::cout << "\t guard " << guard << ';';
+                                // std::cout << std::endl;
 
-
+                                // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
+                                // exception for when the guard is on a reflex vertex
                                 if (
                                     // this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())
                                     !cur_guard.is_reflex_vertex() &&
@@ -832,15 +845,14 @@ class Arrangement {
                                 }
 
                                 std::cout << std::count(new_guards.begin(), new_guards.end(), cur_guard) << " other guards have coords " << cur_guard.get_coords() << std::endl;
+                                // if the guard has the same coords as other guards, don't move it (addresses the edge-case of multiple guards being pulled onto the same reflex vertex and then not being able to escape the reflex region)
                                 if (std::count(new_guards.begin(), new_guards.end(), cur_guard) > 1) {
-                                    // reflex_vertices.clear();
-                                    // pulls.clear();
                                     cur_guard = Guard(prev_guard);
                                     placed = false; 
                                 }
                             } while (!placed);
 
-
+                            // if we computed the gradient of a guard, then restart the search for a guard with a gradient in the zero gradient guards vector
                             break;
                         }
                     }
@@ -849,9 +861,15 @@ class Arrangement {
                     std::cout << "is completely visible? " << this->is_completely_visible(full_arrangement) << std::endl;
                     std::cout << "are areas equal? " <<  compute_area(this->input_arrangement) << '=' << compute_area(full_arrangement) << '?' << (compute_area(this->input_arrangement) == compute_area(full_arrangement)) << std::endl;
                     
-                    if (zero_df_guards.size() == this->guards.size() || this->is_completely_visible(full_arrangement) || (compute_area(this->input_arrangement) - compute_area(full_arrangement)) <= 0.005)
-                        break;
-                }
+                } while ( // if none of the guards have a gradient yet or
+                          !zero_df_guards.empty() && 
+                          // all of the guards received a gradient or
+                          zero_df_guards.size() != this->guards.size() && 
+                          // the polygon is completely visible
+                          !this->is_completely_visible(full_arrangement) && 
+                          // BUG: sometimes the check for complete visibility doesn't work due to (I think) CGAL approximation issues. So if less than 0.005 of the total area is unseen, I consider that everything is seen
+                          (compute_area(this->input_arrangement) - compute_area(full_arrangement)) > 0.005);
+
                 l ++;
 
                 this->guards = std::vector<Guard>(new_guards);
