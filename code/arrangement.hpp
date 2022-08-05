@@ -652,7 +652,9 @@ class Arrangement {
                     segment_behind_reflex_vertex = Line_2(reflex_vertex, point_behind_reflex_vertex);
 
                 if (guard != reflex_vertex) {
+                    // save the reflex vertex seen by the guard
                     reflex_vertices.push_back(reflex_vertex);
+
                     // compute distances between guard - reflex vertex - intersection point
                     auto alpha = distance(guard, reflex_vertex);
                     auto beta = distance(reflex_vertex, intersection);
@@ -674,7 +676,6 @@ class Arrangement {
                     // compute orthogonal vector to the guard-reflex vector
                     // if the guard is on the positive side of the one of the edges of the arrangement the reflex vertex is on, the vector needs to be clockwise perpendicular,
                     //      otherwise, counterclockwise
-                    // std::cout << "WOOO??\n";
                     Vector_2 vp;
                     if (orientation == CGAL::ON_POSITIVE_SIDE)
                         vp = v.perpendicular(CGAL::CLOCKWISE);
@@ -682,15 +683,20 @@ class Arrangement {
                         vp = v.perpendicular(CGAL::COUNTERCLOCKWISE);
 
 
+                    // compute the angle between the point on the polygon boundary seen by the guard, the reflex vertex, and the unseen segment behind the reflex vertex as:
+                    // let v1 be the vector between the reflex vertex and the polygon intersection, and v2 be the vector corresponding to the unseen segment behind the reflex vertex
+                    // the angle between these two vectors is computed as acos(v1 * v2 / ||v1||||v2||) / 3Pi, where * marks the dot product. The angle is normalised by 3Pi
+                    // N.B.: for some reason CGAL doesn't offer a method to exactly compute the angle between two vectors/lines/segments. Only whether it's acute/right/obtuse
                     Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
-                    
-                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))); // / (2 * M_PI);
+        
+                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))) / (2 * M_PI);
                     
                     // std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
                     if (new_beta != beta)
                         angle = 1;
+                    
                     // compute partial Df and h for reflex vertex r Vector_2:
                     Vector_2 Dfr = angle * vp * (new_beta / (2 * alpha));
                     Vector_2 hr = angle * v * (new_beta / (2 * alpha * sqrt(alpha)));
