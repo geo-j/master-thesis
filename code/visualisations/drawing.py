@@ -99,11 +99,11 @@ class Drawing(object):
         i = None
 
         for line in stdin:
-            if iteration is not None and iteration < 10:
-                print(iteration, line)
+            # if iteration is not None and iteration < 10:
+            #     print(iteration, line)
             if line.startswith('total'):
                 self.max_area = float(line[11:].strip())
-                print(self.max_area)
+                # print(self.max_area)
             elif line.startswith('i='):   # get current iteration
                 iteration = int(line[2:].strip())
             elif line.startswith('g'):  # get current guard coords
@@ -146,7 +146,7 @@ class Drawing(object):
         color_list = plt.rcParams['axes.prop_cycle'].by_key()['color']
         i = 0
         for guard in self.xs.keys():
-            print(guard, pos, self.xs[guard])
+            # print(guard, pos, self.xs[guard])
             if len(self.xs[guard]) <= pos:
                 pos = -1
             g = Point2(self.xs[guard][pos], self.ys[guard][pos])
