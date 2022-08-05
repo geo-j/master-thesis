@@ -616,9 +616,17 @@ class Arrangement {
         }
 
         /* gradient method
-        * :in param Arrangement_2 visibility_arrangement:   the visibility region of the guard
         * :in param Guard guard:                            guard point whose gradient needs to be computed
-        * :return Vector_2:                                 gradient of the guard as a vector
+        * :in param vector<Guard> zero_df_guards:           the vector of guards who have a gradient of 0                  
+        * :return tuple< :                                  (very Pythonic, but...) tuple of
+        *       vector<Vector_2>, :                         vector of all the gradients of the guard around n reflex vertices it sees: 
+        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
+        *                                                           index n + 1 contains the sum of the gradients
+        *       vector<Vector_2>, :                         vector of all the pulls of the guard toward the n reflex vertices it sees:
+        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
+        *                                                           index n + 1 contains the sum of the gradients
+        *       vector<Point_2>, :                          vector of all the reflex vertices the guard sees
+        *       Line_2>:                                    the segment behind the reflex vertex (unseen by the guard)
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
@@ -657,7 +665,7 @@ class Arrangement {
                         // std::cout << "multiple guards to be considered\n";
                         new_beta = this->exclusive_beta(g, intersection, reflex_vertex, zero_df_guards);
                     }
-                    std::cout << beta << ' ' << new_beta << std::endl;
+                    // std::cout << beta << ' ' << new_beta << std::endl;
 
                     // compute guard-reflex vertex vector
                     Vector_2 v = Vector_2(guard, reflex_vertex);
@@ -676,14 +684,14 @@ class Arrangement {
 
                     Vector_2 v1(reflex_vertex, intersection), v2(reflex_vertex, point_behind_reflex_vertex);
                     
-                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))) / (2 * M_PI);
+                    double angle = 0.001 + acos(CGAL::to_double(v1 * v2 / (sqrt(CGAL::to_double(v1.squared_length().exact())) * sqrt(CGAL::to_double(v2.squared_length().exact()))))); // / (2 * M_PI);
                     
                     // std::cout << "angle between " << point_behind_reflex_vertex << ' ' << reflex_vertex << ' ' << intersection << " is " << angle << std::endl;
                     
                     // only take the angle if no overlapping visibility regions
                     if (new_beta != beta)
                         angle = 1;
-                    // compute partial Df and h for reflex vertex r
+                    // compute partial Df and h for reflex vertex r Vector_2:
                     Vector_2 Dfr = angle * vp * (new_beta / (2 * alpha));
                     Vector_2 hr = angle * v * (new_beta / (2 * alpha * sqrt(alpha)));
                     // std::cout << Dfr << std::endl;
