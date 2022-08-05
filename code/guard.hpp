@@ -61,22 +61,27 @@ class Guard {
             return this->area;
         }
 
+        // learning rate getter
         double get_learning_rate() const {
             return this->learning_rate;
         }
 
+        // momentum getter
         Vector_2 get_momentum() const {
             return this->momentum;
         }
 
+        // reflex area vertex getter
         Point_2 get_reflex_area_vertex() const {
             return this->reflex_area_vertex;
         }
 
+        // whether guard is on reflex vertex checker
         bool is_reflex_vertex() const {
             return this->reflex_vertex;
         }
 
+        // whether guard is in the reflex area checker
         bool is_in_reflex_area() const {
             return this->reflex_area;
         }
@@ -86,13 +91,16 @@ class Guard {
             this->cur_coords = Point_2(p);
         }
 
+        // reflex vertex boolean setter
         void set_reflex_vertex(bool b) {
             this->reflex_vertex = b;
         }
 
+        // reflex area boolean setter
         void set_in_reflex_area(bool b) {
             this->reflex_area = b;
         }
+
         // learning rate setter
         void set_learning_rate(double alpha) {
             this->learning_rate = alpha;
@@ -143,7 +151,10 @@ class Guard {
         }
 
         /* update_coords method
-        * :in Vector_2 gradient:    gradient based on which the new position of the guard has to be updated
+        * :in vector<Vector_2> gradients:       gradients based on which the new position of the guard has to be updated; the last index is the full gradient, whereas the previous indices are the partial gradients for each reflex vertex the guard sees
+        * :in vector<Vector_2> pulls:           pulls based on which the new position of the guard has to be updated; the last index is the full pull, whereas the previous indices are the partial pulls for each reflex vertex the guard sees
+        * :in vector<Point_2> reflex_vertices:  the reflex vertices the guard sees; their index corresponds to the gradient and pull index in the other vertices
+        * :in bool place_on_reflex_vertex:      check whether a guard is allowed to be placed on a reflex vertex in case of a pull (tackles the edge-case for multiple guards being pulled towards the same reflex vertex)
         *
         * This method updates the guard position based on the gradient, and saves the previous position
         */
@@ -178,7 +189,6 @@ class Guard {
                     this->reflex_area = true;
                     this->reflex_area_vertex = Point_2(this->cur_coords);
                     std::cout << "event=placed on reflex vertex " << this->cur_coords << std::endl;
-                    // std::cout << "reflex vertex? " << this->is_reflex_vertex() << std::endl;
 
                     break;
 
@@ -187,17 +197,15 @@ class Guard {
 
             // if the guard wasn't placed on a reflex vertex, place it normally based on its momentum
             if (!placed) {
-                // if (pulls.size() > 0)
-                // if (CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) > CGAL::to_double(this->momentum.squared_length()) + 0.1) {
-                //     std::cout << "pull reduced from " << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << " to ";
-                //     pulls[pulls.size() - 1] = pulls.at(pulls.size() - 1) * CGAL::to_double(this->momentum.squared_length()) / CGAL::to_double(pulls.at(pulls.size() - 1).squared_length());
-                //     std::cout << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << std::endl;
+                // cap the pull if too large compared to the momentum
+                if (CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) > CGAL::to_double(this->momentum.squared_length()) + 0.1) {
+                    std::cout << "pull reduced from " << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << " to ";
+                    pulls[pulls.size() - 1] = pulls.at(pulls.size() - 1) * CGAL::to_double(this->momentum.squared_length()) / CGAL::to_double(pulls.at(pulls.size() - 1).squared_length());
+                    std::cout << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << std::endl;
 
-                // }
+                }
                     this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + this->pull_attraction * pulls.at(pulls.size() - 1));
-                // else
-                //      this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1));
-                // std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
+
 
                 this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
                 this->reflex_vertex = false;
@@ -212,6 +220,7 @@ class Guard {
         }
 
     private:
+        // save the current coords and the reflex vertex in whose reflex area the guard is in
         Point_2 cur_coords, reflex_area_vertex;
         Arrangement_2 visibility_region;
         double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
