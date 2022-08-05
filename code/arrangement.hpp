@@ -949,15 +949,13 @@ class Arrangement {
         do {
             auto edge = Segment_2(eit->source()->point(), eit->target()->point());
 
+            // find the segments on which the reflex vertex is and save their supporting lines
             if (eit->target()->point() == prev_guard.get_reflex_area_vertex() || eit->source()->point() == prev_guard.get_reflex_area_vertex()) {
                 std::cout << "reflex segment1 " << edge << std::endl;
-
                 edge1 = edge.supporting_line();
-            }
-            else if (eit->source()->point() == prev_guard.get_reflex_area_vertex()) {
+            } else if (eit->source()->point() == prev_guard.get_reflex_area_vertex()) {
                 std::cout << "reflex segment2 " << edge << std::endl;
                 edge2 = edge.supporting_line();
-
             }
 
         } while (++ eit != *this->input_arrangement.unbounded_face()->inner_ccbs_begin());
@@ -999,16 +997,19 @@ class Arrangement {
 
                         std::cout << "projection placements " << guard1 << " and " << guard2 << std::endl;
 
+                        // get the closest reflex line projection
                         if (distance(guard.get_coords(), guard1) < distance(guard.get_coords(), guard2))
                             new_guard = guard1;
                         else
                             new_guard = guard2;
                         
                         return true;
-                    } else if (!this->input_polygon.has_on_unbounded_side(guard1))
+                    } 
+                    // if only one of the projections is inside the polygon, get the one that is
+                    else if (!this->input_polygon.has_on_unbounded_side(guard1))
                         new_guard = guard1;
-                        else if (!this->input_polygon.has_on_unbounded_side(guard2))
-                            new_guard = guard2;
+                    else if (!this->input_polygon.has_on_unbounded_side(guard2))
+                        new_guard = guard2;
                 } catch (...) {
                     std::cout << "crashed whatever\n";
                     return false;
