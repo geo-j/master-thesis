@@ -10,7 +10,12 @@ include_directories(/usr/include/x86_64-linux-gnu/qt5/QtWidgets/)
 find_package(CGAL REQUIRED OPTIONAL_COMPONENTS Qt5)
 
 # create_single_source_cgal_program("joe_simpson_visibility.cpp")
-create_single_source_cgal_program("main.cpp")
+# create_single_source_cgal_program("main.cpp" "arrangement.cpp")
+add_executable(main main.cpp arrangement.cpp)
+target_link_libraries(main CGAL)
+target_include_directories(main
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/code)
 
 
 # if(CGAL_Qt5_FOUND)

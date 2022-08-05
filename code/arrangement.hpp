@@ -40,33 +40,61 @@ typedef std::list<Polygon_with_holes_2>                                         
 
 class Arrangement {
     public:
-        // TODO: move to .cpp file
         /* *****************
            *     I/O       *
            *****************
         */
 
+
+         /* overloaded input operator
+         * The format of the input file is:
+         * E                     * number of edges
+         * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+         * p3.x p3.y p4.x p4.y
+         * ...
+         */
+         friend std::istream &operator>>(std::istream &f, Arrangement &a);
+
+         
+         /* overloaded output operator
+         * The format of the output file is:
+         * E                     * number of edges
+         * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+         * p3.x p3.y p4.x p4.y
+         * ...
+         */
+         friend std::ostream &operator<<(std::ostream &f, const Arrangement &a);
+
         /* read_guards method
         * :out param stream f: data stream from where the guards are input
-
-        * The format of the input guards file is:
+        *
+        * This method reads G guards and their coordinates from a file of the format
+        * 
         * G             * number of guards
         * q1.x q1.y     * coordinates of the guard in the format of q(x, y) separated by spaces
-        * q2.x q2.y     
+        * q2.x q2.y
         * 
-        * This method initialises the guards with given coords read from a file
         */
         template<typename stream>
-        void read_guards(stream &f, double learning_rate, double pull_attraction);
+        void read_guards(stream &f, double learning_rate, double pull_attraction) {
+            std::size_t n_guards;
+            f >> n_guards;
 
+            for (auto i = 0; i < n_guards; i ++) {
+                double x, y;
+                f >> x >> y;
+                Point_2 q(x, y);
+
+                this->add_guard(q, learning_rate, pull_attraction);
+
+            }
+        }
 
         /* init_guards method
         * :out param stream f: data stream from where the guards are input
-
-        * The format of the input guards file is:
-        * G             * number of guards
+        *
+        * This method reads G guards from a file and initialises their positions greedily. This means that every guard is sequentially placed in an unseen area.
         * 
-        * This method reads the number of required guards and initialises their positions greedily. That is, every new guard is placed in an unseen area.
         */
         template<typename stream>
         void init_guards(stream &f, double learning_rate, double pull_attraction);
@@ -285,21 +313,3 @@ class Arrangement {
         std::vector<Point_2> reflex_vertices;
 };
 
-/* overloaded input operator
-* The format of the input file is:
-* E                     * number of edges
-* p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
-* p3.x p3.y p4.x p4.y
-* ...
-*/
-std::istream &operator>>(std::istream &f, Arrangement &a);
-
-  
-/* overloaded output operator
-* The format of the output file is:
-* E                     * number of edges
-* p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
-* p3.x p3.y p4.x p4.y
-* ...
-*/
-std::ostream &operator<<(std::ostream &f, const Arrangement &a);

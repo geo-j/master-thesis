@@ -13,7 +13,6 @@
 #include <CGAL/Cartesian.h>
 
 
-// TODO: think about how the kernel would need to be changed
 typedef CGAL::Exact_predicates_exact_constructions_kernel                   Kernel;
 typedef CGAL::Polygon_2<Kernel>                                             Polygon_2;
 typedef Kernel::Point_2                                                     Point_2;
@@ -42,7 +41,7 @@ void push_back_unique(std::vector<type> &v, type element) {
 *
 * This function computes the square distance p1^2 + p2^2 between two points p1 and p2.
 */
-double distance(Point_2 p1, Point_2 p2) {
+inline double distance(Point_2 p1, Point_2 p2) {
 	return CGAL::to_double(((p1.x() - p2.x()) * (p1.x() - p2.x()) + (p1.y() - p2.y()) * (p1.y() - p2.y())).exact());
 }
 
@@ -52,7 +51,7 @@ double distance(Point_2 p1, Point_2 p2) {
 * 
 * This method computes the minimum distance between all pairs of reflex vertices seen by a guard
 */
-double min_dist_reflex_vertices(std::vector<Point_2> reflex_vertices) {
+inline double min_dist_reflex_vertices(std::vector<Point_2> reflex_vertices) {
 	double D = -1;
 	for (auto q : reflex_vertices)
 		for (auto r : reflex_vertices)
@@ -76,7 +75,7 @@ double min_dist_reflex_vertices(std::vector<Point_2> reflex_vertices) {
 *
 * This function checks whether the input string is a number or a fraction. If it's a fraction, it takes the numerator and denominator on each side of the fraction and returns their fraction value.
 */
-double get_number(std::string s) {
+inline double get_number(std::string s) {
 	double x, y;
 	size_t frac = s.find('/');
 
@@ -96,7 +95,7 @@ double get_number(std::string s) {
 * :in param    Arrangement_2 arrangement: input arrangement to be converted to a polygon
 * :return   Polygon_2     polygon:        output polygon converted from the given arrangement
 */
-Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
+inline Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
 	std::vector<Point_2> vertices;
 
 	// loop around the arrangement
@@ -139,7 +138,7 @@ Polygon_2 arrangement_to_polygon(Arrangement_2 &arrangement) {
 * :param   Polygon_2     polygon:       input polygon to be converted to an arrangement
 * :return    Arrangement_2 arrangement: output arrangement converted from a polygon
 */
-Arrangement_2 polygon_to_arrangement(Polygon_2 polygon) {
+inline Arrangement_2 polygon_to_arrangement(Polygon_2 polygon) {
 	std::vector<Segment_2> edges;
     Arrangement_2 arrangement;
 
@@ -157,7 +156,7 @@ Arrangement_2 polygon_to_arrangement(Polygon_2 polygon) {
 *
 *  This method adds all the reflex vertices of am arrangement in the reflex_vertices vector.
 */
-std::vector<Point_2> get_reflex_vertices(Arrangement_2 arrangement) {
+inline std::vector<Point_2> get_reflex_vertices(Arrangement_2 arrangement) {
 	std::vector<Point_2> reflex_vertices;
 
 	// Identify reflex vertices
@@ -183,7 +182,7 @@ std::vector<Point_2> get_reflex_vertices(Arrangement_2 arrangement) {
 * 
 * This method checks whether a point p is inside the input arrangement
 */
-bool is_inside_arrangement(Arrangement_2 arrangement, Point_2 p) {
+inline bool is_inside_arrangement(Arrangement_2 arrangement, Point_2 p) {
 	// find where in the visibility region the guard is placed
 	CGAL::Arr_naive_point_location<Arrangement_2> pl(arrangement);
 	auto obj = pl.locate(p);
@@ -213,7 +212,7 @@ bool is_inside_arrangement(Arrangement_2 arrangement, Point_2 p) {
 *
 * This function computes the area of an arrangement without holes. It first converts it to a simple polygon, then uses the built-in CGAL function to compute its area and return it.
 */
-double compute_area(Arrangement_2 &arrangement) {
+inline double compute_area(Arrangement_2 &arrangement) {
 	auto visibility_polygon = arrangement_to_polygon(arrangement);
 	return -CGAL::to_double(visibility_polygon.area());
 }

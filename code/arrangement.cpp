@@ -1,7 +1,5 @@
 #include "arrangement.hpp"
 
-class Arrangement {
-    public:
         /* *****************
            *     I/O       *
            *****************
@@ -14,7 +12,7 @@ class Arrangement {
         * p3.x p3.y p4.x p4.y
         * ...
         */
-        friend std::istream &operator>>(std::istream &f, Arrangement &a) {
+        std::istream &operator>>(std::istream &f, Arrangement &a) {
             std::size_t E;
             double x1, y1, x2, y2;
             std::vector<Segment_2> segments;
@@ -76,7 +74,7 @@ class Arrangement {
         * p3.x p3.y p4.x p4.y
         * ...
         */
-        friend std::ostream &operator<<(std::ostream &f, const Arrangement &a) {
+        std::ostream &operator<<(std::ostream &f, const Arrangement &a) {
             f << a.input_arrangement.number_of_edges() << std::endl;
 
             for (auto eit = a.input_arrangement.edges_begin(); eit != a.input_arrangement.edges_end(); ++ eit) {
@@ -86,30 +84,39 @@ class Arrangement {
             return f;
         }
 
-        /* read_guards method
-        * :out param stream f: data stream from where the guards are input
-        * The format of the input guards file is:
-        * G             * number of guards
-        * q1.x q1.y     * coordinates of the guard in the format of q(x, y) separated by spaces
-        * q2.x q2.y     
+        /* print_polygon method
+        * :out param stream f: data stream where the arrangement should be output
+        *
+        * The format of the output file is:
+        * V                     * number of vertices of the polygon
+        * p1.x p1.y             * vertex with coordinates p1(x, y), separated by spaces, in clockwise order
+        * p2.x p2.y
+        * ...
+        * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
+        * p3.x p3.y p4.x p4.y
+        * ...
         */
         template<typename stream>
-        void read_guards(stream &f, double learning_rate, double pull_attraction) {
-            std::size_t n_guards;
-            f >> n_guards;
+        void Arrangement::print_polygon(stream &f) {
+            f << this->input_polygon.size() << std::endl;
 
-            for (auto i = 0; i < n_guards; i ++) {
-                double x, y;
-                f >> x >> y;
-                Point_2 q(x, y);
-
-                this->add_guard(q, learning_rate, pull_attraction);
-
+            for (auto vit = this->input_polygon.vertices_begin(); vit != this->input_polygon.vertices_end(); ++ vit) {
+                f << *vit << std::endl;
+            }
+            f << std::cout;
+            for (auto eit = this->input_polygon.edges_begin(); eit != this->input_polygon.edges_end(); ++ eit) {
+                f << *eit << std::endl;
             }
         }
 
+        /* init_guards method
+        * :out param stream f: data stream from where the guards are input
+        *
+        * This method reads G guards from a file and initialises their positions greedily. This means that every guard is sequentially placed in an unseen area.
+        * 
+        */
         template<typename stream>
-        void init_guards(stream &f, double learning_rate, double pull_attraction) {
+        void Arrangement::init_guards(stream &f, double learning_rate, double pull_attraction) {
             std::size_t n_guards;
             f >> n_guards;
 
@@ -140,31 +147,6 @@ class Arrangement {
                 }
             }
         }
-        /* print_polygon method
-        * :out param stream f: data stream where the arrangement should be output
-        *
-        * The format of the output file is:
-        * V                     * number of vertices of the polygon
-        * p1.x p1.y             * vertex with coordinates p1(x, y), separated by spaces, in clockwise order
-        * p2.x p2.y
-        * ...
-        * p1.x p1.y p2.x p2.y   * edge with endpoints coordinates separated by spaces p1(x, y)p2(x, y)
-        * p3.x p3.y p4.x p4.y
-        * ...
-        */
-        template<typename stream>
-        void print_polygon(stream &f) {
-            f << this->input_polygon.size() << std::endl;
-
-            for (auto vit = this->input_polygon.vertices_begin(); vit != this->input_polygon.vertices_end(); ++ vit) {
-                f << *vit << std::endl;
-            }
-            f << std::cout;
-            for (auto eit = this->input_polygon.edges_begin(); eit != this->input_polygon.edges_end(); ++ eit) {
-                f << *eit << std::endl;
-            }
-        }
-
         /* print_guards method
         * :out param stream f: data stream where the arrangement should be output
         *
@@ -175,7 +157,7 @@ class Arrangement {
         * ...
         */
         template<typename stream>
-        void print_guards(stream &f) {
+        void Arrangement::print_guards(stream &f) {
             f << guards.size() << std::endl;
 
             for (auto guard : guards) {
@@ -189,7 +171,7 @@ class Arrangement {
         * 
         * This method adds the guard with its corresponding visibility region to the guard vector
         */
-        void add_guard(const Point_2 q, const double learning_rate, double pull_attraction) {
+        void Arrangement::add_guard(const Point_2 q, const double learning_rate, double pull_attraction) {
             Arrangement_2 visibility_region = this->visibility(q);
             this->guards.push_back(Guard(q, visibility_region, learning_rate, pull_attraction));
         }
@@ -198,7 +180,7 @@ class Arrangement {
         *
         * This method populates the reflex vertices vector with the reflex vertices of the arrangement
         */
-        void add_reflex_vertices() {
+        void Arrangement::add_reflex_vertices() {
             // std::cout << "here\n";
             auto eit = *(this->input_arrangement).unbounded_face()->inner_ccbs_begin();
 
@@ -233,7 +215,7 @@ class Arrangement {
         *  This method computes whether the whole input arrangement is completely seen by the visibility arrangement of one or multiple guards
         *  This is achieved by converting the visibility arrangement to a polygon and using the built-in == operator.
         */
-        bool is_completely_visible(Arrangement_2 &visibility_arrangement) {
+        bool Arrangement::is_completely_visible(Arrangement_2 &visibility_arrangement) {
             Polygon_2 visibility_polygon = arrangement_to_polygon(visibility_arrangement);
 
             // TODO: deal with inner holes of whole visibility arrangement
@@ -247,7 +229,7 @@ class Arrangement {
         * 
         *  This method computes the visibility region arrangement of a guard
         */
-        Arrangement_2 visibility(const Point_2 guard) {
+        Arrangement_2 Arrangement::visibility(const Point_2 guard) {
             Arrangement_2 visibility_arrangement;
 
             auto obj = this->pl.locate(guard);
@@ -301,7 +283,7 @@ class Arrangement {
         *  This method computes the visibility region arrangement of all the guards
         *  This is achieved by computing the visibility region arrangement for each of the guards placed in the arrangement, and overlaying them
         */
-        Arrangement_2 full_visibility() {
+        Arrangement_2 Arrangement::full_visibility() {
             std::vector<Point_2> visible_points;
             Arrangement_2 prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement;
 
@@ -329,7 +311,7 @@ class Arrangement {
         *  This method computes the visibility region arrangement of all the guards except the current guard
         *  This is achieved by computing the visibility region arrangement for each of the guards placed in the arrangement, and overlaying them
         */
-        Arrangement_2 exclusive_visibility(Guard guard, std::vector<Guard> zero_df_guards) {
+        Arrangement_2 Arrangement::exclusive_visibility(Guard guard, std::vector<Guard> zero_df_guards) {
             std::vector<Point_2> visible_points;
             Arrangement_2 prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement;
             bool computed_visibility = false;
@@ -366,7 +348,7 @@ class Arrangement {
         * 
         * This method checks whether a point r is visible from p by checking whether r is in the visibility region of p.
         */
-        bool is_visible_from(const Point_2 p, const Point_2 r) {
+        bool Arrangement::is_visible_from(const Point_2 p, const Point_2 r) {
             // first compute the visibility region of the guard
             auto visibility_region = this->visibility(p);
 
@@ -402,7 +384,7 @@ class Arrangement {
         * 
         *  This method computes the tuples between all the reflex vertices a guard sees, their intersection points with the input arrangement boundaries and the orientation of the guard in relation to the boundary of the polygon and a specific reflex vertex
         */
-        std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> reflex_vertex_pairs(const Guard g) {
+        std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> Arrangement::reflex_vertex_pairs(const Guard g) {
             std::vector<std::tuple<Point_2, Point_2, CGAL::Oriented_side>> boundary_intersections;
             Point_2 guard = g.get_coords();
             auto visibility_arrangement = g.get_visibility_region();
@@ -463,7 +445,7 @@ class Arrangement {
         * 
         * This method computes the value of beta for the area seen exclusively by the guard.
         */
-        double exclusive_beta(Guard guard, Point_2 intersection, Point_2 reflex_vertex, std::vector<Guard> zero_df_guards) {
+        double Arrangement::exclusive_beta(Guard guard, Point_2 intersection, Point_2 reflex_vertex, std::vector<Guard> zero_df_guards) {
             auto reflex_boundary_segment = Segment_2(reflex_vertex, intersection);
             std::vector<Point_2> shared_visibility_intersection_points;
             double beta = 0;
@@ -550,7 +532,7 @@ class Arrangement {
 
         This method computes the end of the segment (unseen by the guard) on the other side of the reflex vertex seen by a guard. 
         */
-        Point_2 point_behind_reflex_vertex(const Guard guard, Point_2 reflex_vertex) {
+        Point_2 Arrangement::point_behind_reflex_vertex(const Guard guard, Point_2 reflex_vertex) {
             auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
 
             // Identify reflex vertices
@@ -595,7 +577,7 @@ class Arrangement {
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
-        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>, Line_2> gradient(const Guard g, std::vector<Guard> zero_df_guards) {
+        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>, Line_2> Arrangement::gradient(const Guard g, std::vector<Guard> zero_df_guards) {
             std::vector<Vector_2> Dfs, hs;
             std::vector<Point_2> reflex_vertices;
             Line_2 segment_behind_reflex_vertex;
@@ -700,7 +682,7 @@ class Arrangement {
         *                   - update guard in the guards vector
         *                   - if the guard has the same coords as another guard, don't move the guard and recompute its gradient without the pull (edge-case for when multiple guards are placed on top of the same reflex vertex and they cannot escape the reflex region)
         */
-        void optimise() {
+        void Arrangement::optimise() {
             // at beginning, compute the full visibility of the polygon and initialise reflex vertex vector
             auto full_arrangement = this->full_visibility();
             auto l = 0;
@@ -863,7 +845,7 @@ class Arrangement {
     * Sometimes it can happen that the gradient is exactly perpendicular to the boundary, which results in no movement. To tackle that case, the new position of the guard is projected onto the polygon segment. 
     * If the project falls outside of the polygon, then the guard is placed onto the closest segment end.
     */
-    bool place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
+    bool Arrangement::place_guard_on_boundary(Point_2 prev_guard, Point_2 guard, Point_2 &new_guard) {
         // std::cout << "prev guard " << prev_guard << std::endl;
         auto guard_movement = Segment_2(prev_guard, guard);
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
@@ -917,7 +899,7 @@ class Arrangement {
     * This method computes the guard's position inside the reflex area in the case when the gradient requires it to be outside of it
     * If the new guard's position is inside the reflex area, then its position is unchanged. Otherwise, it is projected onto the closest reflex line.
     */
-    bool place_guard_inside_reflex_area(Guard prev_guard, Guard guard, Point_2 &new_guard) {
+    bool Arrangement::place_guard_inside_reflex_area(Guard prev_guard, Guard guard, Point_2 &new_guard) {
         std::cout << "reflex vertex guard " << prev_guard << " tries to move to " << guard << std::endl;
         int n_placed = 0;
         Line_2 edge1, edge2;
@@ -1006,7 +988,7 @@ class Arrangement {
     * 
     * This method checks whether the guard is to be moved outside of the polygon and thus intersects the polygon boundary.
     */
-    bool intersects_boundary(Segment_2 ray) {
+    bool Arrangement::intersects_boundary(Segment_2 ray) {
         auto eit = *this->input_arrangement.unbounded_face()->inner_ccbs_begin();
         
         do {
@@ -1019,15 +1001,3 @@ class Arrangement {
 
         return false;
     }
-
-    private:
-        Arrangement_2 input_arrangement;
-        // TODO: should probably adapt it to polygons with holes
-        Polygon_2 input_polygon;
-        // define type of visibility algorithm used
-        TEV visibility_algo;
-        // find the face of the guard
-        CGAL::Arr_naive_point_location<Arrangement_2> pl;
-        std::vector<Guard> guards;
-        std::vector<Point_2> reflex_vertices;
-};
