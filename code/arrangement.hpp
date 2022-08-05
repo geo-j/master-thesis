@@ -48,14 +48,26 @@ class Arrangement {
 
         /* read_guards method
         * :out param stream f: data stream from where the guards are input
+
         * The format of the input guards file is:
         * G             * number of guards
         * q1.x q1.y     * coordinates of the guard in the format of q(x, y) separated by spaces
         * q2.x q2.y     
+        * 
+        * This method initialises the guards with given coords read from a file
         */
         template<typename stream>
         void read_guards(stream &f, double learning_rate, double pull_attraction);
 
+
+        /* init_guards method
+        * :out param stream f: data stream from where the guards are input
+
+        * The format of the input guards file is:
+        * G             * number of guards
+        * 
+        * This method reads the number of required guards and initialises their positions greedily. That is, every new guard is placed in an unseen area.
+        */
         template<typename stream>
         void init_guards(stream &f, double learning_rate, double pull_attraction);
 
