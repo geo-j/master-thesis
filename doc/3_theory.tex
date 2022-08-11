@@ -273,3 +273,35 @@ The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the s
 Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is $$h = \sum_{r \in R(g)} h_r, R(g) = \{\text{reflex vertices of $P$ seen by $g$\}}.$$
 
 Therefore, the movement of a guard $g$ to the new position $g'$ will take both the gradient and the pull into account: $$g' = g + \alpha (\bigtriangledown f + h).$$ Additionally, we can choose how much influence the pull itself can have in the movement of the guard by adding a hyperparameter $\beta$: $$g' = g + \alpha (\bigtriangledown f + \beta h).$$
+
+\subsubsection{Pull onto the Reflex Vertex}
+We have now created a heuristic for pulling a guard closer to a reflex vertex based on the increase in the seen area behind the reflex vertex. It could happen however that the pull towards the reflex vertex is very strong. In this case, the guard could be moved past the reflex vertex, in between the reflex vertex and the polygon boundary. Although the area seen behind the reflex vertex would be maximised, the guard would ``unsee'' (parts of) the area of its initial position $g$. In order to address this particular issue, the guard will be placed on the reflex vertex when the pull is strong enough. 
+
+This section will thus expand on a procedure that decides when a guard is best placed on a reflex vertex based on its pull towards it.
+
+Firstly, we must define the condition of what a ``strong enough'' pull means. Such a pull would move the guard $g$ ``close enough'' to the reflex vertex. Hence, we need to compute what the upper limit of the distance between the new guard position $g'$ and reflex vertex $r$ would be. The most straight-forward way to do so would be to assign a hyperparameter to the distance between $g$ and $r$. Recall that $||\overline{gr}|| = a$. For now, let $\frac 2 3$ be the factor of closeness of $g'$ to $r$. This means, that when the pull is stronger than $\frac 2 3$ times the distance $a$, then the guard is moved onto the reflex vertex: $$h_r > \frac 2 3 a.$$
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{theory/pull3.png}
+    \caption{Guard $g$ is in between two reflex vertices $r_1$ and $r_2$. Because they are collinear and $g$ is equidistant from them, the two pulls $h_{r_1}$ and $h_{r_2}$ cancel each other out.}
+    \label{fig:pull_cancel}
+\end{figure}
+
+Next, we need to account for the case where a polygon has multiple reflex vertices. Namely, we consider the specific edge case when a guard is in between two reflex vertices, illustrated in Figure \ref{fig:pull_cancel}. Thus, let $r_1$ and $r_2$ be two reflex vertices whose distance $$D = \min_{q \neq r} \text{ distance}(q, r), \forall q, r \in P \text{ reflex vertices}.$$
+Let $g$ be a guard in between $r_1$ and $r_2$. Let the pulls $h_{r_1}$ and $h_{r_2}$ be  individually strong towards $r_1$ and $r_2$, respectively. However, because they are opposites in directions, they cancel each other out, resulting in $g$ possibly not changing its position at all.
+
+We will now introduce another condition for pulling the guard towards the closer reflex vertex when pulls are cancelling each other out. If a guard $g$ is not equidistantly placed in between two reflex vertices, we are interested in computing what the closer reflex vertex is. So, if $g$ is closer than $\frac D 2$ to a reflex vertex, then we consider it close enough if: $$a < \frac D 2.$$
+In this case we can choose to still move towards one of the reflex vertices and make progress.
+
+
+
+\subsection{Reflex Area}
+- address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
+\subsection{Hidden Gradient}
+- speed up the guard movement by giving all guards a gradient
+\subsection{Greedy Initialisation}
+- head start
+\subsection{Angle Behind Reflex Vertex}
+- take into consideration how much a guard should move towards a reflex vertex, depending on the area seen behind it
