@@ -298,7 +298,44 @@ In this case we can choose to still move towards one of the reflex vertices and 
 
 
 \subsection{Reflex Area}
-- address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
+% - address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
+In this section we introduce an additional extension to the gradient descent algorithm with momentum and reflex vertex pull: the concept of a reflex area. 
+
+The Reflex Area design choice was made to counter-act the edge case of a guard moving away from a reflex vertex and ``unseeing'' the area that it was already seeing. This case is illustrated in Figure \ref{fig:pull_to_on_behind}. In Subfigure \ref{fig:pull_to_on_behind1}, guard $g$ starts moving with pull $h_r$ towards reflex vertex $r$. The pull is strong enough to place $g$ on $r$ in Subfigure \ref{fig:pull_to_on_behind2}. In this case, $g$ can see everywhere around $r$. However, the new gradient $\bigtriangledown f$ of $g$ moves it past $r$ in Subfigure \ref{fig:pull_to_on_behind3}. The initially seen area before $r$ is now not completely seen anymore by $g$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/reflex_area_to_vertex.png}
+        \caption{Guard $g$ starts moving with pull $h_r$ towards reflex vertex $r$. Guard $g$ cannot see past $r$.}
+        \label{fig:pull_to_on_behind1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/reflex_area_on_vertex.png}
+        \caption{Guard $g$ is placed on reflex vertex $r$. Guard $g$ can see both before $r$ and past it.}
+        \label{fig:pull_to_on_behind2}
+    \end{subfigure}
+    \begin{subfigure}{0.6\textwidth}
+        \includegraphics[width = \textwidth]{theory/reflex_area_behind_vertex.png}
+        \caption{Guard $g$ has moved past reflex vertex $r$. Guard $g$ cannot see anymore before $r$.}
+        \label{fig:pull_to_on_behind3}
+    \end{subfigure}
+    \caption{Guard $g$ moves towards and on the reflex vertex $r$. Eventually, its newly computed position is away from $r$ and the reflex area. This results in $g$ not seeing the initial area anymore.}
+    \label{fig:pull_to_on_behind}
+\end{figure}
+
+
+Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose intersection is the reflex vertex $r$. We call \textit{reflex area} the area between lines $rr'$ and $rr''$ that is contained inside the polygon. Figure \ref{fig:reflex_area} draws this concept. If a guard $g$ has to move outside of the reflex area, we project its new position onto the closest reflex line (in this case, $rr'$) as $g'$. Naturally, if $g$ has to move inside the reflex area, it can do so unalteredly. In this way, we maintain the gained property of a guard seeing everything around a reflex vertex while still allowing it to move away from the reflex vertex.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{theory/reflex_area.png}
+    \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two reflex lines $rr'$ and $rr''$. So, if $g$ needs to move outside of the reflex area, its new position will be projected on the closest reflex line.}
+    \label{fig:reflex_area}
+\end{figure}
+
+
 \subsection{Hidden Gradient}
 - speed up the guard movement by giving all guards a gradient
 \subsection{Greedy Initialisation}

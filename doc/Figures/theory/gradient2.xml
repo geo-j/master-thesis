@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220302113024" modified="D:20220811125748"/>
+<info created="D:20220302113024" modified="D:20220811163132"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -455,53 +455,55 @@ h
 <text matrix="1 0 0 1 26.6746 74.6746" transformations="translations" pos="398.388 548.036" stroke="black" type="label" width="18.232" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\triangle_1</text>
 <use name="mark/disk(sx)" pos="288 656" size="large" stroke="red"/>
 <use matrix="1 0 0 1 32 80" name="mark/disk(sx)" pos="256 576" size="large" stroke="black"/>
-<use matrix="1 0 0 1 32 80" name="mark/disk(sx)" pos="112 576" size="large" stroke="black"/>
-<text matrix="1 0 0 1 16 64" transformations="translations" pos="112 576" stroke="black" type="label" width="8.689" height="7.41" depth="3.35" valign="baseline" size="LARGE" style="math">g</text>
-<path matrix="1 0 0 1 32 80" stroke="black" pen="heavier" arrow="normal/normal">
-112 576 m
-112 592 l
+</page>
+<page>
+<layer name="alpha"/>
+<view layers="alpha" active="alpha"/>
+<path layer="alpha" stroke="red" fill="red" dash="dashed" opacity="10%" stroke-opacity="opaque">
+224 848 m
+384 848 l
+304 688 l
+h
 </path>
-<text matrix="1 0 0 1 6.0235 70.6302" transformations="translations" pos="112 592" stroke="black" type="label" width="21.208" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\bigtriangledown f</text>
-<text matrix="1 0 0 1 13.7061 77.9922" transformations="translations" pos="112 612.431" stroke="black" type="label" width="12.966" height="8.307" depth="2.32" valign="baseline" size="large" style="math">\partial y</text>
-<text matrix="1 0 0 1 25.0258 -1.4511" transformations="translations" pos="192.089 576" stroke="black" type="label" width="7.374" height="6.177" depth="0" valign="baseline" size="Large" style="math">a</text>
-<text matrix="1 0 0 1 68.7337 69.9408" transformations="translations" pos="151.642 600.107" stroke="black" type="label" width="18.232" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\triangle_2</text>
-<path matrix="1 0 0 1 0 16" stroke="blue" arrow="normal/normal">
-144 640 m
-192 640 l
+<path stroke="red" pen="heavier">
+320 656 m
+224 848 l
 </path>
-<text matrix="1 0 0 1 -32 0" transformations="translations" pos="192 640" stroke="blue" type="label" width="15.802" height="11.957" depth="2.58" valign="baseline" size="LARGE" style="math">h_r</text>
-<path matrix="1 0 0 1 0 16" stroke="black" dash="dashed">
-144 640 m
-192 688 l
+<path stroke="red" pen="heavier">
+288 656 m
+384 848 l
 </path>
-<use matrix="1 0 0 1 0 16" name="mark/disk(sx)" pos="192 688" size="large" stroke="black"/>
-<text matrix="1 0 0 1 0 32" transformations="translations" pos="192 688" stroke="black" type="label" width="12.475" height="12.887" depth="3.35" valign="baseline" size="LARGE" style="math">g&apos;</text>
-<path matrix="1 0 0 1 0 16" stroke="black" dash="dashed">
-144 688 m
-144 640 l
+<path matrix="1 0 0 1 48 112" stroke="red" fill="red" pen="heavier" opacity="30%" stroke-opacity="opaque">
+240 544 m
+256 576 l
+272 544 l
+h
 </path>
-<path matrix="1 0 0 1 0 16" stroke="black" dash="dashed">
-144 688 m
-192 688 l
+<path matrix="1 0 0 1 48 112" stroke="black" pen="fat">
+64 576 m
+448 576 l
 </path>
-<text matrix="1 0 0 1 0 32" transformations="translations" pos="160 688" stroke="black" type="label" width="13.482" height="8.302" depth="0" valign="baseline" size="large" style="math">\partial x</text>
-<path matrix="1 0 0 1 0 16" stroke="black" pen="heavier">
-192 688 m
-288 640 l
+<text matrix="1 0 0 1 64.2818 126.21" transformations="translations" pos="256 576" stroke="black" type="label" width="8.065" height="7.412" depth="0" valign="baseline" size="LARGE" style="math">r</text>
+<use matrix="1 0 0 1 48 112" name="mark/disk(sx)" pos="256 576" size="large" stroke="black"/>
+<text matrix="1 0 0 1 160 96" transformations="translations" pos="112 576" stroke="red" type="label" width="8.689" height="7.41" depth="3.35" valign="baseline" size="LARGE" style="math">g</text>
+<use matrix="1 0 0 1 16 32" name="mark/disk(sx)" pos="288 656" size="large" stroke="red"/>
+<use matrix="1 0 0 1 48 112" name="mark/disk(sx)" pos="256 576" size="large" stroke="black"/>
+<path stroke="black" arrow="normal/normal">
+304 688 m
+240 720 l
 </path>
-<path matrix="1 0 0 1 0 16" stroke="black" dash="dashed">
-192 688 m
-192 640 l
-192 640 l
+<text matrix="1 0 0 1 0 -8.76275" transformations="translations" pos="256 704" stroke="black" type="label" width="14.806" height="6.926" depth="1.93" valign="baseline" style="math">\bigtriangledown f</text>
+<path stroke="black" dash="dashed">
+240 720 m
+277.983 740.034 l
 </path>
-<use matrix="1 0 0 1 0 16" name="mark/disk(sx)" pos="192 640" size="large" stroke="black"/>
-<text transformations="translations" pos="192 640" stroke="black" type="label" width="15.222" height="12.885" depth="4.26" valign="baseline" size="LARGE" style="math">g&apos;_x</text>
-<path matrix="1 0 0 1 0 16" stroke="black" arrow="normal/normal" rarrow="normal/normal">
-144 576 m
-288 576 l
-</path>
-<use matrix="1 0 0 1 0 16" name="mark/disk(sx)" pos="144 688" size="large" stroke="black"/>
-<text matrix="1 0 0 1 -16 32" transformations="translations" pos="144 688" stroke="black" type="label" width="14.706" height="12.89" depth="6.58" valign="baseline" size="LARGE" style="math">g&apos;_y</text>
+<use name="mark/disk(sx)" pos="277.983 740.034" size="large" stroke="black"/>
+<text matrix="1 0 0 1 -21.983 -4.03404" transformations="translations" pos="277.983 740.034" stroke="red" type="label" width="12.475" height="12.887" depth="3.35" valign="baseline" size="LARGE" style="math">g&apos;</text>
+<text matrix="1 0 0 1 -1.70288 -19.2284" transformations="translations" pos="273.392 835.654" stroke="black" type="label" width="63.602" height="9.963" depth="0" valign="baseline" size="Large">reflex area</text>
+<use name="mark/disk(sx)" pos="224 848" size="large" stroke="black"/>
+<use name="mark/disk(sx)" pos="384 848" size="large" stroke="black"/>
+<text matrix="1 0 0 1 -16 0" transformations="translations" pos="224 848" stroke="black" type="label" width="8.396" height="8.766" depth="0" valign="baseline" size="large">$r&apos;$</text>
+<text matrix="1 0 0 1 16 0" transformations="translations" pos="384 848" stroke="black" type="label" width="10.692" height="8.766" depth="0" valign="baseline" size="large">$r&apos;&apos;$</text>
 </page>
 <page>
 <layer name="alpha"/>
@@ -560,6 +562,6 @@ h
 288 640 m
 576 640 l
 </path>
-<text transformations="translations" pos="432 624" stroke="black" type="label" width="12.053" height="9.803" depth="0" valign="baseline" size="Large">$D$</text>
+<text transformations="translations" pos="432 624" stroke="black" type="label" width="12.053" height="9.803" depth="0" valign="baseline" size="Large" style="math">D</text>
 </page>
 </ipe>
