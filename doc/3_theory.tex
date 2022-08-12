@@ -379,6 +379,31 @@ The hidden gradient heuristic can now be generalised. Let $G$ be the complete se
 In this way, all guards will have a non-zero gradient and make progress.
 
 \subsection{Greedy Initialisation}
-- head start
+% - head start
+In this section we will introduce another heuristic for improving the performance of the gradient descent with momentum algorithm: Greedy Initialisation. This heuristic will give a head start to the algorithm by arbitrarily placing guards in areas that are unseen by other guards. In this way, the algorithm will start with an already much larger covered area.
+
+Figure \ref{fig:greedy} offers an example of a Greedy Initialisation. The first guard $g_1$ is arbitrarily placed inside polygon $P$ as shown in Subfigure \ref{fig:greedy1}. Then, guard $g_2$ is arbitrarily placed in an unseen part of $P$, as displayed in Subfigure \ref{fig:greedy2}. In this way, the algorithm gains a head start to continue with the optimisation of the guards' positions.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/greedy1.png}
+        \caption{Guard $g_1$ has been arbitrarily placed inside the polygon $P$.}
+        \label{fig:greedy1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/greedy2.png}
+        \caption{Guard $g_2$ has been arbitrarily placed inside the polygon $P$, outside of the visibility region of guard $g_1$.}
+        \label{fig:greedy2}
+    \end{subfigure}
+    % \begin{subfigure}{0.45\textwidth}
+    %     \includegraphics[width = \textwidth]{theory/greedy.png}
+    %     \caption{Guard $g_3$ has been arbitrarily placed inside the polygon $P$, outside of the visibility regions of guards $g_1$ and $g_2$.}
+    %     \label{fig:greedy3}
+    % \end{subfigure}
+    \caption{Greedy Initialisation for guards $g_1$ and $g_2$ inside polygon $P$. The visibility regions of the guards are displayed in orange and purple, respectively. In this way, the algorithm gains a head start for optimising the positions of the guards.}
+    \label{fig:greedy}
+\end{figure}
 \subsection{Angle Behind Reflex Vertex}
 - take into consideration how much a guard should move towards a reflex vertex, depending on the area seen behind it
