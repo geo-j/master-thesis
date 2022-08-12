@@ -337,7 +337,47 @@ Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose in
 
 
 \subsection{Hidden Gradient}
-- speed up the guard movement by giving all guards a gradient
+% - speed up the guard movement by giving all guards a gradient
+In this section we will introduce a computation speedup for the case in which guards have a gradient of 0 (they don't move). This can happen when the area seen by a guard is already seen by other guards too. We consider that having a gradient of 0 is detrimental to the progress of the algorithm. The reason behind this is that it is unlikely that a guard's optimal position has been found when its gradient is 0. Hence, we would like every guard to move, no matter how little.
+
+In order to allow guards to still move when their gradient is 0, we deployed the Hidden Gradient heuristic. This heuristic is based on the fact that we allow guards whose gradient is 0 to still move with a newly computed ``hidden'' gradient. So, if there are guards whose gradient is 0, we will recompute their gradient by not taking into account the area seen by the guards who have a non-zero gradient.
+
+An example of this approach can be found in Figure \ref{fig:hidden_gradient}. Let $G = \{g_1, g_2, g_3\}$ be the complete set of guards. Initially in Subfigure \ref{fig:hidden_gradient1}, only $g_1$ has a non-zero gradient. The visibility regions of $g_2$ and $g_3$ are overlapping with that of $g_1$, so their gradients are 0. Let $G_0 = \{g_1\}$ be the set of guards who at step 0 have a non-zero gradient. 
+Then, Subfigure \ref{fig:hidden_gradient2} contains the set $G \setminus G_0$ of guards. The visibility area of guard $g_1$ overlaps with $g_2$, so only guard $g_2$ will have a non-zero gradient. Let $G_1 = \{g_2\}$ be the set of guards who at step 1 have a non-zero gradient.
+Lastly, we can compute the non-zero gradient for guard $g_3$ in Subfigure \ref{fig:hidden_gradient3}. Let $G_2 = \{g_3\}$ be the set of guards who at step 2 have a non-zero gradient.
+In Subfigure \ref{fig:hidden_gradient4} all the guards have been moved to their new positions $g'_1, g'_2, g'_3$, respectively. So the gradients have been computed as $G = G_0 \cup G_1 \cup G_2$, where $G_1$ and $G_2$ contain the guards with hidden gradients.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/hidden_gradient1.png}
+        \caption{Guard $g_2$ and $g_3$ have a gradient of 0, because guard $g_1$ sees all the areas they see. So, the set of guards with a non-zero gradient is $G_0 = \{g_1\}$.}
+        \label{fig:hidden_gradient1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/hidden_gradient2.png}
+        \caption{Guard $g_1$ had a non-zero gradient, so we compute the gradients of guards $g_2$ and $g_3$ without $g_1$. Guard $g_2$ sees everything that $g_3$ sees, so $g_3$ will have gradient 0. So, the set of guards with a non-zero gradient is $G_1 = \{g_2\}$.}
+        \label{fig:hidden_gradient2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/hidden_gradient3.png}
+        \caption{Guard $g_2$ had a non-zero gradient, so we compute the gradient of guard $g_3$ without $g_2$. Guard $g_3$ will now have a non-zero gradient. So, the set of guards with a non-zero gradient is $G_2 = \{g_3\}$.}
+        \label{fig:hidden_gradient3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{theory/hidden_gradient4.png}
+        \caption{The new positions $g'_1, g'_2, g'_3$ of the guards such that $G = G_0 \cup G_1 \cup G_2$.}
+        \label{fig:hidden_gradient4}
+    \end{subfigure}
+    \caption{Example of hidden gradient computation for guard set $G = \{g_1, g_2, g_3\}$ in a corridor-like polygon. The visibility areas of each of the guards $g_1, g_2$, and $g_3$ are shown in purple, green and orange, respectively.}
+    \label{fig:hidden_gradient}
+\end{figure}
+
+The hidden gradient heuristic can now be generalised. Let $G$ be the complete set of guards. For each step $i$, let $G_i = G \setminus G_{i - 1}$ be the set of guards with a non-zero gradient after removing the guards with a gradient from step $i - 1$. The set $G_0$ will be the set of guards with a non-zero gradient before removal of any guards. At the end, the union of all subsets $G_i$ will comprise the set of all guards $G = G_0 \cup G_1 \cup ...$.
+In this way, all guards will have a non-zero gradient and make progress.
+
 \subsection{Greedy Initialisation}
 - head start
 \subsection{Angle Behind Reflex Vertex}
