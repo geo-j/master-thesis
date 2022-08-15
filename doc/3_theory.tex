@@ -419,7 +419,9 @@ Figure \ref{fig:greedy} offers an example of a Greedy Initialisation. The first 
 % - take into consideration how much a guard should move towards a reflex vertex, depending on the area seen behind it
 In this section we will introduce a heuristic that will further fine-tune the factor with which a guard is influenced by a reflex vertex. Currently, we only take into account the distance $b$ between the reflex vertex and the polygon boundary. Intuitively, the unseen area behind the reflex vertex should also play a role in the computation of the gradient: guards should be drawn faster to larger areas. In order to do so, we will take into account the normalised value of angle $\mu$ behind the reflex vertex.
 
-A visualisation for this heuristic can be found in Figure \ref{fig:angle}. The pull of the guard $g$ towards the reflex vertex $r$ will be influenced by the normalised value of $\mu$ as follows: $$g' = g + \alpha \frac{\mu}{2\pi}(\bigtriangledown f + \beta h).$$
+A visualisation for this heuristic can be found in Figure \ref{fig:angle}. The pull of the guard $g$ towards the reflex vertex $r$ will be influenced by the normalised value of $\mu$ as follows: $$g' = g + \alpha (\frac{\mu}{2\pi} + c)(\bigtriangledown f + \beta h).$$
+
+We will additionally add a constant $c$ to account for very small angles. For example, if the normalised value of $\mu$ is close to $10^{-5}$, then $c = 10^{-2}$. Then the guard still has a significant move towards the unseen area, no matter how small it is. In this way, smaller areas are not overlooked.
 
 \begin{figure}[h!]
     \centering
