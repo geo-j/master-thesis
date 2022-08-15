@@ -97,7 +97,41 @@ class Arrangement {
         * 
         */
         template<typename stream>
-        void init_guards(stream &f, double learning_rate, double pull_attraction);
+        void init_guards(stream &f, double learning_rate, double pull_attraction) {
+            std::size_t n_guards;
+            f >> n_guards;
+
+            for (auto i = 0; i < n_guards; i ++) {
+                if (i == 0) {
+                    auto eit = *(this->input_arrangement).unbounded_face()->inner_ccbs_begin();
+                    auto edge = Segment_2(eit->source()->point(), eit->target()->point());
+
+                    Point_2 q((eit->source()->point().x() + eit->target()->point().x()) / 2, (eit->source()->point().y() + eit->target()->point().y()) / 2);
+                    // std::cout << "inserting " << q << std::endl;
+                    this->add_guard(q, learning_rate, pull_attraction);
+                } else {
+                    auto full_visibility_arrangement = this->full_visibility();
+                    auto full_visibility_polygon = arrangement_to_polygon(full_visibility_arrangement);
+
+                    if (this->input_polygon.is_clockwise_oriented())
+                        this->input_polygon.reverse_orientation();
+                    if (full_visibility_polygon.is_clockwise_oriented())
+                        full_visibility_polygon.reverse_orientation();
+
+                    Pwh_list_2 symmR;
+                    CGAL::difference(this->input_polygon, full_visibility_polygon, std::back_inserter(symmR));
+
+                    auto v = symmR.begin()->outer_boundary().edge(2);
+
+                    Point_2 q((v.source().x() + v.target().x()) / 2, (v.source().y() + v.target().y()) / 2);
+
+                    q = Point_2(symmR.begin()->outer_boundary().bottom_vertex()->x(), symmR.begin()->outer_boundary().bottom_vertex()->y());
+                    // std::cout << "inserting " << q << std::endl;
+                    this->add_guard(q, learning_rate, pull_attraction);
+
+                }
+            }
+        }
 
         /* print_polygon method
         * :out param stream f: data stream where the arrangement should be output
