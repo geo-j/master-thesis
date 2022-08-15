@@ -295,7 +295,16 @@ Let $g$ be a guard in between $r_1$ and $r_2$. Let the pulls $h_{r_1}$ and $h_{r
 We will now introduce another condition for pulling the guard towards the closer reflex vertex when pulls are cancelling each other out. If a guard $g$ is not equidistantly placed in between two reflex vertices, we are interested in computing what the closer reflex vertex is. So, if $g$ is closer than $\frac D 2$ to a reflex vertex, then we consider it close enough if: $$a < \frac D 2.$$
 In this case we can choose to still move towards one of the reflex vertices and make progress.
 
+\subsubsection{Pull Capping}
+Nonetheless, it can happen that the pull towards a reflex vertex is significantly large in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a very large jump towards the reflex vertex.
 
+We want to smoothen out possibly erratic behaviours of gradient descent. Just like in the case of momentum, we want our pull to be smoothened out in the case that is ``too large''. We define what ``too large'' is based on the momentum. If the pull is larger than a factor of $\gamma$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$:
+\begin{align*}
+    \text{if } ||h_i|| &> \gamma ||M_i|| + c \text{, then} \\
+               h_i &= h_i \frac{\gamma ||M_i||}{||h_i||}.
+\end{align*}
+
+The factor $\gamma$ becomes thus a hyperparameter to experiment with.
 
 \subsection{Reflex Area}
 % - address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
