@@ -279,9 +279,9 @@ class Arrangement {
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
-        std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>, Line_2> gradient(const Guard g, std::vector<Guard> zero_df_guards);
+        Gradient gradient(const Guard g, std::vector<Guard> zero_df_guards);
 
-        Guard compute_new_coords(Guard prev_guard, Guard cur_guard, std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices, bool placed);
+        Guard compute_new_coords(Guard prev_guard, Guard cur_guard, Gradient gradient,  bool placed);
         /* optimise method
         *
         * This method optimises the position of all guards using gradient descent.

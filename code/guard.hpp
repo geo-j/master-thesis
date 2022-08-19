@@ -1,9 +1,5 @@
-#include <CGAL/Vector_2.h>
+#include "gradient.hpp"
 
-#include "utils.hpp"
-
-
-typedef Kernel::Vector_2                                                            Vector_2;
 
 
 class Guard {
@@ -164,7 +160,11 @@ class Guard {
         *
         * This method updates the guard position based on the gradient, and saves the previous position
         */
-        void update_coords(std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices, bool place_on_reflex_vertex) {
+        void update_coords(Gradient gradient, bool place_on_reflex_vertex) {
+            // unpack the gradient
+            auto gradients = gradient.get_gradients();
+            auto pulls = gradient.get_pulls();
+            auto reflex_vertices = gradient.get_reflex_vertices();
             // print gradients
             std::cout << gradients.size() << " " << (int) pulls.size() - 1 << " " << reflex_vertices.size() << std::endl;
             for (int i = 0; i < (int) pulls.size() - 1; i ++) {

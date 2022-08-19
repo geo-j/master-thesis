@@ -6,7 +6,7 @@ int main() {
     double learning_rate, pull_attraction;
 
     std::cin >> learning_rate >> pull_attraction >> arrangement;
-    arrangement.init_guards(std::cin, learning_rate, pull_attraction);
+    arrangement.read_guards(std::cin, learning_rate, pull_attraction);
     // arrangement.print_reflex_intersections();
     std::cout << arrangement;
     // arrangement.print_guards(std::cout);
