@@ -31,6 +31,7 @@ class Guard {
             this->reflex_vertex = g.reflex_vertex;
             this->reflex_area = g.reflex_area;
             this->reflex_area_vertex = g.reflex_area_vertex;
+            this->prev_coords = g.prev_coords;
         }
 
         // copy constructor
@@ -44,6 +45,8 @@ class Guard {
             this->reflex_vertex = g.reflex_vertex;
             this->reflex_area = g.reflex_area;
             this->reflex_area_vertex = g.reflex_area_vertex;
+            this->prev_coords = g.prev_coords;
+
         }
 
         // visibility region getter
@@ -51,6 +54,9 @@ class Guard {
             return this->visibility_region;
         }
 
+        Point_2 get_prev_coords() const {
+            return this->prev_coords;
+        }
         // current coordinates getter
         Point_2 get_coords() const {
             return this->cur_coords;
@@ -170,11 +176,14 @@ class Guard {
 
             bool placed = false;
             // compute the min distance between all reflex vertices seen by the guard
-            double D = min_dist_reflex_vertices(reflex_vertices);
+
+            double D;
+            if (place_on_reflex_vertex && this->pull_onto)
+                D = min_dist_reflex_vertices(reflex_vertices);
             // std::cout << D << std::endl;
 
             // if the guard is close enough (less than the min distance between 2 vertices) to a reflex vertex and far enough from the other one then save the reflex vertex to place the guard later on it
-            for (int i = 0; i < reflex_vertices.size() && place_on_reflex_vertex; i ++) {
+            for (int i = 0; i < reflex_vertices.size() && place_on_reflex_vertex && this->pull_onto; i ++) {
                 auto d = distance(this->cur_coords, reflex_vertices.at(i));
                 // std::cout << d << std::endl;
                 // std::cout << pulls.at(i).squared_length() << " " << (2 / 3.0) * d << std::endl;
@@ -182,7 +191,7 @@ class Guard {
                     && pulls.at(i).squared_length() * this->learning_rate > (2 / 3.0) * d
                 ) {
                     this->momentum = Vector_2(0, 0);
-
+                    this->prev_coords = Point_2(cur_coords);
                     this->cur_coords = Point_2(reflex_vertices.at(i));
                     placed = true;
                     this->reflex_vertex = true;
@@ -198,7 +207,8 @@ class Guard {
             // if the guard wasn't placed on a reflex vertex, place it normally based on its momentum
             if (!placed) {
                 // cap the pull if too large compared to the momentum
-                if (CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) > CGAL::to_double(this->momentum.squared_length()) + 0.1) {
+                if (this->pull_capping &&
+                    CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) > CGAL::to_double(this->momentum.squared_length()) + 0.1) {
                     std::cout << "pull reduced from " << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << " to ";
                     pulls[pulls.size() - 1] = pulls.at(pulls.size() - 1) * CGAL::to_double(this->momentum.squared_length()) / CGAL::to_double(pulls.at(pulls.size() - 1).squared_length());
                     std::cout << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << std::endl;
@@ -206,7 +216,7 @@ class Guard {
                 }
                     this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + this->pull_attraction * pulls.at(pulls.size() - 1));
 
-
+                this->prev_coords = Point_2(cur_coords);
                 this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
                 this->reflex_vertex = false;
             }
@@ -221,9 +231,11 @@ class Guard {
 
     private:
         // save the current coords and the reflex vertex in whose reflex area the guard is in
-        Point_2 cur_coords, reflex_area_vertex;
+        Point_2 cur_coords, reflex_area_vertex, prev_coords;
         Arrangement_2 visibility_region;
+        // set gamma = 1 for not using momentum
+        // set pull_attraction = 0 for not using the pull
         double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
         Vector_2 momentum{0, 0};
-        bool reflex_vertex = false, reflex_area = false;
+        bool reflex_vertex = false, reflex_area = false, pull_onto = true, pull_capping = true;
 };
