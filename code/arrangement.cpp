@@ -768,12 +768,11 @@
                                     cur_guard = prev_guard;
                                     placed = false; 
                                 }
-
-                                if (!placed)
-                                    new_guards[i] = cur_guard;
+                                
 
                             } while (!placed);
 
+                            new_guards[i] = cur_guard;
 
                             // if we computed the gradient of a guard, then restart the search for a guard with a gradient in the zero gradient guards vector
                             break;
