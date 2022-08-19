@@ -267,20 +267,21 @@ class Arrangement {
         /* gradient method
         * :in param Guard guard:                            guard point whose gradient needs to be computed
         * :in param vector<Guard> zero_df_guards:           the vector of guards who have a gradient of 0                  
-        * :return tuple< :                                  (very Pythonic, but...) tuple of
-        *       vector<Vector_2>, :                         vector of all the gradients of the guard around n reflex vertices it sees: 
-        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
-        *                                                           index n + 1 contains the sum of the gradients
-        *       vector<Vector_2>, :                         vector of all the pulls of the guard toward the n reflex vertices it sees:
-        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
-        *                                                           index n + 1 contains the sum of the gradients
-        *       vector<Point_2>, :                          vector of all the reflex vertices the guard sees
-        *       Line_2>:                                    the segment behind the reflex vertex (unseen by the guard)
+        * :return Gradient:                                 object containing all gradient information for the guard
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
         Gradient gradient(const Guard g, std::vector<Guard> zero_df_guards);
 
+        /* compute_new_coords method
+        * :in param Guard prev_guard:               the previous coordinates of the guard
+        * :in param Guard cur_guard:                the current coordinates of the guard to be computed
+        * :in Gradient gradient:                    object containing all gradient information for computing the new coordinates of the current guard
+        * :in bool placed:                          check whether the vertex can be placed on a reflex vertex
+        * :return Guard:                            returns the guard with its updated coordinates
+        *
+        * This method computes the new coordinates of the current guard based on its gradient. After the theoretically computed coordinates, the method also checks whether the reflex area heuristic applies (and if so, does it). Another check is done for whether the new coordinates are still within the polygon boundaries. If they are not and it's possible, they are placed on the polygon boundary.
+        */
         Guard compute_new_coords(Guard prev_guard, Guard cur_guard, Gradient gradient,  bool placed);
         /* optimise method
         *

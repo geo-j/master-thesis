@@ -528,15 +528,7 @@
         /* gradient method
         * :in param Guard guard:                            guard point whose gradient needs to be computed
         * :in param vector<Guard> zero_df_guards:           the vector of guards who have a gradient of 0                  
-        * :return tuple< :                                  (very Pythonic, but...) tuple of
-        *       vector<Vector_2>, :                         vector of all the gradients of the guard around n reflex vertices it sees: 
-        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
-        *                                                           index n + 1 contains the sum of the gradients
-        *       vector<Vector_2>, :                         vector of all the pulls of the guard toward the n reflex vertices it sees:
-        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
-        *                                                           index n + 1 contains the sum of the gradients
-        *       vector<Point_2>, :                          vector of all the reflex vertices the guard sees
-        *       Line_2>:                                    the segment behind the reflex vertex (unseen by the guard)
+        * :return Gradient:                                 object containing all gradient information for the guard
         * 
         * This method computes the gradient of a guard around all the reflex vertices it sees
         */
@@ -632,8 +624,7 @@
         /* compute_new_coords method
         * :in param Guard prev_guard:               the previous coordinates of the guard
         * :in param Guard cur_guard:                the current coordinates of the guard to be computed
-        * :in std::vector<Vector_2> gradients:      vector with the gradients corresponding to all reflex vertices in the visibility region of the guard
-        * :in std::vector<Vector_2> pulls:          vector with the pulls corresponding to all reflex vertices in the visibility region of the guard
+        * :in Gradient gradient:                    object containing all gradient information for computing the new coordinates of the current guard
         * :in bool placed:                          check whether the vertex can be placed on a reflex vertex
         * :return Guard:                            returns the guard with its updated coordinates
         *
@@ -778,9 +769,11 @@
                                     placed = false; 
                                 }
 
+                                if (!placed)
+                                    new_guards[i] = cur_guard;
+
                             } while (!placed);
 
-                            new_guards[i] = cur_guard;
 
                             // if we computed the gradient of a guard, then restart the search for a guard with a gradient in the zero gradient guards vector
                             break;

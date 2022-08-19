@@ -20,6 +20,17 @@ class Gradient {
         }
 
     private:
+    
+        /* vector<Vector_2> gradients:                         vector of all the gradients of the guard around n reflex vertices it sees: 
+        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
+        *                                                           index n + 1 contains the sum of the gradients
+        * 
+        * vector<Vector_2> pulls:                              vector of all the pulls of the guard toward the n reflex vertices it sees:
+        *                                                           indices 0, ..., n contain the gradient as computed for each reflex vertex
+        *                                                           index n + 1 contains the sum of the gradients
+        * 
+        * vector<Point_2> reflex_vertices:                     vector of all the reflex vertices the guard sees
+        */
         std::vector<Vector_2> gradients, pulls;
         std::vector<Point_2> reflex_vertices;
 };
