@@ -281,6 +281,7 @@ class Arrangement {
         */
         std::tuple<std::vector<Vector_2>, std::vector<Vector_2>, std::vector<Point_2>, Line_2> gradient(const Guard g, std::vector<Guard> zero_df_guards);
 
+        Guard compute_new_coords(Guard prev_guard, Guard cur_guard, std::vector<Vector_2> gradients, std::vector<Vector_2> pulls, std::vector<Point_2> reflex_vertices, bool placed);
         /* optimise method
         *
         * This method optimises the position of all guards using gradient descent.
@@ -345,5 +346,6 @@ class Arrangement {
         CGAL::Arr_naive_point_location<Arrangement_2> pl;
         std::vector<Guard> guards;
         std::vector<Point_2> reflex_vertices;
+        bool reflex_area = true, hidden_gradient = true, angle = true;
 };
 
