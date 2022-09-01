@@ -110,7 +110,7 @@ class Arrangement {
                     // std::cout << "inserting " << q << std::endl;
                     this->add_guard(q, learning_rate, pull_attraction);
                 } else {
-                    auto full_visibility_arrangement = this->full_visibility();
+                    auto full_visibility_arrangement = this->full_visibility(this->guards);
                     auto full_visibility_polygon = arrangement_to_polygon(full_visibility_arrangement);
 
                     if (this->input_polygon.is_clockwise_oriented())
@@ -205,7 +205,7 @@ class Arrangement {
         *  This method computes the visibility region arrangement of all the guards
         *  This is achieved by computing the visibility region arrangement for each of the guards placed in the arrangement, and overlaying them
         */
-        Arrangement_2 full_visibility();
+        Arrangement_2 full_visibility(std::vector<Guard> guards);
 
         /* exclusive_visibility method
         *  :in param Guard guard         : guard whose visibility region should be excluded from the computation

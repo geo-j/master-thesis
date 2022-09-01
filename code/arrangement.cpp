@@ -245,12 +245,12 @@
         *  This method computes the visibility region arrangement of all the guards
         *  This is achieved by computing the visibility region arrangement for each of the guards placed in the arrangement, and overlaying them
         */
-        Arrangement_2 Arrangement::full_visibility() {
+        Arrangement_2 Arrangement::full_visibility(std::vector<Guard> guards) {
             std::vector<Point_2> visible_points;
             Arrangement_2 prev_visibility_arrangement, cur_visibility_arrangement, joined_visibility_arrangement;
 
-            for (auto i = 0; i < this->guards.size(); i ++) {
-                auto visibility_arrangement = this->guards.at(i).get_visibility_region();
+            for (auto i = 0; i < guards.size(); i ++) {
+                auto visibility_arrangement = guards.at(i).get_visibility_region();
 
                 if (i == 0)
                     // initialise first visibility polygon
@@ -706,7 +706,7 @@
         */
         void Arrangement::optimise() {
             // at beginning, compute the full visibility of the polygon and initialise reflex vertex vector
-            auto full_arrangement = this->full_visibility();
+            auto full_arrangement = this->full_visibility(this->guards);
             auto l = 0;
 
             this->add_reflex_vertices();
@@ -746,7 +746,7 @@
                         std::cout << "\tcomputed gradient " << total_gradient << " and pull " << total_pull << std::endl;
 
                         // check if the guard has a gradient or a pull
-                        if (total_gradient != Vector_2(0, 0) || total_pull != Vector_2(0, 0)) {
+                        if (total_gradient != Vector_2(0, 0) || total_pull != Vector_2(0, 0) || !this->hidden_gradient) {
                             std::cout << "\t------- removing guard " << cur_guard << std::endl;
                             bool placed = true;
 
@@ -758,39 +758,57 @@
                             std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
                             std::cout << "alpha" << i << '=' << cur_guard.get_learning_rate() << std::endl;
 
-                            // even if the guard has a gradient, it could be that its new position is on top of another guard. So recompute its coords without the pull
-                            do {
-                                cur_guard = this->compute_new_coords(prev_guard, cur_guard, gradient, placed);
+                            for (int l = 1; l <= 32; l *= 2) {
+                                gradient.scale_gradient(l);
+                                std::cout << "scaling gradient with " << l << "to " << gradient.get_gradients().at(gradient.get_gradients().size() - 1) << std::endl;
 
-                                std::cout << std::count(new_guards.begin(), new_guards.end(), cur_guard) << " other guards have coords " << cur_guard.get_coords() << std::endl;
-                                // if the guard has the same coords as other guards, don't move it (addresses the edge-case of multiple guards being pulled onto the same reflex vertex and then not being able to escape the reflex region)
-                                if (std::count(new_guards.begin(), new_guards.end(), cur_guard) > 1) {
-                                    cur_guard = prev_guard;
-                                    placed = false; 
-                                }
-                                
+                                // even if the guard has a gradient, it could be that its new position is on top of another guard. So recompute its coords without the pull
+                                do {
+                                    cur_guard = this->compute_new_coords(prev_guard, cur_guard, gradient, placed);
 
-                            } while (!placed);
 
-                            new_guards[i] = cur_guard;
+                                    std::cout << std::count(new_guards.begin(), new_guards.end(), cur_guard) << " other guards have coords " << cur_guard.get_coords() << std::endl;
+                                    // if the guard has the same coords as other guards, don't move it (addresses the edge-case of multiple guards being pulled onto the same reflex vertex and then not being able to escape the reflex region)
+                                    if (std::count(new_guards.begin(), new_guards.end(), cur_guard) > 1) {
+                                        cur_guard = prev_guard;
+                                        placed = false; 
+                                    }
+                                } while (!placed);
+
+                                auto old_arrangement = this->full_visibility(new_guards);
+                                auto best_guard = new_guards.at(i);
+                                new_guards[i] = cur_guard;
+
+                                auto new_arrangement = this->full_visibility(new_guards);
+                                // std::cout << "here?\n";
+                                // if the new guard has a worse position, restore the previous guard
+                                if (compute_area(new_arrangement) < compute_area(old_arrangement) && l > 1)
+                                    new_guards[i] = best_guard;
+
+                                gradient.scale_gradient(1.0 / l);
+                            }
+
 
                             // if we computed the gradient of a guard, then restart the search for a guard with a gradient in the zero gradient guards vector
                             break;
                         }
                     }
 
-                    full_arrangement = this->full_visibility();
+                    full_arrangement = this->full_visibility(new_guards);
                     std::cout << "is completely visible? " << this->is_completely_visible(full_arrangement) << std::endl;
                     std::cout << "are areas equal? " <<  compute_area(this->input_arrangement) << '=' << compute_area(full_arrangement) << '?' << (compute_area(this->input_arrangement) == compute_area(full_arrangement)) << std::endl;
                     
-                } while ( // if none of the guards have a gradient yet or
+                } while ( (// if none of the guards have a gradient yet or
                           !zero_df_guards.empty() && 
                           // all of the guards received a gradient or
                           zero_df_guards.size() != this->guards.size() && 
                           // the polygon is completely visible
                           !this->is_completely_visible(full_arrangement) && 
                           // BUG: sometimes the check for complete visibility doesn't work due to (I think) CGAL approximation issues. So if less than 0.005 of the total area is unseen, I consider that everything is seen
-                          (compute_area(this->input_arrangement) - compute_area(full_arrangement)) > 0.005);
+                          (compute_area(this->input_arrangement) - compute_area(full_arrangement)) > 0.005)
+                          // OR we're not using hidden gradient
+                        // || !this->hidden_gradient
+                        );
 
                 l ++;
 

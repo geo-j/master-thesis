@@ -19,6 +19,13 @@ class Gradient {
             return this->reflex_vertices;
         }
 
+        void scale_gradient(float factor) {
+            // std::cout << "gradient before " << this->gradients[this->gradients.size() - 1] << std::endl;
+            this->gradients[this->gradients.size() - 1] *= factor;
+            // std::cout << "gradient after " << this->gradients[this->gradients.size() - 1] << std::endl;
+
+        }
+
     private:
     
         /* vector<Vector_2> gradients:                         vector of all the gradients of the guard around n reflex vertices it sees: 

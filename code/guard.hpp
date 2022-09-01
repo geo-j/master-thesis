@@ -235,7 +235,7 @@ class Guard {
         Arrangement_2 visibility_region;
         // set gamma = 1 for not using momentum
         // set pull_attraction = 0 for not using the pull
-        double area, learning_rate{0.5}, gamma{0.5}, pull_attraction{1};
+        double area, learning_rate{0.5}, gamma{0.8}, pull_attraction{1};
         Vector_2 momentum{0, 0};
         bool reflex_vertex = false, reflex_area = false, pull_onto = true, pull_capping = true;
 };
