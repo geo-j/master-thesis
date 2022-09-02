@@ -639,6 +639,7 @@
             std::cout << "\twas guard reflex vertex? " << prev_guard.is_reflex_vertex() << std::endl;
             std::cout << "\twas guard in reflex area? " << prev_guard.is_in_reflex_area() << std::endl;
             std::cout << "\tdoes guard intersect boundary ray " << ray << '?' << this->intersects_boundary(ray) << std::endl;
+            std::cout << "\tis guard inside polygon? " << !this->input_polygon.has_on_unbounded_side(cur_guard.get_coords()) << std::endl;
 
 
             // if the guard is a reflex vertex, or has been on the reflex vertex and is now only allowed to move in the reflex area
@@ -662,9 +663,9 @@
             // if the current guard position is not inside the arrangement, then it means the gradient requires it to be outside; so place it on the boundary
             // exception for when the guard is on a reflex vertex
             if (
-                // this->input_polygon.has_on_unbounded_side(cur_guard.get_coords())
-                !cur_guard.is_reflex_vertex() &&
-                this->intersects_boundary(ray)) {
+                this->input_polygon.has_on_unbounded_side(cur_guard.get_coords()) ||
+                (!cur_guard.is_reflex_vertex() &&
+                this->intersects_boundary(ray))) {
                     Point_2 new_guard_position;
                     if (this->place_guard_on_boundary(prev_guard.get_coords(), cur_guard.get_coords(), new_guard_position)) {
                         cur_guard.set_coords(new_guard_position);
@@ -784,6 +785,7 @@
                                 // if the new guard has a worse position, restore the previous guard
                                 if (compute_area(new_arrangement) < compute_area(old_arrangement) && l > 1)
                                     new_guards[i] = best_guard;
+
 
                                 gradient.scale_gradient(1.0 / l);
                             }
