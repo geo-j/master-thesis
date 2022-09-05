@@ -8,6 +8,9 @@ class Guard {
            *     I/O       *
            *****************
         */
+
+        Guard(){};
+        
         Guard(Point_2 g, Arrangement_2 vis) : cur_coords(g), visibility_region(vis) {
             this->area = compute_area(vis);
         }
@@ -166,13 +169,8 @@ class Guard {
             auto pulls = gradient.get_pulls();
             auto reflex_vertices = gradient.get_reflex_vertices();
             // print gradients
-            std::cout << gradients.size() << " " << (int) pulls.size() - 1 << " " << reflex_vertices.size() << std::endl;
-            for (int i = 0; i < (int) pulls.size() - 1; i ++) {
-                // std::cout << "h=" << this->pull_attraction * pulls.at(i) << std::endl;
-                // std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + this->pull_attraction * pulls.at(i))) * this->learning_rate << std::endl;
-                std::cout << "Df=" << gradients.at(i) * this->learning_rate << std::endl;
-                std::cout << "h=" << pulls.at(i) * this->learning_rate << std::endl;
-            }
+            // std::cout << gradients.size() << " " << (int) pulls.size() - 1 << " " << reflex_vertices.size() << std::endl;
+
 
             bool placed = false;
             // compute the min distance between all reflex vertices seen by the guard
@@ -211,7 +209,7 @@ class Guard {
                     CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) > CGAL::to_double(this->momentum.squared_length()) + 0.1) {
                     std::cout << "pull reduced from " << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << " to ";
                     pulls[pulls.size() - 1] = pulls.at(pulls.size() - 1) * CGAL::to_double(this->momentum.squared_length()) / CGAL::to_double(pulls.at(pulls.size() - 1).squared_length());
-                    std::cout << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << std::endl;
+                    // std::cout << CGAL::to_double(pulls.at(pulls.size() - 1).squared_length()) << std::endl;
 
                 }
                     this->momentum = this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(gradients.size() - 1) + this->pull_attraction * pulls.at(pulls.size() - 1));
@@ -219,12 +217,6 @@ class Guard {
                 this->prev_coords = Point_2(cur_coords);
                 this->cur_coords = Point_2(this->cur_coords + this->learning_rate * this->momentum);
                 this->reflex_vertex = false;
-            }
-
-            // print last gradient
-            if (pulls.size() > 0) {
-                std::cout << "Df=" << this->momentum * this->learning_rate << std::endl;
-                std::cout << "h=" << pulls.at(pulls.size() - 1) * this->learning_rate << std::endl;
             }
                 
         }
