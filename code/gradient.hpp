@@ -5,6 +5,8 @@ typedef Kernel::Vector_2                                                        
 
 class Gradient {
     public:
+        Gradient(){};
+
         Gradient(std::vector<Vector_2> g, std::vector<Vector_2> p, std::vector<Point_2> r) : gradients(g), pulls(p), reflex_vertices(r) {};
 
         std::vector<Vector_2> get_gradients() {
