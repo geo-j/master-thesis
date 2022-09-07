@@ -164,6 +164,8 @@ class Guard {
         * This method updates the guard position based on the gradient, and saves the previous position
         */
         void update_coords(Gradient gradient, bool place_on_reflex_vertex) {
+            if (!place_on_reflex_vertex)
+                std::cout << "\tguard not allowed to use pull\n";
             // unpack the gradient
             auto gradients = gradient.get_gradients();
             auto pulls = gradient.get_pulls();
