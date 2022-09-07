@@ -92,16 +92,19 @@ So, the area of $\triangle_1$ can be computed:
 
 We can now compute the gradient $\bigtriangledown \text{Area}_r$ in a plane rotated by $R$ for a point $g$ and a reflex guard $r$ seen by $g$ as
 
-\begin{align*}
+\begin{align}
     R\bigtriangledown \text{Area}_r \overset{(\ref{eq:gradient})}{=} &\left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)^\intercal \\
     \overset{(\ref{eq:derivative})}{=} &\left(0, \frac{\text{Area}_{\triangle_1}}{\partial y}\right)^\intercal \\
-    R\bigtriangledown \text{Area}_r \overset{(\ref{eq:ardd})}{=} &\left(0, \frac{b^2}{2a}\right)^\intercal.
+    R\bigtriangledown \text{Area}_r \overset{(\ref{eq:ardd})}{=} &\left(0, \frac{b^2}{2a}\right)^\intercal. \label{eq:normf1}
     % \bigtriangledown \text{Area}_r = &\left(0, \frac{b^2}{2a}\right)^\intercal.
-\end{align*}
+\end{align}
 
 % Analogously, if we rotate the plane such that $p$ and reflex vertex $r$ have the same $y$-coordinate, the gradient becomes $$\bigtriangledown f = (\frac{b^2}{2a}, 0)^\intercal.$$
 
-Therefore, for all the reflex vertices $r$ guard $g$ can see, the total gradient $\bigtriangledown f$ becomes the sum of all the partial gradients $\bigtriangledown f_r$ as $$\bigtriangledown f = \sum_{i \in R(g)} \bigtriangledown \text{Area}_i, R(g) = \{\text{reflex vertices of } P \text{ seen by }g\}.$$
+Therefore, for all the reflex vertices $r$ guard $g$ can see, the total gradient $\bigtriangledown f$ becomes the sum of all the partial gradients $\bigtriangledown f_r$ as 
+\begin{align}
+    \bigtriangledown f = \sum_{i \in R(g)} \bigtriangledown \text{Area}_i, R(g) = \{\text{reflex vertices of } P \text{ seen by }g\}. \label{eq:normf2}
+\end{align}
 
 \subsubsection{Computing the New Guard's Position}
 We can now use the coordinates of the gradient $\bigtriangledown f$ to compute the movement direction of the guard $g$ given all the reflex vertices from $P$ seen by $g$. In order to do so, we will use the construction depicted in Figure \ref{fig:vperp}. 
@@ -126,7 +129,14 @@ The coordinates of $\vec v^\perp$ can then be computed using the construction fr
     \label{fig:vsquare}
 \end{figure}
 
-We know that the norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a}$. Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 a$. Therefore, the gradient for guard $g$ and one reflex vertex $r \in \mathit{Vis}(g)$ can be computed as $$\bigtriangledown f = \vec v^\perp \frac{b^2}{2a} \frac 1 a.$$
+We know that the norm of the total gradient $\bigtriangledown f$ is 
+\begin{align}
+    ||\bigtriangledown f|| \overset{(\ref{eq:normf2})}{=} &||\sum \left(0, \frac{b^2}{2a}\right)^\intercal|| \\
+    \overset{(\ref{eq:normf1})}{=} &\sqrt{\left(\frac{b^2}{2a}\right)^2} \\
+    ||\bigtriangledown f|| = &\frac{b^2}{2a}. \label{eq:normf}
+\end{align}
+
+Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 a$. Therefore, the gradient for guard $g$ and one reflex vertex $r \in \mathit{Vis}(g)$ can be computed as $$\bigtriangledown f = \vec v^\perp \frac{b^2}{2a} \frac 1 a.$$
 
 As mentioned before, the total gradient for guard $g$ and all the reflex vertices $r$ the guard can see is $$\bigtriangledown f = \sum_{r \in R(g)} \bigtriangledown \text{Area}_r, R(g) = \{\text{reflex vertices of } P \text{ seen by }g\}.$$
 
@@ -233,7 +243,7 @@ Similarly, the new position $g_i$ of guard $g$ will now be calculated as $$g_i =
 
 \subsection{Reflex Vertex Pull}
 
-In this section we introduce an additional improvement to our gradient descent algorithm with momentum: pulling a guard towards reflex vertices. The pull strategy makes use of the second derivative of our optimisation function $f(g) = \text{Area}(g)$.
+In this section we introduce an additional idea to our gradient descent algorithm: pulling a guard towards reflex vertices. The pull strategy makes use of the second derivative of our optimisation function $f(g) = \text{Area}(g)$.
 
 % The first derivative primarily tells us about the direction the function is going. That is, it tells us if the function is increasing or decreasing.
 
@@ -241,7 +251,7 @@ In this section we introduce an additional improvement to our gradient descent a
 
 As mentioned previously, we are using the first derivative to compute the gradient of a guard's movement. That is, we use the first derivative of $f$ to find the direction of a guard's movement that increases its seen area. Additionally, we can also make use of the second derivative of $f$ to explore what the rate of change of the area increase is. 
 
-We can achieve a more rapid increase in the seen area if we move a guard closer to a reflex vertex. The closer a guard is moved to a reflex vertex, the larger the increase in the area seen past the vertex. If a guard is moved directly on a reflex vertex, then the area seen past the vertex is maximised. An example of the latter case can be seen in Figure \ref{fig:top_reflex_vertex}. There, the guard $g$ has been moved on top of reflex vertex $r$ such that it can see the whole area behind it.
+We can achieve a more rapid increase in the seen area if we move a guard closer to a reflex vertex. The closer a guard is moved to a reflex vertex, the larger the increase in the area seen past the vertex. If a guard is moved directly on a reflex vertex, then the area seen past the vertex is maximised. An example of the latter case is displayed in Figure \ref{fig:top_reflex_vertex}. There, the guard $g$ has been moved on top of reflex vertex $r$ such that it can see the whole area behind it.
 
 \begin{figure}[h!]
     \centering
@@ -250,16 +260,23 @@ We can achieve a more rapid increase in the seen area if we move a guard closer 
     \label{fig:top_reflex_vertex}
 \end{figure}
 
-We will now explore how the pull towards a reflex vertex $r$ can be computed. Let $h_r$ be the pull in question, as shown in Figure \ref{fig:pull}. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards in the direction of the reflex vertex pull. As previously, and without losing generality, we are interested in a rotation of the plane $R$ such that $g$ and $r$ have the same $x$-coordinate. 
+We will now explore how the pull towards a reflex vertex $r$ can be computed. Let $h_r$ be the pull in question, as shown in Figure \ref{fig:pull}. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards the reflex vertex. As previously, and without losing generality, assume that $g$ and $r$ have the same $x$-coordinate by rotating the plane $R$.
 
-The pull is thus the second derivative of the gradient, so $$h_r = \bigtriangledown (\bigtriangledown f_r) = \left(\frac{\partial \bigtriangledown f}{\partial x}, \frac{\partial \bigtriangledown f}{\partial y}\right)^\intercal = \left(\frac{\partial \bigtriangledown f}{\partial x}, 0\right)^\intercal.$$  We can now calculate $h_r$ as follows: the norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a}$, so the norm of the second gradient as 
+The pull is thus the second derivative of the norm of the gradient, so 
+$$h_r = \bigtriangledown ||\bigtriangledown f_r|| = \left(\frac{\partial \bigtriangledown f}{\partial x}, \frac{\partial \bigtriangledown f}{\partial y}\right)^\intercal = \left(\frac{\partial \bigtriangledown f}{\partial x}, 0\right)^\intercal.$$  
+We can now calculate $h_r$ as follows: the Euclidean norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a} (\ref{eq:normf})$, so the norm of the second gradient as 
 \begin{align*}
-||h_r||&= ||\bigtriangledown (\bigtriangledown f)|| \\
+||h_r||&= ||\bigtriangledown ||\bigtriangledown f|||| \\
        &= \bigtriangledown (\frac{b^2}{2a}) \\
        &= \frac{b^2}{2a}\frac{d}{da} \\
        &= b^2\frac{1}{2a}\frac{d}{da} \\
 ||h_r||&= -b^2\frac{1}{2a^2}.
 \end{align*}
+
+Note that we are using the norm approximation heuristic 
+$$\bigtriangledown ||\bigtriangledown f|| \approx \bigtriangledown \sum_{i \in R(g)} ||f_i||, R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}.$$ The reason for this choice is that computing the norm of the partial gradients, summing them and then computing their gradient is much easier than computing the gradient of their sum 
+$$\bigtriangledown ||\bigtriangledown f|| = \bigtriangledown ||\sum_{i \in R(g)} f_i||, R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}.$$
+We are aware of the fallacies of this approximation. Take the opposing unit vectors $a_1 = (1, 0)^\intercal, a_2 = (-1, 0)^\intercal$. The sum of their norms $\sum_i ||a_i|| = 2$, whereas the norm of their sum is $||\sum_i a_i|| = 0$. Clearly, they are not the same. Nonetheless, we still consider this approximation due to computation speed improvements and easiness of use.
 
 \begin{figure*}[!h]
     \includegraphics[width = 0.7\textwidth]{theory/pull.png}
