@@ -750,7 +750,6 @@
                         // check if the guard has a gradient or a pull
                         if (total_gradient != Vector_2(0, 0) || total_pull != Vector_2(0, 0) || !this->hidden_gradient) {
                             std::cout << "\t------- removing guard " << cur_guard << std::endl;
-                            bool placed = true;
 
                             // if so, remove guard from the vector of guards with no gradient and count one index back (s.t. we don't skip a guard)
                             zero_df_guards.erase(zero_df_guards.begin() + j);
@@ -763,7 +762,10 @@
                             Gradient best_gradient = gradient;
                             Guard best_guard = cur_guard;
 
-                            for (double l = 1.0 / 32; l <= 32; l *= 2) {
+                            // line search from factors of 1 / 32 to 32
+                            for (double l = 1.0 / this->line_search_factor; l <= this->line_search_factor; l *= 2) {
+                                bool placed = true;
+
                                 gradient.scale_gradient(l);
                                 std::cout << "scaling gradient with " << l << " to " << gradient.get_gradients().at(gradient.get_gradients().size() - 1) << std::endl;
 
@@ -771,35 +773,47 @@
                                 do {
                                     cur_guard = this->compute_new_coords(prev_guard, cur_guard, gradient, placed);
 
-
-                                    // std::cout << std::count(new_guards.begin(), new_guards.end(), cur_guard) << " other guards have coords " << cur_guard.get_coords() << std::endl;
+                                    std::cout << std::count(new_guards.begin(), new_guards.end(), cur_guard) << " other guards have coords " << cur_guard.get_coords() << std::endl;
                                     // if the guard has the same coords as other guards, don't move it (addresses the edge-case of multiple guards being pulled onto the same reflex vertex and then not being able to escape the reflex region)
                                     if (std::count(new_guards.begin(), new_guards.end(), cur_guard) > 1) {
                                         cur_guard = prev_guard;
-                                        placed = false; 
-                                    }
+
+                                        // if the guard already tried to be placed without pull, but without success, quit and try another factor value
+                                        if (!placed)
+                                            break;
+
+                                        placed = false;
+
+                                    } else
+                                        placed = true;
                                 } while (!placed);
 
-                                auto old_arrangement = this->full_visibility(new_guards);
-                                // best_guard = new_guards.at(i);
-                                new_guards[i] = cur_guard;
+                                // only check if the new position is good if the guard was placed
+                                if (placed) {
+                                    // compute the visibility arrangement as it is now
+                                    auto old_arrangement = this->full_visibility(new_guards);
+                                    // best_guard = new_guards.at(i);
+                                    new_guards[i] = cur_guard;
 
-                                auto new_arrangement = this->full_visibility(new_guards);
-                                // std::cout << "here?\n";
-                                // if the new guard has a worse position, restore the previous guard
-                                if (compute_area(new_arrangement) > compute_area(old_arrangement) || cur_guard.get_area() > best_guard.get_area()) {
-                                    std::cout << "\t new best guard at " << cur_guard << std::endl;
-                                    best_gradient = gradient;
-                                    best_guard = cur_guard;
+                                    // compute the visibility arrangement for the new position of the guard
+
+                                    auto new_arrangement = this->full_visibility(new_guards);
+                                    // std::cout << "here?\n";
+                                    // if the new guard has a better position, save it
+                                    if (compute_area(new_arrangement) > compute_area(old_arrangement) || cur_guard.get_area() > best_guard.get_area()){ //|| (best_guard == prev_guard && l == 1)) {
+                                        std::cout << "\t new best guard at " << cur_guard << std::endl;
+                                        best_gradient = gradient;
+                                        best_guard = cur_guard;
+                                    }
                                 }
 
-
+                                // restore the gradient before the next iteration
                                 gradient.scale_gradient(1.0 / l);
+                                new_guards[i] = best_guard;
                             }
 
 
-                            new_guards[i] = best_guard;
-
+                            // print best gradient
                             for (int i = 0; i < (int) best_gradient.get_pulls().size() - 1; i ++) {
                                 // std::cout << "h=" << this->pull_attraction * pulls.at(i) << std::endl;
                                 // std::cout << "Df=" << (this->gamma * this->momentum + (1 - this->gamma) * (gradients.at(i) + this->pull_attraction * pulls.at(i))) * this->learning_rate << std::endl;

@@ -348,5 +348,7 @@ class Arrangement {
         std::vector<Guard> guards;
         std::vector<Point_2> reflex_vertices;
         bool reflex_area = true, hidden_gradient = true, angle = true;
+        // if line search factor == 1, then we're not using line search
+        double line_search_factor = 32;
 };
 
