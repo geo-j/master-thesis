@@ -136,7 +136,10 @@ We know that the norm of the total gradient $\bigtriangledown f$ is
     ||\bigtriangledown f|| = &\frac{b^2}{2a}. \label{eq:normf}
 \end{align}
 
-Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 a$. Therefore, the gradient for guard $g$ and one reflex vertex $r \in \mathit{Vis}(g)$ can be computed as $$\bigtriangledown f = \vec v^\perp \frac{b^2}{2a} \frac 1 a.$$
+Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 a$. Therefore, the gradient for guard $g$ and one reflex vertex $r \in \mathit{Vis}(g)$ can be computed as 
+\begin{align}
+    \bigtriangledown f = \vec v^\perp \frac{b^2}{2a} \frac 1 a. \label{eq:f}
+\end{align}
 
 As mentioned before, the total gradient for guard $g$ and all the reflex vertices $r$ the guard can see is $$\bigtriangledown f = \sum_{r \in R(g)} \bigtriangledown \text{Area}_r, R(g) = \{\text{reflex vertices of } P \text{ seen by }g\}.$$
 
@@ -221,25 +224,30 @@ In this section we introduce an improvement to the regular gradient descent algo
 
 So, the position $g_i$ at iteration $i$ of a guard $g$ will not be calculated anymore based only on the current computation of gradient descent. Instead, it will also take into account past values of gradient descent. In order to decide how much past states influence the value of the current position, we will take each gradient value with a weight.
 
-Let $M_i$ be the momentum for a guard per iteration $i$. Let $\Delta f_i$ be the computation of the gradient descent in iteration $i$. Let the weight of a gradient descent value be a hyperparameter $\gamma$. 
+Let $M_i$ be the momentum for a guard at iteration $i$. Let $\Delta f_i$ be the computation of the gradient descent in iteration $i$. Let the weight of a gradient descent value be a hyperparameter $\gamma$. 
 As such, we can take into account the value of the previous gradient $\Delta_{i - 1}$ with weight $\gamma$. However, we still want the current gradient $\Delta f_i$ to influence the guard's movement. This can happen with a weight of $1 - \gamma$. So, the computation for the momentum at iteration $i$ becomes $$M_i = \gamma M_{i - 1} + (1 - \gamma)\Delta f_i.$$
 
-Let $$M_0 = (1 - \gamma) \Delta f_0.$$. We can then check for correctness how  the next iterations of the momentum are carried out:
+We start with $$M_0 = (1 - \gamma) \Delta f_0.$$
+We can then check for correctness how  the next iterations of the momentum are carried out:
 \begin{align*}
-    M_1 &= \gamma M_0 + (1 - \gamma) \Delta f_1 \\
-        &= \gamma (1 - \gamma) \Delta f_0 + (1 - \gamma) \Delta f_1 \\
-        &= (1 - \gamma) (\gamma \Delta f_0 + \Delta f_1) \\
-    M_2 &= \gamma M_1 + (1 - \gamma) \Delta f_2 \\
-        &= \gamma (1 - \gamma) (\gamma \Delta f_0 + \Delta f_1) + (1 - \gamma) \Delta f_2 \\
-        &= (1 - \gamma) (\gamma^2 \Delta f_0 + \gamma \Delta f_1 + \Delta f_2) \\
-    ... \\
+    % M_1 &= \gamma M_0 + (1 - \gamma) \Delta f_1 \\
+    %     &= \gamma (1 - \gamma) \Delta f_0 + (1 - \gamma) \Delta f_1 \\
+    %     &= (1 - \gamma) (\gamma \Delta f_0 + \Delta f_1) \\
+    % M_2 &= \gamma M_1 + (1 - \gamma) \Delta f_2 \\
+    %     &= \gamma (1 - \gamma) (\gamma \Delta f_0 + \Delta f_1) + (1 - \gamma) \Delta f_2 \\
+    %     &= (1 - \gamma) (\gamma^2 \Delta f_0 + \gamma \Delta f_1 + \Delta f_2) \\
+    % ... \\
     M_i &= \gamma M_{i - 1} + (1 - \gamma) \Delta f_i \\
-        &= (1 - \gamma) (\gamma^i \Delta f_0 + \gamma^{i - 1} \Delta f_1 + ... + \gamma \Delta f_{i - 1} + \Delta f_i) \\
+        &= \gamma (\gamma M_{i - 2} + (1 - \gamma) \Delta f_{i - 1}) + (1 - \gamma \Delta f_i) \\ 
+        &= \gamma^2 M_{i - 2} + (1 - \gamma)(\gamma \Delta f_{i - 1} + \Delta f_i) \\
+        &= \gamma^3 M_{i - 3} + (1 - \gamma)(\gamma^2 \Delta f_{i - 2} + \gamma \Delta f_{i - 1} + \Delta f_i) \\
+        &...
+        % &= (1 - \gamma) (\gamma^i \Delta f_0 + \gamma^{i - 1} \Delta f_1 + ... + \gamma \Delta f_{i - 1} + \Delta f_i) \\
 \end{align*}
 
 In this way, our momentum computation exponentially decreases the influence of a past state over the guard's current movement. So, the previous value of the momentum will exert its inertia with $\gamma$ influence over the new value of the momentum.
 
-Similarly, the new position $g_i$ of guard $g$ will now be calculated as $$g_i = g_{i - 1} + \alpha M_i.$$
+Similarly, the new position $g_i$ of guard $g$ with learning rate $\alpha$ will now be calculated as $$g_i = g_{i - 1} + \alpha M_i.$$
 
 \subsection{Reflex Vertex Pull}
 
@@ -251,43 +259,66 @@ In this section we introduce an additional idea to our gradient descent algorith
 
 As mentioned previously, we are using the first derivative to compute the gradient of a guard's movement. That is, we use the first derivative of $f$ to find the direction of a guard's movement that increases its seen area. Additionally, we can also make use of the second derivative of $f$ to explore what the rate of change of the area increase is. 
 
-We can achieve a more rapid increase in the seen area if we move a guard closer to a reflex vertex. The closer a guard is moved to a reflex vertex, the larger the increase in the area seen past the vertex. If a guard is moved directly on a reflex vertex, then the area seen past the vertex is maximised. An example of the latter case is displayed in Figure \ref{fig:top_reflex_vertex}. There, the guard $g$ has been moved on top of reflex vertex $r$ such that it can see the whole area behind it.
+We can achieve a more rapid increase in the seen area if we move a guard closer to a reflex vertex. The closer a guard is moved to a reflex vertex, the larger the increase in the area seen past the vertex. If a guard is moved directly on a reflex vertex, then the area seen past the vertex is maximised. 
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{theory/pull2.png}
-    \caption{Guard placed on top of a reflex vertex can now see the whole area behind the reflex vertex.}
-    \label{fig:top_reflex_vertex}
-\end{figure}
+% An example of the latter case is displayed in Figure \ref{fig:top_reflex_vertex}. There, the guard $g$ has been moved on top of reflex vertex $r$ such that it can see the whole area behind it.
 
-We will now explore how the pull towards a reflex vertex $r$ can be computed. Let $h_r$ be the pull in question, as shown in Figure \ref{fig:pull}. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards the reflex vertex. As previously, and without losing generality, assume that $g$ and $r$ have the same $x$-coordinate by rotating the plane $R$.
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[width = 0.5\textwidth]{theory/pull2.png}
+%     \caption{Guard placed on top of a reflex vertex can now see the whole area behind the reflex vertex.}
+%     \label{fig:top_reflex_vertex}
+% \end{figure}
+
+We will now explore how the pull towards a reflex vertex $r$ can be computed, with an example in Figure \ref{fig:pull}. Let the guard $g = (0, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 2$ and $b = 3$ are known. Let $h_r$ be the pull in question. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards the reflex vertex. As previously, and without losing generality, assume that $g$ and $r$ have the same $x$-coordinate by rotating the plane $R$.
+
+The gradient is computed as
+$$\bigtriangledown f \overset{(\ref{eq:f})}{=} (0, \frac{b^2}{2a^2})^\intercal = (0, \frac{9}{8})^\intercal = (0, 1.125)^\intercal.$$ 
+The pull is computed as 
+$$h_r \overset{(\ref{eq:h})}{=} (\frac{b^2}{2a^3}, 0)^\intercal = (\frac{9}{16}, 0)^\intercal = (0.625, 0)^\intercal.$$
+So, the new position of the guard with learning rate $\alpha = 0.3$ becomes 
+$$g' = g + \alpha(\bigtriangledown f + h) = 0.3 ((0, 1.125)^\intercal + (0.625, 0)^\intercal) = (0.1875, 0.3375).$$
 
 The pull is thus the second derivative of the norm of the gradient, so 
 $$h_r = \bigtriangledown ||\bigtriangledown f_r|| = \left(\frac{\partial \bigtriangledown f}{\partial x}, \frac{\partial \bigtriangledown f}{\partial y}\right)^\intercal = \left(\frac{\partial \bigtriangledown f}{\partial x}, 0\right)^\intercal.$$  
 We can now calculate $h_r$ as follows: the Euclidean norm of the gradient is $||\bigtriangledown f|| = \frac{b^2}{2a} (\ref{eq:normf})$, so the norm of the second gradient as 
 \begin{align*}
 ||h_r||&= ||\bigtriangledown ||\bigtriangledown f|||| \\
-       &= \bigtriangledown (\frac{b^2}{2a}) \\
+       &= ||\bigtriangledown (\frac{b^2}{2a})|| \\
        &= \frac{b^2}{2a}\frac{d}{da} \\
        &= b^2\frac{1}{2a}\frac{d}{da} \\
 ||h_r||&= -b^2\frac{1}{2a^2}.
 \end{align*}
 
 Note that we are using the norm approximation heuristic 
-$$\bigtriangledown ||\bigtriangledown f|| \approx \bigtriangledown \sum_{i \in R(g)} ||f_i||, R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}.$$ The reason for this choice is that computing the norm of the partial gradients, summing them and then computing their gradient is much easier than computing the gradient of their sum 
-$$\bigtriangledown ||\bigtriangledown f|| = \bigtriangledown ||\sum_{i \in R(g)} f_i||, R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}.$$
+\begin{align*}
+    \bigtriangledown ||\bigtriangledown f|| \approx \bigtriangledown &\sum_{i \in R(g)} ||f_i||, \\
+    &R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}. 
+\end{align*}
+The reason for this choice is that computing the norm of the partial gradients, summing them and then computing their gradient is much easier than computing the gradient of their sum 
+\begin{align*}
+    \bigtriangledown ||\bigtriangledown f|| = \bigtriangledown ||&\sum_{i \in R(g)} f_i||, \\
+    &R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}.
+\end{align*}
 We are aware of the fallacies of this approximation. Take the opposing unit vectors $a_1 = (1, 0)^\intercal, a_2 = (-1, 0)^\intercal$. The sum of their norms $\sum_i ||a_i|| = 2$, whereas the norm of their sum is $||\sum_i a_i|| = 0$. Clearly, they are not the same. Nonetheless, we still consider this approximation due to computation speed improvements and easiness of use.
 
 \begin{figure*}[!h]
     \includegraphics[width = 0.7\textwidth]{theory/pull.png}
     \centering
-    \caption{Computing the movements of the guard based on both the gradient and the pull towards a reflex vertex. When only taking the reflex vertex pull into account, $g$ would need to move to $g'_x$. Similarly for when taking only the gradient into account, $g$ would need to move to $g'_y$. Combining the two movements together results in $g'$ being the final position of $g$.}
+    \caption{Computing the movements of the guard $g = (0, 0)$ based on both the gradient and the pull towards reflex vertex $r = (2, 0)$. The distances $a = 2$ and $b = 3$ are known. The gradient is computed as $\bigtriangledown f = (0, 1.125)^\intercal$. The pull is computed as $h_r  = (0.625, 0)^\intercal$. So, the new position of the guard with learning rate $\alpha = 0.3$ becomes $g' = (0.1875, 0.3375)$. When only taking the reflex vertex pull into account, $g$ would need to move to $g'_x$. Similarly for when taking only the gradient into account, $g$ would need to move to $g'_y$. Combining the two movements together results in $g'$ being the final position of $g$.}
     \label{fig:pull}
 \end{figure*}
 
-The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the same orientation as vector $\vec{v} = (x, y)^\intercal$  from Figure \ref{fig:vperp}. We will normalise $h_r$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, $$h_r = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}.$$
+The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the same orientation as vector $\vec{v} = (r - g)$. We will normalise $h_r$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, 
+\begin{align}
+    h_r = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}. \label{eq:h}
+\end{align}
 
-Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is $$h = \sum_{r \in R(g)} h_r, R(g) = \{\text{reflex vertices of $P$ seen by $g$\}}.$$
+Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is 
+\begin{align*}
+    h = &\sum_{r \in R(g)} h_r, \\
+    &R(g) = \{\text{reflex vertices of $P$ seen by $g$\}}.
+\end{align*}
 
 Therefore, the movement of a guard $g$ to the new position $g'$ will take both the gradient and the pull into account: $$g' = g + \alpha (\bigtriangledown f + h).$$ Additionally, we can choose how much influence the pull itself can have in the movement of the guard by adding a hyperparameter $\beta$: $$g' = g + \alpha (\bigtriangledown f + \beta h).$$
 
@@ -296,7 +327,10 @@ We have now created a heuristic for pulling a guard closer to a reflex vertex ba
 
 This section will thus expand on a procedure that decides when a guard is best placed on a reflex vertex based on its pull towards it.
 
-Firstly, we must define the condition of what a ``strong enough'' pull means. Such a pull would move the guard $g$ ``close enough'' to the reflex vertex. Hence, we need to compute what the upper limit of the distance between the new guard position $g'$ and reflex vertex $r$ would be. The most straight-forward way to do so would be to assign a hyperparameter to the distance between $g$ and $r$. Recall that $||\overline{gr}|| = a$. For now, let $\frac 2 3$ be the factor of closeness of $g'$ to $r$. This means, that when the pull is stronger than $\frac 2 3$ times the distance $a$, then the guard is moved onto the reflex vertex: $$h_r > \frac 2 3 a.$$
+Firstly, we must define the condition of what a ``strong enough'' pull means. Such a pull would move the guard $g$ ``close enough'' to the reflex vertex. Hence, we need to compute what the upper limit of the distance between the new guard position $g'$ and reflex vertex $r$ would be. The most straight-forward way to do so would be to assign a hyperparameter to the distance between $g$ and $r$. Recall that $||\overline{gr}|| = a$. For now, let $\frac 2 3$ be the factor of closeness of $g'$ to $r$. This means, that when the pull is stronger than $\frac 2 3$ times the distance $a$, so the guard is close enough to the reflex vertex, then the guard is moved onto the reflex vertex: 
+\begin{align}
+    ||h_r|| > \frac 2 3 a. \label{eq:h_a}
+\end{align}
 
 
 \begin{figure}[h!]
@@ -306,14 +340,29 @@ Firstly, we must define the condition of what a ``strong enough'' pull means. Su
     \label{fig:pull_cancel}
 \end{figure}
 
-Next, we need to account for the case where a polygon has multiple reflex vertices. Namely, we consider the specific edge case when a guard is in between two reflex vertices, illustrated in Figure \ref{fig:pull_cancel}. Thus, let $r_1$ and $r_2$ be two reflex vertices whose distance $$D = \min_{q \neq r} \text{ distance}(q, r), \forall q, r \in P \text{ reflex vertices}.$$
+Next, we need to account for the case where the guard is close to multiple reflex vertices. Namely, we consider the specific edge case when a guard is in between two reflex vertices, illustrated in Figure \ref{fig:pull_cancel}. Thus, let $r_1$ and $r_2$ be two reflex vertices whose distance $$D = \min_{q \neq r} \text{ distance}(q, r), \forall q, r \in P \text{ reflex vertices}.$$
 Let $g$ be a guard in between $r_1$ and $r_2$. Let the pulls $h_{r_1}$ and $h_{r_2}$ be  individually strong towards $r_1$ and $r_2$, respectively. However, because they are opposites in directions, they cancel each other out, resulting in $g$ possibly not changing its position at all.
 
 We will now introduce another condition for pulling the guard towards the closer reflex vertex when pulls are cancelling each other out. If a guard $g$ is not equidistantly placed in between two reflex vertices, we are interested in computing what the closer reflex vertex is. So, if $g$ is closer than $\frac D 2$ to a reflex vertex, then we consider it close enough if: $$a < \frac D 2.$$
 In this case we can choose to still move towards one of the reflex vertices and make progress.
 
+An example of moving on top of a reflex vertex can be found in Figure \ref{fig:pull_onto}. Let the guard $g = (1, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 1$ and $b = 3$ are known. Let $h_r$ be the pull in question. The gradient is computed as
+$$\bigtriangledown f \overset{(\ref{eq:f})}{=} (0, \frac{b^2}{2a^2})^\intercal = (0, \frac{9}{2})^\intercal = (0, 4.5)^\intercal.$$
+The pull is computed as 
+$$h_r \overset{(\ref{eq:h})}{=} (\frac{b^2}{2a^3}, 0)^\intercal = (\frac{9}{2}, 0)^\intercal = (4.5, 0)^\intercal.$$
+The guard is close enough to the reflex vertex to be moved onto it (\ref{eq:h_a}):
+$$||h_r|| > \frac 2 3 a \iff 4.5 > \frac 2 3.$$
+So the new coordinate of the guard is $g' = r = (2, 0)$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.7\textwidth]{theory/pull_onto.png}
+    \caption{Computing the movements of the guard $g = (1, 0)$ based on both the gradient and the pull towards reflex vertex $r = (2, 0)$. The distances $a = 1$ and $b = 3$ are known. The gradient is computed as $\bigtriangledown f = (0, 4.5)^\intercal$. The pull is computed as $h_r  = (4.5, 0)^\intercal$. The guard $g$ is close enough to $r$ (\ref{eq:h_a}), so $g$ is placed on top of the reflex vertex $r$.}
+    \label{fig:pull_onto}
+\end{figure}
+
 \subsubsection{Pull Capping}
-Nonetheless, it can happen that the pull towards a reflex vertex is significantly large in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a very large jump towards the reflex vertex.
+Nonetheless, it can happen that the pull towards a reflex vertex is significantly larger in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a very large jump towards the reflex vertex.
 
 We want to smoothen out possibly erratic behaviours of gradient descent. Just like in the case of momentum, we want our pull to be smoothened out in the case that is ``too large''. We define what ``too large'' is based on the momentum. If the pull is larger than a factor of $\gamma$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$:
 \begin{align*}
