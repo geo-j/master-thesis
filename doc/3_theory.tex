@@ -220,7 +220,7 @@ Alternatively, if $\triangle_1$ is first seen by other guards (so $b_{11} = 0$),
 
 \subsection{Momentum}
 
-In this section we introduce an improvement to the regular gradient descent algorithm: momentum. Its aim is to smoothen out the large noisy jumps in the gradient descent computation \cite{goodfelow2016deep}. Momentum builds upon the idea of considering the past states of the gradient descent computation. In this way, the past states create ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother.
+In this section we introduce an extension to the regular gradient descent algorithm: momentum. Its aim is to smoothen out the large noisy jumps in the gradient descent computation \cite{goodfelow2016deep}. Momentum builds upon the idea of considering the past states of the gradient descent computation. In this way, the past states create ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother.
 
 So, the position $g_i$ at iteration $i$ of a guard $g$ will not be calculated anymore based only on the current computation of gradient descent. Instead, it will also take into account past values of gradient descent. In order to decide how much past states influence the value of the current position, we will take each gradient value with a weight.
 
@@ -248,6 +248,9 @@ We can then check for correctness how  the next iterations of the momentum are c
 In this way, our momentum computation exponentially decreases the influence of a past state over the guard's current movement. So, the previous value of the momentum will exert its inertia with $\gamma$ influence over the new value of the momentum.
 
 Similarly, the new position $g_i$ of guard $g$ with learning rate $\alpha$ will now be calculated as $$g_i = g_{i - 1} + \alpha M_i.$$
+
+\subsection{Line Search}
+In this section we introduce another extension to the regular gradient descent algorithm: Line Search \cite{swann1969survey}. Its aim is to use gradient descent's descending direction as a guide for finding the optimal solution to the optimisation function. Then, using a step size, multiple solutions along the descending line are computed and the optimal one for the specific iteration is chosen.
 
 \subsection{Reflex Vertex Pull}
 
