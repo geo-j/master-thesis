@@ -8,6 +8,6 @@ for i in range(5, X_LAST_TOOTH, 3):
 
 print(f' {X_LAST_TOOTH} 9\n{X_LAST_TOOTH} 9 {X_LAST_TOOTH + 1} 5\n{X_LAST_TOOTH + 1} 5 {X_LAST_TOOTH + 1} 3\n{X_LAST_TOOTH + 1} 3 4 3\n{N_TEETH}')
 
-for i in range(N_TEETH):
+for i in range(1, N_TEETH + 1):
     print(f'{4 + 0.1 * i} 4')
 
