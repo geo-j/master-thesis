@@ -219,6 +219,7 @@ This results in the fact that the area seen by $g$ exclusively can be computed a
 Alternatively, if $\triangle_1$ is first seen by other guards (so $b_{11} = 0$), then all the signs are flipped. This claim can also be supported by the intuition of Figure \ref{fig:areas}. If we are interested in the areas of $s_2$ and $s_4$, then it is incorrect to compute them as $\text{Area}_{s_2 + s_4} = 3 + 5 = 8$. This is because $s_1$ and $s_3$ are overlapping in between them.  Instead, $\text{Area}_{s_2 + s_4} = \text{Area}_{s_1 + s_2 + s_3 + s_4} + \text{Area}_{s_4} - \text{Area}_{s_3} + \text{Area}_{s_2} - \text{Area}_{s_1} = 5 + 5 - 4 + 3 - 2 = 7$.
 
 \subsection{Momentum}
+\label{sec:momentum}
 
 In this section we introduce an extension to the regular gradient descent algorithm: momentum. Its aim is to smoothen out the large noisy jumps in the gradient descent computation \cite{goodfelow2016deep}. Momentum builds upon the idea of considering the past states of the gradient descent computation. In this way, the past states create ``inertia'' to the newly computed gradient state. This results in the overall optimisation trajectory to be smoother.
 

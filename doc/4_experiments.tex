@@ -19,7 +19,42 @@ Try to see if the comb polygon scales
 \subsection{Heuristics}
 In this subsection we will observe the role played by each of the heuristics used. We will additionally notice how different heuristics are more relevant for different types of polygons. In order to do so, we will run the program with all of the heuristics but one, for each of the heuristics. By analysing the difference in movement for each of the guards', we will be able to assess the influence every heuristic has on each type of polygon.
 
-We will use fixed hyperparameters for all the runs. This will allow us to focus on the differences between the heuristics. Later in this section we will also discuss the actual hyperparameter choice. As such, we will use a learning rate $\alpha = 0.4$, momentum past weight $\gamma = 0.8$, and pull attraction $\beta = 1$.
+We will use fixed hyperparameters for all the runs. This will allow us to focus on the differences between the heuristics. Later in this section we will also discuss the actual hyperparameter choice. As such, we will use a momentum past weight $\gamma = 0.8$ and pull attraction $\beta = 1$. The learning rate will be varied per polygon and type of experiment. This choice is due to the fragility of the algorithm implementation and will be explained later in this section.
+
+\subsubsection{Without Momentum}
+In this section we will discuss the impact momentum has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:momentum}, momentum takes into account the position history of the guards. In this way, the overall trajectory of a guard is smoothened out.
+
+A suggestive way to observe this is with the comb polygon with five teeth from Figure \ref{fig:comb2}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{experiments/comb2.png}
+    \caption{Polygon in the shape of a comb with five teeth.}
+    \label{fig:comb2}
+\end{figure}
+
+We will compare how the guards move when we are using all the heuristics to when we are not using momentum. The guards will have a learning rate $\alpha = 0.4$. They will start at the same fixed position in both cases.
+
+Figure \ref{fig:no_momentum} displays the area seen per iteration for the comb polygon with five teeth. Both the total area seen and the individual seen area by guards is displayed. Starting with 80\% total area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Using momentum allows the guards to keep a steady trajectory towards their optimum. In Subfigure \ref{fig:no_momentum2} we can observe how each guard has a more erratic direction of movement, with frequent peaks and lows. Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. In this way, momentum allows the total area seen to steadily increase, whereas without it the total area seen displays some setbacks before the optimum is reached.
+Additionally, we reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations (in this example, 4). When not using momentum, the number of iterations increases substantially to 14.
+
+Therefore, momentum poses a significant improvement and speedup to the overall run of the gradient descent implementation.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb2_all.png}
+        \caption{All heuristics.}
+        \label{fig:no_momentum1}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb2_no_momentum.png}
+        \caption{No momentum.}
+        \label{fig:no_momentum2}
+    \end{subfigure}
+    \caption{Total area seen per iteration for the comb polygon with five teeth.}
+    \label{fig:no_momentum}
+\end{figure}
 
 \subsubsection{Without Angle Behind Reflex Vertex}
 
