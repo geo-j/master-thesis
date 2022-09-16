@@ -6,6 +6,7 @@ from sys import stdin
 from collections import defaultdict
 import time
 import os
+from numpy import arange
 
 PATH = 'results/'
 DATE = time.strftime("%Y-%m-%d")
@@ -270,6 +271,9 @@ class Drawing(object):
 
     def plot_area_time(self) -> None:
         plt.plot([x * 100 / float(self.max_area) for x in self.areas])
+        plt.xlim(0, len(self.areas))
+        # plt.margins(x = 0)
+        # plt.xticks(arange(0, len(self.areas) + 1))
         # plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
         plt.ylim(min(self.areas) * 100 / float(self.max_area) - 1, 101)
         plt.xlabel('# iterations')
