@@ -376,19 +376,21 @@ The factor $\gamma$ becomes thus a hyperparameter to experiment with.
 
 
 \subsection{Line Search}
-In this section we introduce another extension to the regular gradient descent algorithm: Line Search \cite{swann1969survey}. Its aim is to use gradient descent's descending direction as a guide for finding the optimal solution to the optimisation function. Then, using a step size, multiple solutions along the descending line are computed. The optimal one for the specific iteration is chosen.
+\label{sec:line_search}
+In this section we introduce another extension to the regular gradient descent algorithm: Line Search \cite{swann1969survey}. Its aim is to use gradient descent's descending direction as a guide for finding the optimal solution to the optimisation function. Then, given a step size factor, multiple solutions along the descending line are computed. The optimal one for the specific iteration is chosen.
 
-Figure \ref{fig:line} illustrates an example for this extension. Take guard $g$ and reflex vertex $r$. The dashed line represents the direction of gradient descent, as computed based on the gradient and reflex vertex pull computations. Given a step size $s$, 5 different possible new guard positions can be identified: $g'_1, g'_2, g'_3, g'_4, g'_5$. The optimal guard will be the one with the largest newly visible area increase.
+Figure \ref{fig:line} illustrates an example for this extension. Take guard $g$ and reflex vertex $r$. Let $\frac 1 x$ be the starting search factor, and $s$ the step size factor. Recall that $M_i$ is the optimal direction for a guard at iteration $i$. As such, line search will compute the optimal guard position $g_{i + 1} = g_i + \alpha\frac{t}{x}M_i, \text{ with } t \text{ the best position for the guard from } \{\frac 1 xM_i, \frac{s}{x}M_i, \frac{s^2}{x}M_i, ...\}$. As such, the dashed line represents the direction of gradient descent, as computed based on the gradient and reflex vertex pull computations. Given a step size $s$, 5 different possible new guard positions can be identified: $g'_{i_1} = g_i + \alpha\frac 1 xM_i$,  $g'_{i_2} = g_i + \alpha\frac s x M_i$, $g'_{i_3} = g_i + \alpha\frac{s^2}{x} M_i$, $g'_{i_4} = g_i + \alpha\frac{s^3}{x} M_i$, $g'_{i_5} = g_i + \alpha\frac{s^4}{x} M_i$. 
+The optimal guard will be the one with the largest newly visible area increase.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.7\textwidth]{theory/line_search.png}
-    \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 5 possible guard positioning on the dashed gradient descent line: $g'_1, g'_2, g'_3, g'_4, g'_5$. The best of them is chosen based on the newly visible area seen.}
+    \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 5 possible guard positioning on the dashed gradient descent line: $g'_{i_1}, g'_{i_2}, g'_{i_3}, g'_{i_4}, g'_{i_5}$. The best of them is chosen based on the newly visible area seen.}
     \label{fig:line}
 \end{figure}
 
-For our experiments, we will be using an exponentially increasing step size. Ths will allow us to search a larger space of position possibilities knowing the direction of the gradient descent. 
-Namely, we will start with a step size of $\frac 1 s^x$ and we will increase it by a factor of $s$ up to $s^x$. We choose $s = 2$ and $x = 5$ so that we are able to choose in between 10 positions at every iteration. We will pick for the best solution aong all the step size based on the largest area increase. Firstly, we will start with a more finely-grated search closer to the actual value of the gradient. This step will check whether the gradient descent overshoots. Then, we will check farther away from the actual value of the gradient for the case that a larger gain in the guard positioning is possible.
+For our experiments, we will be using a step size factor of 2. This will allow us to search a larger space of position possibilities knowing the direction of the gradient descent. 
+Namely, we will start with a factor of $\frac 1 x$ and we will increase it by a factor of $s$ up to factor $x$. We choose step size factor $s = 2$ and $x = 32$ so that we are able to choose in between 10 positions at every iteration. We will pick for the best solution aong all the step size based on the largest area increase. Firstly, we will start with a more finely-grated search closer to the actual value of the gradient. This step will check whether the gradient descent overshoots. Then, we will check farther away from the actual value of the gradient for the case that a larger gain in the guard positioning is possible.
 
 \subsection{Reflex Area}
 % - address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex

@@ -35,7 +35,7 @@ A suggestive way to observe this is with the comb polygon with five teeth from F
 
 We will compare how the guards move when we are using all the heuristics to when we are not using momentum. The guards will have a learning rate $\alpha = 0.4$. They will start at the same fixed position in both cases.
 
-Figure \ref{fig:no_momentum} displays the area seen per iteration for the comb polygon with five teeth. Both the total area seen and the individual seen area by guards is displayed. Starting with 80\% total area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Using momentum allows the guards to keep a steady trajectory towards their optimum. In Subfigure \ref{fig:no_momentum2} we can observe how each guard has a more erratic direction of movement, with frequent peaks and lows. Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. In this way, momentum allows the total area seen to steadily increase, whereas without it the total area seen displays some setbacks before the optimum is reached.
+Figure \ref{fig:no_momentum} displays the area seen per iteration for the comb polygon with five teeth. Both the total area seen and the individual area seen by each are shown. Starting with 80\% total area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Using momentum allows the guards to keep a steady trajectory towards their optimum. In Subfigure \ref{fig:no_momentum2} we can observe how each guard has a more erratic direction of movement, with frequent peaks and lows. Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. In this way, momentum allows the total area seen to steadily increase, whereas without it the total area seen displays some setbacks before the optimum is reached.
 Additionally, we reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations (in this example, 4). When not using momentum, the number of iterations increases substantially to 14.
 
 Therefore, momentum poses a significant improvement and speedup to the overall run of the gradient descent implementation.
@@ -56,7 +56,41 @@ Therefore, momentum poses a significant improvement and speedup to the overall r
     \label{fig:no_momentum}
 \end{figure}
 
-\subsubsection{Without Angle Behind Reflex Vertex}
+\subsubsection{Without Line Search}
+In this section we will discuss the impact line search has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:line_search}, line search determines how far a guard should move into the optimal direction. In this way, it computes the optimal position of a guard on the direction line given a step size.
+In our experiments, the search will compute the best guard placement between multiple positions computed from movement factor $\frac 1 32$ to 32 with a step size $s = 2$.
+
+A suggestive way to observe how well Line Search works is with the comb polygon with four teeth from Figure \ref{fig:comb}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{experiments/comb.png}
+    \caption{Polygon in the shape of a comb with four teeth.}
+    \label{fig:comb}
+\end{figure}
+
+We will compare how the guards move when we are using all the heuristics to when we are not using line search. The guards will have a learning rate $\alpha = 0.4$ for the case when line search is used, and $\alpha = 0.6$ for when it is not used. They will start at the same fixed position in both cases.
+
+Figure \ref{fig:no_line_search} displays the area seen per iteration for the comb polygon with four teeth. Both the total area seen and the individual area seen by each guard are shown. Starting with around 82.5\% total area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using line search clearly makes a difference between Subfigures \ref{fig:no_line_search1} and \ref{fig:no_line_search2}. The first noticeable difference is the number of iterations. Using line search allows the guards to find their optimal positions in 3 iterations, with a steady increase in the total area seen. On the other hand, not using line search results in the optimal position to be found in more than 80 iterations. What is more, 3 of the guards seem to have found their optimal position after the $30^{\text{th}}$ iteration, whereas the last 50 iterations are spent on only one guard finding its own.
+
+Therefore, we reckon that line search significantly and more efficiently speeds up the process of finding the optimal position for each guard. In this way, each guard moves faster to its optimal position and avoids creating situations where multiple guards that have found their optimal position have to wait for only one guard to find its own.
+
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_all.png}
+        \caption{All heuristics.}
+        \label{fig:no_line_search1}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_no_linear_search.png}
+        \caption{No line search.}
+        \label{fig:no_line_search2}
+    \end{subfigure}
+    \caption{Total area seen per iteration for the comb polygon with four teeth.}
+    \label{fig:no_line_search}
+\end{figure}
 
 - momentum
 - reflex vertex pull
