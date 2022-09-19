@@ -142,11 +142,64 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
     \label{fig:no_pull}
 \end{figure}
 
+\subsubsection{Without Pull Capping}
+In this section we will discuss how not capping the pull towards a reflex vertex influences the overall progression of the guards' movements. Section \ref{sec:pull_capping} introduced the notion of capping the pull towards a reflex vertex. The reason for this choice was to not give the pull the possibility to overpower the value of the momentum. So, if the pull is larger than a factor $\mu$ than the momentum, it is capped at the momentum value of a factor of $\mu$. 
+
+We will compare how the guards move when we are using all the heuristics to when we are not capping the pull towards reflex vertices. We will use the comb polygon with four teeth as example. The guards have a learning rate $\alpha = 0.4$ and a pull cap hyperparameter $\mu = 1$. Thus, if the pull is larger than the momentum, we cap it at the size of the momentum. The reason behind this hyperparameter choice was that it offers a middle ground in between pull capping values that are significantly larger or smaller than the momentum. So, if the pull is as large as the momentum, we will decide to prioritise giving the guard the choice to be pulled onto a reflex vertex if it is ``close enough''.
+
+Figure \ref{fig:no_capping} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_cap_pos0} and \ref{fig:all_cap_pos1} show how the blue guard movement changes when its pull is capped; Subfigures \ref{fig:no_cap_pos0} and \ref{fig:no_cap_pos1} show the opposite. We can observe how in Subfigure \ref{fig:all_cap_pos0} the blue guard has its pull towards the reflex vertex capped. In that case, the pull is not strong enough to move the guard towards the reflex vertex. So, the blue guard moves as its momentum dictates to the position in Subfigure \ref{fig:all_cap_pos1}. This can result in encouraging the guard to explore the polygon more rather than directly moving towards a reflex vertex.
+Conversely, Subfigure \ref{fig:no_cap_pos1} displays the blue guard moving closer to the reflex vertex it is pulled to. In subsequent iterations, it is placed on the reflex vertex
+
+Subfigures \ref{fig:area_all_cap} and \ref{fig:area_no_cap} show how the global behaviour of the algorithm is influenced by the capping. Interestingly enough, when capping the pull, the guards' behaviour is more erratic, resulting in more iterations before the whole polygon is seen. On the other hand, using no capping allows a steadier increase in the total area seen. Eventually, the blue guard is drawn and placed onto the reflex vertex. This reinforces the previously discussed idea that placing guards on reflex vertices is beneficial for the overall run of the algorithm. Nonetheless, tuning the hyperparameter $\mu$ is a crucial point of exploration for deciding how and when pull capping would always prove most beneficial.
+
+Therefore, we believe that capping the guards' pull towards a reflex vertex highly depends on the hyperparameter $\mu$ and the shape of the polygon. When not capped, it additionally reinforces the importance of placing guards on reflex vertices. However, when the pull of guards is capped, we are using a more exploratory approach to discovering the polygon.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/comb_capping_pos0.png}
+        \caption{All heuristics, iteration 0. The guard's pull towards the reflex vertex is capped.}
+        \label{fig:all_cap_pos0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/comb_capping_pos1.png}
+        \caption{All heuristics, iteration 1. The guard does not act upon the pull towards the reflex vertex.}
+        \label{fig:all_cap_pos1}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/comb_no_capping_pos0.png}
+        \caption{No pull onto the reflex vertex, iteration 0. The guard's pull towards the reflex vertex is not capped.}
+        \label{fig:no_cap_pos0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/comb_no_capping_pos1.png}
+        \caption{No pull onto the reflex vertex, iteration 1. The guard is drawn closer to the reflex vertex.}
+        \label{fig:no_cap_pos1}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_capping.png}
+        \caption{Seen area for all heuristics.}
+        \label{fig:area_all_cap}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_no_capping.png}
+        \caption{Seen area without pull capping.}
+        \label{fig:area_no_cap}
+    \end{subfigure}
+    \caption{Example of different behaviours of a guard with and without its reflex vertex pull capped in a comb polygon with four teeth.}
+    \label{fig:no_capping}
+\end{figure}
+
 
 % - momentum
 - reflex vertex pull
-    - onto reflex vertex
-    - pull Capping
+    % - onto reflex vertex
+    % - pull Capping
 % - line search
 - reflex area
 - hidden gradient
