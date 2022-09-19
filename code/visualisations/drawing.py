@@ -6,6 +6,7 @@ from sys import stdin
 from collections import defaultdict
 import time
 import os
+from numpy import arange
 
 PATH = 'results/'
 DATE = time.strftime("%Y-%m-%d")
@@ -29,7 +30,7 @@ class Drawing(object):
         self.dfs_y = defaultdict(lambda: defaultdict(list))
         self.hs_x = defaultdict(lambda: defaultdict(list))
         self.hs_y = defaultdict(lambda: defaultdict(list))
-        self.local_areas = defaultdict(lambda: defaultdict(list))
+        self.local_areas = defaultdict(list)
         self.areas = []
         self.max_area = None
 
@@ -128,7 +129,7 @@ class Drawing(object):
             elif line.startswith('area'):   # get current guard's area
                 # i = int(line[4])
                 area = float(line[6:].strip())
-                self.local_areas[f'g{i}'][iteration].append(area)
+                self.local_areas[f'g{i}'].append(area)
         
         self.n_iterations = iteration
 
@@ -270,8 +271,16 @@ class Drawing(object):
 
     def plot_area_time(self) -> None:
         plt.plot([x * 100 / float(self.max_area) for x in self.areas])
+        plt.xlim(0, len(self.areas))
+        # plt.margins(x = 0)
+        # plt.xticks(arange(0, len(self.areas) + 1))
         # plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
-        plt.ylim(min(self.areas) * 100 / float(self.max_area) - 1, 101)
+        # plt.ylim(min(self.areas) * 100 / float(self.max_area) - 1, 101)
+
+        for guard in self.xs.keys():
+            print([x for x in self.local_areas[guard]])
+            plt.plot([x * 100 / float(self.max_area) for x in self.local_areas[guard]])
+
         plt.xlabel('# iterations')
         plt.ylabel('total area seen (%)')
         plt.title('Total Area Seen')
