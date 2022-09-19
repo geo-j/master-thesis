@@ -325,6 +325,7 @@ Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for
 Therefore, the movement of a guard $g$ to the new position $g'$ will take both the gradient and the pull into account: $$g' = g + \alpha (\bigtriangledown f + h).$$ Additionally, we can choose how much influence the pull itself can have in the movement of the guard by adding a hyperparameter $\beta$: $$g' = g + \alpha (\bigtriangledown f + \beta h).$$
 
 \subsubsection{Pull onto the Reflex Vertex}
+\label{sec:pull_onto}
 We have now created a heuristic for pulling a guard closer to a reflex vertex based on the increase in the seen area behind the reflex vertex. It could happen however that the pull towards the reflex vertex is very strong. In this case, the guard could be moved past the reflex vertex, in between the reflex vertex and the polygon boundary. Although the area seen behind the reflex vertex would be maximised, the guard would ``unsee'' (parts of) the area of its initial position $g$. In order to address this particular issue, the guard will be placed on the reflex vertex when the pull is strong enough. 
 
 This section will thus expand on a procedure that decides when a guard is best placed on a reflex vertex based on its pull towards it.

@@ -68,7 +68,7 @@ A suggestive way to observe how well Line Search works is with the comb polygon 
     \label{fig:comb}
 \end{figure}
 
-We will compare how the guards move when we are using all the heuristics to when we are not using line search. The guards will have a learning rate $\alpha = 0.4$. They will start at the same fixed position in both cases.
+We will compare how the guards move when we are using all the heuristics to when we are not using line search. The guards have a learning rate $\alpha = 0.4$. They will start at the same fixed position in both cases.
 
 Figure \ref{fig:no_line_search} displays the area seen per iteration for the comb polygon with four teeth. Both the total area seen and the individual area seen by each guard are shown. Starting with around 82.5\% total area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using line search clearly makes a difference between Subfigures \ref{fig:no_line_search1} and \ref{fig:no_line_search2}. The first noticeable difference is the number of iterations. Using line search allows the guards to find their optimal positions in 3 iterations, with a steady increase in the total area seen. On the other hand, not using line search results in the optimal position to be found in more than 80 iterations. What is more, 3 of the guards seem to have found their optimal position after the $30^{\text{th}}$ iteration, whereas the last 50 iterations are spent on only one guard finding its own.
 
@@ -90,6 +90,58 @@ Therefore, we reckon that line search significantly and more efficiently speeds 
     \caption{Total area seen per iteration for the comb polygon with four teeth.}
     \label{fig:no_line_search}
 \end{figure}
+
+\subsubsection{Without Pulling Onto Reflex Vertex}
+In this section we will discuss the impact the pull onto the reflex vertex heuristic has on the behaviour of the algorithm. Section \ref{sec:pull_onto} introduced the pulling guards on top of a reflex vertex heuristic. This heuristic tackles the idea that if a guard is ``close enough'' to a reflex vertex, then the locally maximum seen area would be achieved by placing the guard on top of the reflex vertex. We have defined a guard being ``close enough'' to a reflex vertex as closer than two thirds of the minimum distance between any two reflex vertices in the polygon.
+
+We will compare how the guards move when we are using all the heuristics to when we are not pulling them onto reflex vertices. The guards have a learning rate $\alpha = 0.4$ and start at the same fixed position in both cases.
+
+Figure \ref{fig:no_pull} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard movement changes when it is placed onto the reflex vertex; Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard movement changes when the guard is pulled towards the reflex vertex, but not pulled onto it. We can observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moved away from the reflex vertex. However, its movement still indicates that it should move back, closer to the reflex vertex it was not placed on. 
+This behaviour is also reflected in the two seen area plots in Subfigures \ref{fig:area_all_pull} and Subfigures \ref{fig:area_no_pull}. Clearly, the case when the green guard is not placed on top of the reflex vertex results in more iterations, as seen in Subfigure \ref{fig:area_no_pull}. This is due to the fact that the green guard could not take advantage of the local area maximisation by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen stagnates in between iterations 2 and 4. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard has quickly moved towards the last part of the polygon that was not yet seen. This resulted in a steady increase in the total seen area.
+
+Therefore, we believe that pulling guards on top of reflex vertices when they are ``close enough'' results in the local maximisation of the area seen by those guards. The number of iterations needed to reach the global maximum is thus reduced. So, the efficiency of the algorithm is also positively affected.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_all_pull_pos0.png}
+        \caption{All heuristics, iteration 0. The guard is pulled towards the reflex vertex.}
+        \label{fig:all_pull_pos0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_all_pull_pos1.png}
+        \caption{All heuristics, iteration 1. The guard is onto the reflex vertex.}
+        \label{fig:all_pull_pos1}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_no_pull_pos0.png}
+        \caption{No pull onto the reflex vertex, iteration 0. The guard is pulled towards the reflex vertex.}
+        \label{fig:no_pull_pos0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_no_pull_pos1.png}
+        \caption{No pull onto the reflex vertex, iteration 1. The guard is placed according to the momentum computation.}
+        \label{fig:no_pull_pos1}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_random_all_pull_onto.png}
+        \caption{Seen area for all heuristics.}
+        \label{fig:area_all_pull}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_random_no_pull_onto.png}
+        \caption{Seen area without pull onto reflex vertices.}
+        \label{fig:area_no_pull}
+    \end{subfigure}
+    \caption{Example of a guard being pulled towards a reflex vertex in the arbitrary polygon.}
+    \label{fig:no_pull}
+\end{figure}
+
 
 % - momentum
 - reflex vertex pull
