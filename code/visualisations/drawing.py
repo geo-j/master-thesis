@@ -278,7 +278,7 @@ class Drawing(object):
         # plt.ylim(min(self.areas) * 100 / float(self.max_area) - 1, 101)
 
         for guard in self.xs.keys():
-            print([x for x in self.local_areas[guard]])
+            # print([x for x in self.local_areas[guard]])
             plt.plot([x * 100 / float(self.max_area) for x in self.local_areas[guard]])
 
         plt.xlabel('# iterations')
