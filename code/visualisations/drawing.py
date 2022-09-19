@@ -273,7 +273,7 @@ class Drawing(object):
         plt.plot([x * 100 / float(self.max_area) for x in self.areas])
         plt.xlim(0, len(self.areas))
         # plt.margins(x = 0)
-        # plt.xticks(arange(0, len(self.areas) + 1))
+        plt.xticks(arange(0, len(self.areas)))
         # plt.axhline(y = self.max_area, color = 'r', linestyle = '--')
         # plt.ylim(min(self.areas) * 100 / float(self.max_area) - 1, 101)
 
@@ -285,7 +285,8 @@ class Drawing(object):
         plt.ylabel('total area seen (%)')
         plt.title('Total Area Seen')
         plt.grid()
-        plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png', dpi = 300)
+        plt.legend(['total'] + [x for x in self.local_areas.keys()])
+        plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png', dpi = 300, bbox_inches = 'tight')
         # plt.show()
 
     def draw_all(self) -> None:
