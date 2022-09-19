@@ -227,7 +227,7 @@ class Guard {
         // save the current coords and the reflex vertex in whose reflex area the guard is in
         Point_2 cur_coords, reflex_area_vertex, prev_coords;
         Arrangement_2 visibility_region;
-        // set gamma = 1 for not using momentum
+        // set gamma = 0 for not using momentum
         // set pull_attraction = 0 for not using the pull
         double area, learning_rate{0.5}, gamma{0.8}, pull_attraction{1};
         Vector_2 momentum{0, 0};
