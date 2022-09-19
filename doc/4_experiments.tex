@@ -24,35 +24,34 @@ We will use fixed hyperparameters for all the runs. This will allow us to focus 
 \subsubsection{Without Momentum}
 In this section we will discuss the impact momentum has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:momentum}, momentum takes into account the position history of the guards. In this way, the overall trajectory of a guard is smoothened out.
 
-A suggestive way to observe this is with the comb polygon with five teeth from Figure \ref{fig:comb2}.
+A suggestive way to observe this is with the arbitrary polygon from Figure \ref{fig:random}. The polygon requires a minimum of 3 guards to be fully seen. For this reason, we will run the algorithm with only 3 guards.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.5\textwidth]{experiments/comb2.png}
-    \caption{Polygon in the shape of a comb with five teeth.}
-    \label{fig:comb2}
+    \includegraphics[width = 0.5\textwidth]{experiments/random.png}
+    \caption{Arbitrarily shaped polygon.}
+    \label{fig:random}
 \end{figure}
 
-We will compare how the guards move when we are using all the heuristics to when we are not using momentum. The guards will have a learning rate $\alpha = 0.4$. They will start at the same fixed position in both cases.
+We will compare how the guards move when we are using all the heuristics to when we are not using momentum. The guards will have a learning rate $\alpha = 0.2$. They will start at the same fixed position in both cases.
 
-Figure \ref{fig:no_momentum} displays the area seen per iteration for the comb polygon with five teeth. Both the total area seen and the individual area seen by each are shown. Starting with 80\% total area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Using momentum allows the guards to keep a steady trajectory towards their optimum. In Subfigure \ref{fig:no_momentum2} we can observe how each guard has a more erratic direction of movement, with frequent peaks and lows. Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. In this way, momentum allows the total area seen to steadily increase, whereas without it the total area seen displays some setbacks before the optimum is reached.
-Additionally, we reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations (in this example, 4). When not using momentum, the number of iterations increases substantially to 14.
-
-Therefore, momentum poses a significant improvement and speedup to the overall run of the gradient descent implementation.
+Figure \ref{fig:no_momentum} displays the area seen per iteration for the arbitrary polygon Both the total area seen and the individual area seen by each are shown. Starting with almost the whole area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Using momentum allows the overall seen area to keep a steady trajectory towards its maximum. Additionally, guards quickly find their optimum in only 4 iterations, without many oscillations. In Subfigure \ref{fig:no_momentum2} however we can observe how the total area fluctuates. The guards also display large jumps close to iterations 5 and 20. These jumps cause the overall progress towards the optimum to be less stable. For example, when guard 2 has a sudden drop in the area it sees around iteration 5, the total area seen naturally drops as well, and only recovers after iteration 20, when guard 0 makes another large jump. This behaviour also suggests that the movement of one guard can heavily influence others, resulting in a noisy behaviour and in a higher number of iterations.
+% Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. 
+Therefore, it becomes clearer how momentum allows the smoothening of noisy guard movements. Additionally, we reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations (in this example, 3). When not using momentum, the number of iterations increases substantially to 24. Momentum thus is a crucial improving heuristic to our whole algorithm, both in speedup as well as in the smootheness of the process.
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb2_all.png}
+        \includegraphics[width = \textwidth]{experiments/area_random_all.png}
         \caption{All heuristics.}
         \label{fig:no_momentum1}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb2_no_momentum.png}
+        \includegraphics[width = \textwidth]{experiments/area_random_no_momentum.png}
         \caption{No momentum.}
         \label{fig:no_momentum2}
     \end{subfigure}
-    \caption{Total area seen per iteration for the comb polygon with five teeth.}
+    \caption{Total area seen per iteration for an arbitrary polygon guarded by 3 guards.}
     \label{fig:no_momentum}
 \end{figure}
 
@@ -66,7 +65,7 @@ A suggestive way to observe how well Line Search works is with the comb polygon 
     \centering
     \includegraphics[width = 0.5\textwidth]{experiments/comb.png}
     \caption{Polygon in the shape of a comb with four teeth.}
-    \label{fig:comb}
+    % \label{fig:comb}
 \end{figure}
 
 We will compare how the guards move when we are using all the heuristics to when we are not using line search. The guards will have a learning rate $\alpha = 0.4$ for the case when line search is used, and $\alpha = 0.6$ for when it is not used. They will start at the same fixed position in both cases.
@@ -92,11 +91,11 @@ Therefore, we reckon that line search significantly and more efficiently speeds 
     \label{fig:no_line_search}
 \end{figure}
 
-- momentum
+% - momentum
 - reflex vertex pull
     - onto reflex vertex
     - pull Capping
-- line search
+% - line search
 - reflex area
 - hidden gradient
 - angle behind reflex vertex
