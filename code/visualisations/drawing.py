@@ -261,7 +261,7 @@ class Drawing(object):
             self.draw_visibility_regions(pos)
             self.draw_guards_dfs(pos)
             plt.title(f'Gradient Computation for Iteration #{pos}')
-            # plt.axis('off')
+            plt.axis('off')
 
             plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_pos{pos}.png', format = 'png', dpi = 300)
             plt.clf()
