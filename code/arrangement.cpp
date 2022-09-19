@@ -761,6 +761,7 @@
 
                             Gradient best_gradient = gradient;
                             Guard best_guard = cur_guard;
+                            bool moved = false;
 
                             // line search from factors of 1 / 32 to 32
                             for (double l = 1.0 / this->line_search_factor; l <= this->line_search_factor; l *= 2) {
@@ -784,7 +785,8 @@
 
                                         placed = false;
 
-                                    } else
+                                    }
+                                     else
                                         placed = true;
                                 } while (!placed);
 
@@ -800,10 +802,11 @@
                                     auto new_arrangement = this->full_visibility(new_guards);
                                     // std::cout << "here?\n";
                                     // if the new guard has a better position, save it
-                                    if (compute_area(new_arrangement) > compute_area(old_arrangement) || cur_guard.get_area() > best_guard.get_area()){ //|| (best_guard == prev_guard && l == 1)) {
+                                    if (compute_area(new_arrangement) > compute_area(old_arrangement) || cur_guard.get_area() > best_guard.get_area() || !moved) {
                                         std::cout << "\t new best guard at " << cur_guard << std::endl;
                                         best_gradient = gradient;
                                         best_guard = cur_guard;
+                                        moved = true;
                                     }
                                 }
 
