@@ -395,6 +395,7 @@ For our experiments, we will be using a step size factor of 2. This will allow u
 Namely, we will start with a factor of $\frac 1 x$ and we will increase it by a factor of $s$ up to factor $x$. We choose step size factor $s = 2$ and $x = 32$ so that we are able to choose in between 10 positions at every iteration. We will pick for the best solution aong all the step size based on the largest area increase. Firstly, we will start with a more finely-grated search closer to the actual value of the gradient. This step will check whether the gradient descent overshoots. Then, we will check farther away from the actual value of the gradient for the case that a larger gain in the guard positioning is possible.
 
 \subsection{Reflex Area}
+\label{sec:reflex_area}
 % - address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
 In this section we introduce an additional extension to the gradient descent algorithm with momentum and reflex vertex pull: the concept of a reflex area. 
 

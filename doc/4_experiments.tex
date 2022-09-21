@@ -105,25 +105,25 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
     \centering
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_all_pull_pos0.png}
-        \caption{All heuristics, iteration 0. The guard is pulled towards the reflex vertex.}
+        \caption{All heuristics, iteration 0. The green guard is pulled towards the reflex vertex.}
         \label{fig:all_pull_pos0}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_all_pull_pos1.png}
-        \caption{All heuristics, iteration 1. The guard is onto the reflex vertex.}
+        \caption{All heuristics, iteration 1. The green guard is onto the reflex vertex.}
         \label{fig:all_pull_pos1}
     \end{subfigure}
     \vfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_pull_pos0.png}
-        \caption{No pull onto the reflex vertex, iteration 0. The guard is pulled towards the reflex vertex.}
+        \caption{No pull onto the reflex vertex, iteration 0. The green guard is pulled towards the reflex vertex.}
         \label{fig:no_pull_pos0}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_pull_pos1.png}
-        \caption{No pull onto the reflex vertex, iteration 1. The guard is placed according to the momentum computation.}
+        \caption{No pull onto the reflex vertex, iteration 1. The green guard is placed according to the momentum computation.}
         \label{fig:no_pull_pos1}
     \end{subfigure}
     \vfill
@@ -138,7 +138,7 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
         \caption{Seen area without pull onto reflex vertices.}
         \label{fig:area_no_pull}
     \end{subfigure}
-    \caption{Example of a guard being pulled towards a reflex vertex in the arbitrary polygon.}
+    \caption{Comparison between a guard being and not being pulled onto a reflex vertex in an arbitrary polygon.}
     \label{fig:no_pull}
 \end{figure}
 
@@ -195,13 +195,90 @@ Therefore, we believe that capping the guards' pull towards a reflex vertex high
     \label{fig:no_capping}
 \end{figure}
 
+\subsubsection{Without Reflex Area}
+In this section we will discuss the importance of keeping guards in the ``reflex area'' of a reflex vertex they've been placed on. Section \ref{sec:reflex_area} introduced this heuristic. The idea is based on the fact that if guards who have been placed on reflex vertices move away from them, they might unsee some of the area they saw when on the reflex vertex. In order to prevent them from looping moving away and then back on the vertex, we will keep them in the reflex area.
 
+We will compare how the guards move when we are using all the heuristics to when we are not keeping guards into a reflex area. We will use another arbitrary polygon as an example. The guards have a learning rate $\alpha = 0.3$.
+
+Figures \ref{fig:reflex_area_eg} and \ref{fig:area_reflex_area} compare using and not using the reflex area heuristic in terms of guard movement and total seen area, respectively. Subfigures \ref{fig:reflex_area_all1} - \ref{fig:reflex_area_all4} show the guards' movement when one of them is bound to the reflex area. In this case, because the blue guard wants to move away from the reflex vertex, the reflex area does not allow it to move away from the reflex vertex. So, it stays there. 
+Subfigures \ref{fig:reflex_area_no1} - \ref{fig:reflex_area_no4} display the guards' movement when the reflex area heuristic is not applied. In this case, the blue guard moves away from the reflex vertex (Subfigure \ref{fig:reflex_area_no2}), to be drawn back to it in the next iteration (Subfigure \ref{fig:reflex_area_no3}). This repetitive behaviour continues without allowing the polygon to be completely seen.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos3.png}
+        \caption{All heuristics, iteration 3. The blue guard is on the reflex vertex.}
+        \label{fig:reflex_area_all1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos4.png}
+        \caption{All heuristics, iteration 4. The blue guard is still on the reflex vertex (in the reflex area).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos5.png}
+        \caption{All heuristics, iteration 5. The blue guard is still on the reflex vertex (in the reflex area).}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos6.png}
+        \caption{All heuristics, iteration 6. The blue guard is still on the reflex vertex (in the reflex area).}
+        \label{fig:reflex_area_all4}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos4.png}
+        \caption{No reflex area, iteration 4. The blue guard is on the reflex vertex.}
+        \label{fig:reflex_area_no1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos5.png}
+        \caption{No reflex area, iteration 5. The blue guard moved away from the reflex vertex.}
+        \label{fig:reflex_area_no2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos6.png}
+        \caption{No reflex area, iteration 6. The blue guard is drawn back to the same reflex vertex.}
+        \label{fig:reflex_area_no3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos7.png}
+        \caption{No reflex area, iteration 7. The blue guard is back on the reflex vertex.}
+        \label{fig:reflex_area_no4}
+    \end{subfigure}
+    \caption{Comparison between using and not using the reflex area heuristic on an arbitrary polygon.}
+    \label{fig:reflex_area_eg}
+\end{figure}
+
+Figure \ref{fig:reflex_area_eg} displays the difference in the areas seen between the two approaches. When using all heuristics (Subfigure \ref{fig:area_reflex_area_all}), the algorithm terminates in 7 iteration. The continuous line clearly marks the guard who did not move away from the reflex vertex. When not using the reflex area heuristic (Subfigure \ref{fig:area_reflex_area_no}), the algorithm appears not to terminate. One of the guards loops away and back on the reflex vertex. The other guard loops so that it sees the area that is being seen and unseen by the other guard. In this way, they do not synchronise in order to see the polygon together at the same time.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_reflex_area_all.png}
+        \caption{Area seen for all heuristics on another arbitrary polygon.}
+        \label{fig:area_reflex_area_all}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_reflex_area_no.png}
+        \caption{Area seen for no reflex area heuristic on another arbitrary polygon.}
+        \label{fig:area_reflex_area_no}
+    \end{subfigure}
+    \caption{Area comparison between using and not using the reflex area heuristic on an arbitrary polygon.}
+    \label{fig:area_reflex_area}
+\end{figure}
+
+Therefore, we believe that the reflex area heuristic is of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. In this way, the guards continue to move out of sync with each other, resulting in the polygon never being fully seen.s
 % - momentum
 - reflex vertex pull
     % - onto reflex vertex
     % - pull Capping
 % - line search
-- reflex area
+% - reflex area
 - hidden gradient
 - angle behind reflex vertex
 - greedy initialisation
