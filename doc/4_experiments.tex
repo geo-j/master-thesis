@@ -272,7 +272,33 @@ Figure \ref{fig:reflex_area_eg} displays the difference in the areas seen betwee
     \label{fig:area_reflex_area}
 \end{figure}
 
-Therefore, we believe that the reflex area heuristic is of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. In this way, the guards continue to move out of sync with each other, resulting in the polygon never being fully seen.s
+Therefore, we believe that the reflex area heuristic is of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. In this way, the guards continue to move out of sync with each other, resulting in the polygon never being fully seen.
+
+\subsubsection{No Hidden Gradient}
+In this section we will discuss the importance of using a hidden gradient heuristic. Section \ref{sec:hidden_gradient} introduced this heuristic. The idea is based on the fact that we want guards to make progress, no matter how little. If a guard's visibility region is already seen by other guards, it is unlikely that its position is optimal. Thus, we want the guard to still move.
+
+We will compare how the guards move when we are using all the heuristics to when we are not moving guards when their visibility region is fully seen by other guards. We will use the comb polygon with four teeth as an example. The guards have a learning rate of $\alpha = 0.4$.
+
+Figure \ref{fig:area_no_hidden_gradient} displays a comparison between using and not using hidden gradient in our algorithm. In Subfigure \ref{fig:area_comb_no_hidden_gradient} we can notice that the execution of the algorithm takes twice as many iterations than in Subfigure \ref{fig:area_comb_all2}. The reason behind this is the fact that for half of the iterations two of the guards do not move when no hidden gradient is used. Additionally, the total area seen in that case fluctuates. This is in contrast with the case where the hidden gradient heuristic is used. In that case, the total area seen is continuously increasing, and all guards who can make progress move.
+
+Therefore, we believe that the hidden gradient heuristic results in a significant improvement to our algorithm in terms of efficiency. In this way, all guards are ensured to make some progress towards their optimum and are not stalled.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_all.png}
+        \caption{All heuristics.}
+        \label{fig:area_comb_all2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_no_hidden_gradient.png}
+        \caption{No hidden gradient.}
+        \label{fig:area_comb_no_hidden_gradient}
+    \end{subfigure}
+    \caption{Seen area for the comb polygon with four teeth.}
+    \label{fig:area_no_hidden_gradient}
+\end{figure}
+
 % - momentum
 - reflex vertex pull
     % - onto reflex vertex
