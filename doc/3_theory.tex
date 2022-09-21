@@ -365,15 +365,16 @@ So the new coordinate of the guard is $g' = r = (2, 0)$.
 \end{figure}
 
 \subsubsection{Pull Capping}
+\label{sec:pull_capping}
 Nonetheless, it can happen that the pull towards a reflex vertex is significantly larger in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a very large jump towards the reflex vertex.
 
-We want to smoothen out possibly erratic behaviours of gradient descent. Just like in the case of momentum, we want our pull to be smoothened out in the case that is ``too large''. We define what ``too large'' is based on the momentum. If the pull is larger than a factor of $\gamma$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$:
+We want to smoothen out possibly erratic behaviours of gradient descent. Just like in the case of momentum, we want our pull to be smoothened out in the case that is ``too large''. We define what ``too large'' is based on the momentum. If the pull is larger than a factor of $\mu$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$:
 \begin{align*}
-    \text{if } ||h_i|| &> \gamma ||M_i|| + c \text{, then} \\
-               h_i &= h_i \frac{\gamma ||M_i||}{||h_i||}.
+    \text{if } ||h_i|| &> \mu ||M_i|| + c \text{, then} \\
+               h_i &= h_i \frac{\mu ||M_i||}{||h_i||}.
 \end{align*}
 
-The factor $\gamma$ becomes thus a hyperparameter to experiment with.
+The factor $\mu$ becomes thus a hyperparameter to experiment with.
 
 
 \subsection{Line Search}
