@@ -435,6 +435,7 @@ Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose in
 
 
 \subsection{Hidden Gradient}
+\label{sec:hidden_gradient}
 % - speed up the guard movement by giving all guards a gradient
 In this section we will introduce a computation speedup for the case in which guards have a gradient of 0 (they don't move). This can happen when the area seen by a guard is already seen by other guards too. We consider that having a gradient of 0 is detrimental to the progress of the algorithm. The reason behind this is that it is unlikely that a guard's optimal position has been found when its gradient is 0. Hence, we would like every guard to move, no matter how little.
 
