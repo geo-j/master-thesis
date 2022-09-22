@@ -300,6 +300,56 @@ Therefore, we believe that the hidden gradient heuristic results in a significan
     \label{fig:area_no_hidden_gradient}
 \end{figure}
 
+\subsubsection{Without Angle Behind Reflex Vertex}
+In this section we will discuss the benefits of using the value of the angle behind reflex vertices. Section \ref{sec:angle} introduced this heuristic. The idea behind this technique is that guards should be drawn faster to larger unseen areas behind reflex vertices. Conversely, if the unseen area behind the reflex vertex is very small, we also want guards to move towards it. In this way, we prioritise unseen areas based on their size, while still accounting for the very small unseen areas.
+
+Figure \ref{fig:no_angle} shows a comparison between using and not using the angle behind the reflex vertex heuristic: Subfigures \ref{fig:all_angle_pos0} and \ref{fig:all_angle_pos1} display the first two iterations of the algorithm when all heuristics are used, whereas  Subfigures \ref{fig:no_angle_pos0} and \ref{fig:no_angle_pos1} focus on the first two iterations when not using the angle behind the reflex vertex.
+We can observe a major difference in the way the final momentum movement is computed for the orange guard in the two cases. When all heuristics are used, the movements of the guards are much smaller and calculated than when the angle does not play a role. For example, in Subfigure \ref{fig:no_angle_pos0}, the orange guard has a very large momentum movement outside of the polygon due to the unseen part in the upper pocket. When we also take into account the angles behind the reflex vertices in the pocket, its movements become much smaller (Subfigure \ref{fig:all_angle_pos0}). In fact, the orange guard is also drawn slightly the right part of the polygon, as it has a larger angle behind the reflex vertex. That part of the polygon is already seen by the blue guard, so it starts moving towards the upper pocket in Subfigure \ref{fig:all_angle_pos1}.
+
+In terms of efficiency, the optimal solution is achieved in more iterations when the movements of the guards when the angle heuristic is used. This can be observed in Subfigures \ref{fig:area_all_angle} and \ref{fig:area_no_angle}. When using all heuristics, the random polygon is fully seen in 5 iterations. The movement of the guards is smooth. Two of the guards have an increasing seen area, whereas the orange guard moves slowly towards the upper pocket of the polygon. Not using the angle heuristic allows us to achieve the same goal in only 3 iterations. As mentioned, the progress of the guards is not as smooth.
+
+Therefore, we believe that computing the angle behind the reflex vertex is a heuristic that allows us to fine-tune and smoothen the movement of the guards. In this way, we can focus on moving fast towards the bigger unseen areas, while also not neglecting the smaller ones. We could say that this heuristic offers a trade-off between the number of iterations and path smoothness. For this reason, we believe that the performance of the algorithm is influenced by the type of polygons it is applied to: polygons with sharper, narrower turns could benefit the most from this heuristic.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_all_pull_pos0_fixed.png}
+        \caption{All heuristics, iteration 0. The orange guard's movement is towards upper right.}
+        \label{fig:all_angle_pos0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_all_pull_pos1_fixed.png}
+        \caption{All heuristics, iteration 1. The orange guard's movement is towards upper left.}
+        \label{fig:all_angle_pos1}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_no_angle_pos0.png}
+        \caption{No angle behind the reflex vertex, iteration 0. The orange guard's movement is all the way to the left boundary of the polygon.}
+        \label{fig:no_angle_pos0}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_no_angle_pos1.png}
+        \caption{No angle behind the reflex vertex, iteration 1. The orange guard's movement is towards the left-side outside of the polygon.}
+        \label{fig:no_angle_pos1}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_random_all_fixed.png}
+        \caption{Seen area for all heuristics.}
+        \label{fig:area_all_angle}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_random_no_angle.png}
+        \caption{Seen area without the angle behind the reflex vertices.}
+        \label{fig:area_no_angle}
+    \end{subfigure}
+    \caption{Comparison between using and not using the angle behind a reflex vertex in an arbitrary polygon.}
+    \label{fig:no_angle}
+\end{figure}
 % - momentum
 - reflex vertex pull
     % - onto reflex vertex
