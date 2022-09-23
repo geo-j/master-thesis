@@ -350,6 +350,22 @@ Therefore, we believe that computing the angle behind the reflex vertex is a heu
     \caption{Comparison between using and not using the angle behind a reflex vertex in an arbitrary polygon.}
     \label{fig:no_angle}
 \end{figure}
+
+\subsubsection{Greedy Initialisation}
+In this section we will discuss the benefits of using a greedy initialisation technique for our algorithm. Section \ref{sec:greedy} introduces this heuristic as beneficial for giving a head start to our algorithm. In our experiments we will greedily initialise the guards in the middle of the leftmost segment of each of their visibility regions. The reason behind this choice is that CGAL did not offer a quick way to pick a randomised position inside the visibility area. Due to the time constraints of this thesis, we decided to use a deterministic positioning.
+
+So far we have not used greedy initialisation in any of our examples. The reason is that this technique can already solve some polygons at guard placement time. Naturally, this would not allow us to show the benefits of using any of the other heuristics. An example in this case is the comb polygon with four teeth in Figure \ref{fig:comb_greedy}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{experiments/comb_greedy.png}
+    \caption{The comb polygon with four teeth is already completely seen at greedy initialisation time.}
+    \label{fig:comb_greedy}
+\end{figure}
+
+In the case of polygons who are not completely seen at initialisation time, it is unclear whether the greedy placement improves the overall progress. How well the algorithm behaves is highly dependent on the initial placement of the guards. Namely, the algorithm often does not finish with different starting positions (it is stuck in local optima). Because of this drawback, we cannot create extensive experiments with different starting guard positionings. It is additionally not feasible to find a generalisation in the type of placements that allow the algorithm to finish.
+
+Therefore, we believe a randomised placement of the guards during the greedy initialisation would be beneficial for giving a head start to the algorithm. However, due to time constraints, this heuristic is to be explored more with a more robust algorithm implementation.
 % - momentum
 - reflex vertex pull
     % - onto reflex vertex
@@ -357,5 +373,5 @@ Therefore, we believe that computing the angle behind the reflex vertex is a heu
 % - line search
 % - reflex area
 % - hidden gradient
-- angle behind reflex vertex
-- greedy initialisation
+% - angle behind reflex vertex
+% - greedy initialisation
