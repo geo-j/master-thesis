@@ -1,7 +1,7 @@
 N_TEETH = int(input())
 X_LAST_TOOTH = (N_TEETH - 1) * 3 + 5
 
-print(f'0.4\n1\n{3 * {N_TEETH - 1} + 5}\n4 3 4 5\n4 5', end='') # learning rate, pull attraction, number of segments
+print(f'0.4\n1\n{3 * (N_TEETH - 1) + 5}\n4 3 4 5\n4 5', end='') # learning rate, pull attraction, number of segments
 
 for i in range(5, X_LAST_TOOTH, 3):
     print(f' {i} 9\n{i} 9 {i + 1} 5\n{i + 1} 5 {i + 2} 5\n{i + 2} 5', end='')
