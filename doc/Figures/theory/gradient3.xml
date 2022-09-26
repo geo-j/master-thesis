@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70212" creator="Ipe 7.2.13">
-<info created="D:20220302113024" modified="D:20220602121747"/>
+<info created="D:20220302113024" modified="D:20220926175208"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -262,12 +262,7 @@ h
 272 544 l
 h
 </path>
-<path stroke="black" pen="fat">
-448 768 m
-448 384 l
-448 384 l
-</path>
-<text matrix="1 0 0 1 16 0" transformations="translations" pos="448 768" stroke="black" type="label" width="74.217" height="9.962" depth="2.79" valign="baseline" size="Large">$P$ boundary</text>
+<text matrix="1 0 0 1 -48 16" transformations="translations" pos="448 768" stroke="black" type="label" width="74.217" height="9.962" depth="2.79" valign="baseline" size="Large">$P$ boundary</text>
 <path stroke="black" pen="fat">
 64 576 m
 448 576 l
@@ -307,10 +302,6 @@ h
 <text matrix="1 0 0 1 -81.8698 9.98817" transformations="translations" pos="398.388 548.036" stroke="black" type="label" width="18.232" height="9.962" depth="2.79" valign="baseline" size="Large" style="math">\triangle_1</text>
 <use layer="gamma" name="mark/disk(sx)" pos="368 704" size="large" stroke="black"/>
 <text matrix="1 0 0 1 16 0" transformations="translations" pos="368 704" stroke="black" type="label" width="11.81" height="6.179" depth="2.15" valign="baseline" size="Large" style="math">r_2</text>
-<path stroke="black" fill="red" pen="fat">
-368 768 m
-368 384 l
-</path>
 <path stroke="black" fill="black" opacity="30%" stroke-opacity="opaque">
 368 576 m
 448 576 l
@@ -331,5 +322,13 @@ h
 <use name="mark/disk(sx)" pos="368 576" size="large" stroke="black"/>
 <text matrix="1 0 0 1 -16 16" transformations="translations" pos="368 576" stroke="black" type="label" width="12.53" height="6.176" depth="2.79" valign="baseline" size="Large" style="math">p_1</text>
 <text matrix="1 0 0 1 0 16" transformations="translations" pos="448 576" stroke="black" type="label" width="12.53" height="6.176" depth="2.79" valign="baseline" size="Large" style="math">p_2</text>
+<path stroke="black" pen="heavier">
+368 768 m
+368 496 l
+</path>
+<path stroke="black" pen="heavier">
+448 768 m
+448 496 l
+</path>
 </page>
 </ipe>
