@@ -51,7 +51,7 @@ We will now create a canonical geometrical construction that allows us to furthe
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.6\textwidth]{theory/gradient2.png}
+    \includegraphics[width = \textwidth]{theory/gradient2.png}
     \caption{Canonical gradient construction for when the position of $g$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $g'$.}
     \label{fig:gradient}
 \end{figure}
@@ -158,7 +158,7 @@ Let point $g_1$ be the guard we have previously computed the gradient for. Let p
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.6\textwidth]{theory/gradient3.png}
+    \includegraphics[width = \textwidth]{theory/gradient3.png}
     \caption{Canonical gradient construction for when the visible area of $g_1'$ is also seen by guard $g_2$.}
     \label{fig:poly_gradient}
 \end{figure}
@@ -186,7 +186,7 @@ We can now generalise the gradient computation to $m$ guards and intersection po
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.7\textwidth]{theory/gradient4.png}
+    \includegraphics[width = \textwidth]{theory/gradient4.png}
     \caption{Canonical gradient construction for where the pink parts of the visible area of $g$ are also seen by other guards. The gray polygons $\triangle_1, \triangle_3, ..., \triangle_{m - 1}$ are the areas that are exclusively seen by $g$.}
     \label{fig:general_gradient} 
 \end{figure}
@@ -305,7 +305,7 @@ The reason for this choice is that computing the norm of the partial gradients, 
 We are aware of the fallacies of this approximation. Take the opposing unit vectors $a_1 = (1, 0)^\intercal, a_2 = (-1, 0)^\intercal$. The sum of their norms $\sum_i ||a_i|| = 2$, whereas the norm of their sum is $||\sum_i a_i|| = 0$. Clearly, they are not the same. Nonetheless, we still consider this approximation due to computation speed improvements and easiness of use.
 
 \begin{figure*}[!h]
-    \includegraphics[width = 0.7\textwidth]{theory/pull.png}
+    \includegraphics[width = \textwidth]{theory/pull.png}
     \centering
     \caption{Computing the movements of the guard $g = (0, 0)$ based on both the gradient and the pull towards reflex vertex $r = (2, 0)$. The distances $a = 2$ and $b = 3$ are known. The gradient is computed as $\bigtriangledown f = (0, 1.125)^\intercal$. The pull is computed as $h_r  = (0.625, 0)^\intercal$. So, the new position of the guard with learning rate $\alpha = 0.3$ becomes $g' = (0.1875, 0.3375)$. When only taking the reflex vertex pull into account, $g$ would need to move to $g'_x$. Similarly for when taking only the gradient into account, $g$ would need to move to $g'_y$. Combining the two movements together results in $g'$ being the final position of $g$.}
     \label{fig:pull}
@@ -359,7 +359,7 @@ So the new coordinate of the guard is $g' = r = (2, 0)$.
 
 \begin{figure}
     \centering
-    \includegraphics[width = 0.7\textwidth]{theory/pull_onto.png}
+    \includegraphics[width = \textwidth]{theory/pull_onto.png}
     \caption{Computing the movements of the guard $g = (1, 0)$ based on both the gradient and the pull towards reflex vertex $r = (2, 0)$. The distances $a = 1$ and $b = 3$ are known. The gradient is computed as $\bigtriangledown f = (0, 4.5)^\intercal$. The pull is computed as $h_r  = (4.5, 0)^\intercal$. The guard $g$ is close enough to $r$ (\ref{eq:h_a}), so $g$ is placed on top of the reflex vertex $r$.}
     \label{fig:pull_onto}
 \end{figure}
@@ -386,7 +386,7 @@ The optimal guard will be the one with the largest newly visible area increase.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.7\textwidth]{theory/line_search.png}
+    \includegraphics[width = \textwidth]{theory/line_search.png}
     \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 5 possible guard positioning on the dashed gradient descent line: $g'_{i_1}, g'_{i_2}, g'_{i_3}, g'_{i_4}, g'_{i_5}$. The best of them is chosen based on the newly visible area seen.}
     \label{fig:line}
 \end{figure}
@@ -428,7 +428,7 @@ Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose in
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.7\textwidth]{theory/reflex_area.png}
+    \includegraphics[width = 0.4\textwidth]{theory/reflex_area.png}
     \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two reflex lines $rr'$ and $rr''$. So, if $g$ needs to move outside of the reflex area, its new position will be projected on the closest reflex line.}
     \label{fig:reflex_area}
 \end{figure}
@@ -517,7 +517,7 @@ We will additionally add a constant $c$ to account for very small angles. For ex
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.6\textwidth]{theory/angle.png}
+    \includegraphics[width = \textwidth]{theory/angle.png}
     \caption{The normalised angle $\mu$ behind the reflex vertex $r$ takes into account the factor with which the guard $g$ is drawn to $r$.}
     \label{fig:angle}
 \end{figure}
