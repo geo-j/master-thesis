@@ -17,7 +17,10 @@ def distance(p1: Point2, p2: Point2) -> float:
     return (p1.x() - p2.x()) * (p1.x() - p2.x()) + (p1.y() - p2.y()) * (p1.y() - p2.y())
 
 class Drawing(object):
-    def __init__(self) -> None:
+    def __init__(self, file:str = None) -> None:
+        self.input_file = None
+        if file is not None:
+            self.input_file = open(file, 'r')
         self.arrangement = arrangement.Arrangement()
         self.vs = TriangularExpansionVisibility(self.arrangement)
         self.guards = []
@@ -49,12 +52,19 @@ class Drawing(object):
         ...
     """
     def read_input_arrangement(self) -> None:
-        E = int(input())
+        E = None
+        if self.input_file is None:
+            E = int(input())
+        else:
+            E = self.input_file.readline()
         p1 = None
         p2 = None
 
         for _ in range(E):
-            line_segment = input().split()
+            if f is None:
+                line_segment = input().split()
+            else:
+                line_segment = self.input_file.readline().split()
             x = None
             y = None
             for i in range(len(line_segment)):
@@ -99,6 +109,8 @@ class Drawing(object):
         iteration = None
         i = None
 
+        if self.file_input is not None:
+            stdin = self.file_input.readlines()
         for line in stdin:
             # if iteration is not None and iteration < 10:
             #     print(iteration, line)
@@ -288,6 +300,9 @@ class Drawing(object):
         plt.legend(['total'] + [x for x in self.local_areas.keys()])
         plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png', dpi = 300, bbox_inches = 'tight')
         # plt.show()
+
+    def plot_area_combs(self) -> None:
+        plt.plot([x * 100 / float(self.max_area) for x in self.areas])
 
     def draw_all(self) -> None:
         self.draw_visibility_regions()
