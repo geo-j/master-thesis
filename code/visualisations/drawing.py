@@ -2,7 +2,7 @@ from skgeom.draw import draw
 from skgeom import Segment2, Point2, arrangement, RotationalSweepVisibility, TriangularExpansionVisibility, intersection, Vector2, Line2
 import matplotlib.pyplot as plt
 from numpy import random, diff, sqrt
-from sys import stdin
+import sys
 from collections import defaultdict
 import time
 import os
@@ -56,12 +56,12 @@ class Drawing(object):
         if self.input_file is None:
             E = int(input())
         else:
-            E = self.input_file.readline()
+            E = int(self.input_file.readline())
         p1 = None
         p2 = None
 
         for _ in range(E):
-            if f is None:
+            if self.input_file is None:
                 line_segment = input().split()
             else:
                 line_segment = self.input_file.readline().split()
@@ -108,10 +108,14 @@ class Drawing(object):
     def read_iteration(self) -> None:
         iteration = None
         i = None
+        stdin = None
 
-        if self.file_input is not None:
-            stdin = self.file_input.readlines()
+        if self.input_file is not None:
+            stdin = self.input_file.readlines()
+        else:
+            stdin = sys.stdin
         for line in stdin:
+            # print(line)
             # if iteration is not None and iteration < 10:
             #     print(iteration, line)
             if line.startswith('total'):
@@ -120,14 +124,14 @@ class Drawing(object):
             elif line.startswith('i='):   # get current iteration
                 iteration = int(line[2:].strip())
             elif line.startswith('g'):  # get current guard coords
-                i = int(line[1])    # get the guard index
-                x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
+                i = int(line.split('=')[0][1:])    # get the guard index
+                x, y = map(float, line.split('=')[1].split())     # get the coords after removing the guard info
 
                 self.xs[f'g{i}'].append(x)
                 self.ys[f'g{i}'].append(y)
             elif line.startswith('D'):  # get current guard gradient info
                 # i = int(line[2])    # get guard index
-                x, y = map(float, line[3:].strip().split())     # get the coords after removing the guard info
+                x, y = map(float, line.split('=')[1].split())     # get the coords after removing the guard info
                 self.dfs_x[f'g{i}'][iteration].append(x)
                 self.dfs_y[f'g{i}'][iteration].append(y)
             elif line.startswith('h'):  # get current guard gradient info
@@ -136,11 +140,11 @@ class Drawing(object):
                 self.hs_x[f'g{i}'][iteration].append(x)
                 self.hs_y[f'g{i}'][iteration].append(y)
             elif line.startswith('area='):  # get current total seen area
-                area = float(line[5:].strip())
+                area = float(line.split('=')[1])
                 self.areas.append(area)
             elif line.startswith('area'):   # get current guard's area
                 # i = int(line[4])
-                area = float(line[6:].strip())
+                area = float(line.split('=')[1])
                 self.local_areas[f'g{i}'].append(area)
         
         self.n_iterations = iteration

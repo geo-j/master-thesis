@@ -4,20 +4,20 @@
 This section will provide the implementation details of the theory part (Section \ref{sec:theory}). The algorithm is implemented in C ++ and makes use of the CGAL library (\url{https://www.cgal.org}). 
 Then, given the implementation, experimental setups will be introduced. The experimental setup will include some basic test polygons to check the correct execution of the algorithm. We will also observe the behaviour of the algorithm and emphasise the importance of each of the heuristics used. Lastly, we will showcase the fragility and importance of hyperparameters.
 
-Polygons used:
-- 2 guards
-- random
-- love
-- comb
-- corridor
+% Polygons used:
+% - 2 guards
+% - random
+% - love
+% - comb
+% - corridor
 
-For every heuristic:
-- show how each polygon behaves when turning it off
+% For every heuristic:
+% - show how each polygon behaves when turning it off
 
-Try to see if the comb polygon scales
+% Try to see if the comb polygon scales
 
 \subsection{Heuristics}
-In this subsection we will observe the role played by each of the heuristics used. We will additionally notice how different heuristics are more relevant for different types of polygons. In order to do so, we will run the program with all of the heuristics but one, for each of the heuristics. By analysing the difference in movement for each of the guards', we will be able to assess the influence every heuristic has on each type of polygon.
+In this subsection we will observe the role played by each of the heuristics used. We will additionally notice how different heuristics are more relevant for different types of polygons. In order to do so, we will run the program with all the heuristics but one, for each of the heuristics. By analysing the difference in movement for each of the guards', we will be able to assess the influence every heuristic has on each type of polygon.
 
 We will use fixed hyperparameters for all the runs. This will allow us to focus on the differences between the heuristics. Later in this section we will also discuss the actual hyperparameter choice. As such, we will use a momentum past weight $\gamma = 0.8$ and pull attraction $\beta = 1$. The learning rate will be varied per polygon and type of experiment. This choice is due to the fragility of the algorithm implementation and will be explained later in this section.
 
@@ -37,7 +37,7 @@ We will compare how the guards move when we are using all the heuristics to when
 
 Figure \ref{fig:no_momentum} displays the area seen per iteration for the arbitrary polygon Both the total area seen and the individual area seen by each are shown. Starting with almost the whole area seen, the guards are eventually optimally placed in a position from which the whole polygon is seen. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Using momentum allows the overall seen area to keep a steady trajectory towards its maximum. Additionally, guards quickly find their optimum in only 4 iterations, without many oscillations. In Subfigure \ref{fig:no_momentum2} however we can observe how the total area fluctuates. The guards also display large jumps close to iterations 5 and 20. These jumps cause the overall progress towards the optimum to be less stable. For example, when guard 2 has a sudden drop in the area it sees around iteration 5, the total area seen naturally drops as well, and only recovers after iteration 20, when guard 0 makes another large jump. This behaviour also suggests that the movement of one guard can heavily influence others, resulting in a noisy behaviour and in a higher number of iterations.
 % Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. 
-Therefore, it becomes clearer how momentum allows the smoothening of noisy guard movements. Additionally, we reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations (in this example, 3). When not using momentum, the number of iterations increases substantially to 24. Momentum thus is a crucial improving heuristic to our whole algorithm, both in speedup as well as in the smootheness of the process.
+Therefore, it becomes clearer how momentum allows the smoothening of noisy guard movements. Additionally, we reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations (in this example, 3). When not using momentum, the number of iterations increases substantially to 24. Momentum thus is a crucial improving heuristic to our whole algorithm, both in speedup and in the smoothness of the process.
 
 \begin{figure}[h!]
     \centering
@@ -59,7 +59,7 @@ Therefore, it becomes clearer how momentum allows the smoothening of noisy guard
 In this section we will discuss the impact line search has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:line_search}, line search determines how far a guard should move into the optimal direction. In this way, it computes the optimal position of a guard on the direction line given a step size.
 
 For our experiments, we will be using a step size factor of 2. This will allow us to search a larger space of position possibilities knowing the direction of the gradient descent. 
-Namely, we will start with a factor of $\frac 1 x$ and we will increase it by a factor of $s$ up to factor $x$. We choose step size factor $s = 2$ and $x = 32$ so that we are able to choose in between 10 positions at every iteration. We will pick for the best solution along all the step size based on the largest area increase. Firstly, we will start with a more finely-grated search closer to the actual value of the gradient. This step will check whether the gradient descent overshoots. Then, we will check farther away from the actual value of the gradient for the case that a larger gain in the guard positioning is possible.
+Namely, we will start with a factor of $\frac 1 x$, and we will increase it by a factor of $s$ up to factor $x$. We choose step size factor $s = 2$ and $x = 32$ so that we are able to choose in between 10 positions at every iteration. We will pick for the best solution along all the step size based on the largest area increase. Firstly, we will start with a more finely-grated search closer to the actual value of the gradient. This step will check whether the gradient descent overshoots. Then, we will check farther away from the actual value of the gradient for the case that a larger gain in the guard positioning is possible.
 
 A suggestive way to observe how well Line Search works is with the comb polygon with four teeth from Figure \ref{fig:comb}.
 
@@ -369,7 +369,7 @@ In the case of polygons who are not completely seen at initialisation time, it i
 
 Therefore, we believe a randomised placement of the guards during the greedy initialisation would be beneficial for giving a head start to the algorithm. However, due to time constraints, this heuristic is to be explored more with a more robust algorithm implementation.
 % - momentum
-- reflex vertex pull
+% - reflex vertex pull
     % - onto reflex vertex
     % - pull Capping
 % - line search
@@ -377,3 +377,48 @@ Therefore, we believe a randomised placement of the guards during the greedy ini
 % - hidden gradient
 % - angle behind reflex vertex
 % - greedy initialisation
+
+\subsection{Scaling for the Comb Polygon}
+In this section we will observe how the algorithm scales on the comb polygon. We will take the comb polygons with 2, 3, ..., 10, 15, 20, 50, 100 teeth. We will note how the algorithm progresses in terms of the total area seen per iteration.
+As such, we will run the algorithm with all heuristics for all the previously mentioned comb polygons. All guards will start at the same $y$-coordinate, 0.1 units apart from each other. An example of such a starting point can be found in Figure \ref{fig:comb6_start_pos}. In this way, we can ensure that the performance of the algorithm can be compared using the same starting position of the guards. We will deem a timeout of two hours for declaring an algorithm unfeasible for larger polygons. We will then analyse how the algorithm performed under each of the circumstances. Lastly, we will offer some points of improvement.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{experiments/comb6_start_pos.png}
+    \caption{In the comb polygon with 6 teeth, all guards start at the same $y$-coordinate, with 0.1 units in between them.}
+    \label{fig:comb6_start_pos}
+\end{figure}
+
+We expect that the number of iterations needed would scale with the number of teeth of the polygon. We are also interested in how the execution time would scale. We expect that the time limit would already be achieved with less than 20 comb teeth.
+
+Figure \ref{fig:all_combs} display the progression of our algorithm for the comb polygons with 2, 3, ..., 10, 15, 20 teeth within one hour. The comb polygons with 50 and 100 teeth did not complete any iteration within that time.
+For comb polygons with 5 teeth and more than 6 teeth, the timeout was not enough to find a feasible solution. Nonetheless, it is worth discussing their behaviour, as it highlights the different issues the algorithm faces. 
+For comb polygons with 7, 9 and 10 teeth, the guards appear to be stuck in a local plateau that it did not manage to escape. This can be traced to an edge case where the guards are stuck in their position because their movement vector does not improve the total area. Another reason why the guards do not move is that they are still trying to maximise their local viewed area in the case where the total area seen cannot be increased within that step. This could result in them all moving to the same part of the polygon. Since that part of the polygon maximises their locally seen area, they will not move anymore.
+For comb polygon with 5 teeth, the guards appear to be stuck in a local maxima that they manage to escape. Unfortunately, they later return to it and restart the cycle. It is unclear whether the comb polygon with 8 teeth would display a similar looping behaviour. Given the timeout, the guards trying to solve the comb polygon with 8 teeth display a less predictable behaviour. We believe that hyperparameter tuning could address this issue.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = \textwidth]{experiments/all_combs_areas.png}
+    \caption{The percentage of the area seen in terms of iterations for comb polygons with 2, 3, ..., 10, 15, and 20 teeth.}
+    \label{fig:all_combs}
+\end{figure}
+
+Conversely, it is also crucial to address the comb polygons which the algorithm manage to solve: 2, 3, 4 and 6 teeth. In this case, we can observe a clear scaling: the more teeth a comb polygon has, the longer it takes to be solved. What is more, the solution also scales with the number of teeth. The comb polygon with 4 and 6 teeth take twice as many iterations to be solved than the ones with 2 and 3 teeth, respectively. We would expect a similar behaviour for comb polygons with more teeth, if the algorithms would finish.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = \textwidth]{experiments/good_combs_areas.png}
+    \caption{The percentage of the area seen in terms of iterations for comb polygons with 2, 3, 4, and 6 teeth.}
+    \label{fig:good_combs}
+\end{figure}
+
+It is worth discussing how the initial guard placement and comb polygon shapes could influence the performance of the algorithm.
+Firstly, it is importance to discuss the initial placement strategy. Guards are placed in the same lower left part of the polygon. However, the larger a polygon, the lower the initially seen area. For example, we can observe how the comb polygon with 2 teeth starts at more than 80\% seen area. On the other hand, the comb polygon with 20 teeth has a less than 65\% seen area at start. We could argue that this gives larger polygons a start disadvantage.
+Moreover, the algorithm is sensitive to the shape of the polygons. The bigger a comb polygon grows, the sharper and narrower its teeth are. A good example in this case is Figure \ref{fig:comb20}, which displays a comb polygon with 20 teeth. Clearly, the teeth are much narrower than in the case of a comb with 4 teeth. This raises the question about the role the shape of the teeth plays into the algorithm performing better or worse. A possible solution to this aspect would be to scale up the polygon. However, a similar question would remain: does the algorithm necessarily perform better or worse because of the polygon shape? and what would be the optimal such shape?
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{experiments/comb20.png}
+    \caption{Comb polygon with 20 teeth.}
+    \label{fig:comb20}
+\end{figure}
