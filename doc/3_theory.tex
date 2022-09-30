@@ -386,7 +386,8 @@ The factor $\mu$ becomes thus a hyperparameter to experiment with.
 \label{sec:line_search}
 In this section we introduce another extension to the regular gradient descent algorithm: Line Search \cite{swann1969survey}. Its aim is to use gradient descent's descending direction as a guide for finding the optimal solution to the optimisation function. Then, given a step size factor, multiple solutions along the descending line are computed. The optimal one for the specific iteration is chosen.
 
-Figure \ref{fig:line} illustrates an example for this extension. Take guard $g$ and reflex vertex $r$. Let $\frac 1 x$ be the starting search factor, and $s$ the step size factor. Recall that $M_i$ is the optimal direction for a guard at iteration $i$. As such, line search will compute the optimal guard position $g_{i + 1} = g_i + \frac{t}{x}M_i(g_i), \text{ with } t \text{ the best position for the guard from } \{\frac 1 xM_i, \frac{s}{x}M_i(g_i), \frac{s^2}{x}M_i(g_i), ...\}$. The dashed line represents the direction of gradient descent, as computed based on the gradient and reflex vertex pull computations. Given a step size $s$, 3 different possible new guard positions can be identified: $g'_{i_1} = g_i + \frac 1 xM_i(g_i)$,  $g'_{i_2} = g_i + \frac s x M_i(g_i)$, $g'_{i_3} = g_i + \frac{s^2}{x} M_i(g_i)$. 
+Figure \ref{fig:line} illustrates an example for this extension. Take guard $g$ and reflex vertex $r$. Let $\frac 1 x$ be the starting search factor, and $s$ the step size factor. Recall that $M_i$ is the optimal direction for a guard at iteration $i$. As such, line search will compute the optimal guard position $g_{i + 1} = g_i + \frac{t}{x}M_i(g_i), \text{ with } t \text{ the best position for the guard from } \{\frac 1 xM_i, \frac{s}{x}M_i(g_i), \frac{s^2}{x}M_i(g_i), ...\}$. The dashed line represents the direction of gradient descent, as computed based on the gradient and reflex vertex pull computations. Given a step size $s$, 3 different possible new guard positions can be identified: $g'_{i_1} = g_i + \frac 1 xM_i(g_i)$,  $g'_{i_2} = g_i + \frac s x M_i(g_i)$, $g'_{i_3} = g_i + \frac{s^2}{x} M_i(g_i)$.
+% By starting with a proper step size factor, we deploy a more finely-grated search closer to the actual value of the gradient. The proper step size factory checks thus whether the gradient descent overshoots. Then, we will check for the best solutions with an improper step size factor. This will allow us to search for a guard positioning farther than the gradient. Lastly, we will also check whether the actual gradient value is the best.
 The optimal guard will be the one with the largest global area seen increase. If the global area is not increased, a best solution is also comprised of a guard gaining visibility to a previously unseen part of the polygon.
 
 It is worth mentioning that Line Search deems the use of a learning rate obsolete. Because the search factor finds the optimal position on the direction line, it thus acts as a learning rate.
@@ -397,8 +398,6 @@ It is worth mentioning that Line Search deems the use of a learning rate obsolet
     \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 3 possible guard positioning on the dashed gradient descent line: $g'_{i_1}, g'_{i_2}, g'_{i_3}$. The best of them is chosen based on the size of the newly visible area seen.}
     \label{fig:line}
 \end{figure}
-
-It is worth mentioning that using 
 
 \subsection{Reflex Area}
 \label{sec:reflex_area}
