@@ -426,3 +426,21 @@ Moreover, the algorithm is sensitive to the shape of the polygons. The bigger a 
     \caption{Comb polygon with 20 teeth.}
     \label{fig:comb20}
 \end{figure}
+
+\subsection{Hyperparameter Sensitivity}
+\label{sec:hyperparameters}
+The algorithm is highly sensitive to the hyperparameter choices, polygons shapes and sizes, and guard starting points. We have already emphasised how the hyperparameter values have been chosen: other values than the ones used would result in the program crashing on not terminating. Similarly, in the context of the comb polygon, we have discussed that the polygon shape can have a crucial effect on the performance of the algorithm.
+
+In this section we will additionally explain how the guard starting points influence the outcome of the program. We will use the irrational guards polygon \cite{abrahamsen2021art} as an example.
+The polygon can be guarded by 3 guards with irrational coordinates, or 4 guards with rational coordinates. We will thus compare these types of positionings. We will place 3 guards at an approximation of the irrational coordinates, and 4 guards at arbitrary rational coordinates. The approximated irrational guards will have coordinates $(2, 0.59), (19, 1.71), (10.57, 2.12)$. The arbitrary guards will have coordinates $(5, 0), (5.5, 0), (6, 0), (6.5, 0)$.
+
+Figure \ref{fig:irrational} displays the difference in runs between the previously mentioned guard placements. The orange line displays the algorithm run for the guard irrational approximation coordinates. As expected, the algorithm deems that the whole polygon is seen within the first iteration. On the other side, the blue line shows the algorithm performance for the guards with rational coordinates. Unfortunately, the program in this case crashes after the 8th iteration. The error was unclear and the time constraints of this thesis did not allow us to solve it.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{experiments/irrational_areas.png}
+    \caption{Comparison for the irrational guards polygon between guards with approximately irrational coordinates and rational guard coordinates.}
+    \label{fig:irrational}
+\end{figure}
+
+Therefore, we believe that the irrational guards polygon is a suggestive example to the sensitivity of the algorithm to initial guard placements. The starting position of the guards can determine whether the algorithm is able to escape local minima or not crash.
