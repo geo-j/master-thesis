@@ -13,12 +13,3 @@ The program does not scale. For comb polygons with more than 6 teeth, the waitin
 % - except for the few test polygons (2 guards, random, comb), all the other testbeds (Simon's) don't work because the algorithm gets stuck/crashes
 % - for bigger polygons (more guards) it becomes slow very fast (unfeasible)
 - initial guard placement
-
-
-\section{Further Progress}
-- improve the efficiency of the code
-    - can add a flag for guards whose gradient has been computed instead of copying the vector
-- find a more efficient way of coding to tackle the edge-cases
-- implement an expiry date for the reflex area
-- implement algorithm for love polygon - currently crashes 
-- init gradient is not randomised -> should do that for finding actually working starting positions
