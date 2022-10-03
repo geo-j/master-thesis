@@ -1,9 +1,9 @@
 \section{Problems Encountered}
 The development of this algorithm has encountered a number of important problems that affected its progress.
 
-A large number of issues were posed by the CGAL library itself, due to its non-detailed errors and lack of explicit documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons).
+Numerous issues were posed by the CGAL library itself, due to its non-detailed errors and lack of explicit documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons).
 
-Additionally, the program is only able to work with a very limited range of simple polygons. The algorithm is thus sensitive to the heuristics used, the shape of the polygons and the values of the hyperparameters. In the Section \ref{sec:experiments} we have mentioned some of the shapes of polygons that the algorithm can solve. 
+Additionally, the program is only able to work with a very limited range of simple polygons. The algorithm is thus sensitive to the heuristics used, the shape of the polygons and the values of the hyperparameters. In the Section \ref{sec:experiments} we have mentioned some shapes of polygons that the algorithm can solve. 
 % Some of the polygons the algorithm can solve under the tested circumstances include those mentioned in Section \ref{sec:experiments}. 
 The irrational guards polygon can only be solved if the irrational guards are already very close to the optimum. Polygons from the APGlib library \cite{art-gallery-instances-page} have also been tested. However, the program always gets stuck with them.
 
