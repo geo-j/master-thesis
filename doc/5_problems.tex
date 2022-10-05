@@ -1,9 +1,18 @@
 \section{Problems Encountered}
+\label{sec:problems}
 The development of this algorithm has encountered a number of important problems that affected its progress.
 
-Numerous issues were posed by the CGAL library itself, due to its non-detailed errors and lack of explicit documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons).
+Some edge-cases still remain unresolved. For example, Figure \ref{fig:edge} shows a frequently appearing one: the blue guard is stuck on the vertex because its movement direction cannot be projected inside the polygon. So, it cannot move downwards and is instead stuck on the vertex.
 
-Additionally, The algorithm is thus sensitive to the heuristics used, the shape of the polygons and the values of the hyperparameters. In the Section \ref{sec:experiments} we have mentioned some shapes of polygons that the algorithm can solve, the hyperparameters used and the initial guard positions.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.6\textwidth]{experiments/edge_case.png}
+    \caption{Edge case for when the blue guard cannot move because its movement direction cannot be projected into a useful direction inside the polygon.}
+    \label{fig:edge}
+\end{figure}
+
+Moreover, numerous issues were posed by the CGAL library itself, due to its non-detailed errors and lack of explicit documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons). Additionally, because of the way CGAL handles number types, we frequently encountered approximation errors. For instance, some guards ``close enough'' to reflex vertices were considered to be on the reflex vertex, even if they were not. Conversely, comparing point coordinates would not always work. So sometimes guards with the same coordinates would not be considered to be overlapping.
+As such, the algorithm is thus sensitive to the heuristics used, the shape of the polygons and the values of the hyperparameters. In the Section \ref{sec:experiments} we have mentioned some shapes of polygons that the algorithm can solve, the hyperparameters used and the initial guard positions.
 % Some of the polygons the algorithm can solve under the tested circumstances include those mentioned in Section \ref{sec:experiments}. 
 We were especially interested in the irrational guards polygon \cite{abrahamsen2021art}. However, the irrational guards polygon can only be solved if the guards are already very close to the optimum. Due to a mysterious CGAL error, we could not fix this issue.
 The same vague issue happens with polygons from the APGlib library \cite{art-gallery-instances-page}. In some rare tested polygons the program only got stuck (not crashed). The APGlib library offers an extensive testbed for polygons. So, the fact that we could not address the CGAL error in this thesis' time constraints was quite dissatisfying.
