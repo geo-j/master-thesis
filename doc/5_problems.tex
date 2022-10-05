@@ -1,9 +1,11 @@
 \section{Problems Encountered}
 The development of this algorithm has encountered a number of important problems that affected its progress.
 
-A large number of issues were posed by the CGAL library itself, due to its non-detailed errors and lack of explicit documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons).
+Numerous issues were posed by the CGAL library itself, due to its non-detailed errors and lack of explicit documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons).
 
-Because of the impeded progress, the program is only able to work with a very limited range of simple polygons depending on the heuristics used and the values of the hyperparameters. Some of the polygons the algorithm can solve under the tested circumstances include those mentioned in Section \ref{sec:experiments}. The irrational guards polygon can only be solved if the irrational guards are already very close to the optimum. Polygons from the APGlib library \cite{art-gallery-instances-page} have also been tested. However, the program always gets stuck with them.
+Additionally, the program is only able to work with a very limited range of simple polygons. The algorithm is thus sensitive to the heuristics used, the shape of the polygons and the values of the hyperparameters. In the Section \ref{sec:experiments} we have mentioned some shapes of polygons that the algorithm can solve. 
+% Some of the polygons the algorithm can solve under the tested circumstances include those mentioned in Section \ref{sec:experiments}. 
+The irrational guards polygon can only be solved if the irrational guards are already very close to the optimum. Polygons from the APGlib library \cite{art-gallery-instances-page} have also been tested. However, the program always gets stuck with them.
 
 The program does not scale. For comb polygons with more than 6 teeth, the waiting time already exceeds an hour to finish.
 % - cryptic CGAL errors
@@ -11,12 +13,3 @@ The program does not scale. For comb polygons with more than 6 teeth, the waitin
 % - except for the few test polygons (2 guards, random, comb), all the other testbeds (Simon's) don't work because the algorithm gets stuck/crashes
 % - for bigger polygons (more guards) it becomes slow very fast (unfeasible)
 - initial guard placement
-
-
-\section{Further Progress}
-- improve the efficiency of the code
-    - can add a flag for guards whose gradient has been computed instead of copying the vector
-- find a more efficient way of coding to tackle the edge-cases
-- implement an expiry date for the reflex area
-- implement algorithm for love polygon - currently crashes 
-- init gradient is not randomised

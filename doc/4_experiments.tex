@@ -57,7 +57,7 @@ Figure \ref{fig:no_momentum} displays the area seen per iteration for the arbitr
     \label{fig:no_momentum}
 \end{figure}
 
-Thus, it becomes clearer how momentum allows the smoothening of noisy guard movements. We reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations. When not using momentum, the number of iterations increases substantially. Momentum thus is a crucial improving heuristic to our whole algorithm, both in terms of speedup and in the smoothness of the process.
+Thus, it becomes clearer how momentum allows the smoothening of noisy guard movements. We reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations. When not using momentum, the number of iterations increases substantially. Momentum thus is a crucial improving heuristic to our whole algorithm, both in terms of speed-up and in the smoothness of the process.
 
 \subsubsection{Without Line Search}
 In this section we will discuss the impact line search has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:line_search}, line search determines how far a guard should move towards the direction vector. In this way, it computes the optimal position of a guard on the movement direction given a step size.
@@ -336,7 +336,7 @@ In terms of efficiency, the optimal solution is achieved in more iterations when
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_angle_pos1.png}
-        \caption{No angle behind the reflex vertex. The orange guard's movement is towards the left-side outside of the polygon.}
+        \caption{No angle behind the reflex vertex. The orange guard's movement is towards the left-side outside the polygon.}
         \label{fig:no_angle_pos1}
     \end{subfigure}
     \vfill
@@ -369,7 +369,7 @@ So far we have not used greedy initialisation in any of our examples. The reason
     \label{fig:comb_greedy}
 \end{figure}
 
-In the case of polygons who are not completely seen at initialisation time, it is unclear whether the greedy placement improves the overall progress. How well the algorithm behaves is highly dependent on the initial placement of the guards. Namely, the algorithm often does not finish with different starting positions (it is stuck in local optima). Because of this drawback, we cannot create extensive experiments with different starting guard positionings. It is additionally not feasible to find a generalisation in the type of placements that allow the algorithm to finish.
+In the case of polygons who are not completely seen at initialisation time, it is unclear whether the greedy placement improves the overall progress. How well the algorithm behaves is highly dependent on the initial placement of the guards. Namely, the algorithm often does not finish with different starting positions (it is stuck in local optima). Because of this drawback, we cannot create extensive experiments with different starting guard positions. It is additionally not feasible to find a generalisation in the type of placements that allow the algorithm to finish.
 
 Therefore, we believe a randomised placement of the guards during the greedy initialisation would be beneficial for giving a head start to the algorithm. However, due to time constraints, this heuristic is to be explored more with a more robust algorithm implementation.
 % - momentum
@@ -418,7 +418,7 @@ Conversely, it is also crucial to address the comb polygons which the algorithm 
 
 It is worth discussing how the initial guard placement and comb polygon shapes could influence the performance of the algorithm.
 Firstly, it is importance to discuss the initial placement strategy. Guards are placed in the same lower left part of the polygon. However, the larger a polygon, the lower the initially seen area. For example, we can observe how the comb polygon with 2 teeth starts at more than 80\% seen area. On the other hand, the comb polygon with 20 teeth has a less than 65\% seen area at start. We could argue that this gives larger polygons a start disadvantage.
-Moreover, the algorithm is sensitive to the shape of the polygons. The bigger a comb polygon grows, the sharper and narrower its teeth are. A good example in this case is Figure \ref{fig:comb20}, which displays a comb polygon with 20 teeth. Clearly, the teeth are much narrower than in the case of a comb with 4 teeth. This raises the question about the role the shape of the teeth plays into the algorithm performing better or worse. A possible solution to this aspect would be to scale up the polygon. However, a similar question would remain: does the algorithm necessarily perform better or worse because of the polygon shape? and what would be the optimal such shape?
+Moreover, the algorithm is sensitive to the shape of the polygons. The bigger a comb polygon grows, the sharper and narrower its teeth are. A good example in this case is Figure \ref{fig:comb20}, which displays a comb polygon with 20 teeth. Clearly, the teeth are much narrower than in the case of a comb with 4 teeth. This raises the question about the role the shape of the teeth plays into the algorithm performing better or worse. A possible solution to this aspect would be to scale up the polygon. However, a similar question would remain: does the algorithm necessarily perform better or worse because of the polygon shape? What would be the optimal such shape?
 
 \begin{figure}[h!]
     \centering
@@ -426,3 +426,21 @@ Moreover, the algorithm is sensitive to the shape of the polygons. The bigger a 
     \caption{Comb polygon with 20 teeth.}
     \label{fig:comb20}
 \end{figure}
+
+\subsection{Hyperparameter Sensitivity}
+\label{sec:hyperparameters}
+The algorithm is highly sensitive to the hyperparameter choices, polygons shapes and sizes, and guard starting points. We have already emphasised how the hyperparameter values have been chosen: other values than the ones used would result in the program crashing on not terminating. Similarly, in the context of the comb polygon, we have discussed that the polygon shape can have a crucial effect on the performance of the algorithm.
+
+In this section we will additionally explain how the guard starting points influence the outcome of the program. We will use the irrational guards polygon \cite{abrahamsen2021art} as an example.
+The polygon can be guarded by 3 guards with irrational coordinates, or 4 guards with rational coordinates. We will thus compare these placements. We will position 3 guards at an approximation of the irrational coordinates, and 4 guards at arbitrary rational coordinates. The approximated irrational guards will have coordinates $(2, 0.59), (19, 1.71), (10.57, 2.12)$. The arbitrary guards will have coordinates $(5, 0), (5.5, 0), (6, 0), (6.5, 0)$.
+
+Figure \ref{fig:irrational} displays the difference in runs between the previously mentioned guard placements. The orange line displays the algorithm run for the guard irrational approximation coordinates. As expected, the algorithm deems that the whole polygon is seen within the first iteration. On the other side, the blue line shows the algorithm performance for the guards with rational coordinates. Unfortunately, the program in this case crashes after the 8th iteration. The error was unclear and the time constraints of this thesis did not allow us to solve it.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.7\textwidth]{experiments/irrational_areas.png}
+    \caption{Comparison for the irrational guards polygon between guards with approximately irrational coordinates and rational guard coordinates.}
+    \label{fig:irrational}
+\end{figure}
+
+Therefore, we believe that the irrational guards polygon is a suggestive example to the sensitivity of the algorithm to initial guard placements. The starting position of the guards can determine whether the algorithm is able to escape local minima or not crash.
