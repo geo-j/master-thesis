@@ -31,27 +31,38 @@ Figure \ref{fig:gradient_descent} illustrates an intuitive example of applying g
 \end{figure}
 
 \subsection{Thesis Goal}
+This thesis will thus be an optimisation algorithm engineering paper. The main goal is to create and implement an algorithm that uses gradient descent to approximate the solution to the Art Gallery Problem. The explored research question will be whether the Art Gallery Problem can be efficiently solved using gradient descent. Additional to gradient descent, the algorithm will deploy different heuristics to address various shortcomings and edge-cases.
+% As such, we expect to be able to provide convergence guarantees for the algorithm. 
+The algorithm will be implemented in C ++ using the CGAL library (\url{https://www.cgal.org}).
 
-This thesis will thus be an optimisation algorithm engineering paper. The main goal is to create and implement an algorithm that uses gradient descent to approximate the solution to the Art Gallery Problem. The explored research question will be whether the Art Gallery Problem can be efficiently solved using gradient descent. As such, we expect to be able to provide convergence guarantees for the algorithm. The algorithm will be implemented in C++ using the CGAL library (\url{https://www.cgal.org}). It will be then compared to other existing algorithm implementations.
-
+This paper is organised as follows: Section \ref{sec:literature} offers an overview of existing work; Section \ref{sec:theory} explains how in theory gradient descent is used to solve the Art Gallery Problem and what heuristics we can make use of to improve the performance of our algorithm; Section \ref{sec:experiments} offers an overview of how well our algorithm performs in practice. Lastly, Section \ref{sec:problems} reveals the major issue this project has encountered.
 % As such, preliminary research and its implementation is presented as preparation for the second phase of the thesis project. Section \ref{sec:literature} offers an existing literature overview. Next, Section \ref{sec:theory} describes the relevant theory in detail.
 % As a preview, Section \ref{sec:experiments} shows some introductory algorithm implementations and their performance.
 % Lastly, Section \ref{sec:thesis} presents the development plan for the second phase of the Master's Thesis project.
 
 \subsection{Discussion}
-- evaluation of what I did
-    - selection of heuristics that make sense (because their combination is too long)
-- "conclusion"
+As previously mentioned, this thesis focussed on implementing and evaluating a gradient descent algorithm to find a solution to the Art Gallery Problem. Indeed, this goal has been achieved for a few cases. 
+Nonetheless, it is worth discussing the development process and the performance of the algorithm. Gradient descent is quite a straight-forward approach. However, its implementation in the context of the Art Gallery Problem is not. There were numerous edge-cases to be taken into account. For many of them, we devised various heuristics with hyperparameters. Other heuristics (momentum) were created as a solution to the gradient descent's sudden jumps shortcomings.
+
+The resulting program is sensitive to hyperparameter choices, polygon shapes and starting guard positions. For this reason, we only provide qualitative evaluations for the heuristics used to extend on gradient descent. Namely, the experiments section discusses the importance of each of the heuristics used. The way this will be done is by running the program with all heuristics but the one whose importance we are discussing. In this way, we will assess its significance in its absence. The reason behind this experimental setup is that combinations of all heuristics are both verbose and unnecessary. Given that the program is still limited to a few number of examples, we cannot use extensive quantitative experimental tools to test its performance.
+In this way, we provide a pragmatic overview to the usefulness of each of the heuristics and hyperparameters used. Namely, we analyse on what the type of polygons different heuristics and hyperparameter values would provide the best results.
+
+
+
+% - evaluation of what I did
+%     - selection of heuristics that make sense (because their combination is too long)
+% - "conclusion"
 
 \section{Future Work}
-- improve the efficiency of the code
-    - can add a flag for guards whose gradient has been computed instead of copying the vector
-- find a more efficient way of coding to tackle the edge-cases
-- implement an expiry date for the reflex area
-- implement algorithm for love polygon - currently crashes 
-- init gradient is not randomised -> should do that for finding actually working starting positions
-- give an impression on the code improvement
-- statistics on the code
-    - type of input 
-    - visualisations
-    - savefiles
+Currently, the program offers a state-of-the-art view about its practical possibilities.
+In the future, it would be suitable to extend it with more general functionalities and capabilities.
+
+One of the most crucial aspects of improvement for the program would be to solve the existing errors and bugs. As of now, the program crashes for specific input polygons. Another important element to consider would be to code it more efficiently. The program does not scale well. 
+Additionally, some features and heuristics are not fully implemented. For example, the greedy initialisation of the guards' position is deterministic. In order to quantitatively assess the performance of the algorithm, a truly randomised greedy initialisation would be required for statistical significance.
+% - improve the efficiency of the code
+%     - can add a flag for guards whose gradient has been computed instead of copying the vector
+% - find a more efficient way of coding to tackle the edge-cases
+% - implement an expiry date for the reflex area
+% - implement algorithm for love polygon - currently crashes 
+% - init gradient is not randomised -> should do that for finding actually working starting positions
+% - give an impression on the code improvement
