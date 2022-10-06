@@ -25,14 +25,14 @@ Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery
 
 
 Let $\bigtriangledown f$ be the gradient of $f$. The gradient then indicates the direction of the steepest descent for the objective function $f(g)$.
-The learning rate (step size) $\alpha$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and updated based on the behaviour of the optimisation function. 
+The learning rate (step size) $\alpha$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and chosen based on the behaviour of the optimisation function. 
 
 After the gradient $\bigtriangledown f$ is computed, we can use it to calculate the new optimised position $g'$ of guard $g$: $$g' = g + \alpha\bigtriangledown f(g).$$
 
 
 In later sections we will experiment with various learning rates. As such, we will explore how they influence the performance of our algorithm in relation to different test polygons. 
 
-\newpage
+% \newpage
 \subsubsection{Computing the Gradient}
 
 Given that $f$ is a function that describes the visibility area of a point $g$, we first need to define how its gradient is computed. We will simplify the gradient computation without losing generality. As such, we will rotate the plane with rotation matrix $R$, so that $g$ and any reflex vertex $r$ have the same $x$-coordinate. In this way, we only need to compute the gradient when we vary the $y$-coordinate. The computation of the gradient remains the same regardless of the rotation applied to the plane.
@@ -56,10 +56,10 @@ We will now create a canonical geometrical construction that allows us to furthe
     \label{fig:gradient}
 \end{figure}
 
-Take a boundary line segment of $P$, $r$ a reflex vertex inside $P$ and $g$ a guard whose optimal position we are interested in. The reflex vertex $r$ is seen by $g$. Let $\overline{pr} = a$ be known, and let $\triangle rpp' = \triangle_2$. Similarly, let $b$ be the known distance between $r$ and the polygon boundary in question.
+Take a boundary line segment of $P$, $r$ a reflex vertex inside $P$ and $g$ a guard whose optimal position we are interested in. The reflex vertex $r$ is seen by $g$. Let $\overline{gr} = a$ be known, and let $\triangle rgg' = \triangle_2$. Similarly, let $b$ be the known distance between $r$ and the polygon boundary in question.
 
 
-Let $\partial y$ be an extremely small change in the $y$-coordinate of $g$. Let $g'$ be the new position of $g$ given the change $\partial y$. The point $g'$ can see then up to a new point around $r$ on the polygon boundary. Let thus the new observed segment on the polygon boundary be $L$. As such, let $\triangle_1$ denote the increase in the visibility area of $g$ when it moves to position $g'$:
+Let $\partial y$ be an extremely small change in the $y$-coordinate of $g$. Let $g'$ be the new position of $g$ given the change $\partial y$. The point $g'$ can see more around $r$ on the polygon boundary. Let $L$ be the new segment that $g'$ sees on the polygon boundary. As such, let $\triangle_1$ denote the increase in the visibility area of $g$ when it moves to position $g'$:
 
 \begin{equation}
     \bigtriangledown \text{Area}_r(g) = \triangle_1. \label{eq:derivative}
@@ -117,7 +117,7 @@ We can now use the coordinates of the gradient $\bigtriangledown f$ to compute t
     \label{fig:vperp}
 \end{figure}
 
-Let $\vec v$ be the vector corresponding to the direction of movement from guard $g$ to a reflex vertex $r$, such that $\vec{v} = (r - g) = (x, y)^\intercal$, with norm $||v|| = a$. So, $||\frac{\vec v}{a}|| = 1$.
+Let $\vec v$ be the vector corresponding to the direction of movement from guard $g$ to a reflex vertex $r$, such that $\vec{v} = (r - g) = (x, y)^\intercal$, with norm $||\vec{v}|| = a$. So, $||\frac{\vec v}{a}|| = 1$.
 
 Let $\vec{v}^\perp  = (g' - g)$ be the vector corresponding to the direction of movement from guard $g$ to its new position $g'$. Vector $\vec v^\perp$ is orthogonal to $\vec{v}$, in the same direction as $\bigtriangledown f$, such that $||\vec{v}|| = ||\vec{v}^\perp|| = a$. We will use the coordinates of $\vec{v}^\perp$ to compute the coordinates of $\bigtriangledown f$ and thus the direction in which $g$ needs to move.
 
@@ -126,18 +126,18 @@ The coordinates of $\vec v^\perp$ can then be computed using the construction fr
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.35\textwidth]{theory/v_square.png}
-    \caption{Computing the coordinates of $\vec v^\perp$ given the guard $g$ and the reflex vertex $r(x, y)$.}
+    \caption{Computing the coordinates of $\vec v^\perp$ given the guard $g$ and the reflex vertex $r = (x, y)$.}
     \label{fig:vsquare}
 \end{figure}
 
 We know that the norm of the total gradient $\bigtriangledown f$ is 
 \begin{align}
-    ||\bigtriangledown f(g)|| \overset{(\ref{eq:normf2})}{=} &||\sum \left(0, \frac{b^2}{2a}\right)^\intercal|| \\
-    \overset{(\ref{eq:normf1})}{=} &\sqrt{\left(\frac{b^2}{2a}\right)^2} \\
+    ||\bigtriangledown f(g)|| \overset{(\ref{eq:normf2})}{=} &||\sum \left(0, \frac{b^2}{2a}\right)^\intercal|| \nonumber \\
+    \overset{(\ref{eq:normf1})}{=} &\sqrt{\left(\frac{b^2}{2a}\right)^2} \nonumber \\
     ||\bigtriangledown f(g)|| = &\frac{b^2}{2a}. \label{eq:normf}
 \end{align}
 
-Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it from the norm of $\vec v^\perp$ with $\frac 1 a$. Therefore, the gradient for guard $g$ and one reflex vertex $r \in \mathit{Vis}(g)$ can be computed as 
+Since $\bigtriangledown f$ has the same direction as $\vec v^\perp$, we wish to normalise it with $\frac 1 a$ (the norm of $\vec v^\perp$). Therefore, the gradient for guard $g$ and one reflex vertex $r \in \mathit{Vis}(g)$ can be computed as 
 \begin{align}
     \bigtriangledown f(g) = \vec v^\perp \frac{b^2}{2a} \frac 1 a. \label{eq:f}
 \end{align}
@@ -150,7 +150,7 @@ As mentioned before, the total gradient for guard $g$ and all the reflex vertice
 
 The new position $g'$ of guard $g$ based on all the reflex vertices it can see is: 
 \begin{equation}
-    g' = g + \alpha\bigtriangledown f.
+    g' = g + \alpha\bigtriangledown f(g).
     \label{eq:l}
 \end{equation}
 
@@ -175,9 +175,9 @@ However, $\triangle_2$ is already seen by guard $g_2$. Since this area is alread
 
 First, we need to compute the shared area seen $\triangle_2$ as:
 \begin{align}
-    \text{Area}_{\triangle_2}(g) &= \text{Area}_{\triangle_1 + \triangle_2}(g) - \text{Area}_{\triangle_2}(g) \\
-                              &= (b_1 + b_2)^2\frac{\partial y}{2a} - b_1^2\frac{\partial y}{2a} \\
-                              &= \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a}. \label{eq:multiple_areas} 
+    \text{Area}_{\triangle_2}(g) &= \text{Area}_{\triangle_1 + \triangle_2}(g) - \text{Area}_{\triangle_2}(g) \nonumber \\
+                              &= (b_1 + b_2)^2\frac{\partial y}{2a} - b_1^2\frac{\partial y}{2a} \nonumber \\
+    \text{Area}_{\triangle_2}(g)&= \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a}. \label{eq:multiple_areas} 
 \end{align}
 Then, we can compute the area $\triangle_1$ seen exclusively by $g_1$ by subtracting the shared area of $\triangle_2$ from the total area seen by $g_1$: 
 \begin{align*}
@@ -187,7 +187,7 @@ Then, we can compute the area $\triangle_1$ seen exclusively by $g_1$ by subtrac
 \end{align*}
 
 \subsubsection{Computing the Gradient for Multiple Guards}
-We can now generalise the gradient computation to $m$ guards and intersection points. Let $g$ be the guard whose position we wish to optimise around reflex vertex $r$ as before. Let the areas highlighted in blue in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by the other $m - 1$ guards. Let the visibility region of $g$ intersect other guards' visibility regions in $m$ intersection points $p_1, p_2, ..., p_m$. Let the distance from the reflex vertex $r$ to the intersection points be $b_{11}, b_{12}, ..., b_{m1}, b$.
+We can now generalise the gradient computation to $m$ guards and $m$ intersection points. Let $g$ be the guard whose position we wish to optimise around reflex vertex $r$ as before. Let the areas highlighted in blue in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by the other $m - 1$ guards. Let the visibility region of $g$ intersect other guards' visibility regions in $m$ intersection points $p_1, p_2, ..., p_m$. Let the distance from the reflex vertex $r$ to the intersection points be $b_{11}, b_{12}, ..., b_{m1}, b$.
 
 \begin{figure}[h!]
     \centering
@@ -209,7 +209,7 @@ The areas of polygons $\triangle_1, \triangle_2, ..., \triangle_m$ do not grow l
     \label{fig:areas}
 \end{figure}
 
-Similarly to Figure \ref{fig:areas}, we can compute the area seen exclusively by $g$. From the total area $\text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}$ seen by $g$ we need to alternatively subtract the shared areas $\text{Area}_{\triangle_m}, ..., \text{Area}_{\triangle_4}, \text{Area}_{\triangle_2}$, then add the exclusively seen areas $\text{Area}_{\triangle_{m - 1}}, ..., \text{Area}_{\triangle_3}, \text{Area}_{\triangle_1}$.
+Similarly to Figure \ref{fig:areas}, we can compute the area seen exclusively by $g$. From the total area $\text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}$ seen by $g$ we need to alternatively subtract the shared areas $\text{Area}_{\triangle_m}, ..., \text{Area}_{\triangle_4},$ $\text{Area}_{\triangle_2}$, then add the exclusively seen areas $\text{Area}_{\triangle_{m - 1}}, ..., \text{Area}_{\triangle_3}, \text{Area}_{\triangle_1}$.
 
 % Figure \ref{fig:general_gradient} displays an example
 % For each area seen by multiple guards, we know the length of the subsegments in between reflex vertex $r$ and the shared area beginning and ending, respectively. 
@@ -217,7 +217,10 @@ Similarly to Figure \ref{fig:areas}, we can compute the area seen exclusively by
 
 This results in the fact that the area seen by $g$ exclusively can be computed as 
 \begin{align*}
-    \text{Area}_{\triangle_1 + \triangle_3 + ... + \triangle_{m - 1}}(g) &= \text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}(g) - \text{Area}_{\triangle_{m - 1}}(g) + \text{Area}_{\triangle_{m - 2}}(g) - ... - \text{Area}_{\triangle_2}(g) + \text{Area}_{\triangle_1}(g) \\
+    \text{Area}_{\triangle_1 + \triangle_3 + ... + \triangle_{m - 1}}(g) &= \text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}(g) \\/
+    &- \text{Area}_{\triangle_{m - 1}}(g) + \text{Area}_{\triangle_{m - 2}}(g) \\
+    &- ... \\
+    &- \text{Area}_{\triangle_2}(g) + \text{Area}_{\triangle_1}(g) \\
                                                                       &= \left(b^2 - b_{m1}^2 + b_{(m - 1)2}^2 - ... - b_{12}^2 + b_{11}^2\right)\frac{\partial y}{2a}.
 \end{align*}
 
@@ -230,8 +233,8 @@ In this section we introduce an extension to the regular gradient descent algori
 
 So, the position $g_i$ at iteration $i$ of a guard $g$ will not be calculated anymore based only on the current computation of gradient descent. Instead, it will also take into account past values of gradient descent. In order to decide how much past states influence the value of the current position, we will take each gradient value with a weight.
 
-Let $M_i$ be the momentum for a guard at iteration $i$. Let $\Delta f_i$ be the computation of the gradient descent in iteration $i$. Let the weight of a gradient descent value be a hyperparameter $\gamma$. 
-As such, we can take into account the value of the previous gradient $\Delta_{i - 1}$ with weight $\gamma$. However, we still want the current gradient $\Delta f_i$ to influence the guard's movement. This can happen with a weight of $1 - \gamma$. So, the computation for the momentum at iteration $i$ becomes $$M_i(g_i) = \gamma M_{i - 1}(g_{i - 1}) + (1 - \gamma)\Delta f_i(g_i).$$
+Let $M_i(g_i)$ be the momentum for a guard at iteration $i$. Let $\Delta f_i(g_i)$ be the computation of the gradient descent in iteration $i$. Let the weight of a gradient descent value be a hyperparameter $\gamma$. 
+As such, we can take into account the value of the previous gradient $\Delta f_{i - 1}(g_{i - 1})$ with weight $\gamma$. However, we still want the current gradient $\Delta f_i(g_i)$ to influence the guard's movement. This can happen with a weight of $1 - \gamma$. So, the computation for the momentum at iteration $i$ becomes $$M_i(g_i) = \gamma M_{i - 1}(g_{i - 1}) + (1 - \gamma)\Delta f_i(g_i).$$
 
 We start with $$M_0(g_0) = (1 - \gamma) \Delta f_0(g_0).$$
 We can then check for correctness how  the next iterations of the momentum are carried out:
@@ -255,6 +258,22 @@ In this way, our momentum computation exponentially decreases the influence of a
 
 Similarly, the new position $g_i$ of guard $g$ with learning rate $\alpha$ will now be calculated as $$g_i = g_{i - 1} + \alpha M_i(g_{i - 1}).$$
 
+\subsection{Line Search}
+\label{sec:line_search}
+In this section we introduce another extension to the regular gradient descent algorithm: Line Search \cite{swann1969survey}. Its aim is to use gradient descent's descending direction as a guide for finding the optimal solution to the optimisation function. Then, given a step size factor, multiple solutions along the descending line are computed. The optimal one for the specific iteration is chosen.
+
+Figure \ref{fig:line} illustrates an example for this extension. Take guard $g$ and reflex vertex $r$. Let $\frac 1 x$ be the starting search factor, and $s$ the step size factor. Recall that $M_i(g)$ is the optimal movement direction for a guard at iteration $i$. As such, line search will compute the optimal guard position $g_{i + 1} = g_i + \frac{s^t}{x}M_i(g_i),$ with $t$ the best step power for the guard from $\{\frac 1 xM_i, \frac{s}{x}M_i(g_i), \frac{s^2}{x}M_i(g_i), ...\}$. The dashed line represents the direction of gradient descent, as computed based on the gradient and reflex vertex pull computations. Given a step size $s$, 3 different possible new guard positions can be identified: $g'_{i_1} = g_i + \frac 1 xM_i(g_i)$,  $g'_{i_2} = g_i + \frac s x M_i(g_i)$, $g'_{i_3} = g_i + \frac{s^2}{x} M_i(g_i)$.
+% By starting with a proper step size factor, we deploy a more finely-grated search closer to the actual value of the gradient. The proper step size factory checks thus whether the gradient descent overshoots. Then, we will check for the best solutions with an improper step size factor. This will allow us to search for a guard positioning farther than the gradient. Lastly, we will also check whether the actual gradient value is the best.
+The optimal guard will be the one with the largest global area seen increase. If the global area is not increased, a best solution is also chosen if a guard is gaining visibility to a previously unseen part of the polygon, regardless of the area increase.
+
+It is worth mentioning that Line Search deems the use of a learning rate obsolete. Because the search factor finds the optimal position on the direction line, it acts thus as a learning rate.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = \textwidth]{theory/line_search.png}
+    \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 3 possible guard positioning on the dashed gradient descent line: $g'_{i_1}, g'_{i_2}, g'_{i_3}$. The best of them is chosen based on the size of the newly visible area seen.}
+    \label{fig:line}
+\end{figure}
 
 \subsection{Reflex Vertex Pull}
 
@@ -264,7 +283,7 @@ In this section we introduce an additional idea to our gradient descent algorith
 
 % the second derivative tells us what the rate of change of a quantity is
 
-As mentioned previously, we are using the first derivative to compute the gradient of a guard's movement. That is, we use the first derivative of $f$ to find the direction of a guard's movement that increases its seen area. Additionally, we can also make use of the second derivative of $f$ to explore what the rate of change of the area increase is. 
+As mentioned previously, we are using the first derivative to compute the gradient of a guard's movement. That is, we use the first derivative of $f(g)$ to find the direction of a guard's movement that increases its seen area. Additionally, we can also make use of the second derivative of $f(g)$ to explore what the rate of change in the area increase is. 
 
 We can achieve a more rapid increase in the seen area if we move a guard closer to a reflex vertex. The closer a guard is moved to a reflex vertex, the larger the increase in the area seen past the vertex. If a guard is moved directly on a reflex vertex, then the area seen past the vertex is maximised. 
 
@@ -277,18 +296,25 @@ We can achieve a more rapid increase in the seen area if we move a guard closer 
 %     \label{fig:top_reflex_vertex}
 % \end{figure}
 
-We will now explore how the pull towards a reflex vertex $r$ can be computed, with an example in Figure \ref{fig:pull}. Let the guard $g = (0, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 2$ and $b = 3$ are known. Let $h_r$ be the pull in question. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards the reflex vertex. As previously, and without losing generality, assume that $g$ and $r$ have the same $x$-coordinate by rotating the plane $R$.
+We will now explore how the pull towards a reflex vertex $r$ can be computed, with an example in Figure \ref{fig:pull}. Let the guard $g = (0, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 2$ and $b = 3$ are known. Let $h_r$ be the pull in question. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards the reflex vertex. As previously, and without losing generality, assume that $g$ and $r$ have the same $x$-coordinate by rotating the plane $R$. Combining the two movements together results in $g'$ being the final position of $g$.
+
+\begin{figure*}[!h]
+    \includegraphics[width = \textwidth]{theory/pull.png}
+    \centering
+    \caption{Computing the movements of the guard $g$ based on both the gradient and the pull towards reflex vertex $r$. The new position of the guard with learning rate $\alpha = 0.3$ becomes $g' = (0.1875, 0.3375)$.}
+    \label{fig:pull}
+\end{figure*}
 
 The gradient is computed as
 $$\bigtriangledown f(g) \overset{(\ref{eq:f})}{=} (0, \frac{b^2}{2a^2})^\intercal = (0, \frac{9}{8})^\intercal = (0, 1.125)^\intercal.$$ 
 The pull is computed as 
 $$h_r(g) \overset{(\ref{eq:h})}{=} (\frac{b^2}{2a^3}, 0)^\intercal = (\frac{9}{16}, 0)^\intercal = (0.625, 0)^\intercal.$$
-So, the new position of the guard with learning rate $\alpha = 0.3$ becomes 
-$$g' = g + \alpha(\bigtriangledown f(g) + h) = 0.3 ((0, 1.125)^\intercal + (0.625, 0)^\intercal) = (0.1875, 0.3375).$$
+So, the new position $g'$ of the guard $g$ given the learning rate $\alpha = 0.3$ becomes 
+$$g' = g + \alpha(\bigtriangledown f(g) + h(g)) = 0.3 ((0, 1.125)^\intercal + (0.625, 0)^\intercal) = (0.1875, 0.3375).$$
 
-The pull is thus the second derivative of the norm of the gradient, so 
+We will now explain how we arrived at the pull computation. The pull is the second derivative of the norm of the gradient, so 
 $$h_r(g) = \bigtriangledown ||\bigtriangledown f_r(g)|| = \left(\frac{\partial \bigtriangledown f(g)}{\partial x}, \frac{\partial \bigtriangledown f(g)}{\partial y}\right)^\intercal = \left(\frac{\partial \bigtriangledown f(g)}{\partial x}, 0\right)^\intercal.$$  
-We can now calculate $h_r$ as follows: the Euclidean norm of the gradient is $||\bigtriangledown f(g)|| = \frac{b^2}{2a} (\ref{eq:normf})$, so the norm of the second gradient as 
+We can now calculate $h_r$ as follows: the Euclidean norm of the gradient is $||\bigtriangledown f(g)|| = \frac{b^2}{2a} (\ref{eq:normf})$, so the norm of the second gradient is 
 \begin{align*}
 ||h_r(g)||&= ||\bigtriangledown ||\bigtriangledown f(g)|||| \\
        &= ||\bigtriangledown (\frac{b^2}{2a})|| \\
@@ -307,65 +333,63 @@ The reason for this choice is that computing the norm of the partial gradients, 
     \bigtriangledown ||\bigtriangledown f|| = \bigtriangledown ||&\sum_{i \in R(g)} f_i||, \\
     &R(g) = \{\text{reflex vertices of } P \text{ seen by } g\}.
 \end{align*}
-We are aware of the fallacies of this approximation. Take the opposing unit vectors $a_1 = (1, 0)^\intercal, a_2 = (-1, 0)^\intercal$. The sum of their norms $\sum_i ||a_i|| = 2$, whereas the norm of their sum is $||\sum_i a_i|| = 0$. Clearly, they are not the same. Nonetheless, we still consider this approximation due to computation speed improvements and easiness of use.
+We are aware of the fallacies of this approximation. Take the opposing unit vectors $a_1 = (1, 0)^\intercal,$ $a_2~=~(-1, 0)^\intercal$. The sum of their norms $\sum_i ||a_i|| = 2$, whereas the norm of their sum is $||\sum_i a_i|| = 0$. Clearly, they are not the same. Nonetheless, we still consider this approximation due to computation speed improvements and easiness of use.
 
-\begin{figure*}[!h]
-    \includegraphics[width = \textwidth]{theory/pull.png}
-    \centering
-    \caption{Computing the movements of the guard $g = (0, 0)$ based on both the gradient and the pull towards reflex vertex $r = (2, 0)$. The distances $a = 2$ and $b = 3$ are known. The gradient is computed as $\bigtriangledown f(g) = (0, 1.125)^\intercal$. The pull is computed as $h_r  = (0.625, 0)^\intercal$. So, the new position of the guard with learning rate $\alpha = 0.3$ becomes $g' = (0.1875, 0.3375)$. When only taking the reflex vertex pull into account, $g$ would need to move to $g'_x$. Similarly for when taking only the gradient into account, $g$ would need to move to $g'_y$. Combining the two movements together results in $g'$ being the final position of $g$.}
-    \label{fig:pull}
-\end{figure*}
-
-The pull $h_r$ has the direction towards the reflex vertex $r$. So, it has the same orientation as vector $\vec{v} = (r - g)$. We will normalise $h_r$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, 
+The pull $h_r(g)$ is directed towards the reflex vertex $r$. So, it has the same orientation as vector $\vec{v} = (r - g)$. We will normalise $h_r(g)$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, 
 \begin{align}
     h_r(g) = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}. \label{eq:h}
 \end{align}
 
-Let $h$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is 
+Let $h(g)$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard can see is 
 \begin{align*}
     h(g) = &\sum_{r \in R(g)} h_r(g), \\
     &R(g) = \{\text{reflex vertices of $P$ seen by $g$\}}.
 \end{align*}
 
-Therefore, the movement of a guard $g$ to the new position $g'$ will take both the gradient and the pull into account: $$g' = g + \alpha (\bigtriangledown f + h).$$ Additionally, we can choose how much influence the pull itself can have in the movement of the guard by adding a hyperparameter $\beta$: $$g' = g + \alpha (\bigtriangledown f(g) + \beta h(g)).$$
+Therefore, the movement of a guard $g$ to the new position $g'$ will take both the gradient and the pull into account: $$g' = g + \alpha (\bigtriangledown f(g) + h(g)).$$ Additionally, we can choose how much influence the pull itself can have in the movement of the guard by adding a hyperparameter $\beta$: $$g' = g + \alpha (\bigtriangledown f(g) + \beta h(g)).$$
 
 \subsubsection{Pull onto the Reflex Vertex}
 \label{sec:pull_onto}
-We have now created a heuristic for pulling a guard closer to a reflex vertex based on the increase in the seen area behind the reflex vertex. It could happen however that the pull towards the reflex vertex is very strong. In this case, the guard could be moved past the reflex vertex, in between the reflex vertex and the polygon boundary. Although the area seen behind the reflex vertex would be maximised, the guard would ``unsee'' (parts of) the area of its initial position $g$. In order to address this particular issue, the guard will be placed on the reflex vertex when the pull is strong enough. 
+We have now created a heuristic for pulling a guard closer to a reflex vertex based on the increase in the seen area behind the reflex vertex. It could happen however that the pull towards the reflex vertex is very strong. In this case, the guard could be moved past the reflex vertex, in between the reflex vertex and the polygon boundary. Although the area seen behind the reflex vertex would be maximised, the guard would ``unsee'' (parts of) the area seen from its initial position $g$. In order to address this particular edge-case, the guard will be placed on the reflex vertex when the pull is strong enough. 
 
 This section will thus expand on a procedure that decides when a guard is best placed on a reflex vertex based on its pull towards it.
 
-Firstly, we must define the condition of what a ``strong enough'' pull means. Such a pull would move the guard $g$ ``close enough'' to the reflex vertex. Hence, we need to compute what the upper limit of the distance between the new guard position $g'$ and reflex vertex $r$ would be. The most straight-forward way to do so would be to assign a hyperparameter to the distance between $g$ and $r$. Recall that $||\overline{gr}|| = a$. For now, let $\frac 2 3$ be the factor of closeness of $g'$ to $r$. This means, that when the pull is stronger than $\frac 2 3$ times the distance $a$, so the guard is close enough to the reflex vertex, then the guard is moved onto the reflex vertex: 
+Firstly, we must define the condition of what a ``strong enough'' pull means. Such a pull would move the guard $g$ ``close enough'' to the reflex vertex. Hence, we need to define what a minimum the distance between the new guard position $g'$ and reflex vertex $r$ would be. The most straight-forward way to do so would be to assign a hyperparameter to the distance between $g$ and $r$. Recall that $||\overline{gr}|| = a$. For now, let $\frac 2 3$ be the factor of closeness of $g'$ to $r$. This means, that when the guard is more than two thirds of the distance close to the reflex vertex, then the guard is moved onto the reflex vertex: 
 \begin{align}
     ||h_r(g)|| > \frac 2 3 a. \label{eq:h_a}
 \end{align}
 
+Next, we need to account for the case where the guard is close to multiple reflex vertices. Namely, we consider the specific edge-case when a guard is in between two reflex vertices, illustrated in Figure \ref{fig:pull_cancel}. Let $D$ be the minimum distance in between any two reflex vertices of polygon $P$:
+\begin{align*}
+    D = &\min_{q \neq r} \text{ distance}(q, r), \\
+    &\forall q, r \in P \text{ reflex vertices}.
+\end{align*}
+Let $g$ be a guard in between two reflex vertices $r_1$ and $r_2$ at distance $D$ from each other. Let the pulls $h_{r_1}(g)$ and $h_{r_2}(g)$ be strong towards $r_1$ and $r_2$, respectively. However, because they are opposites in directions, they cancel each other out, resulting in $g$ possibly not changing its position at all.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.5\textwidth]{theory/pull3.png}
-    \caption{Guard $g$ is in between two reflex vertices $r_1$ and $r_2$. Because they are collinear and $g$ is equidistant from them, the two pulls $h_{r_1}$ and $h_{r_2}$ cancel each other out.}
+    \caption{Guard $g$ is in between two reflex vertices $r_1$ and $r_2$. Because they are collinear, $g$ is equidistant from them and the pulls are equally strong $||h_{r_1}(g) = h_{r_2}(g)$, they cancel each other out.}
     \label{fig:pull_cancel}
 \end{figure}
 
-Next, we need to account for the case where the guard is close to multiple reflex vertices. Namely, we consider the specific edge case when a guard is in between two reflex vertices, illustrated in Figure \ref{fig:pull_cancel}. Thus, let $r_1$ and $r_2$ be two reflex vertices whose distance $$D = \min_{q \neq r} \text{ distance}(q, r), \forall q, r \in P \text{ reflex vertices}.$$
-Let $g$ be a guard in between $r_1$ and $r_2$. Let the pulls $h_{r_1}$ and $h_{r_2}$ be  individually strong towards $r_1$ and $r_2$, respectively. However, because they are opposites in directions, they cancel each other out, resulting in $g$ possibly not changing its position at all.
-
-We will now introduce another condition for pulling the guard towards the closer reflex vertex when pulls are cancelling each other out. If a guard $g$ is not equidistantly placed in between two reflex vertices, we are interested in computing what the closer reflex vertex is. So, if $g$ is closer than $\frac D 2$ to a reflex vertex, then we consider it close enough if: $$a < \frac D 2.$$
+We will now introduce another condition for pulling the guard towards the closer reflex vertex when pulls are cancelling each other out. If a guard $g$ is not equidistantly placed in between two reflex vertices, we are interested in computing what the closer reflex vertex is. So, if $g$ is closer to a reflex vertex than half of the minimum distance in between any two reflex vertices $\frac D 2$, then we consider it close enough if: $$a < \frac D 2.$$
 In this case we can choose to still move towards one of the reflex vertices and make progress.
 
-An example of moving on top of a reflex vertex can be found in Figure \ref{fig:pull_onto}. Let the guard $g = (1, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 1$ and $b = 3$ are known. Let $h_r$ be the pull in question. The gradient is computed as
+An example of moving on top of a reflex vertex can be found in Figure \ref{fig:pull_onto}. Let the guard $g = (1, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 1$ and $b = 3$ are known. Let $h_r(g)$ be the pull in question. The gradient is computed as
 $$\bigtriangledown f(g) \overset{(\ref{eq:f})}{=} (0, \frac{b^2}{2a^2})^\intercal = (0, \frac{9}{2})^\intercal = (0, 4.5)^\intercal.$$
 The pull is computed as 
 $$h_r(g) \overset{(\ref{eq:h})}{=} (\frac{b^2}{2a^3}, 0)^\intercal = (\frac{9}{2}, 0)^\intercal = (4.5, 0)^\intercal.$$
-The guard is close enough to the reflex vertex to be moved onto it (\ref{eq:h_a}):
-$$||h_r(g|| > \frac 2 3 a \iff 4.5 > \frac 2 3.$$
+The guard is close enough to $r$ to be moved onto it (\ref{eq:h_a}):
+$$||h_r(g)|| > \frac 2 3 a \iff 4.5 > \frac 2 3.$$
 So the new coordinate of the guard is $g' = r = (2, 0)$.
+
+Note that Figure \ref{fig:pull_onto} displays how the closer the guard to a reflex vertex is, the stronger its pull. This comes in contrast with Figure \ref{fig:pull}. Given the same reflex vertex $r$ and polygon boundary coordinates, the guard $g = (0, 0)$ was farther away, and its pull $h_r(g) = (0.625, 0)^\intercal$ was thus not as strong. Hence, we only want to place guards on reflex vertices when their pull is strong enough.
 
 \begin{figure}
     \centering
     \includegraphics[width = \textwidth]{theory/pull_onto.png}
-    \caption{Computing the movements of the guard $g = (1, 0)$ based on both the gradient and the pull towards reflex vertex $r = (2, 0)$. The distances $a = 1$ and $b = 3$ are known. The gradient is computed as $\bigtriangledown f(g) = (0, 4.5)^\intercal$. The pull is computed as $h_r(g)  = (4.5, 0)^\intercal$. The guard $g$ is close enough to $r$ (\ref{eq:h_a}), so $g$ is placed on top of the reflex vertex $r$.}
+    \caption{Computing the movements of the guard $g$ based on both the gradient and the pull towards reflex vertex $r$. The guard $g$ is close enough to $r$ (\ref{eq:h_a}), so $g$ is placed on top of the reflex vertex $r$.}
     \label{fig:pull_onto}
 \end{figure}
 
@@ -373,44 +397,24 @@ So the new coordinate of the guard is $g' = r = (2, 0)$.
 \label{sec:pull_capping}
 Nonetheless, it can happen that the pull towards a reflex vertex is significantly larger in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a very large jump towards the reflex vertex.
 
-We want to smoothen out possibly erratic behaviours of gradient descent. Just like in the case of momentum, we want our pull to be smoothened out in the case that is ``too large''. We define what ``too large'' is based on the momentum. If the pull is larger than a factor of $\mu$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$:
+We want to smoothen out possibly erratic movement jumps. Just like in the case of momentum, we want our pull to be smoothened out when it is ``suddenly too large''. We define what ``suddenly too large'' is based on the momentum. If the pull is larger than a factor of $\mu$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$, the momentum $h_i(g_i)$ can be capped as:
 \begin{align*}
     \text{if } ||h_i(g_i)|| &> \mu ||M_i(g_i)|| + c \text{, then} \\
                h_i(g_i) &= h_i(g_i) \frac{\mu ||M_i(g_i)||}{||h_i(g_i)||}.
 \end{align*}
-
 The factor $\mu$ becomes thus a hyperparameter to experiment with.
 
-
-\subsection{Line Search}
-\label{sec:line_search}
-In this section we introduce another extension to the regular gradient descent algorithm: Line Search \cite{swann1969survey}. Its aim is to use gradient descent's descending direction as a guide for finding the optimal solution to the optimisation function. Then, given a step size factor, multiple solutions along the descending line are computed. The optimal one for the specific iteration is chosen.
-
-Figure \ref{fig:line} illustrates an example for this extension. Take guard $g$ and reflex vertex $r$. Let $\frac 1 x$ be the starting search factor, and $s$ the step size factor. Recall that $M_i$ is the optimal direction for a guard at iteration $i$. As such, line search will compute the optimal guard position $g_{i + 1} = g_i + \frac{t}{x}M_i(g_i), \text{ with } t \text{ the best position for the guard from } \{\frac 1 xM_i, \frac{s}{x}M_i(g_i), \frac{s^2}{x}M_i(g_i), ...\}$. The dashed line represents the direction of gradient descent, as computed based on the gradient and reflex vertex pull computations. Given a step size $s$, 3 different possible new guard positions can be identified: $g'_{i_1} = g_i + \frac 1 xM_i(g_i)$,  $g'_{i_2} = g_i + \frac s x M_i(g_i)$, $g'_{i_3} = g_i + \frac{s^2}{x} M_i(g_i)$.
-% By starting with a proper step size factor, we deploy a more finely-grated search closer to the actual value of the gradient. The proper step size factory checks thus whether the gradient descent overshoots. Then, we will check for the best solutions with an improper step size factor. This will allow us to search for a guard positioning farther than the gradient. Lastly, we will also check whether the actual gradient value is the best.
-The optimal guard will be the one with the largest global area seen increase. If the global area is not increased, a best solution is also comprised of a guard gaining visibility to a previously unseen part of the polygon.
-
-It is worth mentioning that Line Search deems the use of a learning rate obsolete. Because the search factor finds the optimal position on the direction line, it thus acts as a learning rate.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width = \textwidth]{theory/line_search.png}
-    \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 3 possible guard positioning on the dashed gradient descent line: $g'_{i_1}, g'_{i_2}, g'_{i_3}$. The best of them is chosen based on the size of the newly visible area seen.}
-    \label{fig:line}
-\end{figure}
 
 \subsection{Reflex Area}
 \label{sec:reflex_area}
 % - address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
-In this section we introduce an additional extension to the gradient descent algorithm with momentum and reflex vertex pull: the concept of a reflex area. 
-
-The Reflex Area design choice was made to counter-act the edge case of a guard moving away from a reflex vertex and ``unseeing'' the area that it was already seeing. This case is illustrated in Figure \ref{fig:pull_to_on_behind}. In Subfigure \ref{fig:pull_to_on_behind1}, guard $g$ starts moving with pull $h_r$ towards reflex vertex $r$. The pull is strong enough to place $g$ on $r$ in Subfigure \ref{fig:pull_to_on_behind2}. In this case, $g$ can see everywhere around $r$. However, the new gradient $\bigtriangledown f$ of $g$ moves it past $r$ in Subfigure \ref{fig:pull_to_on_behind3}. The initially seen area before $r$ is now not completely seen anymore by $g$.
+In this section we introduce an additional heuristic to our algorithm: the concept of \textit{reflex area}. The reflex area design choice was made to counter-act the edge-case of a guard moving away from a reflex vertex and ``unseeing'' the area that it was already seeing. This case is illustrated in Figure \ref{fig:pull_to_on_behind}. In Subfigure \ref{fig:pull_to_on_behind1}, guard $g$ starts moving with pull $h_r(g)$ towards reflex vertex $r$. The pull is strong enough to place $g$ on $r$ in Subfigure \ref{fig:pull_to_on_behind2}. In this case, $g$ can see everywhere around $r$. However, the new gradient $\bigtriangledown f(g)$ of $g$ moves it past $r$ in Subfigure \ref{fig:pull_to_on_behind3}. The initially seen area before $r$ is now not completely seen anymore by $g$.
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{theory/reflex_area_to_vertex.png}
-        \caption{Guard $g$ starts moving with pull $h_r$ towards reflex vertex $r$. Guard $g$ cannot see past $r$.}
+        \caption{Guard $g$ starts moving with pull $h_r(g)$ towards reflex vertex $r$. Guard $g$ cannot see past $r$.}
         \label{fig:pull_to_on_behind1}
     \end{subfigure}
     \hfill
@@ -429,44 +433,59 @@ The Reflex Area design choice was made to counter-act the edge case of a guard m
 \end{figure}
 
 
-Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose intersection is the reflex vertex $r$. We call \textit{reflex area} the area between lines $rr'$ and $rr''$ that is contained inside the polygon. Figure \ref{fig:reflex_area} draws this concept. If a guard $g$ has to move outside of the reflex area, we project its new position onto the closest reflex line (in this case, $rr'$) as $g'$. Naturally, if $g$ has to move inside the reflex area, it can do so unalteredly. In this way, we maintain the gained property of a guard seeing everything around a reflex vertex while still allowing it to move away from the reflex vertex.
+Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose intersection is the reflex vertex $r$. We call \textit{reflex area} the area between line segments $rr'$ and $rr''$ that is contained inside the polygon. Figure \ref{fig:reflex_area} draws this concept. If a guard $g$ has to move outside of the reflex area, we project its new position $g'$ onto the closest reflex line (in this case, $rr'$). Naturally, if $g$ has to move inside the reflex area, it can do so unaffectedly. In this way, we maintain the gained property of a guard seeing everything around a reflex vertex while still allowing it to move away from the reflex vertex.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width = 0.4\textwidth]{theory/reflex_area.png}
-    \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two reflex lines $rr'$ and $rr''$. So, if $g$ needs to move outside of the reflex area, its new position will be projected on the closest reflex line.}
+    \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two line segments $rr'$ and $rr''$. So, if $g$ needs to move outside of the reflex area, its new position will be projected on the closest reflex line.}
     \label{fig:reflex_area}
 \end{figure}
 
+\subsection{Angle Behind Reflex Vertex}
+\label{sec:angle}
+% - take into consideration how much a guard should move towards a reflex vertex, depending on the area seen behind it
+In this section we will introduce a heuristic that will further fine-tune the factor with which a guard's movement is influenced by a reflex vertex. Currently, we only take into account the distance $b$ between the reflex vertex and the polygon boundary. Intuitively, the unseen area behind the reflex vertex should also play a role in the computation of the gradient: guards should be drawn faster to larger areas. In order to do so, we will take into account the normalised value of angle $\theta$ behind the reflex vertex.
 
-\subsection{Hidden Gradient}
+A visualisation for this heuristic can be found in Figure \ref{fig:angle}. The pull of the guard $g$ towards the reflex vertex $r$ will be influenced by the normalised value of $\theta$ as follows: $$g' = g + (\frac{\theta}{2\pi} + c)(\bigtriangledown f(g) + \beta h(g)).$$
+
+We will additionally add a constant $c$ to account for very small angles. For example, if the normalised value of $\theta$ is close to $10^{-5}$, then $c = 10^{-2}$. Then the guard still has a significant move towards the unseen area, no matter how small it is. In this way, smaller areas are not overlooked.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = \textwidth]{theory/angle.png}
+    \caption{The normalised angle $\mu$ behind the reflex vertex $r$ takes into account the factor with which the guard $g$ is drawn to $r$.}
+    \label{fig:angle}
+\end{figure}
+
+\subsection{Hidden Movement}
 \label{sec:hidden_gradient}
 % - speed up the guard movement by giving all guards a gradient
-In this section we will introduce a computation speedup for the case in which guards have a gradient of 0 (they don't move). This can happen when the area seen by a guard is already seen by other guards too. We consider that having a gradient of 0 is detrimental to the progress of the algorithm. The reason behind this is that it is unlikely that a guard's optimal position has been found when its gradient is 0. Hence, we would like every guard to move, no matter how little.
+In this section we will introduce a computation speedup for the case in which guards have a movement vector of 0 (they don't move). This can happen when the area seen by a guard is already completely seen by other guards. We consider that having a movement vector of 0 is detrimental to the progress of the algorithm. Note that we call \textit{movement vector} the sum of all heuristics that apply to computing the new position of a guard. The reason behind this is that it is unlikely that a guard's optimal position has been found when its movement vector is 0. Hence, we would like every guard to move, no matter how little.
 
-In order to allow guards to still move when their gradient is 0, we deployed the Hidden Gradient heuristic. This heuristic is based on the fact that we allow guards whose gradient is 0 to still move with a newly computed ``hidden'' gradient. So, if there are guards whose gradient is 0, we will recompute their gradient by not taking into account the area seen by the guards who have a non-zero gradient.
+In order to allow guards to still move when their movement vector is 0, we deployed the \textit{hidden gradient} heuristic. This heuristic is based on the fact that we allow guards whose movement vector is 0 to still move with a newly computed ``hidden'' movement vector. So, if there are guards whose movement vector is 0, we will recompute their movement vector by not taking into account the area seen by the guards who have a non-zero movement vector.
 
-An example of this approach can be found in Figure \ref{fig:hidden_gradient}. Let $G = \{g_1, g_2, g_3\}$ be the complete set of guards. Initially in Subfigure \ref{fig:hidden_gradient1}, only $g_1$ has a non-zero gradient. The visibility regions of $g_2$ and $g_3$ are overlapping with that of $g_1$, so their gradients are 0. Let $G_0 = \{g_1\}$ be the set of guards who at step 0 have a non-zero gradient. 
-Then, Subfigure \ref{fig:hidden_gradient2} contains the set $G \setminus G_0$ of guards. The visibility area of guard $g_1$ overlaps with $g_2$, so only guard $g_2$ will have a non-zero gradient. Let $G_1 = \{g_2\}$ be the set of guards who at step 1 have a non-zero gradient.
-Lastly, we can compute the non-zero gradient for guard $g_3$ in Subfigure \ref{fig:hidden_gradient3}. Let $G_2 = \{g_3\}$ be the set of guards who at step 2 have a non-zero gradient.
-In Subfigure \ref{fig:hidden_gradient4} all the guards have been moved to their new positions $g'_1, g'_2, g'_3$, respectively. So the gradients have been computed as $G = G_0 \cup G_1 \cup G_2$, where $G_1$ and $G_2$ contain the guards with hidden gradients.
+An example of this approach can be found in Figure \ref{fig:hidden_gradient}. Let $G = \{g_1, g_2, g_3\}$ be the complete set of guards. Initially in Subfigure \ref{fig:hidden_gradient1}, only $g_1$ has a non-zero movement vector. The visibility regions of $g_2$ and $g_3$ are overlapping with that of $g_1$, so their movement vectors are 0. Let $G_0 = \{g_1\}$ be the set of guards who at step 0 have a non-zero movement vector. In this case, only $g_1$
+Then, Subfigure \ref{fig:hidden_gradient2} will display the remaining set $G \setminus G_0$ of guards with a zeroed movement vector. The visibility area of guard $g_1$ overlaps with $g_2$, so only guard $g_2$ will have a non-zero movement vector. So, $g_2$ will be part of the set $G_1 = \{g_2\}$ of guards who at step 1 have a non-zero movement vector.
+Lastly, we can compute the non-zero movement vector for guard $g_3$ in Subfigure \ref{fig:hidden_gradient3}. The guard $g_3$ can now be part of the set $G_2 = \{g_3\}$ which contains the guards who at step 2 have a non-zero movement vector.
+In Subfigure \ref{fig:hidden_gradient4} all the guards have been moved to their new positions $g'_1, g'_2, g'_3$, respectively. So the movement vectors have been computed as $G = G_0 \cup G_1 \cup G_2$, where $G_1$ and $G_2$ contain the guards with hidden movements.
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{theory/hidden_gradient1.png}
-        \caption{Guard $g_2$ and $g_3$ have a gradient of 0, because guard $g_1$ sees all the areas they see. So, the set of guards with a non-zero gradient is $G_0 = \{g_1\}$.}
+        \caption{Guard $g_2$ and $g_3$ have a movement vector of 0, because guard $g_1$ sees all the areas they see. So, the set of guards with a non-zero movement vector is $G_0 = \{g_1\}$.}
         \label{fig:hidden_gradient1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{theory/hidden_gradient2.png}
-        \caption{Guard $g_1$ had a non-zero gradient, so we compute the gradients of guards $g_2$ and $g_3$ without $g_1$. Guard $g_2$ sees everything that $g_3$ sees, so $g_3$ will have gradient 0. So, the set of guards with a non-zero gradient is $G_1 = \{g_2\}$.}
+        \caption{Guard $g_1$ had a non-zero movement vector, so we compute the movement vectors of guards $g_2$ and $g_3$ without $g_1$. Guard $g_2$ sees everything that $g_3$ sees, so $g_3$ will have movement vector 0. So, the set of guards with a non-zero movement vector is $G_1 = \{g_2\}$.}
         \label{fig:hidden_gradient2}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{theory/hidden_gradient3.png}
-        \caption{Guard $g_2$ had a non-zero gradient, so we compute the gradient of guard $g_3$ without $g_2$. Guard $g_3$ will now have a non-zero gradient. So, the set of guards with a non-zero gradient is $G_2 = \{g_3\}$.}
+        \caption{Guard $g_2$ had a non-zero movement vector, so we compute the movement vector of guard $g_3$ without $g_2$. Guard $g_3$ will now have a non-zero movement vector. So, the set of guards with a non-zero movement vector is $G_2 = \{g_3\}$.}
         \label{fig:hidden_gradient3}
     \end{subfigure}
     \hfill
@@ -475,19 +494,19 @@ In Subfigure \ref{fig:hidden_gradient4} all the guards have been moved to their 
         \caption{The new positions $g'_1, g'_2, g'_3$ of the guards such that $G = G_0 \cup G_1 \cup G_2$.}
         \label{fig:hidden_gradient4}
     \end{subfigure}
-    \caption{Example of hidden gradient computation for guard set $G = \{g_1, g_2, g_3\}$ in a corridor-like polygon. The visibility areas of each of the guards $g_1, g_2$, and $g_3$ are shown in purple, green and orange, respectively.}
+    \caption{Example of hidden movement computation for guard set $G = \{g_1, g_2, g_3\}$ in a corridor-like polygon. The visibility areas of each of the guards $g_1, g_2$, and $g_3$ are shown in purple, green and orange, respectively.}
     \label{fig:hidden_gradient}
 \end{figure}
 
-The hidden gradient heuristic can now be generalised. Let $G$ be the complete set of guards. For each step $i$, let $G_i = G \setminus G_{i - 1}$ be the set of guards with a non-zero gradient after removing the guards with a gradient from step $i - 1$. The set $G_0$ will be the set of guards with a non-zero gradient before removal of any guards. At the end, the union of all subsets $G_i$ will comprise the set of all guards $G = G_0 \cup G_1 \cup ...$.
-In this way, all guards will have a non-zero gradient and make progress.
+The hidden movement heuristic can now be generalised. Let $G$ be the complete set of guards. For each step $i$, let $G_i = G \setminus G_{i - 1}$ be the set of guards with a non-zero movement vector after removing the guards with a movement vector from step $i - 1$. The set $G_0$ will be the set of guards with a non-zero movement vector before removal of any guards. At the end, the union of all subsets $G_i$ will comprise the set of all guards $G = G_0 \cup G_1 \cup ...$.
+In this way, all guards will have a non-zero movement vector and make progress.
 
 \subsection{Greedy Initialisation}
 \label{sec:greedy}
 % - head start
-In this section we will introduce another heuristic for improving the performance of the gradient descent with momentum algorithm: Greedy Initialisation. This heuristic will give a head start to the algorithm by arbitrarily placing guards in areas that are unseen by other guards. In this way, the algorithm will start with an already much larger covered area.
+In this section we will introduce another heuristic for our algorithm: \textit{greedy initialisation}. This heuristic sequentially places guards at starting positions in areas that are unseen by other guards. In this way, the algorithm will have a head start with a larger covered area than when guards are placed arbitrarily.
 
-Figure \ref{fig:greedy} offers an example of a Greedy Initialisation. The first guard $g_1$ is arbitrarily placed inside polygon $P$ as shown in Subfigure \ref{fig:greedy1}. Then, guard $g_2$ is arbitrarily placed in an unseen part of $P$, as displayed in Subfigure \ref{fig:greedy2}. In this way, the algorithm gains a head start to continue with the optimisation of the guards' positions.
+Figure \ref{fig:greedy} offers an example of a greedy initialisation. The first guard $g_1$ is arbitrarily placed inside polygon $P$ as shown in Subfigure \ref{fig:greedy1}. Then, guard $g_2$ is arbitrarily placed in an unseen part of $P$, as displayed in Subfigure \ref{fig:greedy2}. In this way, the algorithm gains a head start to continue with the optimisation of the guards' positions.
 
 \begin{figure}[h!]
     \centering
@@ -509,20 +528,4 @@ Figure \ref{fig:greedy} offers an example of a Greedy Initialisation. The first 
     % \end{subfigure}
     \caption{Greedy Initialisation for guards $g_1$ and $g_2$ inside polygon $P$. The visibility regions of the guards are displayed in orange and purple, respectively. In this way, the algorithm gains a head start for optimising the positions of the guards.}
     \label{fig:greedy}
-\end{figure}
-
-\subsection{Angle Behind Reflex Vertex}
-\label{sec:angle}
-% - take into consideration how much a guard should move towards a reflex vertex, depending on the area seen behind it
-In this section we will introduce a heuristic that will further fine-tune the factor with which a guard is influenced by a reflex vertex. Currently, we only take into account the distance $b$ between the reflex vertex and the polygon boundary. Intuitively, the unseen area behind the reflex vertex should also play a role in the computation of the gradient: guards should be drawn faster to larger areas. In order to do so, we will take into account the normalised value of angle $\mu$ behind the reflex vertex.
-
-A visualisation for this heuristic can be found in Figure \ref{fig:angle}. The pull of the guard $g$ towards the reflex vertex $r$ will be influenced by the normalised value of $\mu$ as follows: $$g' = g + \alpha (\frac{\mu}{2\pi} + c)(\bigtriangledown f(g) + \beta h(g)).$$
-
-We will additionally add a constant $c$ to account for very small angles. For example, if the normalised value of $\mu$ is close to $10^{-5}$, then $c = 10^{-2}$. Then the guard still has a significant move towards the unseen area, no matter how small it is. In this way, smaller areas are not overlooked.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width = \textwidth]{theory/angle.png}
-    \caption{The normalised angle $\mu$ behind the reflex vertex $r$ takes into account the factor with which the guard $g$ is drawn to $r$.}
-    \label{fig:angle}
 \end{figure}
