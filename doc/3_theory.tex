@@ -18,7 +18,7 @@ Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.4\textwidth]{theory/sumf.png}
+    \includegraphics{theory/sumf.pdf}
     \caption{Global change in the area seen by $g$ when moved by $\partial y$ to a new position $g'$.}
     \label{fig:sumf}
 \end{figure}
@@ -51,7 +51,7 @@ We will now create a canonical geometrical construction that allows us to furthe
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = \textwidth]{theory/gradient2.png}
+    \includegraphics{theory/gradient2.pdf}
     \caption{Canonical gradient construction for when the position of $g$ is varied by a small amount $\partial y$ around reflex vertex $r$ to the new position $g'$.}
     \label{fig:gradient}
 \end{figure}
@@ -112,7 +112,7 @@ We can now use the coordinates of the gradient $\bigtriangledown f$ to compute t
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.5\textwidth]{theory/v_perp.png}
+    \includegraphics{theory/v_perp.pdf}
     \caption{Computing the new position $g'$ of guard $g$ around reflex vertex $r$ based on the gradient $\bigtriangledown f$.}
     \label{fig:vperp}
 \end{figure}
@@ -125,7 +125,7 @@ The coordinates of $\vec v^\perp$ can then be computed using the construction fr
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.35\textwidth]{theory/v_square.png}
+    \includegraphics{theory/v_square.pdf}
     \caption{Computing the coordinates of $\vec v^\perp$ given the guard $g$ and the reflex vertex $r = (x, y)$.}
     \label{fig:vsquare}
 \end{figure}
@@ -163,7 +163,7 @@ Let point $g_1$ be the guard we have previously computed the gradient for. Let p
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = \textwidth]{theory/gradient3.png}
+    \includegraphics{theory/gradient3.pdf}
     \caption{Canonical gradient construction for when the visible area of $g_1'$ is also seen by guard $g_2$.}
     \label{fig:poly_gradient}
 \end{figure}
@@ -187,7 +187,7 @@ Then, we can compute the area $\triangle_1$ seen exclusively by $g_1$ by subtrac
 \end{align*}
 
 \subsubsection{Computing the Gradient for Multiple Guards}
-We can now generalise the gradient computation to $m$ guards and $m$ intersection points. Let $g$ be the guard whose position we wish to optimise around reflex vertex $r$ as before. Let the areas highlighted in blue in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by the other $m - 1$ guards. Let the visibility region of $g$ intersect other guards' visibility regions in $m$ intersection points $p_1, p_2, ..., p_m$. Let the distance from the reflex vertex $r$ to the intersection points be $b_{11}, b_{12}, ..., b_{m1}, b$.
+We can now generalise the gradient computation to $m$ guards and $m$ intersection points. Let $g$ be the guard whose position we wish to optimise around reflex vertex $r$ as before. Let the areas highlighted in blue in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by the other $m - 1$ guards. Let the visibility region of $g$ intersect other guards' visibility regions in $m$ intersection points $p_1, p_2, ..., p_m$. Let the distance from the reflex vertex $r$ to the intersection points be $b_{1}, b_{2}, ..., b_{m}, b$.
 
 \begin{figure}[h!]
     \centering
@@ -204,7 +204,7 @@ The areas of polygons $\triangle_1, \triangle_2, ..., \triangle_m$ do not grow l
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.4\textwidth]{theory/area.png}
+    \includegraphics{theory/area.pdf}
     \caption{Example for computing the area of overlapping polygons with areas $\text{Area}_{s_1} = 2$, $\text{Area}_{s_2} = 3$, $\text{Area}_{s_3} = 4$, $\text{Area}_{s_4} = 5$. It is incorrect to compute $\text{Area}_{s_1 + s_3} = 2 + 4 = 6$. Instead, $\text{Area}_{s_1 + s_3} = \text{Area}_{s_1 + s_2 + s_3 + s_4} - \text{Area}_{s_4} + \text{Area}_{s_3} - \text{Area}_{s_2} + \text{Area}_{s_1} = 5 - 5 + 4 - 3 + 2 = 3$.}
     \label{fig:areas}
 \end{figure}
@@ -217,7 +217,7 @@ Similarly to Figure \ref{fig:areas}, we can compute the area seen exclusively by
 
 This results in the fact that the area seen by $g$ exclusively can be computed as 
 \begin{align*}
-    \text{Area}_{\triangle_1 + \triangle_3 + ... + \triangle_{m - 1}}(g) &= \text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}(g) \\/
+    \text{Area}_{\triangle_1 + \triangle_3 + ... + \triangle_{m - 1}}(g) &= \text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}(g) \\
     &- \text{Area}_{\triangle_{m - 1}}(g) + \text{Area}_{\triangle_{m - 2}}(g) \\
     &- ... \\
     &- \text{Area}_{\triangle_2}(g) + \text{Area}_{\triangle_1}(g) \\
@@ -270,7 +270,7 @@ It is worth mentioning that Line Search deems the use of a learning rate obsolet
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = \textwidth]{theory/line_search.png}
+    \includegraphics{theory/line_search.pdf}
     \caption{The gradient descent line gives the direction of searching for the optimal guard position. Given a step size, there are 3 possible guard positioning on the dashed gradient descent line: $g'_{i_1}, g'_{i_2}, g'_{i_3}$. The best of them is chosen based on the size of the newly visible area seen.}
     \label{fig:line}
 \end{figure}
@@ -299,7 +299,7 @@ We can achieve a more rapid increase in the seen area if we move a guard closer 
 We will now explore how the pull towards a reflex vertex $r$ can be computed, with an example in Figure \ref{fig:pull}. Let the guard $g = (0, 0)$, the reflex vertex $r = (2, 0)$ and the polygon boundary intersection point be $(5, 0)$. So, the distances $a = 2$ and $b = 3$ are known. Let $h_r$ be the pull in question. Let $g'_y$ be the new coordinates of guard $g$ when only the gradient is taken into account. In that case, we are only interested in the small movement $\partial y$. Analogously, let $g'_x$ be the new coordinate of guard $g$ when $g$ moves by a small amount $\partial x$ towards the reflex vertex. As previously, and without losing generality, assume that $g$ and $r$ have the same $x$-coordinate by rotating the plane $R$. Combining the two movements together results in $g'$ being the final position of $g$.
 
 \begin{figure*}[!h]
-    \includegraphics[width = \textwidth]{theory/pull.png}
+    \includegraphics{theory/pull.pdf}
     \centering
     \caption{Computing the movements of the guard $g$ based on both the gradient and the pull towards reflex vertex $r$. The new position of the guard with learning rate $\alpha = 0.3$ becomes $g' = (0.1875, 0.3375)$.}
     \label{fig:pull}
@@ -368,7 +368,7 @@ Let $g$ be a guard in between two reflex vertices $r_1$ and $r_2$ at distance $D
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.5\textwidth]{theory/pull3.png}
+    \includegraphics{theory/pull3.pdf}
     \caption{Guard $g$ is in between two reflex vertices $r_1$ and $r_2$. Because they are collinear, $g$ is equidistant from them and the pulls are equally strong $||h_{r_1}(g) = h_{r_2}(g)$, they cancel each other out.}
     \label{fig:pull_cancel}
 \end{figure}
@@ -388,7 +388,7 @@ Note that Figure \ref{fig:pull_onto} displays how the closer the guard to a refl
 
 \begin{figure}
     \centering
-    \includegraphics[width = \textwidth]{theory/pull_onto.png}
+    \includegraphics{theory/pull_onto.pdf}
     \caption{Computing the movements of the guard $g$ based on both the gradient and the pull towards reflex vertex $r$. The guard $g$ is close enough to $r$ (\ref{eq:h_a}), so $g$ is placed on top of the reflex vertex $r$.}
     \label{fig:pull_onto}
 \end{figure}
@@ -437,7 +437,7 @@ Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose in
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.4\textwidth]{theory/reflex_area.png}
+    \includegraphics{theory/reflex_area.pdf}
     \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two line segments $rr'$ and $rr''$. So, if $g$ needs to move outside of the reflex area, its new position will be projected on the closest reflex line.}
     \label{fig:reflex_area}
 \end{figure}
@@ -453,7 +453,7 @@ We will additionally add a constant $c$ to account for very small angles. For ex
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = \textwidth]{theory/angle.png}
+    \includegraphics{theory/angle.pdf}
     \caption{The normalised angle $\mu$ behind the reflex vertex $r$ takes into account the factor with which the guard $g$ is drawn to $r$.}
     \label{fig:angle}
 \end{figure}
