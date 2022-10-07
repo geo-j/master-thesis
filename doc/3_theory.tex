@@ -14,7 +14,7 @@ Let $P$ be a polygon and $g = (x, y) \in P$ a guard. We are interested in comput
 
 We define $f(g) = \text{Area}(g)$ as the area seen by a guard $g$. Let $\bigtriangledown \text{Area}_r(g)$ be the local change in the area guarded by point $g$ around a reflex vertex $r$ seen by guard $g$, thus $r \in \mathit{Vis(g)}$. Given all reflex vertices $i$, the total (global) change in the area seen by $g$ can be thus summed up to $\text{Area}(g) = \sum_i \text{Area}_i(g)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $P$ and its reflex vertices $r_1$ and $r_2$. The polygon $P$ is guarded by $g$, and its position is modified to $g'$ by a small change $\partial y$ in its $y$-coordinate. The visibility areas of $g$ are $Area_{r_1}$ and $Area_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $g$ is computed as $\bigtriangledown \text{Area}(g) = \bigtriangledown \text{Area}_{r_1}(g) + \bigtriangledown \text{Area}_{r_2}(g)$.
 
-Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery Problem. We can then use gradient descent as a method to optimise the objective function $f$. We will define below what the methodology of gradient descent is comprised of.
+Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery Problem. We can then use gradient descent as a method to optimise the objective function $f$. We will define below what the methodology of gradient descent consists of.
 
 \begin{figure}[h!]
     \centering
@@ -59,7 +59,7 @@ We will now create a canonical geometrical construction that allows us to furthe
 Take a boundary line segment of $P$, $r$ a reflex vertex inside $P$ and $g$ a guard whose optimal position we are interested in. The reflex vertex $r$ is seen by $g$. Let $\overline{gr} = a$ be known, and let $\triangle rgg' = \triangle_2$. Similarly, let $b$ be the known distance between $r$ and the polygon boundary in question.
 
 
-Let $\partial y$ be an extremely small change in the $y$-coordinate of $g$. Let $g'$ be the new position of $g$ given the change $\partial y$. The point $g'$ can see more around $r$ on the polygon boundary. Let $L$ be the new segment that $g'$ sees on the polygon boundary. As such, let $\triangle_1$ denote the increase in the visibility area of $g$ when it moves to position $g'$:
+Let $\partial y$ be a tiny change in the $y$-coordinate of $g$. Let $g'$ be the new position of $g$ given the change $\partial y$. The point $g'$ can see more around $r$ on the polygon boundary. Let $L$ be the new segment that $g'$ sees on the polygon boundary. As such, let $\triangle_1$ denote the increase in the visibility area of $g$ when it moves to position $g'$:
 
 \begin{equation}
     \bigtriangledown \text{Area}_r(g) = \triangle_1. \label{eq:derivative}
@@ -192,7 +192,7 @@ We can now generalise the gradient computation to $m$ guards and $m$ intersectio
 \begin{figure}[h!]
     \centering
     \includegraphics{theory/gradient4.pdf}
-    \caption{Canonical gradient construction for where the pink parts of the visible area of $g$ are also seen by other guards. The gray polygons $\triangle_1, \triangle_3, ..., \triangle_{m - 1}$ are the areas that are exclusively seen by $g$.}
+    \caption{Canonical gradient construction for where the pink parts of the visible area of $g$ are also seen by other guards. The grey polygons $\triangle_1, \triangle_3, ..., \triangle_{m - 1}$ are the areas that are exclusively seen by $g$.}
     \label{fig:general_gradient} 
 \end{figure}
 
@@ -433,12 +433,12 @@ In this section we introduce an additional heuristic to our algorithm: the conce
 \end{figure}
 
 
-Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose intersection is the reflex vertex $r$. We call \textit{reflex area} the area between line segments $rr'$ and $rr''$ that is contained inside the polygon. Figure \ref{fig:reflex_area} draws this concept. If a guard $g$ has to move outside of the reflex area, we project its new position $g'$ onto the closest reflex line (in this case, $rr'$). Naturally, if $g$ has to move inside the reflex area, it can do so unaffectedly. In this way, we maintain the gained property of a guard seeing everything around a reflex vertex while still allowing it to move away from the reflex vertex.
+Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose intersection is the reflex vertex $r$. We call \textit{reflex area} the area between line segments $rr'$ and $rr''$ that is contained inside the polygon. Figure \ref{fig:reflex_area} draws this concept. If a guard $g$ has to move outside the reflex area, we project its new position $g'$ onto the closest reflex line (in this case, $rr'$). Naturally, if $g$ has to move inside the reflex area, it can do so unaffectedly. In this way, we maintain the gained property of a guard seeing everything around a reflex vertex while still allowing it to move away from the reflex vertex.
 
 \begin{figure}[h!]
     \centering
     \includegraphics{theory/reflex_area.pdf}
-    \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two line segments $rr'$ and $rr''$. So, if $g$ needs to move outside of the reflex area, its new position will be projected on the closest reflex line.}
+    \caption{Guard $g$ has been placed on the reflex vertex $r$. Hence, its movement is restricted to the reflex area created by the two line segments $rr'$ and $rr''$. So, if $g$ needs to move outside the reflex area, its new position will be projected on the closest reflex line.}
     \label{fig:reflex_area}
 \end{figure}
 
@@ -461,7 +461,7 @@ We will additionally add a constant $c$ to account for very small angles. For ex
 \subsection{Hidden Movement}
 \label{sec:hidden_gradient}
 % - speed up the guard movement by giving all guards a gradient
-In this section we will introduce a computation speedup for the case in which guards have a movement vector of 0 (they don't move). This can happen when the area seen by a guard is already completely seen by other guards. We consider that having a movement vector of 0 is detrimental to the progress of the algorithm. Note that we call \textit{movement vector} the sum of all heuristics that apply to computing the new position of a guard. The reason behind this is that it is unlikely that a guard's optimal position has been found when its movement vector is 0. Hence, we would like every guard to move, no matter how little.
+In this section we will introduce a computation speed-up for the case in which guards have a movement vector of 0 (they don't move). This can happen when the area seen by a guard is already completely seen by other guards. We consider that having a movement vector of 0 is detrimental to the progress of the algorithm. Note that we call \textit{movement vector} the sum of all heuristics that apply to computing the new position of a guard. The reason behind this is that it is unlikely that a guard's optimal position has been found when its movement vector is 0. Hence, we would like every guard to move, no matter how little.
 
 In order to allow guards to still move when their movement vector is 0, we deployed the \textit{hidden gradient} heuristic. This heuristic is based on the fact that we allow guards whose movement vector is 0 to still move with a newly computed ``hidden'' movement vector. So, if there are guards whose movement vector is 0, we will recompute their movement vector by not taking into account the area seen by the guards who have a non-zero movement vector.
 
@@ -518,7 +518,7 @@ Figure \ref{fig:greedy} offers an example of a greedy initialisation. The first 
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{theory/greedy2.png}
-        \caption{Guard $g_2$ has been arbitrarily placed inside the polygon $P$, outside of the visibility region of guard $g_1$.}
+        \caption{Guard $g_2$ has been arbitrarily placed inside the polygon $P$, outside the visibility region of guard $g_1$.}
         \label{fig:greedy2}
     \end{subfigure}
     % \begin{subfigure}{0.45\textwidth}
