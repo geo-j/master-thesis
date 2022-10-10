@@ -35,17 +35,19 @@ This thesis will thus be an optimisation algorithm engineering paper. The main g
 % As such, we expect to be able to provide convergence guarantees for the algorithm. 
 The algorithm will be implemented in C ++ using the CGAL library (\url{https://www.cgal.org}).
 
-This paper is organised as follows: Section \ref{sec:literature} offers an overview of existing work; Section \ref{sec:theory} explains how in theory gradient descent is used to solve the Art Gallery Problem and what heuristics we can make use of to improve the performance of our algorithm; Section \ref{sec:experiments} offers an overview of how well our algorithm performs in practice. Lastly, Section \ref{sec:problems} reveals the major issue this project has encountered.
+This paper is organised as follows: Section \ref{sec:literature} offers an overview of existing work; Section \ref{sec:theory} explains how in theory gradient descent is used to solve the Art Gallery Problem and what heuristics we can make use of to improve the performance of our algorithm; Section \ref{sec:experiments} offers an overview of how well our algorithm performs in practice. Lastly, Section \ref{sec:problems} reveals issues this project has encountered.
 % As such, preliminary research and its implementation is presented as preparation for the second phase of the thesis project. Section \ref{sec:literature} offers an existing literature overview. Next, Section \ref{sec:theory} describes the relevant theory in detail.
 % As a preview, Section \ref{sec:experiments} shows some introductory algorithm implementations and their performance.
 % Lastly, Section \ref{sec:thesis} presents the development plan for the second phase of the Master's Thesis project.
 
 \subsection{Discussion}
-As previously mentioned, this thesis focussed on implementing and evaluating a gradient descent algorithm to find a solution to the Art Gallery Problem. Indeed, this goal has been achieved for a few cases. 
-Nonetheless, it is worth discussing the development process and the performance of the algorithm. Gradient descent is quite a straight-forward approach. However, its implementation in the context of the Art Gallery Problem is not. There were numerous edge-cases to be taken into account. For many of them, we devised various heuristics with hyperparameters. Other heuristics (momentum) were created as a solution to the gradient descent's sudden jumps shortcomings.
+As previously mentioned, this thesis focusses on implementing and evaluating a gradient descent algorithm to find a solution to the Art Gallery Problem. Indeed, this goal has been achieved for a few cases. 
+Nonetheless, it is worth discussing the development process and the performance of the algorithm. Gradient descent is quite a straight-forward approach. However, its implementation in the context of the Art Gallery Problem is not. There were numerous edge-cases to be taken into account. For many of them, we created various hyperparameterised heuristics. Other heuristics (momentum) were created as an improvement to the shortcomings of the vanilla version of gradient descent.
 
-The resulting program is sensitive to hyperparameter choices, polygon shapes and starting guard positions. For this reason, we only provide qualitative evaluations for the heuristics used to extend on gradient descent. Namely, the experiments section discusses the importance of each of the heuristics used. The way this will be done is by running the program with all heuristics but the one whose importance we are discussing. In this way, we will assess its significance in its absence. The reason behind this experimental setup is that combinations of all heuristics are both verbose and unnecessary. Given that the program is still limited to a few number of examples, we cannot use extensive quantitative experimental tools to test its performance.
-In this way, we provide a pragmatic overview to the usefulness of each of the heuristics and hyperparameters used. Namely, we analyse on what the type of polygons different heuristics and hyperparameter values would provide the best results.
+The resulting program is sensitive to hyperparameter choices, polygon shapes and starting guard positions. For this reason, we only provide qualitative evaluations for the heuristics used to extend gradient descent. Namely, Section \ref{sec:experiments} discusses the added benefits of each of the heuristics used. The way this is done is by running the program with all heuristics but the one whose practicality we are discussing. In this way, we will assess its significance in its absence. The reason behind this experimental setup is that combinations of all heuristics are both verbose and unnecessary. Given that the program is still limited to a few number of examples, we cannot use extensive statistical tools to test its performance.
+In this way, we provide a pragmatic overview to the usefulness of each of the heuristics and hyperparameters used. Namely, we analyse on what the type of polygons different heuristics and hyperparameter values provide concrete results.
+
+Section \ref{sec:future} will further discuss about how the program could be improved in the future.
 
 
 
@@ -53,13 +55,16 @@ In this way, we provide a pragmatic overview to the usefulness of each of the he
 %     - selection of heuristics that make sense (because their combination is too long)
 % - "conclusion"
 
-\section{Future Work}
+\subsection{Future Work}
+\label{sec:future}
 Currently, the program offers a state-of-the-art view about its practical possibilities.
-In the future, it would be suitable to extend it with more general functionalities and capabilities.
+In the future, it would be suitable to extend it with more robust functionalities.
 
-One of the most crucial aspects of improvement for the program would be to solve the existing errors and bugs. As of now, the program crashes for specific input polygons. Another important element to consider would be to code it more efficiently. The program does not scale well. 
+One of the most crucial aspects of improvement for the program would be to solve the existing errors and bugs. As of now, the program crashes for specific input polygons (see Section \ref{sec:problems} for an extensive overview of its shortcomings). Another important element to consider would be to code it more efficiently. Some of the data structures used are naive and can be easily implemented in a smarter way. For this reason, the program does not scale well. 
+
 Additionally, some features and heuristics are not complete. For example, the greedy initialisation of the guards' position is deterministic. In order to quantitatively assess the performance of the algorithm, a truly randomised greedy initialisation would be required for statistical significance.
-Lastly, it would be worth exploring how the algorithm would benefit from a different implementation. Namely, using another programming language like Python and other libraries which are better documented and more reliable to use.
+
+Lastly, it would be worth exploring how the algorithm would benefit from a different implementation. Namely, using another programming language like Python (or CGAL Python bindings) and other geometry libraries which are better documented and more reliable to use.
 % - improve the efficiency of the code
 %     - can add a flag for guards whose gradient has been computed instead of copying the vector
 % - find a more efficient way of coding to tackle the edge-cases
