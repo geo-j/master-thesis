@@ -8,7 +8,7 @@ Figure \ref{fig:art} displays an example of the Art Gallery Problem \cite{o1987a
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.6\textwidth]{p.png}
+    \includegraphics{theory/visp.pdf}
     \caption{Example of an Art Gallery Problem instance with polygon $P$ guarded by 2 points. The visibility area $\mathit{Vis}(g)$ is emphasised in pink.}
     \label{fig:art}
 \end{figure}
@@ -25,7 +25,7 @@ Figure \ref{fig:gradient_descent} illustrates an intuitive example of applying g
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.6\textwidth]{gradient.png}
+    \includegraphics{gradient.pdf}
     \caption{Illustrative example of applying gradient descent.}
     \label{fig:gradient_descent}
 \end{figure}
@@ -35,7 +35,7 @@ This thesis will thus be an optimisation algorithm engineering paper. The main g
 % As such, we expect to be able to provide convergence guarantees for the algorithm. 
 The algorithm will be implemented in C ++ using the CGAL library (\url{https://www.cgal.org}).
 
-This paper is organised as follows: Section \ref{sec:literature} offers an overview of existing work; Section \ref{sec:theory} explains how in theory gradient descent is used to solve the Art Gallery Problem and what heuristics we can make use of to improve the performance of our algorithm; Section \ref{sec:experiments} offers an overview of how well our algorithm performs in practice. Lastly, Section \ref{sec:problems} reveals issues this project has encountered.
+This paper is organised as follows: Section \ref{sec:literature} offers an overview of existing work; Section \ref{sec:theory} explains how in theory gradient descent is used to solve the Art Gallery Problem and what heuristics we can make use of to improve the performance of our algorithm; Section \ref{sec:experiments} offers an overview of how well our algorithm performs in practice. Lastly, Section \ref{sec:problems} discusses issues this project has encountered.
 % As such, preliminary research and its implementation is presented as preparation for the second phase of the thesis project. Section \ref{sec:literature} offers an existing literature overview. Next, Section \ref{sec:theory} describes the relevant theory in detail.
 % As a preview, Section \ref{sec:experiments} shows some introductory algorithm implementations and their performance.
 % Lastly, Section \ref{sec:thesis} presents the development plan for the second phase of the Master's Thesis project.
@@ -47,7 +47,7 @@ Nonetheless, it is worth discussing the development process and the performance 
 The resulting program is sensitive to hyperparameter choices, polygon shapes and starting guard positions. For this reason, we only provide qualitative evaluations for the heuristics used to extend gradient descent. Namely, Section \ref{sec:experiments} discusses the added benefits of each of the heuristics used. The way this is done is by running the program with all heuristics but the one whose practicality we are discussing. In this way, we will assess its significance in its absence. The reason behind this experimental setup is that combinations of all heuristics are both verbose and unnecessary. Given that the program is still limited to a few number of examples, we cannot use extensive statistical tools to test its performance.
 In this way, we provide a pragmatic overview to the usefulness of each of the heuristics and hyperparameters used. Namely, we analyse on what the type of polygons different heuristics and hyperparameter values provide concrete results.
 
-Section \ref{sec:future} will further discuss about how the program could be improved in the future.
+Section \ref{sec:future} will further discuss how the program could be improved in the future.
 
 
 
