@@ -1,7 +1,7 @@
 \section{Theory}
 \label{sec:theory}
 
-This section investigates the theory aspects of solving the Art Gallery Problem using gradient descent. Namely, we explain what the optimisation function in the context of the Art Gallery problem is, and how it can be solved with gradient descent. We initially apply gradient descent to only one guard, then extend it to multiple guards.
+This section investigates the theory aspects of solving the Art Gallery Problem using gradient descent. Namely, we explain what the optimisation function is in the context of the Art Gallery problem, and how it can be solved with gradient descent. We initially apply gradient descent to only one guard, then extend it to multiple guards.
 
 \subsection{Guarding the Polygon with One Point}
 
@@ -12,7 +12,7 @@ First, we explore how gradient descent is applied for the case that we want to g
 
 Let $P$ be a polygon and $g = (x, y) \in P$ a guard. We are interested in computing the best direction for moving $g$ inside $P$ such that the visibility area $\mathit{Vis}(g)$ increases. That is, exploring what would be a better position $g'$ to move $g$ to such that $g$ ``sees more'' of the polygon $P$. 
 
-We define $f(g) = \text{Area}(g)$ as the area seen by a guard $g$. Let $\bigtriangledown \text{Area}_r(g)$ be the local change in the area guarded by point $g$ around a reflex vertex $r$ seen by guard $g$, thus $r \in \mathit{Vis(g)}$. Given all reflex vertices $i$, the total (global) change in the area seen by $g$ is thus summed up to $\text{Area}(g) = \sum_i \text{Area}_i(g)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $P$ and its reflex vertices $r_1$ and $r_2$. The polygon $P$ is guarded by $g$, and its position is modified to $g'$ by a small change $\partial y$ in its $y$-coordinate. The visibility areas of $g$ are $Area_{r_1}$ and $Area_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $g$ is computed as $\bigtriangledown \text{Area}(g) = \bigtriangledown \text{Area}_{r_1}(g) + \bigtriangledown \text{Area}_{r_2}(g)$.
+We define $f(g) = \text{Area}(g)$ as the area seen by a guard $g$. Let $\bigtriangledown \text{Area}_r(g)$ be the local change in the area guarded by point $g$ around a reflex vertex $r$ seen by guard $g$, thus $r \in \mathit{Vis(g)}$. Given all reflex vertices $i$, the total (global) change in the area seen by $g$ is summed up to $\text{Area}(g) = \sum_i \text{Area}_i(g)$. Figure \ref{fig:sumf} offers an example for this case for a polygon $P$ and its reflex vertices $r_1$ and $r_2$. The polygon $P$ is guarded by $g$, and its position is modified to $g'$ by a small change $\partial y$ in its $y$-coordinate. The visibility areas of $g$ are $Area_{r_1}$ and $Area_{r_2}$ around reflex vertices $r_1$ and $r_2$, respectively. In this way, the total change in the visibility area of $g$ is computed as $\bigtriangledown \text{Area}(g) = \bigtriangledown \text{Area}_{r_1}(g) + \bigtriangledown \text{Area}_{r_2}(g)$.
 
 Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery Problem. We  then use gradient descent as a method to optimise the objective function $f$. We define below what the methodology of gradient descent consists of.
 
