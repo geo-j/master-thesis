@@ -8,7 +8,7 @@
 
 This section provides the implementation details of the theory part (Section \ref{sec:theory}). Then, we  introduce our experimental setup. The experiments include basic test polygons to showcase the execution of the program. We  also observe the importance of each of the heuristics used. We analyse then how the program scales in the context of the comb polygon. Lastly, we  mention the importance of the hyperparameter values used.
 
-The algorithm is implemented in C ++ and makes use of the CGAL library (\url{https://www.cgal.org}). The project is publicly found at \url{https://github.com/geo-j/master-thesis}. It contains 22 code files and 1873 lines of code (excluding comments and empty lines).
+The algorithm is implemented in C++ and makes use of the CGAL library (\url{https://www.cgal.org}). The project is publicly found at \url{https://github.com/geo-j/master-thesis}. It contains 22 code files and 1873 lines of code (excluding comments and empty lines).
 From the CGAL library we are using the Triangular Expansion Visibility algorithm \cite{DBLP:journals/corr/BungiuHHHK14} to compute the visibility polygons.
 
 The program takes the segments of a boundary of a simple polygon, and the initial coordinates of the guards as input. For each iteration, the new position of the guards, the area seen by each guard and their movement direction details (momentum, pull, events i.e. pulling on top of reflex vertices) are logged in a file. Using the logfile, the program creates visualisations for the position of each guard, their visibility polygon area and their movement direction vector for each iteration. The program also plots the area seen both by each guard and in total. The visualisations are created using the Python 3 libraries matplotlib (\url{https://matplotlib.org/}) and the scikit-geometry (\url{https://github.com/scikit-geometry/scikit-geometry}).
@@ -45,6 +45,7 @@ We observe this behaviour with an arbitrary polygon in Figure \ref{fig:random}. 
     \label{fig:random}
 \end{figure}
 
+\newpage
 Figure \ref{fig:no_momentum} displays the area seen per iteration for the arbitrary polygon. Both the total and the individual areas seen by each guard are shown. Starting with almost the whole polygon seen, the guards are eventually optimally placed. Nonetheless, using momentum clearly makes a difference in Subfigure \ref{fig:no_momentum1}, than when not using it in Subfigure \ref{fig:no_momentum2}. Momentum allows the overall seen area to keep a steady trajectory towards its maximum. Additionally, guards quickly find their optimum in only 4 iterations, without many oscillations. In Subfigure \ref{fig:no_momentum2} however we  observe how the total area fluctuates. The guards display large jumps close to iterations 5 and 20. These jumps cause the overall progress towards the optimum to be less stable. For example, when guard 2 ($g2$) has a sudden drop in the area it sees around iteration 5, the total area seen naturally drops as well. The algorithm only recovers after iteration 20, when guard 0 ($g0$) makes another large jump. This behaviour also emphasises how the movement of one guard heavily influences the other guards' trajectories. As a result, the guards' trajectories to optimality become noisier and slower (more iterations are needed).
 % Subfigure \ref{fig:no_momentum1} displays a more smoothened out trajectory for each guard. 
 
@@ -81,7 +82,7 @@ A suggestive way to observe how well line search works is with the comb polygon 
     \label{fig:comb}
 \end{figure}
 
-Figure \ref{fig:no_line_search} displays the area seen per iteration for the comb polygon with four teeth. Both the total area seen and the individual area seen by each guard are shown. Starting with around 82.5\% total area seen, the global optimum is eventually found. Nonetheless, using line search clearly makes a difference between Subfigures \ref{fig:no_line_search1} and \ref{fig:no_line_search2}. The first noticeable difference is the number of iterations. Using line search allows the guards to find their optimal positions in 3 iterations, with a steady increase in the total area seen. It is worth mentioning that not all guards were moved in iteration 3. This is because the polygon was fully seen after moving only two of the guards. On the other hand, in subfigure \ref{fig:no_line_search2} not using line search results in the optimal position to be found in more than 80 iterations. What is more, 3 of the guards found their optimal position after the $30^{\text{th}}$ iteration, whereas the last 50 iterations are spent on only one guard finding its own.
+Figure \ref{fig:no_line_search} displays the area seen per iteration for the comb polygon with four teeth. Both the total area seen and the individual area seen by each guard are shown. Starting with around 82.5\% total area seen, the global optimum is eventually found. Nonetheless, using line search clearly makes a difference between Subfigures \ref{fig:no_line_search1} and \ref{fig:no_line_search2}. The first noticeable difference is the number of iterations. Using line search allows the guards to find their optimal positions in 3 iterations, with a steady increase in the total area seen. It is worth mentioning that not all guards were moved in iteration 3. This is because the polygon was fully seen after moving only two of the guards. On the other hand, in subfigure \ref{fig:no_line_search2} not using line search results in the optimal position to be found in more than 80 iterations. Additionally, 3 of the guards found their optimal position after the $30^{\text{th}}$ iteration, whereas the last 50 iterations are spent on only one guard finding its own.
 
 
 \begin{figure}[h!]
@@ -103,13 +104,18 @@ Figure \ref{fig:no_line_search} displays the area seen per iteration for the com
 Therefore, we reckon that line search significantly and more efficiently speeds up the process of finding the optimal position for each guard. In this way, each guard moves faster to its optimal position. The situation where multiple guards that have found their optimal position have to wait for only one guard to find its own is also avoided.
 
 \subsubsection{Without Pulling Onto Reflex Vertex}
-In this section we  discuss the impact the pull onto the reflex vertex heuristic has on the behaviour of the algorithm. Section \ref{sec:pull_onto} introduced the pull onto reflex vertices heuristic. This heuristic tackles the idea that if a guard is ``close enough'' to a reflex vertex, then the locally maximum seen area would be achieved by placing the guard on top of the reflex vertex. 
+In this section we discuss the impact that the pull onto the reflex vertex heuristic has upon the behaviour of the algorithm. Section \ref{sec:pull_onto} introduced the pull onto reflex vertices heuristic. This heuristic tackles the idea that if a guard is ``close enough'' to a reflex vertex, then the locally maximum seen area would be achieved by placing the guard on top of the reflex vertex. 
 % We have defined ``close enough'' as a guard being closer than two thirds of the minimum distance between any two reflex vertices in the polygon.
 
 We  compare how the guards move when we are using all the heuristics to when we are not pulling them onto reflex vertices. The guards  start at the same fixed position in both cases.
 
 Figure \ref{fig:no_pull_eg} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard's movement changes when it is placed onto the reflex vertex; Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard's movement changes when it is pulled towards the reflex vertex, but not onto it. We  observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moves away from the reflex vertex.
 
+These events are also observed in the two seen area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
+
+Therefore, we believe that pulling guards on top of reflex vertices when they are ``close enough'' results in maximising the local area seen by those guards. The number of iterations needed to reach the global maximum is thus reduced. So, the efficiency of the algorithm is also improved.
+
+\newpage
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
@@ -123,7 +129,7 @@ Figure \ref{fig:no_pull_eg} displays the two reflex vertex pull cases: Subfigure
         \caption{All heuristics. The green guard is onto the reflex vertex.}
         \label{fig:all_pull_pos1}
     \end{subfigure}
-    \vfill
+    % \vfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_pull_pos0_fixed.png}
         \caption{No pull onto the reflex vertex. The green guard is pulled towards the reflex vertex.}
@@ -138,11 +144,7 @@ Figure \ref{fig:no_pull_eg} displays the two reflex vertex pull cases: Subfigure
     \caption{Example of different movements of guards with and without pulling them onto reflex vertices in an arbitrarily shaped polygon guarded by three guards.}
     \label{fig:no_pull_eg}
 \end{figure}
-
-% However, its movement still indicates that it should move back, closer to the reflex vertex it was not placed on. 
-These events are also observed in the two seen area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
-
-
+\vfill
 \begin{figure}[!h]
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/area_random_all_fixed.png}
@@ -159,16 +161,12 @@ These events are also observed in the two seen area plots in Figure \ref{fig:no_
     \label{fig:no_pull_plots}
 \end{figure}
 
-
-Therefore, we believe that pulling guards on top of reflex vertices when they are ``close enough'' results in maximising the local area seen by those guards. The number of iterations needed to reach the global maximum is thus reduced. So, the efficiency of the algorithm is also improved.
-
+\newpage
 \subsubsection{Without Pull Capping}
 In this section we  discuss how not capping the pull towards a reflex vertex influences the progress of the algorithm. Section \ref{sec:pull_capping} introduced the notion of capping the pull towards a reflex vertex. The reason for this choice was to not allow the pull to overpower the value of the momentum. So, if the pull is larger than $\mu$ times the momentum, it is capped at the momentum value multiplied by $\mu$. 
 
 We  compare how the guards move when we are using all the heuristics to when we are not capping the pull towards reflex vertices. We  use the comb polygon with four teeth as example. The guards have a pull cap hyperparameter $\mu = 1$. Thus, if the pull is larger than the momentum, we cap it at the size of the momentum. This value was chosen experimentally in order to clearly show the benefits of using this heuristic. So, if the pull is as large as the momentum, we prioritise pulling guards onto reflex vertices if they are ``close enough''.
 
-Figure \ref{fig:no_cap_eg} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_cap_pos0} and \ref{fig:all_cap_pos1} show how the blue guard movement changes when its pull is capped; Subfigures \ref{fig:no_cap_pos0} and \ref{fig:no_cap_pos1} show the opposite. We  observe how in Subfigure \ref{fig:all_cap_pos0} the blue guard has its pull towards the reflex vertex capped. In that case, the movement vector is larger than the pull, so the guard doesn't move towards the reflex vertex. So, the blue guard moves as its movement vector dictates to the position in Subfigure \ref{fig:all_cap_pos1}. This encourages the guard to explore the polygon more rather than directly moving towards a reflex vertex.
-Conversely, Subfigure \ref{fig:no_cap_pos1} displays the blue guard moving closer to the reflex vertex it is pulled to. In subsequent iterations, it is placed on the reflex vertex.
 
 \begin{figure}[h!]
     \centering
@@ -199,6 +197,10 @@ Conversely, Subfigure \ref{fig:no_cap_pos1} displays the blue guard moving close
     \label{fig:no_cap_eg}
 \end{figure}
 
+Figure \ref{fig:no_cap_eg} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_cap_pos0} and \ref{fig:all_cap_pos1} show how the blue guard movement changes when its pull is capped; Subfigures \ref{fig:no_cap_pos0} and \ref{fig:no_cap_pos1} show the blue guard's movement without pull capping. We  observe how in Subfigure \ref{fig:all_cap_pos0} the blue guard has its pull towards the reflex vertex capped. In that case, the movement vector is larger than the pull, so the guard doesn't move towards the reflex vertex. So, the blue guard moves as its movement vector dictates to the position in Subfigure \ref{fig:all_cap_pos1}. This encourages the guard to explore the polygon more rather than directly moving towards a reflex vertex.
+Conversely, Subfigure \ref{fig:no_cap_pos1} displays the blue guard moving closer to the reflex vertex it is pulled to. In subsequent iterations, it is placed on the reflex vertex.
+
+
 Figure \ref{fig:no_cap_plots} shows how the global behaviour of the algorithm is influenced by the capping. Interestingly enough, when capping the pull, the guards' behaviour is more erratic. This results in more iterations before the whole polygon is seen (Subfigure \ref{fig:area_all_cap}). On the other hand, using no capping allows a steadier increase in the total area seen (Subfigure \ref{fig:area_no_cap}). Eventually, the blue guard ($g0$) is drawn and placed onto the reflex vertex in iteration 2. The reflex vertex placement does not improve the locally seen area. However, it reinforces the previously discussed idea that placing guards on reflex vertices is globally beneficial for the algorithm. As such, tuning the hyperparameter $\mu$ is a crucial point of exploration for deciding how and when pull capping would always prove most favourable.
 
 \begin{figure}[!h]
@@ -217,16 +219,22 @@ Figure \ref{fig:no_cap_plots} shows how the global behaviour of the algorithm is
     \label{fig:no_cap_plots}
 \end{figure}
 
-We believe that capping the guards' pull towards a reflex vertex highly depends on the hyperparameter $\mu$. When not capped, it emphasises the importance of placing guards on reflex vertices. However, when the pull of guards is capped, we are using a more exploratory approach to discovering the polygon. Thus, we can experimentally decide whether to use this heuristic. 
+In this way, we claim that capping the guards' pull towards a reflex vertex highly depends on the hyperparameter $\mu$. When not capped, it emphasises the importance of placing guards on reflex vertices. However, when the pull of guards is capped, we are using a more exploratory approach to discovering the polygon. Thus, we can experimentally decide whether to use this heuristic. 
 % The shape of the polygon can influence this decision as well.
 
+\newpage
 \subsubsection{Without Reflex Area}
 In this section we  discuss the importance of keeping guards in the reflex area of a reflex vertex they had been placed on. Section \ref{sec:reflex_area} introduced this heuristic. The idea counteracts the edge-case of guards moving away from reflex vertices they had been placed on. When they move away from the reflex vertex, they might unsee a large previously seen area. It is possible that afterwards their movement vector directs them to move back onto the reflex vertex. We want to prevent them from unnecessarily moving away and then back on the vertex in a loop. For this reason, we  keep them in the reflex area. The reflex area is then the area determined by the two segment lines meeting in the reflex vertex. By staying in this area, the guard would be able to move away from the reflex vertex in a direction that does not undo its progress.
 
+% \newpage
 We  compare how the guards move when we are using all the heuristics to when we are not keeping guards into a reflex area. We  use another arbitrary polygon as an example, that needs two guards to be fully seen.
 
 Figures \ref{fig:reflex_area_eg} and \ref{fig:area_reflex_area} compare the algorithm progress when using and not using the reflex area heuristic, respectively. Subfigures \ref{fig:reflex_area_all1} - \ref{fig:reflex_area_all4} show the guards' movement when one of them is bound to the reflex area. In this case, the blue guard wants to move away from the reflex vertex. The reflex area does not allow it to move away from the reflex vertex, so it stays there. 
 Subfigures \ref{fig:reflex_area_no1} - \ref{fig:reflex_area_no4} display the guards' movement when the reflex area heuristic is not applied. In this case, the blue guard moves away from the reflex vertex (Subfigure \ref{fig:reflex_area_no2}), only to be drawn back to it in the next iteration (Subfigure \ref{fig:reflex_area_no3}). This repetitive behaviour continues without eventually reaching the optimum state.
+
+Figure \ref{fig:area_reflex_area} displays the difference in the areas seen between the two approaches. When using all heuristics (Subfigure \ref{fig:area_reflex_area_all}), the algorithm terminates in 7 iterations. The continuous line clearly marks the guard who did not move away from the reflex vertex. When not using the reflex area heuristic (Subfigure \ref{fig:area_reflex_area_no}), the algorithm appears not to terminate. One of the guards loops away and back on the reflex vertex. The other guard loops so that it sees the area that is being seen and unseen by the other guard. In this way, they do not synchronise in order to see the polygon together at the same time. This is clearly shown in the repetitive plot.
+
+In this way, the reflex area heuristic becomes of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices in a repetitive manner. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. The guards continue to move out of sync with each other, resulting in the polygon never being fully seen.
 
 \newpage
 \thispagestyle{empty}
@@ -282,7 +290,7 @@ Subfigures \ref{fig:reflex_area_no1} - \ref{fig:reflex_area_no4} display the gua
 \end{figure}
 
 % \newpage
-Figure \ref{fig:reflex_area_eg} displays the difference in the areas seen between the two approaches. When using all heuristics (Subfigure \ref{fig:area_reflex_area_all}), the algorithm terminates in 7 iterations. The continuous line clearly marks the guard who did not move away from the reflex vertex. When not using the reflex area heuristic (Subfigure \ref{fig:area_reflex_area_no}), the algorithm appears not to terminate. One of the guards loops away and back on the reflex vertex. The other guard loops so that it sees the area that is being seen and unseen by the other guard. In this way, they do not synchronise in order to see the polygon together at the same time. This is clearly shown in the repetitive plot.
+
 
 \begin{figure}[h!]
     \centering
@@ -300,8 +308,6 @@ Figure \ref{fig:reflex_area_eg} displays the difference in the areas seen betwee
     \caption{Area comparison between using and not using the reflex area heuristic on an arbitrary polygon guarded by two guards.}
     \label{fig:area_reflex_area}
 \end{figure}
-
-Therefore, we believe that the reflex area heuristic is of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices in a repetitive manner. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. The guards continue to move out of sync with each other, resulting in the polygon never being fully seen.
 
 % \newpage
 \subsubsection{Without Angle Behind Reflex Vertex}
@@ -361,7 +367,7 @@ In terms of efficiency, the optimal solution is achieved in more iterations when
     \label{fig:no_angle_plots}
 \end{figure}
 
-Therefore, we believe that computing the angle behind the reflex vertex is a heuristic that allows us to fine-tune and smoothen the movement of the guards. In this way, we  focus on moving fast towards the bigger unseen areas, while not neglecting the smaller ones. We could say that this heuristic offers a trade-off between the number of iterations and path smoothness. For this reason, the performance of the algorithm is influenced by the type of polygons it is applied to: polygons with sharper, narrower turns could benefit the most from this heuristic.
+Therefore, computing the angle behind the reflex vertex is a heuristic that allows us to fine-tune and smoothen the movement of the guards. In this way, we  focus on moving fast towards the bigger unseen areas, while not neglecting the smaller ones. We could say that this heuristic offers a trade-off between the number of iterations and path smoothness. For this reason, the performance of the algorithm is influenced by the type of polygons it is applied to: polygons with sharper, narrower turns could benefit the most from this heuristic.
 
 
 \subsubsection{No Hidden Movement}
@@ -387,7 +393,7 @@ Figure \ref{fig:area_no_hidden_gradient} displays a comparison between using and
     \label{fig:area_no_hidden_gradient}
 \end{figure}
 
-Therefore, we believe that the hidden gradient heuristic results in a significant improvement to our algorithm in terms of efficiency. In this way, all guards are ensured to make some progress towards their optimum and are not stalled.
+Therefore, we reckon that the hidden gradient heuristic results in a significant improvement to our algorithm in terms of efficiency. In this way, all guards are ensured to make some progress towards their optimum and are not stalled.
 
 \subsubsection{Greedy Initialisation}
 In this section we  discuss the benefits of using a greedy initialisation technique for our algorithm. Section \ref{sec:greedy} introduces it as beneficial for giving a head start to our algorithm. In our experiments we  greedily initialise the guards in the middle of the leftmost segment of each of their visibility regions. The reason behind this choice is that CGAL did not offer a quick way to pick a randomised position inside the visibility area. Due to the time constraints of this thesis, we decided to use a deterministic positioning.
@@ -433,7 +439,7 @@ We expect that the number of iterations and the execution time needed would scal
 Figure \ref{fig:all_combs} displays the progression of our algorithm for the comb polygons with 2, 3, ..., 10, 15, 20 teeth within one hour. The comb polygons with 50 and 100 teeth did not complete any iteration within that time.
 For comb polygons with 5 teeth and more than 6 teeth, the timeout was not enough to find a feasible solution. Nonetheless, it is worth discussing their behaviour, as it highlights the different issues the algorithm faces. 
 For comb polygons with 7, 9 and 10 teeth, the guards appear to be stuck in a local plateau that they did not manage to escape. This is traced to an edge-case where the guards are stuck in their position because their movement vector does not improve the total area. Another reason why the guards do not move is that they are still trying to maximise their local area in the case where the total area seen cannot be increased within that step. This could result in them all moving to the same part of the polygon. Since that part of the polygon maximises their local area, they  not move anymore.
-For the comb polygon with 5 teeth, the guards appear to be stuck in a local maxima that they manage to escape. Unfortunately, they later return to it and restart the cycle. It is unclear whether the comb polygon with 8 teeth would display a similar looping behaviour. Given the timeout, the guards trying to solve the comb polygon with 8 teeth display a less predictable behaviour. We believe that hyperparameter tuning could address this issue.
+For the comb polygon with 5 teeth, the guards appear to be stuck in a local maxima that they manage to escape. Unfortunately, they later return to it and restart the cycle. It is unclear whether the comb polygon with 8 teeth would display a similar looping behaviour. Given the timeout, the guards trying to solve the comb polygon with 8 teeth display a less predictable behaviour. Hyperparameter tuning could address this issue.
 
 \begin{figure}[h!]
     \centering
@@ -446,18 +452,19 @@ Conversely, it is also crucial to address in Figure \ref{fig:good_combs} the com
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = \textwidth]{experiments/good_combs_areas.png}
+    \includegraphics[width = 0.8\textwidth]{experiments/good_combs_areas.png}
     \caption{The percentage of the area seen in terms of iterations for comb polygons with 2, 3, 4, and 6 teeth.}
     \label{fig:good_combs}
 \end{figure}
 
 It is also worth discussing how the initial guard placement and comb polygon shapes could influence the performance of the algorithm.
 Firstly, it is important to note the initial placement strategy. Guards are placed in the same lower left part of the polygon. However, the larger a polygon, the lower the initially seen area. For example, we  observe how the comb polygon with 2 teeth starts at more than 80\% seen area. On the other hand, the comb polygon with 20 teeth has a less than 65\% seen area at start. We could argue that this type of placement gives larger polygons a start disadvantage. A way to mitigate this issue could be to find a way of placement that scales, while still keeping the initial similar positioning among different combs.
+\newpage
 Moreover, the algorithm is sensitive to the shape of the polygons. The bigger a comb polygon grows, the sharper and narrower its teeth are. A good example in this case is Figure \ref{fig:comb20}, which displays a comb polygon with 20 teeth. Clearly, the teeth are much narrower than in the case of a comb with 4 teeth. This raises the question about the performance of the algorithm given different angles in the polygon boundary. A possible solution to this aspect would be to scale up the polygon. However, a similar question would remain: does the algorithm necessarily perform better or worse because of the polygon shape? What would be the optimal shape?
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = 0.8\textwidth]{experiments/comb20.png}
+    \includegraphics[width = 0.65\textwidth]{experiments/comb20.png}
     \caption{Comb polygon with 20 teeth.}
     \label{fig:comb20}
 \end{figure}
@@ -473,9 +480,12 @@ Figure \ref{fig:irrational} displays the difference in runs between the previous
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[width = 0.7\textwidth]{experiments/irrational_areas.png}
+    \includegraphics[width = 0.5\textwidth]{experiments/irrational_areas.png}
     \caption{Comparison for the irrational guards polygon between guards with approximately irrational coordinates and rational guard coordinates.}
     \label{fig:irrational}
 \end{figure}
 
-Therefore, we believe that the irrational guards polygon is a suggestive example to the sensitivity of the algorithm to initial guard placements. The starting position of the guards can determine whether the algorithm is able to escape local minima or not crash. Nonetheless, we are not able to provide a generalisation of this statement. Namely, we were not able to determine how the starting position of the guards influences the progress of the algorithm, while it is also dependent on the polygon shape.
+The irrational guards polygon becomes thus a suggestive example to the sensitivity of the algorithm to initial guard placements. The starting position of the guards can determine whether the algorithm is able to escape local minima or not crash. Nonetheless, we are not able to provide a generalisation of this statement. Namely, we were not able to determine how the starting position of the guards influences the progress of the algorithm, while it is also dependent on the polygon shape.
+
+In this way, we observed how the different heuristics influence the algorithm. Some heuristics, like momentum, proved to be fundamental to its correct development. Others, such as the pull capping, require case-specific tuning based on the start positions of the guards and the shape of the polygon.
+In the next section we further discuss why the algorithm is sensitive to these hyperparameters and how it could be improved.
