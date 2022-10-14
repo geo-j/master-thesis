@@ -20,7 +20,7 @@ However, we did not encounter this edge-case frequently enough to give it a high
 \subsubsection*{CGAL}
 Moreover, numerous issues were posed by the CGAL library itself. These problems mainly related to the library's non-detailed errors and brief documentation. Having to reverse engineer and delve into the source-code of CGAL slowed down the debugging process. Because some errors were not explicit at all, some crashes remained unsolved (for example, the program crashes for certain starting positions for different polygons). We encountered these issues only half-way through the thesis. Because of a lack of more robust known computational geometry libraries and time constraints, we decided to heroically tackle them.
 
-Some issues were posed by converting between CGAL's number types and the native C ++ types (\texttt{double}). CGAL's proprietary numeric values were greatly inefficient and effort was required to convert these to C++ native \texttt{double} values. Doing this greatly increased efficiency.
+Some issues were posed by converting between CGAL's number types and the native C++ types (\texttt{double}). CGAL's proprietary numeric values were greatly inefficient and effort was required to convert these to C++ native \texttt{double} values. Doing this greatly increased efficiency.
 Nonetheless, such conversion resulted in approximation errors. For instance, some guards ``close enough'' to reflex vertices were wrongly considered to be on the reflex vertex. Conversely, comparing point coordinates would not always work, as sometimes guards with the same coordinates would not be considered to be the same.
 
 \subsubsection*{Input Polygons}
@@ -30,12 +30,17 @@ Lastly, we also wanted to test the program on polygons from the APGlib library \
 
 \subsubsection*{Scalability}
 Another problem worth mentioning is scalability. The program does not scale. As mentioned in Section \ref{sec:experiments}, for comb polygons with more than 6 teeth, the waiting time already exceeds an hour to finish. We believe that this waiting time is inadequate for the size of the polygon and number of guards inside it.
+
 Some of the largest bottlenecks that work against scalability are the visibility area and the hidden movement computations. Currently, the visibility area of each guard is updated at every iteration. We are using the Triangular Expansion Visibility \cite{DBLP:journals/corr/BungiuHHHK14} which runs in $O(g)$ time, with $g$ the number of guards. Thus, the visibility computation per iteration runs in $O(g^2)$ time. 
 In terms of the hidden movement computation, each guard has its gradient recomputed at most $g$ times. This happens in the case when only one guard out of the $g$ guards has a non-zero movement vector, and thus it gets removed from the set. The remaining $g - 1$ guards have their movement vector recomputed. Again, in the worst case only one guard has a non-zero gradient. Thus, a guard gets its movement vector recomputed in $O(g^2)$ time.
+
 Other poorly scalable parts of the algorithm are based on the number of reflex vertices. The movement vector computation depends on the number of reflex vertices $r$. If $r >> g$, then the algorithm performs poorly for polygons with significantly fewer guards than reflex vertices.
 
-For these reasons, the algorithm is sensitive to the heuristics used, the shape of the polygons and the values of the hyperparameters. In the Section \ref{sec:experiments} we have mentioned some shapes of polygons that the algorithm can solve, with which hyperparameters and initial guard positions.
-We believe that if these edge-cases and errors get solved, the program should perform correctly and without crashing. We would still expect that the program would get stuck in local minima. However, it should be possible to escape them with case-specific hyperparameter tuning and heuristic choice.
+For these reasons, the program is especially sensitive to the values of the parameters. For instance, searching between fewer steps for line search can help the program find a solution faster. In this way, we decrease the number of steps taken for computing a new guard position. 
+% Therefore, should these naive (brute-force) implementations approaches be implemented more efficiently, we would expect the program to scale. 
+The program is additionally sensitive to the heuristics used and the shape of the polygons. In Section \ref{sec:experiments} we have mentioned some shapes of polygons that the algorithm can solve, with which hyperparameters and initial guard positions.
+
+Therefore, we believe that if these edge-cases and errors get solved, the program should perform correctly and without crashing. Additionally, should the naive (brute-force) approaches be implemented more efficiently, we would expect the program to scale. We would still predict that the program gets stuck in local maxima. However, it should be possible to escape them with case-specific hyperparameter tuning and heuristic choice.
 % Some of the polygons the algorithm can solve under the tested circumstances include those mentioned in Section \ref{sec:experiments}. 
 
 
