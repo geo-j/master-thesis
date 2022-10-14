@@ -8,7 +8,7 @@ First, we will address the question regarding whether polygons given by integer 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{literature/fig-12-1.png}
+    \includegraphics[width = \textwidth]{literature/fig-12.pdf}
     \caption{The polygon $P$ developed by Abraham et al. \cite{1057165} to emphasise the need for irrational guards sometimes.}
     \label{fig:p}
 \end{figure}
@@ -22,14 +22,14 @@ The six triangular pockets are created in order to force a guard on a line segme
     % \includegraphics[width=\textwidth]{Screenshot from 2022-02-02 09-57-44.png}
     \begin{subfigure}{0.3\textwidth}
         \centering
-        \includegraphics[width=0.45\textwidth]{literature/ForcingLine-1.png}
+        \includegraphics[width=\textwidth]{literature/ForcingLine.pdf}
         \caption{The only way that one guard can see both $t$ and $b$ is when the guard is on the blue line.}
         \label{fig:forcing_line}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.65\textwidth}
         \centering
-        \includegraphics[width=0.6\textwidth]{literature/DisjointTriangleRegions2-1.png}
+        \includegraphics[width=\textwidth]{literature/DisjointTriangleRegions2.pdf}
         \caption{The only way to guard the polygon with three guards requires one guard on each of the green lines $l_\ell, l_m, l_r$.}
         \label{fig:disjoint_triangle}
     \end{subfigure}
@@ -37,13 +37,14 @@ The six triangular pockets are created in order to force a guard on a line segme
     \label{fig:tb}
 \end{figure}
 
+\newpage
 \subsubsection{Intuition for Quadrilaterial Pockets}
 The four quadrilateral pockets are created in order to force a guard in a region bounded by a curve. Figure \ref{fig:quadrilateral_pockets} was taken and adapted from \cite{1057165}, and depicts the visualisation for this case. 
 Consider some position of $g_{\ell}$ on $l_{\ell}$. As $g_{\ell}$ moves up on $l_{\ell}$, the point $p^{\ell}_t$ slides towards the right on segment $e^{\ell}_t$, and point $p^{\ell}_b$ slides to the left on segment $e^{\ell}_b$. In this way, the lines $p^{\ell}_tb$ and $p^{\ell}_bd$, where $b, d$ are reflex vertices, intersect and form the curve $c_{\ell}$. Considering thus the fixed position of a guard $g_m$ either on the left or on the right of the curve $c_\ell$, there exists a position of guard $g_{\ell}$ on $l_{\ell}$ such that edge $e_t^{\ell}$ and line $p_b^{\ell}g_m$ are seen by $g_\ell$. Then, only if $g_m$ is on the left or on $c_\ell$ can it see the remaining parts of the pockets that are not seen by $g_\ell$ (edge $e_b^{\ell}$, line $p_t^{\ell}g_{\ell}$). Analogously, in order for the right side of $P$ and the right pair of quadrilateral pockets to be seen by both guards $g_m$ and $g_r$, $g_m$ has to be on the curve $c_r$ or on its right. Since $g_m$ has to also satisfy its position on $l_m$, its only feasible position is as the intersection point between $c_\ell, c_r$ and $l_m$. 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{literature/fig-6-1.png}
+    \includegraphics[width=\textwidth]{literature/fig-6.pdf}
     \caption{Restricting a guard to a region bounded by a curve \cite{1057165}.}
     \label{fig:quadrilateral_pockets}
 \end{figure}
@@ -52,18 +53,18 @@ Consider some position of $g_{\ell}$ on $l_{\ell}$. As $g_{\ell}$ moves up on $l
 The three rectangular pockets are created in order to force a guard to a single irrational point. Further building onto the previously discussed instance from Figure \ref{fig:quadrilateral_pockets}, the three rectangular pockets on the laterals and top of $P$ are added.  They allow for additional constraints for the positions of the guards $g_\ell, g_m, g_r$. Based on the curve equations of $c_\ell$ and $c_r$, we can thus calculate the irrational position of $g_m = (3.5 + 5\sqrt 2, 1.5\sqrt 2)$. Subsequently, we can fix the positions of $g_\ell$ and $g_r$ on lines $l_\ell$ and $l_r$.
 
 \subsubsection{Monotone Polygon Construction}
-The polygon $P$ in question  was found through experimentation in GeoGebra (\url{https://www.geogebra.org/}). The triangular and rectangular pockets were fixed. Finding then the position of the rectangular pockets required the existence of a rational line that contained the irrational coordinates of guard $g_m$ from Figure \ref{fig:quadrilateral_pockets}. The irrational coordinates of the two other guards $g_\ell, g_r$ were chosen such that they would be able to see the rest of the polygon that is unseen by $g_m$. The rectangular pockets were added based on their coordinates.
+The polygon $P$ in question  was found through experimentation in GeoGebra \cite{geogebra}. The triangular and rectangular pockets were fixed. Finding then the position of the rectangular pockets required the existence of a rational line that contained the irrational coordinates of guard $g_m$ from Figure \ref{fig:quadrilateral_pockets}. The irrational coordinates of the two other guards $g_\ell, g_r$ were chosen such that they would be able to see the rest of the polygon that is unseen by $g_m$. The rectangular pockets were added based on their coordinates.
 
 In this way, by placing each guard placed on the lines $l_\ell, l_m, l_r$ at unique irrational positions, respectively, dependencies between guard positions were created. The resulting guard set becomes thus $S = \{g_\ell, g_m, g_r\}$.  Given the unique and irrational positions of the guards, the only method for seeing the whole polygon $P$ using guards with rational positions would be to use at least 4. This statement can also be generalised such that a family of polygons $(\mathcal{P}_n)_{n \in \mathbb{Z}_+}, \forall n$ can be guarded by $3n$ guards with irrational coordinates, or requires $4n$ guards with rational coordinates. The coordinates determining the polygons are hence polynomial in $n$.
 
 \subsubsection{Rectilinear Polygon Construction}
 Similarly, a rectilinear polygon $P_R$ can be created given integer coordinates. Polygon $P_R$ would require guards with irrational coordinates in any optimal solution. It can be guarded by 9 guards if guards can be placed at points with irrational coordinates. Otherwise, the smallest optimal guard set $S$ with rational coordinates would be required to have size 10.
 
-Polygon $P_R$ can be constructed by extending $P$ with the 6 non-rectiliniar gray parts ($Q_1, Q_2, Q_3, Q_4, T_1, T_2$) in Figure \ref{fig:rectilinear}, such that each of them requires at least 1 guard in the interior. The figure was taken from \cite{1057165}. When placing 6 guards in the gray parts, the white areas of $P_R$ remain unseen. As such, 3 guards must still be similarly placed at the 3 irrational points on lines $l_\ell, l_m, l_r$ as in the case of $P$, in order to guard the rest of $P_R$.
+Polygon $P_R$ can be constructed by extending $P$ with the 6 non-rectiliniar gray parts ($Q_1, Q_2, Q_3,$ $Q_4, T_1, T_2$) in Figure \ref{fig:rectilinear}, such that each of them requires at least 1 guard in the interior. The figure was taken from \cite{1057165}. When placing 6 guards in the gray parts, the white areas of $P_R$ remain unseen. As such, 3 guards must still be similarly placed at the 3 irrational points on lines $l_\ell, l_m, l_r$ as in the case of $P$, in order to guard the rest of $P_R$.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{literature/RectilinearPolygonComplete4-1.png}
+    \includegraphics[width=\textwidth]{literature/RectilinearPolygonComplete4.pdf}
     \caption{Rectilinear Polygon $P_R$ \cite{1057165}.}
     \label{fig:rectilinear}
 \end{figure}
