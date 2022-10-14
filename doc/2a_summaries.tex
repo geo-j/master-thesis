@@ -7,7 +7,7 @@ Therefore, Bungiu et al. present three algorithms and their practical performanc
 \subsubsection{Algorithm of Joe and Simpson}
 The algorithm of Joe and Simpson \cite{joe1987corrections} runs in $O(n)$ time and space. 
 
-Let $v_i$, for $i = {1, 2, ..., n}$, be the boundary vertices of the polygon $P$. Let $g$ be a guard in $P$, and let $s$ be a stack datastructure. The stack $s$ will be used to keep track of the vertices determining $\mathit{Vis}(g)$. 
+Let $v_i$, for $i = {1, 2, ..., n}$, be the boundary vertices of the polygon $P$. Let $g$ be a guard in $P$, and let $s$ be a stack data structure. The stack $s$ will be used to keep track of the vertices determining $\mathit{Vis}(g)$. 
 
 The algorithm begins by scanning the boundaries of $P$. The scanning is done through shooting rays $\vec{pv_i}$, for $i = {1, 2, ..., n}$ in this order. The endpoints $v_i$ and $v_{i + 1}$ of each ray form a boundary edge $\overline{v_iv_{i + 1}}$. In this way, the processing of $v_i$ and $v_{i + 1}$ is done by checking whether the points are in $\mathit{Vis}(g)$. This means that the position of every $v_{i + 1}$ with respect to the ray $\vec{pv_i}$ is checked. If $v_{i + 1}$ is found in front of the ray $\vec{pv_i}$ (if $v_{i + 1}$ is seen from $g$), then both $v_i$ and $v_{i + 1}$ are added to the processing stack $s$. For every newly pushed vertex on $s$, the algorithm checks whether the segment $\overline{v_iv_{i + 1}}$ obscures any of the previously added vertices. If that is the case, then the endpoints of the obscured line segment are declared obsolete and deleted. The polygon comprised of the vertices from $s$ forms at the end the visibility polygon $\mathit{Vis}(g)$.
 

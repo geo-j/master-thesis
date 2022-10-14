@@ -46,7 +46,7 @@ We  use the notation $\frac{\partial f}{\partial y}$ to denote the change in the
 
 to be the gradient of $f$ given that $P$ is guarded by a point $g$. 
 
-We  now create a canonical geometrical construction that allows us to further define and compute $\bigtriangledown f$. In this case, we consider the normalised length of the gradient as $||~\bigtriangledown~f(g)||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
+We  now create a canonical geometric construction that allows us to further define and compute $\bigtriangledown f$. In this case, we consider the normalised length of the gradient as $||~\bigtriangledown~f(g)||~=~1$. This canonical construction is displayed in Figure \ref{fig:gradient}. 
 % We will then generalise this case to multiple reflex vertices and guards.
 
 \begin{figure}[h!]
@@ -374,7 +374,7 @@ Therefore, the movement of a guard $g$ to the new position $g'$ takes both the g
 
 \subsubsection{Pull onto the Reflex Vertex}
 \label{sec:pull_onto}
-We have now created a heuristic for pulling a guard closer to a reflex vertex based on the increase in the seen area behind the reflex vertex. It could happen however that the pull towards the reflex vertex is very strong. In this case, the guard could be moved past the reflex vertex, in between the reflex vertex and the polygon boundary. Although the area seen behind the reflex vertex would be maximised, the guard would ``unsee'' (parts of) the area seen from its initial position $g$. In order to address this particular edge-case, the guard is placed on the reflex vertex when the pull is strong enough. 
+We have now created a heuristic for pulling a guard closer to a reflex vertex based on the increase in the seen area behind the reflex vertex. It could happen however that the pull towards the reflex vertex is forceful. In this case, the guard could be moved past the reflex vertex, in between the reflex vertex and the polygon boundary. Although the area seen behind the reflex vertex would be maximised, the guard would ``unsee'' (parts of) the area seen from its initial position $g$. In order to address this particular edge-case, the guard is placed on the reflex vertex when the pull is strong enough. 
 
 This section thus expands on a procedure that decides when a guard is best placed on a reflex vertex based on its pull towards it.
 
@@ -419,7 +419,7 @@ Note that Figure \ref{fig:pull_onto} displays how the closer the guard to a refl
 
 \subsubsection{Pull Capping}
 \label{sec:pull_capping}
-Nonetheless, it can happen that the pull towards a reflex vertex is significantly larger in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a very large jump towards the reflex vertex.
+Nonetheless, it can happen that the pull towards a reflex vertex is significantly larger in comparison to the gradient and the momentum. In that case, if the guard is not pulled onto the reflex vertex, it would at least have a huge jump towards the reflex vertex.
 
 We want to smoothen out possibly erratic movement jumps. Just like in the case of momentum, we want our pull to be smoothened out when it is ``suddenly too large''. We define what ``suddenly too large'' is based on the momentum. If the pull is larger than a factor of $\mu$ than the momentum and a constant $c$, then we cap it at that value. So, at step $i$, the momentum $h_i(g_i)$ is capped as:
 \begin{align*}
@@ -474,7 +474,7 @@ We propose in this section a heuristic that further fine-tunes the factor with w
 
 A visualisation for this heuristic is found in Figure \ref{fig:angle}. The pull of the guard $g$ towards the reflex vertex $r$ is influenced by the normalised value of $\theta$ as follows: $$g' = g + (\frac{\theta}{2\pi} + c)(\bigtriangledown f(g) + \beta h(g)).$$
 
-We  additionally add a constant $c$ to account for very small angles. For example, if the normalised value of $\theta$ is close to $10^{-5}$, then $c = 10^{-2}$. Then the guard still has a significant move towards the unseen area, no matter how small it is. In this way, smaller areas are not overlooked.
+We  additionally add a constant $c$ to account for small angles. For example, if the normalised value of $\theta$ is close to $10^{-5}$, then $c = 10^{-2}$. Then the guard still has a significant move towards the unseen area, no matter how small it is. In this way, smaller areas are not overlooked.
 
 \begin{figure}[h!]
     \centering

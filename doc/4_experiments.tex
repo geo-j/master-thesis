@@ -313,7 +313,7 @@ In this way, the reflex area heuristic becomes of great importance to the correc
 \subsubsection{Without Angle Behind Reflex Vertex}
 In this section we  discuss the benefits of using the angle behind reflex vertices. Section \ref{sec:angle} introduced this heuristic. The idea behind this technique is that guards should be drawn faster to larger unseen areas behind reflex vertices. 
 % Conversely, if the unseen area behind the reflex vertex is very small, we don't want guards to move towards it. 
-In this way, we prioritise unseen areas based on their size, while still accounting for the very small unseen areas.
+In this way, we prioritise unseen areas based on their size, while still accounting for the small unseen areas.
 
 We  compare how the guards move when we are using all the heuristics to when we are not taking into account the angle behind the reflex vertex. We  use an arbitrary polygon as an example, that needs three guards to be fully seen.
 
@@ -424,7 +424,7 @@ Therefore, we believe that the greedy initialisation technique would be most ben
 \newpage
 \subsection{Scaling for the Comb Polygon}
 In this section we  observe how the algorithm scales on the comb polygon. We  take the comb polygons with 2, 3, ..., 10, 15, 20, 50, 100 teeth. We  note how the algorithm progresses in terms of the total area seen per iteration.
-As such, we  run the algorithm with all heuristics for all the previously mentioned comb polygons. All guards  start at the same $y$-coordinate, 0.1 units apart from each other. An example of such a starting point is found in Figure \ref{fig:comb6_start_pos}. In this way, we  ensure that the performance of the algorithm can be compared using the same starting position of the guards. We  deem a timeout of one hour for declaring an algorithm unfeasible for larger polygons. We  then analyse how the algorithm performed under each of the circumstances. Lastly, we  offer some points of improvement.
+As such, we  run the algorithm with all heuristics for all the previously mentioned comb polygons. All guards  start at the same $y$-coordinate, 0.1 units apart from each other. An example of such a starting point is found in Figure \ref{fig:comb6_start_pos}. In this way, we  ensure that the performance of the algorithm can be compared using the same starting position of the guards. We  deem a timeout of one hour for declaring an algorithm infeasible for larger polygons. We  then analyse how the algorithm performed under each of the circumstances. Lastly, we  offer some points of improvement.
 
 \begin{figure}[h!]
     \centering
