@@ -175,13 +175,13 @@ However, $\triangle_2$ is already seen by guard $g_2$. Since this area is alread
 
 First, we need to compute the shared area seen $\triangle_2$ as:
 \begin{align}
-    \text{Area}_{\triangle_2}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g) - \text{Area}_{\triangle_2}(g) \nonumber \\
+    \text{Area}_{\triangle_2}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g_1) - \text{Area}_{\triangle_2}(g_1) \nonumber \\
                               &= (b_1 + b_2)^2\frac{\partial y}{2a} - b_1^2\frac{\partial y}{2a} \nonumber \\
     \text{Area}_{\triangle_2}(g_1)&= \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a}. \label{eq:multiple_areas} 
 \end{align}
 Then, we  compute the area $\triangle_1$ seen exclusively by $g_1$ by subtracting the shared area of $\triangle_2$ from the total area seen by $g_1$: 
 \begin{align*}
-    \text{Area}_{\triangle_1}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g) - \text{Area}_{\triangle_1}(g) \\
+    \text{Area}_{\triangle_1}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g_1) - \text{Area}_{\triangle_2}(g_1) \\
                               &= (b_1 + b_2)^2\frac{\partial y}{2a} - \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a} \\
     \text{Area}_{\triangle_1}(g_1) &= b_1^2\frac{\partial y}{2a}. 
 \end{align*}
