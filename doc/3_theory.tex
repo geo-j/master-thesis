@@ -246,13 +246,13 @@ An example for the benefits of using momentum are found in Figure \ref{fig:momen
 \begin{figure}[!h]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{gradient.pdf}
+        \includegraphics{theory/gradient.pdf}
         \caption{No momentum.}
         \label{fig:theory_no_momentum}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/momentum.pdf}
+        \includegraphics{theory/momentum.pdf}
         \caption{With momentum.}
         \label{fig:theory_momentum}
     \end{subfigure}
@@ -448,24 +448,24 @@ Let $rr'$ and $rr''$ be the extensions to the polygon boundary segments whose in
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/reflex_area_to_vertex.pdf}
+        \includegraphics{theory/reflex_area_to_vertex.pdf}
         \caption{Guard $g$ starts moving with pull $h_r(g)$ towards reflex vertex $r$. Guard $g$ cannot see past $r$.}
         \label{fig:pull_to_on_behind1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/reflex_area_on_vertex.pdf}
+        \includegraphics{theory/reflex_area_on_vertex.pdf}
         \caption{Guard $g$ is placed on reflex vertex $r$. Guard $g$ sees both before $r$ and past it.}
         \label{fig:pull_to_on_behind2}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/reflex_area_behind_vertex.pdf}
+        \includegraphics{theory/reflex_area_behind_vertex.pdf}
         \caption{Guard $g$ has moved past reflex vertex $r$. Guard $g$ cannot see anymore before $r$.}
         \label{fig:pull_to_on_behind3}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/reflex_area.pdf}
+        \includegraphics{theory/reflex_area.pdf}
         \caption{The movement of $g$ is restricted inside the reflex area.}
         \label{fig:reflex_area}
     \end{subfigure}
@@ -504,24 +504,24 @@ In Subfigure \ref{fig:hidden_gradient4} all the guards have been moved to their 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/hidden_gradient1.png}
+        \includegraphics{theory/hidden_gradient1.pdf}
         \caption{Guard $g_2$ and $g_3$ have a movement vector of 0, because guard $g_1$ sees all the areas they see. So, the set of guards with a non-zero movement vector is $G_0 = \{g_1\}$.}
         \label{fig:hidden_gradient1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/hidden_gradient2.png}
+        \includegraphics{theory/hidden_gradient2.pdf}
         \caption{Guard $g_1$ had a non-zero movement vector, so we compute the movement vectors of guards $g_2$ and $g_3$ without $g_1$. Guard $g_2$ sees everything that $g_3$ sees, so $g_3$ has movement vector 0. So, the set of guards with a non-zero movement vector is $G_1 = \{g_2\}$.}
         \label{fig:hidden_gradient2}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/hidden_gradient3.png}
+        \includegraphics{theory/hidden_gradient3.pdf}
         \caption{Guard $g_2$ had a non-zero movement vector, so we compute the movement vector of guard $g_3$ without $g_2$. Guard $g_3$ has a non-zero movement vector. So, the set of guards with a non-zero movement vector is $G_2 = \{g_3\}$.}
         \label{fig:hidden_gradient3}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/hidden_gradient4.png}
+        \includegraphics{theory/hidden_gradient4.pdf}
         \caption{The new positions $g'_1, g'_2, g'_3$ of the guards such that $G = G_0 \cup G_1 \cup G_2$.}
         \label{fig:hidden_gradient4}
     \end{subfigure}
@@ -542,13 +542,13 @@ Figure \ref{fig:greedy} offers an example of a greedy initialisation. The first 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/greedy1.png}
+        \includegraphics{theory/greedy1.pdf}
         \caption{Guard $g_1$ has been arbitrarily placed inside the polygon $P$.}
         \label{fig:greedy1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{theory/greedy2.png}
+        \includegraphics{theory/greedy2.pdf}
         \caption{Guard $g_2$ has been arbitrarily placed inside the polygon $P$, outside the visibility region of guard $g_1$.}
         \label{fig:greedy2}
     \end{subfigure}
