@@ -219,11 +219,11 @@ Similarly to Figure \ref{fig:areas}, we  compute the area seen exclusively by $g
 
 This results in the fact that the area seen by $g$ exclusively is computed as 
 \begin{align*}
-    \text{Area}_{\triangle_1 + \triangle_3 + ... + \triangle_{m - 1}}(g) &= \text{Area}_{\triangle_1 + \triangle_2, ..., \triangle_m}(g) \\
+    \text{Area}_{\triangle_1 + \triangle_3 + ... + \triangle_{m - 1}}(g) &= \text{Area}_{\triangle_1 + \triangle_2 + ... + \triangle_m}(g) \\
     &- \text{Area}_{\triangle_{m - 1}}(g) + \text{Area}_{\triangle_{m - 2}}(g) \\
     &- ... \\
     &- \text{Area}_{\triangle_2}(g) + \text{Area}_{\triangle_1}(g) \\
-                                                                      &= \left(b^2 - b_{m1}^2 + b_{(m - 1)2}^2 - ... - b_{12}^2 + b_{11}^2\right)\frac{\partial y}{2a}.
+                                                                         &= \left(b^2 - b_{m}^2 + b_{(m - 1)}^2 - ... - b_{2}^2 + b_{1}^2\right)\frac{\partial y}{2a}.
 \end{align*}
 
 Alternatively, if $\triangle_1$ is first seen by other guards (so $b_{11} = 0$), then all the signs are flipped. This claim is also supported by the intuition of Figure \ref{fig:areas}. If we are interested in the areas of $s_2$ and $s_4$, then it is incorrect to compute them as $\text{Area}_{s_2 + s_4} = 3 + 5 = 8$. This is because $s_1$ and $s_3$ are overlapping in between them.  Instead, $\text{Area}_{s_2 + s_4} = \text{Area}_{s_1 + s_2 + s_3 + s_4} + \text{Area}_{s_4} - \text{Area}_{s_3} + \text{Area}_{s_2} - \text{Area}_{s_1} = 5 + 5 - 4 + 3 - 2 = 7$.
