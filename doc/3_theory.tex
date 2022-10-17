@@ -171,20 +171,25 @@ Let point $g_1$ be the guard we have previously computed the gradient for. Let p
 The visibility regions of guards $g_1$ and $g_2$ are computed. Let $p$ be the intersection point between them. Let $d$ be the point seen by $g_1$ on the polygon boundary. Point $p$ divides the segment seen by $g_1$ behind the reflex vertex $r_1$ into two subsegments $\overline{r_1p_1}$ and $\overline{p_1p_2}$. The lengths of the subsegments are $b_1$ and $b_2$, respectively, with $b_1 + b_2 = b$. Recall that $b$ is the distance between the reflex vertex $r_1$ and the polygon boundary. Thus,  $b_2$ corresponds to the length of the shared seen segment.
 
 As before in equation \ref{eq:ardd}, the area seen by $g_1$ is $$\text{Area}_{\triangle_1 + \triangle_2}(g_1) = (b_1 + b_2)^2\frac{\partial y}{2a}.$$
-However, $\triangle_2$ is already seen by guard $g_2$. Since this area is already covered, we are only interested in how $g_1$ covers the remaining $\triangle_1$. So, we do not need to take $\triangle_2$ into account when computing the gradient of $g_1$. We thus need to subtract the area of $\triangle_2$ from the total area seen by $g_1$. 
+However, $\triangle_2$ is already seen by guard $g_2$. Since this area is already covered, we are only interested in how $g_1$ covers the remaining $\triangle_1$. 
+We can compute that from the same equation as $$\text{Area}_{\triangle_1}(g_1) = b_1^2\frac{\partial y}{2a}.$$
+So, we do not need to take $\triangle_2$ into account when computing the gradient of $g_1$. 
+% We thus need to subtract the area of $\triangle_2$ from the total area seen by $g_1$. 
 
-First, we need to compute the shared area seen $\triangle_2$ as:
+Now we can also compute the shared area seen $\triangle_2$ as:
 \begin{align}
     \text{Area}_{\triangle_2}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g_1) - \text{Area}_{\triangle_1}(g_1) \nonumber \\
                               &= (b_1 + b_2)^2\frac{\partial y}{2a} - b_1^2\frac{\partial y}{2a} \nonumber \\
     \text{Area}_{\triangle_2}(g_1)&= \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a}. \label{eq:multiple_areas} 
 \end{align}
-Then, we  compute the area $\triangle_1$ seen exclusively by $g_1$ by subtracting the shared area of $\triangle_2$ from the total area seen by $g_1$: 
-\begin{align*}
-    \text{Area}_{\triangle_1}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g_1) - \text{Area}_{\triangle_2}(g_1) \\
-                              &= (b_1 + b_2)^2\frac{\partial y}{2a} - \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a} \\
-    \text{Area}_{\triangle_1}(g_1) &= b_1^2\frac{\partial y}{2a}. 
-\end{align*}
+
+We use thus equation \ref{eq:multiple_areas} in the next section to introduce a generalisation for the computation for the exclusive area seen by $g_1$.
+% Then, we  compute the area $\triangle_1$ seen exclusively by $g_1$ by subtracting the shared area of $\triangle_2$ from the total area seen by $g_1$: 
+% \begin{align*}
+%     \text{Area}_{\triangle_1}(g_1) &= \text{Area}_{\triangle_1 + \triangle_2}(g_1) - \text{Area}_{\triangle_2}(g_1) \\
+%                               &= (b_1 + b_2)^2\frac{\partial y}{2a} - \left[(b_1 + b_2)^2 - b_1^2\right]\frac{\partial y}{2a} \\
+%     \text{Area}_{\triangle_1}(g_1) &= b_1^2\frac{\partial y}{2a}. 
+% \end{align*}
 
 \subsubsection{Computing the Gradient for Multiple Guards}
 We generalise the gradient computation to $m$ guards and $m$ intersection points. Let $g$ be the guard whose position we wish to optimise around reflex vertex $r$ as before. Let the areas highlighted in blue in Figure \ref{fig:general_gradient} be the parts of the visibility region of $g$ that are also seen by the other $m - 1$ guards. Let the visibility region of $g$ intersect other guards' visibility regions in $m$ intersection points $p_1, p_2, ..., p_m$. Let the distance from the reflex vertex $r$ to the intersection points be $b_{1}, b_{2}, ..., b_{m}, b$.
