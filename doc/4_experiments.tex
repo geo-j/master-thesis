@@ -12,7 +12,8 @@ The algorithm is implemented in C++ and makes use of the CGAL library \cite{cgal
 From the CGAL library we are using the Triangular Expansion Visibility algorithm \cite{DBLP:journals/corr/BungiuHHHK14} to compute the visibility polygons.
 
 The program takes the segments of a boundary of a simple polygon, and the initial coordinates of the guards as input. For each iteration, the new position of the guards, the area seen by each guard and their movement direction details (momentum, pull, events i.e. pulling on top of reflex vertices) are logged in a file. Using the logfile, the program creates visualisations for the position of each guard, their visibility polygon area and their movement direction vector for each iteration. The program also plots the area seen both by each guard and in total. The visualisations are created using the Python 3 libraries matplotlib \cite{matplotlib} and the scikit-geometry \cite{scikit-geometry}.
-It is worth mentioning that the program stops when the polygon becomes fully seen. This can happen upon the movement of only some of the guards. For this reason, the plots may show no movement for some guards in the last iteration.
+The plots displaying guard movements inside polygons show, for each guard, the total gradient vector in red. For each reflex vertex, the partial gradient vectors are  green and the pull vectors are purple.
+% It is worth mentioning that the program stops when the polygon becomes fully seen. This can happen upon the movement of only some of the guards. For this reason, the plots may show no movement for some guards in the last iteration.
 
 
 % Polygons used:
@@ -69,40 +70,7 @@ Figure \ref{fig:no_momentum} displays the area seen per iteration for the arbitr
 
 Thus, it becomes clearer how momentum allows the smoothening of noisy guard movements. We reckon that because guards are holding a steadier trajectory, they are more likely to achieve the optimum in less iterations. When not using momentum, the number of iterations increases substantially. Momentum appears to be a crucial improving heuristic to our whole algorithm, both in terms of speed-up and in the smoothness of the process.
 
-\subsubsection{Without Line Search}
-In this section we  discuss the impact line search has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:line_search}, line search determines how far a guard should move towards the direction movement vector. In this way, it computes the optimal position of a guard on the movement direction given a step size.
 
-Line Search has step size $s$, maximum movement factor $x$ and starting factor $\frac{s^t}{x}, t = 0$ as hyperparameters. For our experiments, we choose $s = 2$ and $x = 32$. We start with a factor of $\frac 1 32$ for the movement vector. We  increase it by a step size of 2 up to factor 32.  In this way we generate 10 solutions in total, one for every step $\frac{1}{32}, \frac{1}{16}, \frac 1 8, ..., 1, 2, 4, ..., 32$. This  allows us to search a larger space of position possibilities knowing the direction of the movement vector. We  pick the best solution along all the step size based on the largest area increase. 
-
-A suggestive way to observe how well line search works is with the comb polygon with four teeth from Figure \ref{fig:comb}. Comb polygons with $t$ teeth require $t$ guards to be guarded, one guard for each tooth. This is because the space in between the teeth is large enough so that guards cannot fully see two teeth simultaneously. In our case, $t = 4$. We  compare how the guards move when we are using all the heuristics to when we are not using line search. They  start at the same fixed position in both cases, so we  focus on observing their movements.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width = 0.5\textwidth]{experiments/comb.png}
-    \caption{Polygon in the shape of a comb with four teeth.}
-    \label{fig:comb}
-\end{figure}
-
-Figure \ref{fig:no_line_search} displays the area seen per iteration for the comb polygon with four teeth. Both the total area seen and the individual area seen by each guard are shown. Starting with around 82.5\% total area seen, the global optimum is eventually found. Nonetheless, using line search clearly makes a difference between Subfigures \ref{fig:no_line_search1} and \ref{fig:no_line_search2}. The first noticeable difference is the number of iterations. Using line search allows the guards to find their optimal positions in 3 iterations, with a steady increase in the total area seen. Note that not all guards were moved in iteration 3. This is because the polygon was fully seen after moving only two of the guards. On the other hand, in subfigure \ref{fig:no_line_search2} not using line search results in the optimal position to be found in more than 80 iterations. Additionally, 3 of the guards found their optimal position after the $30^{\text{th}}$ iteration, whereas the last 50 iterations are spent on only one guard finding its own.
-
-
-\begin{figure}[h!]
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb_easy_all.png}
-        \caption{All heuristics.}
-        \label{fig:no_line_search1}
-    \end{subfigure}
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb_no_linear_search.png}
-        \caption{No line search.}
-        \label{fig:no_line_search2}
-    \end{subfigure}
-    \caption{Total area seen per iteration for the comb polygon with four teeth, guarded by four guards.}
-    \label{fig:no_line_search}
-\end{figure}
-
-Therefore, we reckon that line search significantly and more efficiently speeds up the process of finding the optimal position for each guard. In this way, each guard moves faster to its optimal position. The situation where multiple guards that have found their optimal position have to wait for only one guard to find its own is also avoided.
 
 \subsubsection{Without Pulling Onto Reflex Vertex}
 In this section we discuss the impact that the pull onto the reflex vertex heuristic has upon the behaviour of the algorithm. Section \ref{sec:pull_onto} introduced the pull onto reflex vertices heuristic. This heuristic tackles the idea that if a guard is ``close enough'' to a reflex vertex, then the locally maximum seen area would be achieved by placing the guard on top of the reflex vertex. 
@@ -110,9 +78,9 @@ In this section we discuss the impact that the pull onto the reflex vertex heuri
 
 We  compare how the guards move when we are using all the heuristics to when we are not pulling them onto reflex vertices. The guards  start at the same fixed position in both cases.
 
-Figure \ref{fig:no_pull_eg} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard's movement changes when it is placed onto the reflex vertex; Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard's movement changes when it is pulled towards the reflex vertex, but not onto it. We  observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moves away from the reflex vertex.
+Figure \ref{fig:no_pull_eg} displays the two reflex vertex pull cases. Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard's movement changes when it is placed onto the reflex vertex. Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard's movement changes when it is pulled towards the reflex vertex, but not onto it. We  observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moves away from the reflex vertex.
 
-These events are also observed in the two seen area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Note that that the red guard does not move in iteration 4 because the other two guards have already covered the whole polygon. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
+These events are also observed in the two area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Note that that the red guard does not move in iteration 4 because the other two guards have already covered the whole polygon. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
 
 Therefore, we believe that pulling guards on top of reflex vertices when they are ``close enough'' results in maximising the local area seen by those guards. The number of iterations needed to reach the global maximum is thus reduced. So, the efficiency of the algorithm is also improved.
 
@@ -125,16 +93,16 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
         \label{fig:all_pull_pos0}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/random_all_pull_pos1_fixed.png}
-        \caption{All heuristics. The green guard is onto the reflex vertex.}
-        \label{fig:all_pull_pos1}
-    \end{subfigure}
     % \vfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_pull_pos0_fixed.png}
         \caption{No pull onto the reflex vertex. The green guard is pulled towards the reflex vertex.}
         \label{fig:no_pull_pos0}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/random_all_pull_pos1_fixed.png}
+        \caption{All heuristics. The green guard is onto the reflex vertex.}
+        \label{fig:all_pull_pos1}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
@@ -148,7 +116,7 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
 \vfill
 \begin{figure}[!h]
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_random_all_fixed.png}
+        \includegraphics[width = \textwidth]{experiments/area_random_all_fixed2.png}
         \caption{Seen area for all heuristics.}
         \label{fig:area_all_pull}
     \end{subfigure}
@@ -206,13 +174,13 @@ Figure \ref{fig:no_cap_plots} shows how the global behaviour of the algorithm is
 
 \begin{figure}[!h]
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb_capping.png}
+        \includegraphics[width = \textwidth]{experiments/area_comb_capping2.png}
         \caption{Seen area for all heuristics.}
         \label{fig:area_all_cap}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb_no_capping.png}
+        \includegraphics[width = \textwidth]{experiments/area_comb_no_capping2.png}
         \caption{Seen area without pull capping.}
         \label{fig:area_no_cap}
     \end{subfigure}
@@ -233,70 +201,77 @@ We  compare how the guards move when we are using all the heuristics to when we 
 Figures \ref{fig:reflex_area_eg} and \ref{fig:area_reflex_area} compare the algorithm progress when using and not using the reflex area heuristic, respectively. Subfigures \ref{fig:reflex_area_all1} - \ref{fig:reflex_area_all4} show the guards' movement when one of them is bound to the reflex area. In this case, the blue guard wants to move away from the reflex vertex. The reflex area does not allow it to move away from the reflex vertex, so it stays there. 
 Subfigures \ref{fig:reflex_area_no1} - \ref{fig:reflex_area_no4} display the guards' movement when the reflex area heuristic is not applied. In this case, the blue guard moves away from the reflex vertex (Subfigure \ref{fig:reflex_area_no2}), only to be drawn back to it in the next iteration (Subfigure \ref{fig:reflex_area_no3}). This repetitive behaviour continues without eventually reaching the optimum state.
 
+% \newpage
 Figure \ref{fig:area_reflex_area} displays the difference in the areas seen between the two approaches. When using all heuristics (Subfigure \ref{fig:area_reflex_area_all}), the algorithm terminates in 7 iterations. The continuous line clearly marks the guard who did not move away from the reflex vertex. Conversely, when not using the reflex area heuristic (Subfigure \ref{fig:area_reflex_area_no}), the algorithm appears not to terminate. One of the guards loops away and back on the reflex vertex. The other guard loops so that it sees the area that is being seen and unseen by the other guard. In this way, they do not synchronise in order to see the polygon together at the same time. This is clearly shown in the repetitive plot.
 
 In this way, the reflex area heuristic becomes of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices in a repetitive manner. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. The guards continue to move out of sync with each other, resulting in the polygon never being fully seen.
 
 \newpage
-\thispagestyle{empty}
+% \thispagestyle{empty}
 \begin{figure}[h!]
     \centering
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos3.png}
-        \caption{All heuristics. The blue guard is on the reflex vertex.}
-        \label{fig:reflex_area_all1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos4.png}
-        \caption{No reflex area. The blue guard is on the reflex vertex.}
-        \label{fig:reflex_area_no1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos5.png}
-        \caption{All heuristics. The blue guard is still on the reflex vertex (in the reflex area).}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos5.png}
-        \caption{No reflex area. The blue guard moved away from the reflex vertex.}
-        \label{fig:reflex_area_no2}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos6.png}
-        \caption{All heuristics. The blue guard is still on the reflex vertex (in the reflex area).}
-        \label{fig:reflex_area_all4}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos6.png}
-        \caption{No reflex area. The blue guard is drawn back to the same reflex vertex.}
-        \label{fig:reflex_area_no3}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos4.png}
-        \caption{All heuristics. The blue guard is still on the reflex vertex (in the reflex area).}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.4\textwidth}
-        \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos7.png}
-        \caption{No reflex area. The blue guard is back on the reflex vertex.}
-        \label{fig:reflex_area_no4}
-    \end{subfigure}
-    \caption{Comparison between using and not using the reflex area heuristic on an arbitrary polygon guarded by two guards.}
-    \label{fig:reflex_area_eg}
-\end{figure}
+    % \begin{resizebox}{\linewidth}{!}{
+    \begin{adjustbox}{minipage=\textwidth,scale=0.9}
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos3.png}
+            \caption{All heuristics. The blue guard is on the reflex vertex.}
+            \label{fig:reflex_area_all1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos4.png}
+            \caption{No reflex area. The blue guard is on the reflex vertex.}
+            \label{fig:reflex_area_no1}
+        \end{subfigure}
+        % \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos5.png}
+            \caption{All heuristics. The blue guard is still on the reflex vertex (in the reflex area).}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos5.png}
+            \caption{No reflex area. The blue guard moved away from the reflex vertex.}
+            \label{fig:reflex_area_no2}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos6.png}
+            \caption{All heuristics. The blue guard is still on the reflex vertex (in the reflex area).}
+            \label{fig:reflex_area_all4}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos6.png}
+            \caption{No reflex area. The blue guard is drawn back to the same reflex vertex.}
+            \label{fig:reflex_area_no3}
+        \end{subfigure}
+    % \end{figure}
+    % \begin{figure}
+    %     \ContinuedFloat
+    %     \centering
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_all_pos4.png}
+            \caption{All heuristics. The blue guard is still on the reflex vertex (in the reflex area).}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \includegraphics[width = \textwidth]{experiments/reflex_area_no_pos7.png}
+            \caption{No reflex area. The blue guard is back on the reflex vertex.}
+            \label{fig:reflex_area_no4}
+        \end{subfigure}
+        \caption{Comparison between using and not using the reflex area heuristic on an arbitrary polygon guarded by two guards.}
+        \label{fig:reflex_area_eg}
+    % \end{resizebox}
+    \end{adjustbox}
+    \end{figure}
+\newpage
 
-% \newpage
 
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_reflex_area_all.png}
+        \includegraphics[width = \textwidth]{experiments/area_reflex_area_all2.png}
         \caption{Area seen for all heuristics on another arbitrary polygon.}
         \label{fig:area_reflex_area_all}
     \end{subfigure}
@@ -309,6 +284,46 @@ In this way, the reflex area heuristic becomes of great importance to the correc
     \caption{Area comparison between using and not using the reflex area heuristic on an arbitrary polygon guarded by two guards.}
     \label{fig:area_reflex_area}
 \end{figure}
+
+
+
+% \newpage
+\subsubsection{Without Line Search}
+In this section we  discuss the impact line search has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:line_search}, line search determines how far a guard should move towards the direction movement vector. In this way, it computes the optimal position of a guard on the movement direction given a step size.
+
+Line Search has step size $s$, maximum movement factor $x$ and starting factor $\frac{s^t}{x}, t = 0$ as hyperparameters. For our experiments, we choose $s = 2$ and $x = 32$. We start with a factor of $\frac 1 32$ for the movement vector. We  increase it by a step size of 2 up to factor 32.  In this way we generate 10 solutions in total, one for every step $\frac{1}{32}, \frac{1}{16}, \frac 1 8, ..., 1, 2, 4, ..., 32$. This  allows us to search a larger space of position possibilities knowing the direction of the movement vector. We  pick the best solution along all the step size based on the largest area increase. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{experiments/comb.png}
+    \caption{Polygon in the shape of a comb with four teeth.}
+    \label{fig:comb}
+\end{figure}
+
+A suggestive way to observe how well line search works is with the comb polygon with four teeth from Figure \ref{fig:comb}. Comb polygons with $t$ teeth require $t$ guards to be guarded, one guard for each tooth. This is because the space in between the teeth is large enough so that guards cannot fully see two teeth simultaneously. In our case, $t = 4$. We  compare how the guards move when we are using all the heuristics to when we are not using line search. They  start at the same fixed position in both cases, so we  focus on observing their movements.
+
+
+Figure \ref{fig:no_line_search} displays the area seen per iteration for the comb polygon with four teeth. Both the total area seen and the individual area seen by each guard are shown. Starting with around 82.5\% total area seen, the global optimum is eventually found. Nonetheless, using line search clearly makes a difference between Subfigures \ref{fig:no_line_search1} and \ref{fig:no_line_search2}. The first noticeable difference is the number of iterations. Using line search allows the guards to find their optimal positions in 3 iterations, with a steady increase in the total area seen. Note that not all guards were moved in iteration 3. This is because the polygon was fully seen after moving only two of the guards. On the other hand, in subfigure \ref{fig:no_line_search2} not using line search results in the optimal position to be found in more than 80 iterations. Additionally, 3 of the guards found their optimal position after the $30^{\text{th}}$ iteration, whereas the last 50 iterations are spent on only one guard finding its own.
+
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_easy_all2.png}
+        \caption{All heuristics.}
+        \label{fig:no_line_search1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width = \textwidth]{experiments/area_comb_no_linear_search.png}
+        \caption{No line search.}
+        \label{fig:no_line_search2}
+    \end{subfigure}
+    \caption{Total area seen per iteration for the comb polygon with four teeth, guarded by four guards.}
+    \label{fig:no_line_search}
+\end{figure}
+
+Therefore, we reckon that line search significantly and more efficiently speeds up the process of finding the optimal position for each guard. In this way, each guard moves faster to its optimal position. The situation where multiple guards that have found their optimal position have to wait for only one guard to find its own is also avoided.
 
 % \newpage
 \subsubsection{Without Angle Behind Reflex Vertex}
@@ -345,7 +360,7 @@ We  observe a major difference in the way the final movement vector is computed 
         \caption{No angle behind the reflex vertex. The orange guard's movement is towards the left-side outside the polygon.}
         \label{fig:no_angle_pos1}
     \end{subfigure}
-    \caption{Example of different movements of guards with and without the angle behind the reflex vertex in an arbitrarily shaped polygon guarded by three guards.}
+    \caption{Example of different movements of guards with and without the angle behind the reflex vertex in an arbitrarily shaped polygon guarded by three guards. The total gradient vector is displayed in red, partial gradient vectors are green and the pull vector is purple.}
     \label{fig:no_angle_eg}
 \end{figure}
 
@@ -381,12 +396,13 @@ Figure \ref{fig:area_no_hidden_gradient} displays a comparison between using and
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb_all.png}
+        \includegraphics[width = \textwidth]{experiments/area_comb_all2.png}
         \caption{All heuristics.}
         \label{fig:area_comb_all2}
     \end{subfigure}
+    \hfill
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width = \textwidth]{experiments/area_comb_no_hidden_gradient.png}
+        \includegraphics[width = \textwidth]{experiments/area_comb_no_hidden_gradient2.png}
         \caption{No hidden gradient.}
         \label{fig:area_comb_no_hidden_gradient}
     \end{subfigure}
