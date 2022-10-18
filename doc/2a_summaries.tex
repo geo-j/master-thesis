@@ -42,6 +42,7 @@ Let $P$ be a polygon determined by vertices $\{a_1, a_2, a_3, b_1, b_2, b_3, b_4
 
 Then, the event line $L$ starts sweeping around $g$ as shown in Subfigures \ref{fig:asano1} - \ref{fig:asano7}. Every line segment that $L$ intersects is stored in a balanced binary tree $T$ in the order of their intersection angle. As $T$ is updated, a new vertex of $\mathit{Vis}(g)$ is stored each time the segment closest to $g$ in $T$ changes. It is important to mention that the intersection between $L$ and the line segments is not explicit, but is instead determined by comparisons between the endpoints' coordinates. For instance, in Figure \ref{fig:asano_1}, the endpoint $b_2$ of line segment $\overline{b_2a_2}$ is the first one $L$ intersects. Point $b_2$ is thus added to $T$. Then, $L$ continues sweeping and adds $b_1, a_2$ and $a_1$ to $T$. Although $\overline{b_2a_2}$ and $\overline{b_1a_1}$ represent line segments $s_2$ and $s_1$, respectively, the intersection of $L$ with them is not explicitly computed, but is determined based solely on the positions of their endpoints: $s_1$ is farther away from $g$ because $q, a_2$ and $b_2$ are on the same side of $s_2$.
 
+\newpage
 \begin{figure}[h!]
 	\centering
 	\begin{subfigure}{0.45\textwidth}
@@ -69,7 +70,7 @@ Then, the event line $L$ starts sweeping around $g$ as shown in Subfigures \ref{
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}{0.45\textwidth}
-		\includegraphics*{literature/asano5.pdf}
+		\includegraphics{literature/asano5.pdf}
 		\caption{$b_2$ is added to $\mathit{Vis}(g)$ such that \\ $\mathit{Vis}(g) = \{a_1, a_2, a_3, b_3, b_4, b_2\}$, and line segment $\overline{b_2a_2}$ is added to $T$ such that \\ $T = \{\overline{b_1a_1}, \overline{a_1a_3}, \overline{a_3b_4}, \overline{b_4b_3}, \overline{b_2a_2}\}$.}
 	\end{subfigure}
 	\caption{Example run of the Algorithm of Asano \cite{asano1985efficient} on polygon $P$ and guard $g$. The vertices of $P$ are added to the binary tree $T$ in the order of their angle between $g$ and the origin $O = (0, 0)$. The result of the algorithm is visibility region $\mathit{Vis}(g) = \{a_1, a_2, a_3, b_3, b_4, b_2\}$.}
@@ -99,7 +100,7 @@ Then, the event line $L$ starts sweeping around $g$ as shown in Subfigures \ref{
 % \end{figure}
 	% - as the sweep proceeds, $T$ is updated and a neq vertex of $V(q)$ is generated each time the smallest element (segment closest to $q$) in $T$ changes
 	% - important to have efficient comparison ops (e.g.: *add pic*)
-\newpage 
+% \newpage 
 \subsubsection{New Algorithm: Triangular Expansion}
 The algorithm introduced by Bungiu et al. \cite{DBLP:journals/corr/BungiuHHHK14} is named Triangular Expansion and runs in $\Omega(n^2)$ time and $O(n)$ space. It begins by triangulating $P$ in $O(n \log n)$ time if $P$ has holes, and $O(n)$ otherwise. The implementation runtime is constrained by CGAL, which makes use of the Delaunay triangulation algorithm \cite{delaunay1934sphere} with $O(n^2)$ time for the worst case, but with better performance in practice. 
 

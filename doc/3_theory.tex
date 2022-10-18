@@ -287,7 +287,7 @@ In this way, our momentum computation exponentially decreases the influence of a
 
 Similarly, the new position $g_i$ of guard $g$ with learning rate $\alpha$ is now calculated as $$g_i = g_{i - 1} + \alpha M_i(g_{i - 1}).$$
 
-\newpage
+% \newpage
 \subsection{Reflex Vertex Pull}
 
 This section presents an additional idea to our gradient descent algorithm: pulling a guard towards reflex vertices. The pull strategy makes use of the second derivative of our optimisation function $f(g) = \text{Area}(g)$.
@@ -320,6 +320,7 @@ We explore how the pull towards a reflex vertex $r$ can be computed, with an exa
 
 The gradient is computed as
 $$\bigtriangledown f(g) \overset{(\ref{eq:f})}{=} (0, \frac{b^2}{2a^2})^\intercal = (0, \frac{9}{8})^\intercal = (0, 1.125)^\intercal.$$ 
+
 The pull is computed as 
 $$h_r(g) \overset{(\ref{eq:h})}{=} (\frac{b^2}{2a^3}, 0)^\intercal = (\frac{9}{16}, 0)^\intercal = (0.625, 0)^\intercal.$$
 So, the new position $g'$ of the guard $g$ given the learning rate $\alpha = 0.3$ becomes 
