@@ -80,11 +80,6 @@ We  compare how the guards move when we are using all the heuristics to when we 
 
 Figure \ref{fig:no_pull_eg} displays the two reflex vertex pull cases. Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard's movement changes when it is placed onto the reflex vertex. Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard's movement changes when it is pulled towards the reflex vertex, but not onto it. We  observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moves away from the reflex vertex.
 
-These events are also observed in the two area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Note that that the red guard does not move in iteration 4 because the other two guards have already covered the whole polygon. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
-
-Therefore, we believe that pulling guards on top of reflex vertices when they are ``close enough'' results in maximising the local area seen by those guards. The number of iterations needed to reach the global maximum is thus reduced. So, the efficiency of the algorithm is also improved.
-
-\newpage
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
@@ -113,7 +108,14 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
     \caption{Example of different movements of guards with and without pulling them onto reflex vertices in an arbitrarily shaped polygon guarded by three guards.}
     \label{fig:no_pull_eg}
 \end{figure}
-\vfill
+
+These events are also observed in the two area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Note that that the red guard does not move in iteration 4 because the other two guards have already covered the whole polygon. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
+
+Therefore, we believe that pulling guards on top of reflex vertices when they are ``close enough'' results in maximising the local area seen by those guards. The number of iterations needed to reach the global maximum is thus reduced. So, the efficiency of the algorithm is also improved.
+
+% \newpage
+
+% \vfill
 \begin{figure}[!h]
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/area_random_all_fixed2.png}
@@ -130,7 +132,7 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
     \label{fig:no_pull_plots}
 \end{figure}
 
-\newpage
+% \newpage
 \subsubsection{Without Pull Capping}
 In this section we  discuss how not capping the pull towards a reflex vertex influences the progress of the algorithm. Section \ref{sec:pull_capping} introduced the notion of capping the pull towards a reflex vertex. The reason for this choice was to not allow the pull to overpower the value of the momentum. So, if the pull is larger than $\mu$ times the momentum, it is capped at the momentum value multiplied by $\mu$. 
 
@@ -202,9 +204,9 @@ Figures \ref{fig:reflex_area_eg} and \ref{fig:area_reflex_area} compare the algo
 Subfigures \ref{fig:reflex_area_no1} - \ref{fig:reflex_area_no4} display the guards' movement when the reflex area heuristic is not applied. In this case, the blue guard moves away from the reflex vertex (Subfigure \ref{fig:reflex_area_no2}), only to be drawn back to it in the next iteration (Subfigure \ref{fig:reflex_area_no3}). This repetitive behaviour continues without eventually reaching the optimum state.
 
 % \newpage
-Figure \ref{fig:area_reflex_area} displays the difference in the areas seen between the two approaches. When using all heuristics (Subfigure \ref{fig:area_reflex_area_all}), the algorithm terminates in 7 iterations. The continuous line clearly marks the guard who did not move away from the reflex vertex. Conversely, when not using the reflex area heuristic (Subfigure \ref{fig:area_reflex_area_no}), the algorithm appears not to terminate. One of the guards loops away and back on the reflex vertex. The other guard loops so that it sees the area that is being seen and unseen by the other guard. In this way, they do not synchronise in order to see the polygon together at the same time. This is clearly shown in the repetitive plot.
+Figure \ref{fig:area_reflex_area} displays the difference in the areas seen between the two approaches. When using all heuristics (Subfigure \ref{fig:area_reflex_area_all}), the algorithm terminates in 7 iterations. The continuous line marks the guard who did not move away from the reflex vertex. Conversely, when not using the reflex area heuristic (Subfigure \ref{fig:area_reflex_area_no}), the algorithm appears not to terminate. One of the guards loops away and back on the reflex vertex. The other guard loops so that it sees the area that is being seen and unseen by the other guard. In this way, they do not synchronise in order to see the polygon at the same time. This shows in the repetitive plot.
 
-In this way, the reflex area heuristic becomes of great importance to the correct run of the algorithm. It addresses the issue of guards moving away and back on reflex vertices in a repetitive manner. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. The guards continue to move out of sync with each other, resulting in the polygon never being fully seen.
+In this way, the reflex area heuristic becomes important to the correct run of the algorithm. It addresses the issue of guards moving repeatedly away and back on reflex vertices. This behaviour causes the other guards to move towards the area that becomes unseen by the first guard. The guards continue to move out of sync with each other, resulting in the polygon never being fully seen.
 
 \newpage
 % \thispagestyle{empty}
