@@ -35,6 +35,7 @@ Another problem worth mentioning is scalability. The program does not scale. As 
 Some of the largest bottlenecks that work against scalability are the visibility area and the hidden movement computations. Currently, the visibility area of each guard is updated at every iteration. We are using the Triangular Expansion Visibility \cite{DBLP:journals/corr/BungiuHHHK14} which runs in $O(g)$ time, with $g$ the number of guards. Thus, the visibility computation per iteration runs in $O(g^2)$ time. 
 In terms of the hidden movement computation, each guard has its gradient recomputed at most $g$ times. This happens in the case when only one guard out of the $g$ guards has a non-zero movement vector, and thus it gets removed from the set. The remaining $g - 1$ guards have their movement vector recomputed. Again, in the worst case only one guard has a non-zero gradient. Thus, a guard gets its movement vector recomputed in $O(g^2)$ time.
 
+\newpage
 Other poorly scalable parts of the algorithm are based on the number of reflex vertices. The movement vector computation depends on the number of reflex vertices $r$. If $r >> g$, then the algorithm performs poorly for polygons with significantly fewer guards than reflex vertices.
 
 For these reasons, the program is especially sensitive to the values of the parameters. For instance, searching between fewer steps for line search can help the program find a solution faster. In this way, we decrease the number of steps taken for computing a new guard position. 
