@@ -353,6 +353,7 @@ The reason for this choice is that computing the norm of the partial gradients, 
 \end{align*}
 We are aware of the fallacies of this approximation. Take the opposing unit vectors $a_1 = (1, 0)^\intercal,$ $a_2~=~(-1, 0)^\intercal$. The sum of their norms $\sum_i ||a_i|| = 2$, whereas the norm of their sum is $||\sum_i a_i|| = 0$. Clearly, they are not the same. Nonetheless, we still consider this approximation due to computation speed improvements and easiness of use.
 
+\newpage
 The pull $h_r(g)$ is directed towards the reflex vertex $r$. So, it has the same orientation as vector~$\vec{v} = (r - g)$. We  normalise $h_r(g)$ with the norm of vector $\vec{v}$. Its norm is $||\vec{v}|| = \frac 1 a$. So, 
 \begin{align}
     h_r(g) = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}. \label{eq:h}
