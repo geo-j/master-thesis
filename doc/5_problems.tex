@@ -8,13 +8,14 @@ When this happens, the program would project the movement direction vector on th
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = \textwidth]{experiments/edge_case.pdf}
+    \includegraphics[width = 0.9\textwidth]{experiments/edge_case.pdf}
     \caption{Edge-case for when the blue guard cannot move because its movement direction cannot be projected towards the inside the polygon.}
     \label{fig:edge}
 \end{figure}
 
 In order to solve this issue, we would need to devise a technique that allows the guard to move regardless of its gradient. One such heuristic could be to mirror the movement direction vector inside the polygon. The black dotted line in the figure displays the mirroring line. The mirrored movement direction vector along the mirroring line is displayed in dark red. In this way, the guard would be able to make progress along the polygon's boundaries as expected.
 
+% \newpage
 However, we did not encounter this edge-case frequently enough to give it a high priority on the issues list. Due to the time constraints of the thesis, it remained hence unsolved.
 
 \subsubsection*{CGAL}

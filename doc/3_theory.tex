@@ -23,7 +23,7 @@ Thus, we consider $f(g)$ as the continuous objective function of the Art Gallery
     \label{fig:sumf}
 \end{figure}
 
-
+\newpage
 Let $\bigtriangledown f$ be the gradient of $f$. The gradient then indicates the direction of the steepest descent for the objective function $f(g)$.
 The learning rate (step size) $\alpha$ is the size of the steps taken to reach the optimum. It is typically a small value, and it is evaluated and chosen based on the behaviour of the optimisation function. 
 
@@ -65,6 +65,7 @@ Let $\partial y$ be a tiny change in the $y$-coordinate of $g$. Let $g'$ be the 
     \bigtriangledown \text{Area}_r(g) = \triangle_1. \label{eq:derivative}
 \end{equation}
 
+\newpage
 We are now interested in computing how the area seen by guard $g$ increases given the change $\partial y$ in the position of $g$. The distances $a$ and $b$ are known. As such, we aim at expressing the gradient $\bigtriangledown \text{Area}_r$ for point $g$ and reflex vertex $r \in \mathit{Vis}(g)$ using $a$ and $b$. Since $\bigtriangledown \text{Area}_r$ depends on the change in the coordinates of $g$, computing it is tightly connected to the change in the area of triangle $\triangle_1$. We  proceed to calculate the area of $\triangle_1$ below.
 
 Given that triangles $\triangle_1$ and $\triangle_2$ are square triangles, their areas is calculated as:
@@ -107,6 +108,7 @@ Therefore, for all the reflex vertices $r$ guard $g$ sees, the total gradient $\
     R(g) &= \{\text{reflex vertices of } P \text{ seen by }g\}. \nonumber
 \end{align}
 
+\newpage
 \subsubsection{Computing the New Guard's Position}
 We use the coordinates of the gradient $\bigtriangledown f$ to compute the movement direction of the guard $g$ given all the reflex vertices from $P$ seen by $g$. In order to do so, we  use the construction depicted in Figure \ref{fig:vperp}. 
 
@@ -283,6 +285,7 @@ We  then check for correctness how  the next iterations of the momentum are carr
         % &= (1 - \gamma) (\gamma^i \Delta f_0 + \gamma^{i - 1} \Delta f_1 + ... + \gamma \Delta f_{i - 1} + \Delta f_i) \\
 \end{align*}
 
+\newpage
 In this way, our momentum computation exponentially decreases the influence of a past state over the guard's current movement. So, the previous value of the momentum  exerts its inertia with $\gamma$ influence over the new value of the momentum.
 
 Similarly, the new position $g_i$ of guard $g$ with learning rate $\alpha$ is now calculated as $$g_i = g_{i - 1} + \alpha M_i(g_{i - 1}).$$
@@ -354,6 +357,7 @@ The pull $h_r(g)$ is directed towards the reflex vertex $r$. So, it has the same
     h_r(g) = \vec{v}\frac{-b^2}{2a^2}\frac 1 a = \vec{v}\frac{-b^2}{2a^3}. \label{eq:h}
 \end{align}
 
+\newpage
 Let $h(g)$ be the total pull for guard $g$. As for the gradient, the total pull for guard $g$ and all reflex vertices $r$ the guard sees is 
 \begin{align*}
     h(g) = &\sum_{r \in R(g)} h_r(g), \\
@@ -418,7 +422,7 @@ We want to smoothen out possibly erratic movement jumps. Just like in the case o
 \end{align*}
 The factor $\mu$ becomes thus a hyperparameter to experiment with.
 
-\newpage
+% \newpage
 \subsection{Reflex Area}
 \label{sec:reflex_area}
 % - address the issue of a guard "losing" the seen area gained after moving on top of a reflex vertex + its movement in and out of the reflex vertex
@@ -533,15 +537,17 @@ In Subfigure \ref{fig:hidden_gradient4} all the guards have been moved to their 
     \label{fig:hidden_gradient}
 \end{figure}
 
+\newpage
 The hidden movement heuristic can be generalised. Let $G$ be the complete set of guards. For each step $i$, let $G_i = G \setminus G_{i - 1}$ be the set of guards with a non-zero movement vector after removing the guards with a movement vector from step $i - 1$. The set $G_0$ is the set of guards with a non-zero movement vector before removal of any guards. At the end, the union of all subsets $G_i$ comprises the set of all guards $G = G_0 \cup G_1 \cup ...$.
 In this way, all guards  have a non-zero movement vector and make progress.
 
+\newpage
 \subsection{Greedy Initialisation}
 \label{sec:greedy}
 % - head start
-In this section we  introduce another heuristic for our algorithm: \textit{greedy initialisation}. This heuristic sequentially places guards at starting positions in areas that are unseen by other guards. In this way, the algorithm has a head start with a larger covered area than when guards are placed arbitrarily.
+In this section we  introduce another heuristic for our algorithm: \textit{greedy initialisation}. This heuristic sequentially places guards at starting positions in areas that are unseen by other guards. In this way, the algorithm has a head start with a larger covered area than when guards are placed arbitrarily anywhere in the polygon.
 
-Figure \ref{fig:greedy} offers an example of a greedy initialisation. The first guard $g_1$ is arbitrarily placed inside polygon $P$ as shown in Subfigure \ref{fig:greedy1}. Then, guard $g_2$ is arbitrarily placed in an unseen part of $P$, as displayed in Subfigure \ref{fig:greedy2}. In this way, the algorithm gains a head start to continue with the optimisation of the guards' positions.
+Figure \ref{fig:greedy} offers an example of a greedy initialisation. The first guard $g_1$ is arbitrarily placed inside polygon $P$ as shown in Subfigure \ref{fig:greedy1}. Then, guard $g_2$ is arbitrarily placed in an unseen part of $P$, as displayed in Subfigure \ref{fig:greedy2}. The algorithm continues then with the optimisation of the guards' positions.
 
 \begin{figure}[h!]
     \centering
@@ -564,3 +570,5 @@ Figure \ref{fig:greedy} offers an example of a greedy initialisation. The first 
     \caption{Greedy Initialisation for guards $g_1$ and $g_2$ inside polygon $P$. The visibility regions of the guards are displayed in orange and purple, respectively. In this way, the algorithm gains a head start for optimising the positions of the guards.}
     \label{fig:greedy}
 \end{figure}
+
+Nonetheless, placing guards arbitrarily inside unseen areas of the polygon deemed to be too difficult in CGAL given the time constraints of this thesis. For this reason, we are placing the guards in the middle of the leftmost segment of every unseen area. We are aware of the limitations of this deterministic approach.

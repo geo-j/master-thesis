@@ -31,6 +31,8 @@ The plots displaying guard movements inside polygons show, for each guard, the t
 \subsection{Heuristics}
 In this section we  observe the role played by each of the heuristics used. We  additionally notice how different heuristics are relevant for different types of polygons. In order to do so, we  run the program with all the heuristics but one, for each of the heuristics. By analysing the difference in movement for each of the guards, we assess the influence every heuristic has on different types of polygons.
 
+It is worth mentioning that the experiments are not run with greedy initialisation. When initialising guards greedily, some polygons already become solved from the beginning. This does not allow us to properly showcase the other heuristics. Nonetheless, we still discuss the greedy initialisation heuristic at the end of this section.
+
 We  use fixed hyperparameters for all the runs. This allows us to focus on the differences between the heuristics. 
 % Later in this section we will also discuss the actual hyperparameter choice. 
 As such, we  use the momentum hyperparameter $\gamma = 0.8$ and pull attraction $\beta = 1$. The hyperparameter values were chosen through experimentation. The algorithm is sensitive to the hyperparameter choices, so for other values it often becomes stuck in local optima.
@@ -38,7 +40,7 @@ As such, we  use the momentum hyperparameter $\gamma = 0.8$ and pull attraction 
 \subsubsection{Without Momentum}
 In this section we  discuss the impact momentum has on the overall behaviour of the algorithm. As introduced in Section \ref{sec:momentum}, momentum takes into account the position history of the guards. In this way, the overall trajectory of a guard is smoothened out.
 
-We observe this behaviour with an arbitrary polygon in Figure \ref{fig:random}. The polygon requires a minimum of 3 guards to be fully seen. We  compare how the guards move with all the heuristics to when not using momentum. They start at the same fixed position in both cases.
+We observe this behaviour with an arbitrary polygon in Figure \ref{fig:random}. The polygon requires a minimum of 3 guards to be fully seen. They start at the same fixed position in both cases. We  compare how the guards move with all the heuristics to when not using momentum. 
 
 \begin{figure}[h!]
     \centering
@@ -134,7 +136,7 @@ Therefore, we believe that pulling guards on top of reflex vertices when they ar
 
 % \newpage
 \subsubsection{Without Pull Capping}
-In this section we  discuss how not capping the pull towards a reflex vertex influences the progress of the algorithm. Section \ref{sec:pull_capping} introduced the notion of capping the pull towards a reflex vertex. The reason for this choice was to not allow the pull to overpower the value of the momentum. So, if the pull is larger than $\mu$ times the momentum, it is capped at the momentum value multiplied by $\mu$. 
+In this section we  discuss how capping the pull towards a reflex vertex influences the progress of the algorithm. Section \ref{sec:pull_capping} introduced the pull capping notion. The reason for this choice was to not allow the pull to overpower the value of the momentum. So, if the pull is larger than $\mu$ times the momentum, it is capped at the momentum value multiplied by $\mu$. 
 
 We  compare how the guards move when we are using all the heuristics to when we are not capping the pull towards reflex vertices. We  use the comb polygon with four teeth as example. The guards have a pull cap hyperparameter $\mu = 1$. Thus, if the pull is larger than the momentum, we cap it at the size of the momentum. This value was chosen experimentally in order to clearly show the benefits of using this heuristic. So, if the pull is as large as the momentum, we prioritise pulling guards onto reflex vertices if they are ``close enough''.
 
@@ -171,7 +173,7 @@ We  compare how the guards move when we are using all the heuristics to when we 
 Figure \ref{fig:no_cap_eg} displays the two reflex vertex pull cases: Subfigures \ref{fig:all_cap_pos0} and \ref{fig:all_cap_pos1} show how the blue guard movement changes when its pull is capped; Subfigures \ref{fig:no_cap_pos0} and \ref{fig:no_cap_pos1} show the blue guard's movement without pull capping. We  observe how in Subfigure \ref{fig:all_cap_pos0} the blue guard has its pull towards the reflex vertex capped. In that case, the movement vector is larger than the pull, so the guard doesn't move towards the reflex vertex. So, the blue guard moves as its movement vector dictates to the position in Subfigure \ref{fig:all_cap_pos1}. This encourages the guard to explore the polygon more rather than directly moving towards a reflex vertex.
 Conversely, Subfigure \ref{fig:no_cap_pos1} displays the blue guard moving closer to the reflex vertex it is pulled to. In subsequent iterations, it is placed on the reflex vertex.
 
-
+\newpage
 Figure \ref{fig:no_cap_plots} shows how the global behaviour of the algorithm is influenced by the capping. Interestingly enough, when capping the pull, the guards' behaviour is more erratic. This results in more iterations before the whole polygon is seen (Subfigure \ref{fig:area_all_cap}).  On the other hand, using no capping allows a steadier increase in the total area seen (Subfigure \ref{fig:area_no_cap}). Eventually, the blue guard ($g0$) is drawn and placed onto the reflex vertex in iteration 2. It is worth mentioning that it does not move in the last iteration because the other guards have already covered the whole polygon. Nonetheless, the reflex vertex placement does not improve the locally seen area. It however reinforces the previously discussed idea that placing guards on reflex vertices is globally beneficial for the algorithm. As such, tuning the hyperparameter $\mu$ is a crucial point of exploration for deciding how and when pull capping would always prove most favourable.
 
 \begin{figure}[!h]
@@ -335,6 +337,7 @@ In this way, we prioritise unseen areas based on their size, while still account
 
 We  compare how the guards move when we are using all the heuristics to when we are not taking into account the angle behind the reflex vertex. We  use an arbitrary polygon as an example, that needs three guards to be fully seen. Figure \ref{fig:no_angle_eg} shows a comparison between using and not using the angle behind the reflex vertex heuristic. Subfigures \ref{fig:all_angle_pos0} and \ref{fig:all_angle_pos1} display the first two iterations of the algorithm when all heuristics are used. Subfigures \ref{fig:no_angle_pos0} and \ref{fig:no_angle_pos1} focus on the first two iterations when not using the heuristic.
 
+\newpage
 We  observe a major difference in the way the final movement vector is computed for the orange guard in the two cases. When all heuristics are used, the movements of the guards are much smaller and smoother. For example, in Subfigure \ref{fig:no_angle_pos0}, the orange guard has a large movement vector outside the polygon due to the unseen part in the upper pocket. When we also take into account the angles behind the reflex vertices in the pocket, its movement vectors become much smaller (Subfigure \ref{fig:all_angle_pos0}). In fact, the orange guard is also drawn slightly to the right part of the polygon, as it has a larger angle behind the reflex vertex. That part of the polygon is already seen by the blue guard, so it starts moving towards the upper pocket in Subfigure \ref{fig:all_angle_pos1}.
 
 \begin{figure}[h!]
@@ -414,10 +417,11 @@ Figure \ref{fig:area_no_hidden_gradient} displays a comparison between using and
 
 Therefore, we reckon that the hidden gradient heuristic results in a significant improvement to our algorithm in terms of efficiency. In this way, all guards are ensured to make some progress towards their optimum and are not stalled.
 
+\newpage
 \subsubsection{Greedy Initialisation}
 In this section we  discuss the benefits of using a greedy initialisation technique for our algorithm. Section \ref{sec:greedy} introduces it as beneficial for giving a head start to our algorithm. In our experiments we  greedily initialise the guards in the middle of the leftmost segment of each of their visibility regions. The reason behind this choice is that CGAL did not offer a quick way to pick a randomised position inside the visibility area. Due to the time constraints of this thesis, we decided to use a deterministic positioning.
 
-So far we have not used greedy initialisation in any of our examples. The reason is that this technique already solves some polygons at guard placement time. Naturally, this would not allow us to show the benefits of using any of the other heuristics. An example in this case is the comb polygon with four teeth in Figure \ref{fig:comb_greedy}.
+So far we have not used greedy initialisation in any of our examples. The reason is that this technique already solves some polygons at guard placement time. An example in this case is the comb polygon with four teeth in Figure \ref{fig:comb_greedy}.
 
 \begin{figure}[h!]
     \centering
@@ -429,7 +433,7 @@ So far we have not used greedy initialisation in any of our examples. The reason
 In the case of polygons who are not completely seen at initialisation time, it is unclear whether the greedy placement improves the overall progress. How well the algorithm behaves is highly dependent on the initial placement of the guards. Namely, the algorithm often does not finish with different starting positions (it is stuck in local optima). Because of this drawback, we cannot create extensive experiments with different starting guard positions. 
 % It is additionally not feasible to find a generalisation in the type of placements that allow the algorithm to finish.
 
-Therefore, we believe that the greedy initialisation technique would be most beneficial with a deterministic placement tailored to the shape of the polygon. An arbitrary placement would be most convenient for generalising the performance of the technique. However, due to time constraints, this heuristic is to be explored with a more robust and arbitrary implementation.
+Therefore, we believe that the greedy initialisation technique would benefit most from a deterministic placement if it were tailored to the shape of the polygon. Otherwise, an arbitrary placement would be most suitable for general cases. However, due to time constraints, this heuristic's performance is limited. So, it is to be explored with a more robust implementation that places guards arbitrarily.
 % - momentum
 % - reflex vertex pull
     % - onto reflex vertex
@@ -443,7 +447,7 @@ Therefore, we believe that the greedy initialisation technique would be most ben
 \newpage
 \subsection{Scaling for the Comb Polygon}
 In this section we  observe how the algorithm scales on the comb polygon. We  take the comb polygons with 2, 3, ..., 10, 15, 20, 50, 100 teeth. We  note how the algorithm progresses in terms of the total area seen per iteration.
-As such, we  run the algorithm with all heuristics for all the previously mentioned comb polygons. All guards  start at the same $y$-coordinate, 0.1 units apart from each other. An example of such a starting point is found in Figure \ref{fig:comb6_start_pos}. In this way, we  ensure that the performance of the algorithm can be compared using the same starting position of the guards. We  deem a timeout of one hour for declaring an algorithm infeasible for larger polygons. We  then analyse how the algorithm performed under each of the circumstances. Lastly, we  offer some points of improvement.
+As such, we  run the algorithm with all heuristics (but greedy initialisation) for all the mentioned comb polygons. All guards  start at the same $y$-coordinate, 0.1 units apart from each other. An example of such a starting point is found in Figure \ref{fig:comb6_start_pos}. In this way, we  ensure that the performance of the algorithm can be compared using the same starting position of the guards. We  deem a timeout of one hour for declaring an algorithm infeasible for larger polygons. We  then analyse how the algorithm performed under each of the circumstances. Lastly, we  offer some points of improvement.
 
 \begin{figure}[h!]
     \centering
