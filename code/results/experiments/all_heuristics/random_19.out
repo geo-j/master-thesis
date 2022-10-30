@@ -1,0 +1,3434 @@
+18
+6 24 3 20
+5 26 6 24
+7 16 7 12
+3 20 7 16
+8 26 7 24
+5 26 8 26
+10 13 7 12
+9 18 10 13
+11 20 9 18
+11 24 7 24
+15 17 11 20
+15 27 11 24
+16 22 15 27
+17 17 15 17
+19 19 17 17
+17 20 19 19
+19 21 17 20
+16 22 19 21
+total area=103
+i=0
+area=102.496
++++++3 guards with gradient 0
+	======== guard 7 17
+	was guard reflex vertex? 0
+	computed gradient -0.0855368 -0.0133624 and pull -0.00188973 0.0052281
+	------- removing guard 7 17
+g0=7 17
+area0=73.677
+alpha0=0.5
+scaling gradient with 0.03125 to -0.00267302 -0.000417575
+	>>>> prev guard 7 17 cur guard 6.99954 17.0005
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.99954 17.0005?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99954 17.0005
+	 new best guard at 6.99954 17.0005
+scaling gradient with 0.0625 to -0.00534605 -0.00083515
+	>>>> prev guard 7 17 cur guard 6.99846 17.0013
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.99846 17.0013?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99846 17.0013
+scaling gradient with 0.125 to -0.0106921 -0.0016703
+	>>>> prev guard 7 17 cur guard 6.99633 17.0023
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.99633 17.0023?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99633 17.0023
+scaling gradient with 0.25 to -0.0213842 -0.0033406
+	>>>> prev guard 7 17 cur guard 6.9923 17.0033
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.9923 17.0033?0
+	is guard inside polygon? 1
+0 other guards have coords 6.9923 17.0033
+scaling gradient with 0.5 to -0.0427684 -0.0066812
+	>>>> prev guard 7 17 cur guard 6.98461 17.004
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.98461 17.004?0
+	is guard inside polygon? 1
+0 other guards have coords 6.98461 17.004
+scaling gradient with 1 to -0.0855368 -0.0133624
+	>>>> prev guard 7 17 cur guard 6.96971 17.0037
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.96971 17.0037?0
+	is guard inside polygon? 1
+0 other guards have coords 6.96971 17.0037
+scaling gradient with 2 to -0.171074 -0.0267248
+	>>>> prev guard 7 17 cur guard 6.9405 17.0013
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.9405 17.0013?0
+	is guard inside polygon? 1
+0 other guards have coords 6.9405 17.0013
+scaling gradient with 4 to -0.342147 -0.0534496
+	>>>> prev guard 7 17 cur guard 6.88272 16.9946
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.88272 16.9946?0
+	is guard inside polygon? 1
+0 other guards have coords 6.88272 16.9946
+scaling gradient with 8 to -0.684294 -0.106899
+	>>>> prev guard 7 17 cur guard 6.76789 16.979
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.76789 16.979?0
+	is guard inside polygon? 1
+0 other guards have coords 6.76789 16.979
+scaling gradient with 16 to -1.36859 -0.213798
+	>>>> prev guard 7 17 cur guard 6.53897 16.9457
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.53897 16.9457?0
+	is guard inside polygon? 1
+0 other guards have coords 6.53897 16.9457
+scaling gradient with 32 to -2.73718 -0.427597
+	>>>> prev guard 7 17 cur guard 6.08193 16.8769
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7 17 6.08193 16.8769?1
+	is guard inside polygon? 0
+0 other guards have coords 6.11827 16.8817
+Df=0.004 0
+h=0 -0.004
+Df=-0.0467684 -0.0066812
+h=-0.000944864 0.00661405
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.000456275 0.000481052
+h=-0.000944864 0.00261405
+is completely visible? 0
+are areas equal? 103=102.493?0
++++++2 guards with gradient 0
+	======== guard 6 22.26
+	was guard reflex vertex? 0
+	computed gradient -6.77306 -0.0823952 and pull 0.00989238 3.90355
+	------- removing guard 6 22.26
+g1=6 22.26
+area1=93.4363
+alpha1=0.5
+scaling gradient with 0.03125 to -0.211658 -0.00257485
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 5.97883 22.2597
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 5.97883 22.2597?0
+	is guard inside polygon? 1
+0 other guards have coords 5.97883 22.2597
+	 new best guard at 5.97883 22.2597
+scaling gradient with 0.0625 to -0.423316 -0.0051497
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 5.91957 22.2591
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 5.91957 22.2591?0
+	is guard inside polygon? 1
+0 other guards have coords 5.91957 22.2591
+scaling gradient with 0.125 to -0.846633 -0.0102994
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 5.7875 22.2579
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 5.7875 22.2579?0
+	is guard inside polygon? 1
+0 other guards have coords 5.7875 22.2579
+scaling gradient with 0.25 to -1.69327 -0.0205988
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 5.51252 22.2566
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 5.51252 22.2566?0
+	is guard inside polygon? 1
+0 other guards have coords 5.51252 22.2566
+scaling gradient with 0.5 to -3.38653 -0.0411976
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 4.9539 22.2593
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 4.9539 22.2593?0
+	is guard inside polygon? 1
+0 other guards have coords 4.9539 22.2593
+scaling gradient with 1 to -6.77306 -0.0823952
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 3.82978 22.2851
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 3.82978 22.2851?1
+	is guard inside polygon? 0
+0 other guards have coords 4.70622 22.275
+scaling gradient with 2 to -13.5461 -0.16479
+pull reduced from 15.2378 to 	>>>> prev guard 6 22.26 cur guard 2.45264 22.4087
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 2.45264 22.4087?1
+	is guard inside polygon? 0
+0 other guards have coords 4.73478 22.313
+scaling gradient with 4 to -27.0922 -0.329581
+	>>>> prev guard 6 22.26 cur guard 0.223683 22.7774
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 0.223683 22.7774?1
+	is guard inside polygon? 0
+0 other guards have coords 4.77716 22.3695
+scaling gradient with 8 to -54.1845 -0.659162
+	>>>> prev guard 6 22.26 cur guard -4.24918 23.0655
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 -4.24918 23.0655?1
+	is guard inside polygon? 0
+0 other guards have coords 4.76764 22.3569
+scaling gradient with 16 to -108.369 -1.31832
+	>>>> prev guard 6 22.26 cur guard -13.2893 23.1721
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 -13.2893 23.1721?1
+	is guard inside polygon? 0
+0 other guards have coords 4.7397 22.3196
+scaling gradient with 32 to -216.738 -2.63665
+	>>>> prev guard 6 22.26 cur guard -31.3787 23.0985
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6 22.26 -31.3787 23.0985?1
+	is guard inside polygon? 0
+0 other guards have coords 4.71659 22.2888
+Df=-3.39997 0
+h=0 1.954
+Df=-0.000540026 0.00031036
+h=0.000154647 0.000269086
+Df=0 0
+h=0 0
+Df=-0.00114475 -0.0440288
+h=0.00440139 -0.000114436
+Df=2.24016e-05 0.000109034
+h=9.7094e-06 -1.99484e-06
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.0150977 0.00241177
+h=0.000380443 -0.00238157
+Df=-0.0211658 -0.000257485
+h=0.00494619 1.95177
+is completely visible? 0
+are areas equal? 103=102.493?0
++++++1 guards with gradient 0
+	======== guard 14.24 18.25
+	was guard reflex vertex? 0
+	computed gradient 0.502172 0.973699 and pull -0.281657 0.157242
+	------- removing guard 14.24 18.25
+g2=14.24 18.25
+area2=59.1268
+alpha2=0.5
+scaling gradient with 0.03125 to 0.0156929 0.0304281
+pull reduced from 0.104056 to 	>>>> prev guard 14.24 18.25 cur guard 14.2416 18.253
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.2416 18.253?0
+	is guard inside polygon? 1
+0 other guards have coords 14.2416 18.253
+	 new best guard at 14.2416 18.253
+scaling gradient with 0.0625 to 0.0313858 0.0608562
+pull reduced from 0.104056 to 	>>>> prev guard 14.24 18.25 cur guard 14.246 18.2616
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.246 18.2616?0
+	is guard inside polygon? 1
+0 other guards have coords 14.246 18.2616
+	 new best guard at 14.246 18.2616
+scaling gradient with 0.125 to 0.0627715 0.121712
+pull reduced from 0.104056 to 	>>>> prev guard 14.24 18.25 cur guard 14.2556 18.2806
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.2556 18.2806?0
+	is guard inside polygon? 1
+0 other guards have coords 14.2556 18.2806
+	 new best guard at 14.2556 18.2806
+scaling gradient with 0.25 to 0.125543 0.243425
+pull reduced from 0.104056 to 	>>>> prev guard 14.24 18.25 cur guard 14.2754 18.3205
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.2754 18.3205?0
+	is guard inside polygon? 1
+0 other guards have coords 14.2754 18.3205
+	 new best guard at 14.2754 18.3205
+scaling gradient with 0.5 to 0.251086 0.48685
+	>>>> prev guard 14.24 18.25 cur guard 14.2882 18.4168
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.2882 18.4168?0
+	is guard inside polygon? 1
+0 other guards have coords 14.2882 18.4168
+	 new best guard at 14.2882 18.4168
+scaling gradient with 1 to 0.502172 0.973699
+	>>>> prev guard 14.24 18.25 cur guard 14.3205 18.6069
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.3205 18.6069?0
+	is guard inside polygon? 1
+0 other guards have coords 14.3205 18.6069
+	 new best guard at 14.3205 18.6069
+scaling gradient with 2 to 1.00434 1.9474
+	>>>> prev guard 14.24 18.25 cur guard 14.4186 18.9695
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.4186 18.9695?0
+	is guard inside polygon? 1
+0 other guards have coords 14.4186 18.9695
+	 new best guard at 14.4186 18.9695
+scaling gradient with 4 to 2.00869 3.8948
+	>>>> prev guard 14.24 18.25 cur guard 14.6698 19.6647
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 14.6698 19.6647?0
+	is guard inside polygon? 1
+0 other guards have coords 14.6698 19.6647
+	 new best guard at 14.6698 19.6647
+scaling gradient with 8 to 4.01738 7.7896
+	>>>> prev guard 14.24 18.25 cur guard 15.2443 21.0156
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 15.2443 21.0156?0
+	is guard inside polygon? 1
+0 other guards have coords 15.2443 21.0156
+	 new best guard at 15.2443 21.0156
+scaling gradient with 16 to 8.03475 15.5792
+	>>>> prev guard 14.24 18.25 cur guard 16.4792 23.67
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 16.4792 23.67?1
+	is guard inside polygon? 0
+0 other guards have coords 15.9313 22.3437
+scaling gradient with 32 to 16.0695 31.1584
+	>>>> prev guard 14.24 18.25 cur guard 18.498 27.5987
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 14.24 18.25 18.498 27.5987?1
+	is guard inside polygon? 0
+0 other guards have coords 15.9841 22.0794
+Df=0.276711 0.512311
+h=-0.139124 0.0751441
+Df=-0.00617942 -0.00885537
+h=-0.000881317 0.000614996
+Df=-0.0164449 -0.0207063
+h=-0.0022396 0.00177869
+Df=-0.000528006 -0.00029752
+h=-4.50787e-05 8.00008e-05
+Df=0.000450044 -0.000211221
+h=5.0989e-05 0.000108641
+Df=-0.00292265 0.00460944
+h=0.00141046 0.000894314
+Df=0.574515 1.35089
+h=-0.140829 0.0786208
+is completely visible? 0
+are areas equal? 103=102.312?0
+i=1
+area=102.312
++++++3 guards with gradient 0
+	======== guard 6.99954 17.0005
+	was guard reflex vertex? 0
+	computed gradient 0.00857394 3.91019e-06 and pull 3.90831e-06 -0.00856981
+	------- removing guard 6.99954 17.0005
+g0=6.99954 17.0005
+area0=73.6757
+alpha0=0.5
+scaling gradient with 0.03125 to 0.000267935 1.22194e-07
+	>>>> prev guard 6.99954 17.0005 cur guard 6.99921 17
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 6.99921 17?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99921 17
+	 new best guard at 6.99921 17
+scaling gradient with 0.0625 to 0.000535871 2.44387e-07
+	>>>> prev guard 6.99954 17.0005 cur guard 6.99899 16.9988
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 6.99899 16.9988?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99899 16.9988
+scaling gradient with 0.125 to 0.00107174 4.88774e-07
+	>>>> prev guard 6.99954 17.0005 cur guard 6.99892 16.9969
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 6.99892 16.9969?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99892 16.9969
+scaling gradient with 0.25 to 0.00214348 9.77548e-07
+	>>>> prev guard 6.99954 17.0005 cur guard 6.99909 16.9946
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 6.99909 16.9946?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99909 16.9946
+scaling gradient with 0.5 to 0.00428697 1.9551e-06
+	>>>> prev guard 6.99954 17.0005 cur guard 6.99965 16.9919
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 6.99965 16.9919?0
+	is guard inside polygon? 1
+0 other guards have coords 6.99965 16.9919
+	 new best guard at 6.99965 16.9919
+scaling gradient with 1 to 0.00857394 3.91019e-06
+	>>>> prev guard 6.99954 17.0005 cur guard 7.00095 16.9888
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 7.00095 16.9888?0
+	is guard inside polygon? 1
+0 other guards have coords 7.00095 16.9888
+	 new best guard at 7.00095 16.9888
+scaling gradient with 2 to 0.0171479 7.82039e-06
+	>>>> prev guard 6.99954 17.0005 cur guard 7.00371 16.9856
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 7.00371 16.9856?0
+	is guard inside polygon? 1
+0 other guards have coords 7.00371 16.9856
+	 new best guard at 7.00371 16.9856
+scaling gradient with 4 to 0.0342957 1.56408e-05
+	>>>> prev guard 6.99954 17.0005 cur guard 7.00935 16.9821
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 7.00935 16.9821?0
+	is guard inside polygon? 1
+0 other guards have coords 7.00935 16.9821
+	 new best guard at 7.00935 16.9821
+scaling gradient with 8 to 0.0685915 3.12815e-05
+	>>>> prev guard 6.99954 17.0005 cur guard 7.02072 16.9784
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 7.02072 16.9784?0
+	is guard inside polygon? 1
+0 other guards have coords 7.02072 16.9784
+	 new best guard at 7.02072 16.9784
+scaling gradient with 16 to 0.137183 6.25631e-05
+	>>>> prev guard 6.99954 17.0005 cur guard 7.04353 16.9747
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 7.04353 16.9747?0
+	is guard inside polygon? 1
+0 other guards have coords 7.04353 16.9747
+	 new best guard at 7.04353 16.9747
+scaling gradient with 32 to 0.274366 0.000125126
+	>>>> prev guard 6.99954 17.0005 cur guard 7.08922 16.9708
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.99954 17.0005 7.08922 16.9708?0
+	is guard inside polygon? 1
+0 other guards have coords 7.08922 16.9708
+	 new best guard at 7.08922 16.9708
+Df=0.00428697 1.9551e-06
+h=1.95416e-06 -0.00428491
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.0456883 -0.00385466
+h=1.95416e-06 -0.00428491
+is completely visible? 0
+are areas equal? 103=102.339?0
++++++2 guards with gradient 0
+	======== guard 5.97883 22.2597
+	was guard reflex vertex? 0
+	computed gradient 1.1416 -0.00788278 and pull 0.00887193 0.634585
+	------- removing guard 5.97883 22.2597
+g1=5.97883 22.2597
+area1=93.3369
+alpha1=0.5
+scaling gradient with 0.03125 to 0.0356751 -0.000246337
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 5.96547 22.2598
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 5.96547 22.2598?0
+	is guard inside polygon? 1
+0 other guards have coords 5.96547 22.2598
+	 new best guard at 5.96547 22.2598
+scaling gradient with 0.0625 to 0.0713502 -0.000492674
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 5.96192 22.2599
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 5.96192 22.2599?0
+	is guard inside polygon? 1
+0 other guards have coords 5.96192 22.2599
+scaling gradient with 0.125 to 0.1427 -0.000985347
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 5.97335 22.2599
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 5.97335 22.2599?0
+	is guard inside polygon? 1
+0 other guards have coords 5.97335 22.2599
+	 new best guard at 5.97335 22.2599
+scaling gradient with 0.25 to 0.285401 -0.00197069
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 6.01103 22.2598
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 6.01103 22.2598?0
+	is guard inside polygon? 1
+0 other guards have coords 6.01103 22.2598
+	 new best guard at 6.01103 22.2598
+scaling gradient with 0.5 to 0.570801 -0.00394139
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 6.09827 22.2602
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 6.09827 22.2602?0
+	is guard inside polygon? 1
+0 other guards have coords 6.09827 22.2602
+	 new best guard at 6.09827 22.2602
+scaling gradient with 1 to 1.1416 -0.00788278
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 6.28229 22.2645
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 6.28229 22.2645?0
+	is guard inside polygon? 1
+0 other guards have coords 6.28229 22.2645
+	 new best guard at 6.28229 22.2645
+scaling gradient with 2 to 2.28321 -0.0157656
+pull reduced from 0.402777 to 	>>>> prev guard 5.97883 22.2597 cur guard 6.65813 22.2877
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 6.65813 22.2877?0
+	is guard inside polygon? 1
+0 other guards have coords 6.65813 22.2877
+	 new best guard at 6.65813 22.2877
+scaling gradient with 4 to 4.56641 -0.0315311
+	>>>> prev guard 5.97883 22.2597 cur guard 7.41632 22.3666
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 7.41632 22.3666?0
+	is guard inside polygon? 1
+0 other guards have coords 7.41632 22.3666
+	 new best guard at 7.41632 22.3666
+scaling gradient with 8 to 9.13282 -0.0630622
+	>>>> prev guard 5.97883 22.2597 cur guard 8.93705 22.4869
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 8.93705 22.4869?0
+	is guard inside polygon? 1
+0 other guards have coords 8.93705 22.4869
+scaling gradient with 16 to 18.2656 -0.126124
+	>>>> prev guard 5.97883 22.2597 cur guard 11.9811 22.634
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 11.9811 22.634?0
+	is guard inside polygon? 1
+0 other guards have coords 11.9811 22.634
+scaling gradient with 32 to 36.5313 -0.252249
+	>>>> prev guard 5.97883 22.2597 cur guard 18.0703 22.7899
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.97883 22.2597 18.0703 22.7899?1
+	is guard inside polygon? 0
+0 other guards have coords 15.8614 22.693
+Df=0.555968 -0.00676193
+h=0.00388531 0.319451
+Df=-0.000534311 0.000313529
+h=0.000155386 0.000264807
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.015368 0.00250702
+h=0.000395273 -0.00242302
+Df=0.758196 0.0788987
+h=0.00443597 0.317292
+is completely visible? 0
+are areas equal? 103=101.975?0
++++++1 guards with gradient 0
+	======== guard 15.2443 21.0156
+	was guard reflex vertex? 0
+	computed gradient 0.915707 -0.648319 and pull 0.594072 0.804481
+	------- removing guard 15.2443 21.0156
+g2=15.2443 21.0156
+area2=77.2506
+alpha2=0.5
+scaling gradient with 0.03125 to 0.0286159 -0.02026
+	>>>> prev guard 15.2443 21.0156 cur guard 15.7662 22.1748
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 15.7662 22.1748?0
+	is guard inside polygon? 1
+0 other guards have coords 15.7662 22.1748
+	 new best guard at 15.7662 22.1748
+scaling gradient with 0.0625 to 0.0572317 -0.04052
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+0 other guards have coords 16 22
+	 new best guard at 16 22
+scaling gradient with 0.125 to 0.114463 -0.0810399
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 0.25 to 0.228927 -0.16208
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 0.5 to 0.457854 -0.32416
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 1 to 0.915707 -0.648319
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 2 to 1.83141 -1.29664
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 4 to 3.66283 -2.59328
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 8 to 7.32566 -5.18655
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 16 to 14.6513 -10.3731
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+scaling gradient with 32 to 29.3026 -20.7462
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.2443 21.0156 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 15.2443 21.0156 16 22?0
+	is guard inside polygon? 1
+1 other guards have coords 16 22
+Df=-0.0520497 0.217517
+h=-0.0498422 -0.0119267
+Df=-0.0642 -0.198863
+h=-0.0204716 0.00660896
+Df=-0.0044106 -0.0121842
+h=-0.00138965 0.000503043
+Df=-0.000443435 -0.000630639
+h=-0.000121545 8.54649e-05
+Df=0.533106 -0.409262
+h=0.329782 0.429576
+Df=0.0458511 0.079263
+h=0.0390787 -0.0226057
+Df=0 0
+h=0.297036 0.402241
+is completely visible? 0
+are areas equal? 103=101.975?0
+i=2
+area=101.975
++++++3 guards with gradient 0
+	======== guard 7.08922 16.9708
+	was guard reflex vertex? 0
+	computed gradient -0.0218551 -0.000277399 and pull -3.94606e-05 0.00310894
+	------- removing guard 7.08922 16.9708
+g0=7.08922 16.9708
+area0=73.4061
+alpha0=0.5
+scaling gradient with 0.03125 to -0.000682972 -8.6687e-06
+	>>>> prev guard 7.08922 16.9708 cur guard 7.1257 16.968
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.1257 16.968?0
+	is guard inside polygon? 1
+0 other guards have coords 7.1257 16.968
+	 new best guard at 7.1257 16.968
+scaling gradient with 0.0625 to -0.00136594 -1.73374e-05
+	>>>> prev guard 7.08922 16.9708 cur guard 7.15474 16.9661
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.15474 16.9661?0
+	is guard inside polygon? 1
+0 other guards have coords 7.15474 16.9661
+scaling gradient with 0.125 to -0.00273189 -3.46748e-05
+	>>>> prev guard 7.08922 16.9708 cur guard 7.1777 16.9649
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.1777 16.9649?0
+	is guard inside polygon? 1
+0 other guards have coords 7.1777 16.9649
+scaling gradient with 0.25 to -0.00546378 -6.93496e-05
+	>>>> prev guard 7.08922 16.9708 cur guard 7.19551 16.9642
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.19551 16.9642?0
+	is guard inside polygon? 1
+0 other guards have coords 7.19551 16.9642
+scaling gradient with 0.5 to -0.0109276 -0.000138699
+	>>>> prev guard 7.08922 16.9708 cur guard 7.20867 16.964
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.20867 16.964?0
+	is guard inside polygon? 1
+0 other guards have coords 7.20867 16.964
+scaling gradient with 1 to -0.0218551 -0.000277399
+	>>>> prev guard 7.08922 16.9708 cur guard 7.217 16.9641
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.217 16.9641?0
+	is guard inside polygon? 1
+0 other guards have coords 7.217 16.9641
+scaling gradient with 2 to -0.0437102 -0.000554797
+	>>>> prev guard 7.08922 16.9708 cur guard 7.21929 16.9644
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.21929 16.9644?0
+	is guard inside polygon? 1
+0 other guards have coords 7.21929 16.9644
+scaling gradient with 4 to -0.0874204 -0.00110959
+	>>>> prev guard 7.08922 16.9708 cur guard 7.21238 16.9649
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.21238 16.9649?0
+	is guard inside polygon? 1
+0 other guards have coords 7.21238 16.9649
+scaling gradient with 8 to -0.174841 -0.00221919
+	>>>> prev guard 7.08922 16.9708 cur guard 7.18936 16.9653
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.18936 16.9653?0
+	is guard inside polygon? 1
+0 other guards have coords 7.18936 16.9653
+scaling gradient with 16 to -0.349682 -0.00443838
+	>>>> prev guard 7.08922 16.9708 cur guard 7.13598 16.9656
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.13598 16.9656?0
+	is guard inside polygon? 1
+0 other guards have coords 7.13598 16.9656
+scaling gradient with 32 to -0.699363 -0.00887675
+	>>>> prev guard 7.08922 16.9708 cur guard 7.02333 16.9652
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.08922 16.9708 7.02333 16.9652?0
+	is guard inside polygon? 1
+0 other guards have coords 7.02333 16.9652
+	 new best guard at 7.02333 16.9652
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.0109276 -0.000138699
+h=-1.97303e-05 0.00155447
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.112649 -0.000389565
+h=-1.97303e-05 0.00155447
+is completely visible? 0
+are areas equal? 103=101.993?0
++++++2 guards with gradient 0
+	======== guard 7.41632 22.3666
+	was guard reflex vertex? 0
+	computed gradient -0.138967 -0.0358217 and pull -0.0212162 0.082991
+	------- removing guard 7.41632 22.3666
+g1=7.41632 22.3666
+area1=98.1954
+alpha1=0.5
+scaling gradient with 0.03125 to -0.00434271 -0.00111943
+	>>>> prev guard 7.41632 22.3666 cur guard 8.02032 22.438
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 8.02032 22.438?0
+	is guard inside polygon? 1
+0 other guards have coords 8.02032 22.438
+	 new best guard at 8.02032 22.438
+scaling gradient with 0.0625 to -0.00868543 -0.00223886
+	>>>> prev guard 7.41632 22.3666 cur guard 8.50053 22.5031
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 8.50053 22.5031?0
+	is guard inside polygon? 1
+0 other guards have coords 8.50053 22.5031
+scaling gradient with 0.125 to -0.0173709 -0.00447771
+	>>>> prev guard 7.41632 22.3666 cur guard 8.88084 22.563
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 8.88084 22.563?0
+	is guard inside polygon? 1
+0 other guards have coords 8.88084 22.563
+scaling gradient with 0.25 to -0.0347417 -0.00895542
+	>>>> prev guard 7.41632 22.3666 cur guard 9.17949 22.6184
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.17949 22.6184?0
+	is guard inside polygon? 1
+0 other guards have coords 9.17949 22.6184
+scaling gradient with 0.5 to -0.0694834 -0.0179108
+	>>>> prev guard 7.41632 22.3666 cur guard 9.40935 22.6692
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.40935 22.6692?0
+	is guard inside polygon? 1
+0 other guards have coords 9.40935 22.6692
+scaling gradient with 1 to -0.138967 -0.0358217
+	>>>> prev guard 7.41632 22.3666 cur guard 9.57721 22.7145
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.57721 22.7145?0
+	is guard inside polygon? 1
+0 other guards have coords 9.57721 22.7145
+scaling gradient with 2 to -0.277934 -0.0716434
+	>>>> prev guard 7.41632 22.3666 cur guard 9.68158 22.752
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.68158 22.752?0
+	is guard inside polygon? 1
+0 other guards have coords 9.68158 22.752
+scaling gradient with 4 to -0.555867 -0.143287
+	>>>> prev guard 7.41632 22.3666 cur guard 9.70738 22.7759
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.70738 22.7759?0
+	is guard inside polygon? 1
+0 other guards have coords 9.70738 22.7759
+scaling gradient with 8 to -1.11173 -0.286573
+	>>>> prev guard 7.41632 22.3666 cur guard 9.61471 22.7746
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.61471 22.7746?0
+	is guard inside polygon? 1
+0 other guards have coords 9.61471 22.7746
+scaling gradient with 16 to -2.22347 -0.573147
+	>>>> prev guard 7.41632 22.3666 cur guard 9.31612 22.7246
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 9.31612 22.7246?0
+	is guard inside polygon? 1
+0 other guards have coords 9.31612 22.7246
+scaling gradient with 32 to -4.44694 -1.14629
+	>>>> prev guard 7.41632 22.3666 cur guard 8.63042 22.5783
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.41632 22.3666 8.63042 22.5783?0
+	is guard inside polygon? 1
+0 other guards have coords 8.63042 22.5783
+Df=0 0
+h=0 0
+Df=-0.070109 -0.0178699
+h=-0.0106017 0.0415936
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.000625599 -4.09085e-05
+h=-6.41175e-06 -9.80525e-05
+Df=0.604001 0.0713061
+h=-0.0106081 0.0414955
+is completely visible? 0
+are areas equal? 103=101.993?0
++++++1 guards with gradient 0
+	======== guard 16 22
+	was guard reflex vertex? 1
+	computed gradient -0.0200475 -0.124169 and pull -0.0472028 -0.0740708
+	------- removing guard 16 22
+g2=16 22
+area2=78.7679
+alpha2=0.5
+scaling gradient with 0.03125 to -0.000626484 -0.00388028
+	>>>> prev guard 16 22 cur guard 15.9952 21.9922
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.9952 21.9922?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.9952 21.9922
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.9952 21.9922
+	 new best guard at 15.9952 21.9922
+scaling gradient with 0.0625 to -0.00125297 -0.00776055
+	>>>> prev guard 16 22 cur guard 15.9865 21.9778
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.9865 21.9778?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.9865 21.9778
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.9865 21.9778
+scaling gradient with 0.125 to -0.00250594 -0.0155211
+	>>>> prev guard 16 22 cur guard 15.9746 21.9573
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.9746 21.9573?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.9746 21.9573
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.9746 21.9573
+scaling gradient with 0.25 to -0.00501187 -0.0310422
+	>>>> prev guard 16 22 cur guard 15.9599 21.9304
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.9599 21.9304?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.9599 21.9304
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.9599 21.9304
+scaling gradient with 0.5 to -0.0100237 -0.0620844
+	>>>> prev guard 16 22 cur guard 15.9424 21.8952
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.9424 21.8952?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.9424 21.8952
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.9424 21.8952
+scaling gradient with 1 to -0.0200475 -0.124169
+	>>>> prev guard 16 22 cur guard 15.9216 21.8473
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.9216 21.8473?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.9216 21.8473
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.9216 21.8473
+scaling gradient with 2 to -0.040095 -0.248338
+	>>>> prev guard 16 22 cur guard 15.8963 21.7767
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.8963 21.7767?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.8963 21.7767
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.8963 21.7767
+scaling gradient with 4 to -0.08019 -0.496675
+	>>>> prev guard 16 22 cur guard 15.8633 21.6632
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.8633 21.6632?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.8633 21.6632
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.8633 21.6632
+scaling gradient with 8 to -0.16038 -0.99335
+	>>>> prev guard 16 22 cur guard 15.8161 21.4656
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.8161 21.4656?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.8161 21.4656
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.8161 21.4656
+scaling gradient with 16 to -0.32076 -1.9867
+	>>>> prev guard 16 22 cur guard 15.7416 21.1014
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.7416 21.1014?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.7416 21.1014
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.7416 21.1014
+scaling gradient with 32 to -0.64152 -3.9734
+	>>>> prev guard 16 22 cur guard 15.6131 20.4054
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 16 22 15.6131 20.4054?0
+	is guard inside polygon? 1
+reflex vertex guard 16 22 tries to move to 15.6131 20.4054
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 15.6131 20.4054
+Df=0.0742918 0.0371459
+h=0.0166122 -0.0332243
+Df=-0.0427367 0.106842
+h=-0.01984 -0.007936
+Df=-0.0390375 -0.195187
+h=-0.0191397 0.00382794
+Df=-0.00226554 -0.0101949
+h=-0.0011058 0.000245733
+Df=-0.000275862 -0.000689655
+h=-0.000128066 5.12263e-05
+Df=-0.00478293 -0.00779511
+h=-0.0236014 -0.0370354
+is completely visible? 0
+are areas equal? 103=101.993?0
+i=3
+area=101.993
++++++3 guards with gradient 0
+	======== guard 7.02333 16.9652
+	was guard reflex vertex? 0
+	computed gradient -0.0214134 -7.10133e-05 and pull -1.00945e-05 0.0030439
+	------- removing guard 7.02333 16.9652
+g0=7.02333 16.9652
+area0=73.5309
+alpha0=0.5
+scaling gradient with 0.03125 to -0.000669168 -2.21916e-06
+	>>>> prev guard 7.02333 16.9652 cur guard 6.93314 16.9652
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.93314 16.9652?0
+	is guard inside polygon? 1
+0 other guards have coords 6.93314 16.9652
+	 new best guard at 6.93314 16.9652
+scaling gradient with 0.0625 to -0.00133834 -4.43833e-06
+	>>>> prev guard 7.02333 16.9652 cur guard 6.86086 16.9655
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.86086 16.9655?0
+	is guard inside polygon? 1
+0 other guards have coords 6.86086 16.9655
+	 new best guard at 6.86086 16.9655
+scaling gradient with 0.125 to -0.00267667 -8.87666e-06
+	>>>> prev guard 7.02333 16.9652 cur guard 6.80276 16.966
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.80276 16.966?0
+	is guard inside polygon? 1
+0 other guards have coords 6.80276 16.966
+	 new best guard at 6.80276 16.966
+scaling gradient with 0.25 to -0.00535334 -1.77533e-05
+	>>>> prev guard 7.02333 16.9652 cur guard 6.75575 16.9667
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.75575 16.9667?0
+	is guard inside polygon? 1
+0 other guards have coords 6.75575 16.9667
+	 new best guard at 6.75575 16.9667
+scaling gradient with 0.5 to -0.0107067 -3.55066e-05
+	>>>> prev guard 7.02333 16.9652 cur guard 6.71707 16.9676
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.71707 16.9676?0
+	is guard inside polygon? 1
+0 other guards have coords 6.71707 16.9676
+	 new best guard at 6.71707 16.9676
+scaling gradient with 1 to -0.0214134 -7.10133e-05
+	>>>> prev guard 7.02333 16.9652 cur guard 6.68398 16.9686
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.68398 16.9686?0
+	is guard inside polygon? 1
+0 other guards have coords 6.68398 16.9686
+	 new best guard at 6.68398 16.9686
+scaling gradient with 2 to -0.0428268 -0.000142027
+	>>>> prev guard 7.02333 16.9652 cur guard 6.65322 16.9697
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.65322 16.9697?0
+	is guard inside polygon? 1
+0 other guards have coords 6.65322 16.9697
+	 new best guard at 6.65322 16.9697
+scaling gradient with 4 to -0.0856535 -0.000284053
+	>>>> prev guard 7.02333 16.9652 cur guard 6.62005 16.9709
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.62005 16.9709?0
+	is guard inside polygon? 1
+0 other guards have coords 6.62005 16.9709
+	 new best guard at 6.62005 16.9709
+scaling gradient with 8 to -0.171307 -0.000568106
+	>>>> prev guard 7.02333 16.9652 cur guard 6.57639 16.9721
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.57639 16.9721?0
+	is guard inside polygon? 1
+0 other guards have coords 6.57639 16.9721
+	 new best guard at 6.57639 16.9721
+scaling gradient with 16 to -0.342614 -0.00113621
+	>>>> prev guard 7.02333 16.9652 cur guard 6.50719 16.9732
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.50719 16.9732?0
+	is guard inside polygon? 1
+0 other guards have coords 6.50719 16.9732
+	 new best guard at 6.50719 16.9732
+scaling gradient with 32 to -0.685228 -0.00227242
+	>>>> prev guard 7.02333 16.9652 cur guard 6.38331 16.9742
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.02333 16.9652 6.38331 16.9742?0
+	is guard inside polygon? 1
+0 other guards have coords 6.38331 16.9742
+	 new best guard at 6.38331 16.9742
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.0107067 -3.55066e-05
+h=-5.04724e-06 0.00152195
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.123881 0.000979029
+h=-5.04724e-06 0.00152195
+is completely visible? 0
+are areas equal? 103=102.143?0
++++++2 guards with gradient 0
+	======== guard 8.02032 22.438
+	was guard reflex vertex? 0
+	computed gradient -0.212459 -0.139761 and pull -0.0748351 0.114337
+	------- removing guard 8.02032 22.438
+g1=8.02032 22.438
+area1=98.8137
+alpha1=0.5
+scaling gradient with 0.03125 to -0.00663934 -0.00436754
+	>>>> prev guard 8.02032 22.438 cur guard 8.49537 22.506
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 8.49537 22.506?0
+	is guard inside polygon? 1
+0 other guards have coords 8.49537 22.506
+	 new best guard at 8.49537 22.506
+scaling gradient with 0.0625 to -0.0132787 -0.00873507
+	>>>> prev guard 8.02032 22.438 cur guard 8.86661 22.571
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 8.86661 22.571?0
+	is guard inside polygon? 1
+0 other guards have coords 8.86661 22.571
+scaling gradient with 0.125 to -0.0265573 -0.0174701
+	>>>> prev guard 8.02032 22.438 cur guard 9.15345 22.6327
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.15345 22.6327?0
+	is guard inside polygon? 1
+0 other guards have coords 9.15345 22.6327
+scaling gradient with 0.25 to -0.0531147 -0.0349403
+	>>>> prev guard 8.02032 22.438 cur guard 9.37013 22.69
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.37013 22.69?0
+	is guard inside polygon? 1
+0 other guards have coords 9.37013 22.69
+scaling gradient with 0.5 to -0.106229 -0.0698806
+	>>>> prev guard 8.02032 22.438 cur guard 9.52537 22.7402
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.52537 22.7402?0
+	is guard inside polygon? 1
+0 other guards have coords 9.52537 22.7402
+scaling gradient with 1 to -0.212459 -0.139761
+	>>>> prev guard 8.02032 22.438 cur guard 9.62083 22.7779
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.62083 22.7779?0
+	is guard inside polygon? 1
+0 other guards have coords 9.62083 22.7779
+scaling gradient with 2 to -0.424918 -0.279522
+	>>>> prev guard 8.02032 22.438 cur guard 9.64723 22.7915
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.64723 22.7915?0
+	is guard inside polygon? 1
+0 other guards have coords 9.64723 22.7915
+scaling gradient with 4 to -0.849835 -0.559045
+	>>>> prev guard 8.02032 22.438 cur guard 9.57588 22.758
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.57588 22.758?0
+	is guard inside polygon? 1
+0 other guards have coords 9.57588 22.758
+scaling gradient with 8 to -1.69967 -1.11809
+	>>>> prev guard 8.02032 22.438 cur guard 9.34134 22.6307
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 9.34134 22.6307?0
+	is guard inside polygon? 1
+0 other guards have coords 9.34134 22.6307
+scaling gradient with 16 to -3.39934 -2.23618
+	>>>> prev guard 8.02032 22.438 cur guard 8.8063 22.3168
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 8.8063 22.3168?0
+	is guard inside polygon? 1
+0 other guards have coords 8.8063 22.3168
+	 new best guard at 8.8063 22.3168
+scaling gradient with 32 to -6.79868 -4.47236
+	>>>> prev guard 8.02032 22.438 cur guard 7.69091 21.6298
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 8.02032 22.438 7.69091 21.6298?0
+	is guard inside polygon? 1
+0 other guards have coords 7.69091 21.6298
+	 new best guard at 7.69091 21.6298
+Df=0 0
+h=0 0
+Df=0.000606092 -9.60567e-05
+h=-1.47365e-05 -9.2983e-05
+Df=0 0
+h=0 0
+Df=-0.106835 -0.0697845
+h=-0.0374028 0.0572612
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-1.11539 -0.686979
+h=-0.0374176 0.0571683
+is completely visible? 0
+are areas equal? 103=102.176?0
++++++1 guards with gradient 0
+	======== guard 15.9952 21.9922
+	was guard reflex vertex? 0
+	computed gradient 155.445 -95.5135 and pull 10430.3 16999.1
+	------- removing guard 15.9952 21.9922
+g2=15.9952 21.9922
+area2=78.7579
+alpha2=0.5
+scaling gradient with 0.03125 to 4.85767 -2.9848
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+	 new best guard at 15.9952 21.9922
+scaling gradient with 0.0625 to 9.71534 -5.96959
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.125 to 19.4307 -11.9392
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.25 to 38.8614 -23.8784
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.5 to 77.7227 -47.7567
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 1 to 155.445 -95.5135
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 2 to 310.891 -191.027
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 4 to 621.782 -382.054
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 8 to 1243.56 -764.108
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 16 to 2487.13 -1528.22
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 32 to 4974.26 -3056.43
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 0
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+Df=-0.042829 0.107389
+h=-0.0199688 -0.00796399
+Df=-0.0392139 -0.195215
+h=-0.0191483 0.00384643
+Df=-0.00227814 -0.0102064
+h=-0.0011074 0.000247179
+Df=-0.000277096 -0.000689389
+h=-0.000128053 5.14701e-05
+Df=77.733 -47.6955
+h=5215.19 8499.59
+Df=0.0743223 0.037485
+h=0.0168 -0.0333097
+Df=0 0
+h=5215.16 8499.56
+is completely visible? 0
+are areas equal? 103=102.176?0
+i=4
+area=102.176
++++++3 guards with gradient 0
+	======== guard 6.38331 16.9742
+	was guard reflex vertex? 0
+	computed gradient -0.017324 0.00152062 and pull 0.000215603 0.00245632
+	------- removing guard 6.38331 16.9742
+g0=6.38331 16.9742
+area0=70.5544
+alpha0=0.5
+scaling gradient with 0.03125 to -0.000541375 4.75192e-05
+	>>>> prev guard 6.38331 16.9742 cur guard 6.28417 16.9752
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 6.28417 16.9752?0
+	is guard inside polygon? 1
+0 other guards have coords 6.28417 16.9752
+	 new best guard at 6.28417 16.9752
+scaling gradient with 0.0625 to -0.00108275 9.50384e-05
+	>>>> prev guard 6.38331 16.9742 cur guard 6.20477 16.9763
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 6.20477 16.9763?0
+	is guard inside polygon? 1
+0 other guards have coords 6.20477 16.9763
+	 new best guard at 6.20477 16.9763
+scaling gradient with 0.125 to -0.0021655 0.000190077
+	>>>> prev guard 6.38331 16.9742 cur guard 6.14106 16.9774
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 6.14106 16.9774?0
+	is guard inside polygon? 1
+0 other guards have coords 6.14106 16.9774
+	 new best guard at 6.14106 16.9774
+scaling gradient with 0.25 to -0.004331 0.000380154
+	>>>> prev guard 6.38331 16.9742 cur guard 6.08968 16.9786
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 6.08968 16.9786?0
+	is guard inside polygon? 1
+0 other guards have coords 6.08968 16.9786
+	 new best guard at 6.08968 16.9786
+scaling gradient with 0.5 to -0.008662 0.000760308
+	>>>> prev guard 6.38331 16.9742 cur guard 6.04773 16.9799
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 6.04773 16.9799?0
+	is guard inside polygon? 1
+0 other guards have coords 6.04773 16.9799
+	 new best guard at 6.04773 16.9799
+scaling gradient with 1 to -0.017324 0.00152062
+	>>>> prev guard 6.38331 16.9742 cur guard 6.01246 16.9813
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 6.01246 16.9813?1
+	is guard inside polygon? 0
+0 other guards have coords 6.01882 16.9812
+	 new best guard at 6.01882 16.9812
+scaling gradient with 2 to -0.034648 0.00304123
+	>>>> prev guard 6.38331 16.9742 cur guard 5.98716 16.9829
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 5.98716 16.9829?1
+	is guard inside polygon? 0
+0 other guards have coords 6.01781 16.9822
+	 new best guard at 6.01781 16.9822
+scaling gradient with 4 to -0.069296 0.00608246
+	>>>> prev guard 6.38331 16.9742 cur guard 5.98558 16.9844
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 5.98558 16.9844?1
+	is guard inside polygon? 0
+0 other guards have coords 6.01641 16.9836
+	 new best guard at 6.01641 16.9836
+scaling gradient with 8 to -0.138592 0.0121649
+	>>>> prev guard 6.38331 16.9742 cur guard 5.97678 16.9868
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 5.97678 16.9868?1
+	is guard inside polygon? 0
+0 other guards have coords 6.01435 16.9856
+	 new best guard at 6.01435 16.9856
+scaling gradient with 16 to -0.277184 0.0243298
+	>>>> prev guard 6.38331 16.9742 cur guard 5.95495 16.9909
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 5.95495 16.9909?1
+	is guard inside polygon? 0
+0 other guards have coords 6.0113 16.9887
+	 new best guard at 6.0113 16.9887
+scaling gradient with 32 to -0.554368 0.0486597
+	>>>> prev guard 6.38331 16.9742 cur guard 5.90836 16.998
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.38331 16.9742 5.90836 16.998?1
+	is guard inside polygon? 0
+0 other guards have coords 6.00693 16.9931
+	 new best guard at 6.00693 16.9931
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.008662 0.000760308
+h=0.000107802 0.00122816
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.102934 0.00931637
+h=0.000107802 0.00122816
+is completely visible? 0
+are areas equal? 103=102.283?0
++++++2 guards with gradient 0
+	======== guard 7.69091 21.6298
+	was guard reflex vertex? 0
+	computed gradient -0.0998006 -0.0296715 and pull -0.0119789 0.0407438
+	------- removing guard 7.69091 21.6298
+g1=7.69091 21.6298
+area1=98.0102
+alpha1=0.5
+scaling gradient with 0.03125 to -0.00311877 -0.000927234
+	>>>> prev guard 7.69091 21.6298 cur guard 6.7971 21.0842
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 6.7971 21.0842?0
+	is guard inside polygon? 1
+0 other guards have coords 6.7971 21.0842
+	 new best guard at 6.7971 21.0842
+scaling gradient with 0.0625 to -0.00623754 -0.00185447
+	>>>> prev guard 7.69091 21.6298 cur guard 6.08022 20.6516
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 6.08022 20.6516?0
+	is guard inside polygon? 1
+0 other guards have coords 6.08022 20.6516
+scaling gradient with 0.125 to -0.0124751 -0.00370894
+	>>>> prev guard 7.69091 21.6298 cur guard 5.50427 20.3092
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 5.50427 20.3092?0
+	is guard inside polygon? 1
+0 other guards have coords 5.50427 20.3092
+scaling gradient with 0.25 to -0.0249502 -0.00741787
+	>>>> prev guard 7.69091 21.6298 cur guard 5.03982 20.0386
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 5.03982 20.0386?0
+	is guard inside polygon? 1
+0 other guards have coords 5.03982 20.0386
+scaling gradient with 0.5 to -0.0499003 -0.0148357
+	>>>> prev guard 7.69091 21.6298 cur guard 4.66207 19.8248
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 4.66207 19.8248?0
+	is guard inside polygon? 1
+0 other guards have coords 4.66207 19.8248
+scaling gradient with 1 to -0.0998006 -0.0296715
+	>>>> prev guard 7.69091 21.6298 cur guard 4.3487 19.6548
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 4.3487 19.6548?0
+	is guard inside polygon? 1
+0 other guards have coords 4.3487 19.6548
+scaling gradient with 2 to -0.199601 -0.059343
+	>>>> prev guard 7.69091 21.6298 cur guard 4.07684 19.517
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 4.07684 19.517?0
+	is guard inside polygon? 1
+0 other guards have coords 4.07684 19.517
+scaling gradient with 4 to -0.399203 -0.118686
+	>>>> prev guard 7.69091 21.6298 cur guard 3.81823 19.3989
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 3.81823 19.3989?0
+	is guard inside polygon? 1
+0 other guards have coords 3.81823 19.3989
+scaling gradient with 8 to -0.798405 -0.237372
+	>>>> prev guard 7.69091 21.6298 cur guard 3.53031 19.2848
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 3.53031 19.2848?1
+	is guard inside polygon? 0
+0 other guards have coords 3.64857 19.3514
+scaling gradient with 16 to -1.59681 -0.474744
+	>>>> prev guard 7.69091 21.6298 cur guard 3.25736 19.2167
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 3.25736 19.2167?1
+	is guard inside polygon? 0
+0 other guards have coords 3.59791 19.4021
+scaling gradient with 32 to -3.19362 -0.949488
+	>>>> prev guard 7.69091 21.6298 cur guard 2.96438 19.2035
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 7.69091 21.6298 2.96438 19.2035?1
+	is guard inside polygon? 0
+0 other guards have coords 3.51427 19.4857
+Df=0 0
+h=0 0
+Df=-0.0506003 -0.0147498
+h=-0.00597432 0.0204953
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.000699966 -8.59034e-05
+h=-1.51451e-05 -0.000123407
+Df=-0.893819 -0.545601
+h=-0.00598946 0.0203719
+is completely visible? 0
+are areas equal? 103=101.498?0
++++++1 guards with gradient 0
+	======== guard 15.9952 21.9922
+	was guard reflex vertex? 1
+	computed gradient 155.445 -95.5135 and pull 10430.3 16999.1
+	------- removing guard 15.9952 21.9922
+g2=15.9952 21.9922
+area2=78.7579
+alpha2=0.5
+scaling gradient with 0.03125 to 4.85767 -2.9848
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+	 new best guard at 15.9952 21.9922
+scaling gradient with 0.0625 to 9.71534 -5.96959
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.125 to 19.4307 -11.9392
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.25 to 38.8614 -23.8784
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.5 to 77.7227 -47.7567
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 1 to 155.445 -95.5135
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 2 to 310.891 -191.027
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 4 to 621.782 -382.054
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 8 to 1243.56 -764.108
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 16 to 2487.13 -1528.22
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 32 to 4974.26 -3056.43
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+Df=-0.042829 0.107389
+h=-0.0199688 -0.00796399
+Df=-0.0392139 -0.195215
+h=-0.0191483 0.00384643
+Df=-0.00227814 -0.0102064
+h=-0.0011074 0.000247179
+Df=-0.000277096 -0.000689389
+h=-0.000128053 5.14701e-05
+Df=77.733 -47.6955
+h=5215.19 8499.59
+Df=0.0743223 0.037485
+h=0.0168 -0.0333097
+Df=0 0
+h=5215.16 8499.56
+is completely visible? 0
+are areas equal? 103=101.498?0
+i=5
+area=101.498
++++++3 guards with gradient 0
+	======== guard 6.00693 16.9931
+	was guard reflex vertex? 0
+	computed gradient -0.0149522 0.00211913 and pull 0.000299441 0.0021128
+	------- removing guard 6.00693 16.9931
+g0=6.00693 16.9931
+area0=69.3489
+alpha0=0.5
+scaling gradient with 0.03125 to -0.000467256 6.62229e-05
+	>>>> prev guard 6.00693 16.9931 cur guard 5.92456 17.0007
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.92456 17.0007?1
+	is guard inside polygon? 0
+0 other guards have coords 5.96191 17.0381
+	 new best guard at 5.96191 17.0381
+scaling gradient with 0.0625 to -0.000934512 0.000132446
+	>>>> prev guard 6.00693 16.9931 cur guard 5.89596 17.0445
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.89596 17.0445?1
+	is guard inside polygon? 0
+0 other guards have coords 5.92575 17.0742
+	 new best guard at 5.92575 17.0742
+scaling gradient with 0.125 to -0.00186902 0.000264891
+	>>>> prev guard 6.00693 16.9931 cur guard 5.87283 17.0796
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.87283 17.0796?1
+	is guard inside polygon? 0
+0 other guards have coords 5.89663 17.1034
+	 new best guard at 5.89663 17.1034
+scaling gradient with 0.25 to -0.00373805 0.000529783
+	>>>> prev guard 6.00693 16.9931 cur guard 5.85395 17.1079
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.85395 17.1079?1
+	is guard inside polygon? 0
+0 other guards have coords 5.87303 17.127
+	 new best guard at 5.87303 17.127
+scaling gradient with 0.5 to -0.0074761 0.00105957
+	>>>> prev guard 6.00693 16.9931 cur guard 5.83816 17.1309
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.83816 17.1309?1
+	is guard inside polygon? 0
+0 other guards have coords 5.85363 17.1464
+	 new best guard at 5.85363 17.1464
+scaling gradient with 1 to -0.0149522 0.00211913
+	>>>> prev guard 6.00693 16.9931 cur guard 5.82427 17.1499
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.82427 17.1499?1
+	is guard inside polygon? 0
+0 other guards have coords 5.83716 17.1628
+	 new best guard at 5.83716 17.1628
+scaling gradient with 2 to -0.0299044 0.00423826
+	>>>> prev guard 6.00693 16.9931 cur guard 5.81072 17.1663
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.81072 17.1663?1
+	is guard inside polygon? 0
+0 other guards have coords 5.82219 17.1778
+	 new best guard at 5.82219 17.1778
+scaling gradient with 4 to -0.0598088 0.00847653
+	>>>> prev guard 6.00693 16.9931 cur guard 5.79509 17.1817
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.79509 17.1817?1
+	is guard inside polygon? 0
+0 other guards have coords 5.80671 17.1933
+	 new best guard at 5.80671 17.1933
+scaling gradient with 8 to -0.119618 0.0169531
+	>>>> prev guard 6.00693 16.9931 cur guard 5.7731 17.1983
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.7731 17.1983?1
+	is guard inside polygon? 0
+0 other guards have coords 5.78741 17.2126
+	 new best guard at 5.78741 17.2126
+scaling gradient with 16 to -0.239235 0.0339061
+	>>>> prev guard 6.00693 16.9931 cur guard 5.73662 17.2202
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.73662 17.2202?1
+	is guard inside polygon? 0
+0 other guards have coords 5.75822 17.2418
+	 new best guard at 5.75822 17.2418
+scaling gradient with 32 to -0.47847 0.0678122
+	>>>> prev guard 6.00693 16.9931 cur guard 5.66977 17.2548
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.00693 16.9931 5.66977 17.2548?1
+	is guard inside polygon? 0
+0 other guards have coords 5.70746 17.2925
+	 new best guard at 5.70746 17.2925
+Df=0 0
+h=0 0
+Df=-0.0074761 0.00105957
+h=0.000149721 0.0010564
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=-0.0884467 0.0130675
+h=0.000149721 0.0010564
+is completely visible? 0
+are areas equal? 103=101.6?0
++++++2 guards with gradient 0
+	======== guard 6.7971 21.0842
+	was guard reflex vertex? 0
+	computed gradient 0.0784068 0.43326 and pull 0.100143 -0.012798
+	------- removing guard 6.7971 21.0842
+g1=6.7971 21.0842
+area1=92.7215
+alpha1=0.5
+scaling gradient with 0.03125 to 0.00245021 0.0135394
+	>>>> prev guard 6.7971 21.0842 cur guard 6.0923 20.6478
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 6.0923 20.6478?0
+	is guard inside polygon? 1
+0 other guards have coords 6.0923 20.6478
+	 new best guard at 6.0923 20.6478
+scaling gradient with 0.0625 to 0.00490042 0.0270787
+	>>>> prev guard 6.7971 21.0842 cur guard 5.53897 20.3001
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 5.53897 20.3001?0
+	is guard inside polygon? 1
+0 other guards have coords 5.53897 20.3001
+scaling gradient with 0.125 to 0.00980085 0.0541574
+	>>>> prev guard 6.7971 21.0842 cur guard 5.1073 20.026
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 5.1073 20.026?0
+	is guard inside polygon? 1
+0 other guards have coords 5.1073 20.026
+scaling gradient with 0.25 to 0.0196017 0.108315
+	>>>> prev guard 6.7971 21.0842 cur guard 4.77393 19.8164
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.77393 19.8164?0
+	is guard inside polygon? 1
+0 other guards have coords 4.77393 19.8164
+scaling gradient with 0.5 to 0.0392034 0.21663
+	>>>> prev guard 6.7971 21.0842 cur guard 4.52118 19.669
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.52118 19.669?0
+	is guard inside polygon? 1
+0 other guards have coords 4.52118 19.669
+scaling gradient with 1 to 0.0784068 0.43326
+	>>>> prev guard 6.7971 21.0842 cur guard 4.33683 19.5932
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.33683 19.5932?0
+	is guard inside polygon? 1
+0 other guards have coords 4.33683 19.5932
+scaling gradient with 2 to 0.156814 0.866519
+	>>>> prev guard 6.7971 21.0842 cur guard 4.21505 19.6179
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.21505 19.6179?0
+	is guard inside polygon? 1
+0 other guards have coords 4.21505 19.6179
+scaling gradient with 4 to 0.313627 1.73304
+	>>>> prev guard 6.7971 21.0842 cur guard 4.159 19.8097
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.159 19.8097?0
+	is guard inside polygon? 1
+0 other guards have coords 4.159 19.8097
+scaling gradient with 8 to 0.627254 3.46608
+	>>>> prev guard 6.7971 21.0842 cur guard 4.1869 20.3084
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.1869 20.3084?0
+	is guard inside polygon? 1
+0 other guards have coords 4.1869 20.3084
+scaling gradient with 16 to 1.25451 6.93215
+	>>>> prev guard 6.7971 21.0842 cur guard 4.34468 21.3994
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.34468 21.3994?0
+	is guard inside polygon? 1
+0 other guards have coords 4.34468 21.3994
+scaling gradient with 32 to 2.50902 13.8643
+	>>>> prev guard 6.7971 21.0842 cur guard 4.73182 23.6573
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.7971 21.0842 4.73182 23.6573?1
+	is guard inside polygon? 0
+0 other guards have coords 5.25454 23.006
+	 new best guard at 5.25454 23.006
+Df=0 0
+h=0 0
+Df=-0.0218581 0.00152104
+h=0.000520391 0.00747828
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.055431 0.214884
+h=0.0495069 -0.0127707
+Df=0 0
+h=0 0
+Df=0.00563054 0.000224709
+h=4.41626e-05 -0.00110658
+Df=0.387144 2.2579
+h=0.0500714 -0.00639898
+is completely visible? 0
+are areas equal? 103=100.076?0
++++++1 guards with gradient 0
+	======== guard 15.9952 21.9922
+	was guard reflex vertex? 1
+	computed gradient 155.445 -95.5135 and pull 10430.3 16999.1
+	------- removing guard 15.9952 21.9922
+g2=15.9952 21.9922
+area2=78.7579
+alpha2=0.5
+scaling gradient with 0.03125 to 4.85767 -2.9848
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+	 new best guard at 15.9952 21.9922
+scaling gradient with 0.0625 to 9.71534 -5.96959
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.125 to 19.4307 -11.9392
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.25 to 38.8614 -23.8784
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.5 to 77.7227 -47.7567
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 1 to 155.445 -95.5135
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 2 to 310.891 -191.027
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 4 to 621.782 -382.054
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 8 to 1243.56 -764.108
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 16 to 2487.13 -1528.22
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 32 to 4974.26 -3056.43
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+Df=-0.042829 0.107389
+h=-0.0199688 -0.00796399
+Df=-0.0392139 -0.195215
+h=-0.0191483 0.00384643
+Df=-0.00227814 -0.0102064
+h=-0.0011074 0.000247179
+Df=-0.000277096 -0.000689389
+h=-0.000128053 5.14701e-05
+Df=77.733 -47.6955
+h=5215.19 8499.59
+Df=0.0743223 0.037485
+h=0.0168 -0.0333097
+Df=0 0
+h=5215.16 8499.56
+is completely visible? 0
+are areas equal? 103=100.076?0
+i=6
+area=100.076
++++++3 guards with gradient 0
+	======== guard 5.70746 17.2925
+	was guard reflex vertex? 0
+	computed gradient 0.236371 -0.00163785 and pull 0.00355408 0.052384
+	------- removing guard 5.70746 17.2925
+g0=5.70746 17.2925
+area0=70.4319
+alpha0=0.5
+scaling gradient with 0.03125 to 0.0073866 -5.11829e-05
+	>>>> prev guard 5.70746 17.2925 cur guard 5.6378 17.3082
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.6378 17.3082?1
+	is guard inside polygon? 0
+0 other guards have coords 5.66479 17.3352
+	 new best guard at 5.66479 17.3352
+scaling gradient with 0.0625 to 0.0147732 -0.000102366
+	>>>> prev guard 5.70746 17.2925 cur guard 5.61089 17.353
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.61089 17.353?1
+	is guard inside polygon? 0
+0 other guards have coords 5.62895 17.3711
+	 new best guard at 5.62895 17.3711
+scaling gradient with 0.125 to 0.0295464 -0.000204732
+	>>>> prev guard 5.70746 17.2925 cur guard 5.58914 17.3905
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.58914 17.3905?1
+	is guard inside polygon? 0
+0 other guards have coords 5.59932 17.4007
+	 new best guard at 5.59932 17.4007
+scaling gradient with 0.25 to 0.0590928 -0.000409463
+	>>>> prev guard 5.70746 17.2925 cur guard 5.57374 17.4214
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.57374 17.4214?1
+	is guard inside polygon? 0
+0 other guards have coords 5.57616 17.4238
+	 new best guard at 5.57616 17.4238
+scaling gradient with 0.5 to 0.118186 -0.000818926
+	>>>> prev guard 5.70746 17.2925 cur guard 5.56787 17.4456
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.56787 17.4456?1
+	is guard inside polygon? 1
+0 other guards have coords 5.56113 17.4389
+	 new best guard at 5.56113 17.4389
+scaling gradient with 1 to 0.236371 -0.00163785
+	>>>> prev guard 5.70746 17.2925 cur guard 5.57849 17.4613
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.57849 17.4613?1
+	is guard inside polygon? 1
+0 other guards have coords 5.55857 17.4414
+	 new best guard at 5.55857 17.4414
+scaling gradient with 2 to 0.472742 -0.00327571
+	>>>> prev guard 5.70746 17.2925 cur guard 5.62009 17.4643
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.62009 17.4643?1
+	is guard inside polygon? 1
+0 other guards have coords 5.57789 17.4221
+	 new best guard at 5.57789 17.4221
+scaling gradient with 4 to 0.945484 -0.00655141
+	>>>> prev guard 5.70746 17.2925 cur guard 5.722 17.445
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.722 17.445?1
+	is guard inside polygon? 1
+0 other guards have coords 5.63849 17.3615
+	 new best guard at 5.63849 17.3615
+scaling gradient with 8 to 1.89097 -0.0131028
+	>>>> prev guard 5.70746 17.2925 cur guard 5.94324 17.3838
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 5.94324 17.3838?1
+	is guard inside polygon? 1
+0 other guards have coords 5.77974 17.2203
+	 new best guard at 5.77974 17.2203
+scaling gradient with 16 to 3.78194 -0.0262056
+	>>>> prev guard 5.70746 17.2925 cur guard 6.40209 17.2407
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 6.40209 17.2407?1
+	is guard inside polygon? 1
+0 other guards have coords 6.08071 16.9193
+	 new best guard at 6.08071 16.9193
+scaling gradient with 32 to 7.56387 -0.0524113
+	>>>> prev guard 5.70746 17.2925 cur guard 7.33533 16.9356
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.70746 17.2925 7.33533 16.9356?1
+	is guard inside polygon? 1
+0 other guards have coords 6.69985 16.3001
+	 new best guard at 6.69985 16.3001
+Df=0.147266 -0.00642285
+h=0.000956658 0.0219348
+Df=-0.0290808 0.00560392
+h=0.000820382 0.00425727
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=1.25462 0.0163298
+h=0.00177704 0.026192
+is completely visible? 0
+are areas equal? 103=100.228?0
++++++2 guards with gradient 0
+	======== guard 5.25454 23.006
+	was guard reflex vertex? 0
+	computed gradient -1.95559 1.50608 and pull 1.20542 1.59966
+	------- removing guard 5.25454 23.006
+g1=5.25454 23.006
+area1=90.928
+alpha1=0.5
+scaling gradient with 0.03125 to -0.0611123 0.0470651
+	>>>> prev guard 5.25454 23.006 cur guard 5.67868 24.977
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 5.67868 24.977?1
+	is guard inside polygon? 1
+0 other guards have coords 6.35331 24.4711
+	 new best guard at 6.35331 24.4711
+scaling gradient with 0.0625 to -0.122225 0.0941302
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+0 other guards have coords 6 24
+	 new best guard at 6 24
+scaling gradient with 0.125 to -0.244449 0.18826
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 0.25 to -0.488898 0.376521
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 0.5 to -0.977796 0.753042
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 1 to -1.95559 1.50608
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 2 to -3.91118 3.01217
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 4 to -7.82237 6.02433
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 8 to -15.6447 12.0487
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 16 to -31.2895 24.0973
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+scaling gradient with 32 to -62.579 48.1947
+event=placed on reflex vertex 6 24
+	>>>> prev guard 5.25454 23.006 cur guard 6 24
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 5.25454 23.006 6 24?0
+	is guard inside polygon? 1
+1 other guards have coords 6 24
+Df=-0.99689 0.747667
+h=0.601773 0.802364
+Df=-0.000307948 0.000540783
+h=0.00026923 0.000153313
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.0194014 0.0048336
+h=0.000669455 -0.0026871
+Df=0 0
+h=0.602712 0.79983
+is completely visible? 0
+are areas equal? 103=102.04?0
++++++1 guards with gradient 0
+	======== guard 15.9952 21.9922
+	was guard reflex vertex? 1
+	computed gradient 155.445 -95.5135 and pull 10430.3 16999.1
+	------- removing guard 15.9952 21.9922
+g2=15.9952 21.9922
+area2=78.7579
+alpha2=0.5
+scaling gradient with 0.03125 to 4.85767 -2.9848
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+	 new best guard at 15.9952 21.9922
+scaling gradient with 0.0625 to 9.71534 -5.96959
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.125 to 19.4307 -11.9392
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.25 to 38.8614 -23.8784
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 0.5 to 77.7227 -47.7567
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 1 to 155.445 -95.5135
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 2 to 310.891 -191.027
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 4 to 621.782 -382.054
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 8 to 1243.56 -764.108
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 16 to 2487.13 -1528.22
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+scaling gradient with 32 to 4974.26 -3056.43
+event=placed on reflex vertex 16 22
+	>>>> prev guard 15.9952 21.9922 cur guard 16 22
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 15.9952 21.9922 16 22?0
+	is guard inside polygon? 1
+reflex vertex guard 15.9952 21.9922 tries to move to 16 22
+reflex segment1 16 22 19 21
+reflex segment1 15 27 16 22
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 0
+on edge2? 0
+on edge1? 1
+new position still inside the polygon? 1
+new position ON polygon? 1
+projecting
+crashed whatever
+	old reflex coords
+1 other guards have coords 15.9952 21.9922
+Df=-0.042829 0.107389
+h=-0.0199688 -0.00796399
+Df=-0.0392139 -0.195215
+h=-0.0191483 0.00384643
+Df=-0.00227814 -0.0102064
+h=-0.0011074 0.000247179
+Df=-0.000277096 -0.000689389
+h=-0.000128053 5.14701e-05
+Df=77.733 -47.6955
+h=5215.19 8499.59
+Df=0.0743223 0.037485
+h=0.0168 -0.0333097
+Df=0 0
+h=5215.16 8499.56
+is completely visible? 0
+are areas equal? 103=102.04?0
+i=7
+area=102.04
++++++3 guards with gradient 0
+	======== guard 6.69985 16.3001
+	was guard reflex vertex? 0
+	computed gradient -0 -0 and pull -0 -0
+	======== guard 6 24
+	was guard reflex vertex? 1
+	computed gradient 0.0191616 0.00489521 and pull 0.0027971 -0.00237671
+	------- removing guard 6 24
+g1=6 24
+area1=95.14
+alpha1=0.5
+scaling gradient with 0.03125 to 0.000598801 0.000152975
+	>>>> prev guard 6 24 cur guard 6.00034 23.9998
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.00034 23.9998?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.00034 23.9998
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.00034 23.9998
+	 new best guard at 6.00034 23.9998
+scaling gradient with 0.0625 to 0.0011976 0.000305951
+	>>>> prev guard 6 24 cur guard 6.00101 23.9994
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.00101 23.9994?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.00101 23.9994
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.00101 23.9994
+	 new best guard at 6.00101 23.9994
+scaling gradient with 0.125 to 0.00239521 0.000611902
+	>>>> prev guard 6 24 cur guard 6.00207 23.9989
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.00207 23.9989?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.00207 23.9989
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.00207 23.9989
+	 new best guard at 6.00207 23.9989
+scaling gradient with 0.25 to 0.00479041 0.0012238
+	>>>> prev guard 6 24 cur guard 6.00367 23.9984
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.00367 23.9984?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.00367 23.9984
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.00367 23.9984
+	 new best guard at 6.00367 23.9984
+scaling gradient with 0.5 to 0.00958082 0.00244761
+	>>>> prev guard 6 24 cur guard 6.00619 23.998
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.00619 23.998?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.00619 23.998
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.00619 23.998
+	 new best guard at 6.00619 23.998
+scaling gradient with 1 to 0.0191616 0.00489521
+	>>>> prev guard 6 24 cur guard 6.0104 23.9979
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.0104 23.9979?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.0104 23.9979
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.0104 23.9979
+	 new best guard at 6.0104 23.9979
+scaling gradient with 2 to 0.0383233 0.00979043
+	>>>> prev guard 6 24 cur guard 6.01789 23.9986
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.01789 23.9986?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.01789 23.9986
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.01789 23.9986
+	 new best guard at 6.01789 23.9986
+scaling gradient with 4 to 0.0766466 0.0195809
+	>>>> prev guard 6 24 cur guard 6.03182 24.0009
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.03182 24.0009?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.03182 24.0009
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.03182 24.0009
+	 new best guard at 6.03182 24.0009
+scaling gradient with 8 to 0.153293 0.0391617
+	>>>> prev guard 6 24 cur guard 6.05857 24.0064
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.05857 24.0064?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.05857 24.0064
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.05857 24.0064
+	 new best guard at 6.05857 24.0064
+scaling gradient with 16 to 0.306586 0.0783234
+	>>>> prev guard 6 24 cur guard 6.11091 24.0184
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.11091 24.0184?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.11091 24.0184
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.11091 24.0184
+	 new best guard at 6.11091 24.0184
+scaling gradient with 32 to 0.613173 0.156647
+	>>>> prev guard 6 24 cur guard 6.21438 24.0434
+	was guard reflex vertex? 1
+	was guard in reflex area? 1
+	does guard intersect boundary ray 6 24 6.21438 24.0434?0
+	is guard inside polygon? 1
+reflex vertex guard 6 24 tries to move to 6.21438 24.0434
+reflex segment1 3 20 6 24
+reflex segment1 6 24 5 26
+on positive side edge2? 1
+on positive side edge1? 0
+on negative side edge2? 0
+on negative side edge1? 1
+on edge2? 0
+on edge1? 0
+placement between reflex lines
+	new reflex coords who dis
+0 other guards have coords 6.21438 24.0434
+	 new best guard at 6.21438 24.0434
+Df=0 0.00125
+h=0.00125 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0 0
+h=0 0
+Df=0.00958082 0.0011976
+h=0.000148544 -0.00118835
+Df=0.10347 0.0250204
+h=0.00139855 -0.00118835
+is completely visible? 0
+are areas equal? 103=102.243?0
++++++2 guards with gradient 0
+	======== guard 6.69985 16.3001
+	was guard reflex vertex? 0
+	computed gradient 1.87127 1.88978 and pull 4.45055 -4.44815
+	------- removing guard 6.69985 16.3001
+g0=6.69985 16.3001
+area0=66.4568
+alpha0=0.5
+scaling gradient with 0.03125 to 0.0584772 0.0590556
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+0 other guards have coords 7 16
+	 new best guard at 7 16
+scaling gradient with 0.0625 to 0.116954 0.118111
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 0.125 to 0.233909 0.236222
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 0.25 to 0.467817 0.472445
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 0.5 to 0.935635 0.94489
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 1 to 1.87127 1.88978
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 2 to 3.74254 3.77956
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 4 to 7.48508 7.55912
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 8 to 14.9702 15.1182
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 16 to 29.9403 30.2365
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+scaling gradient with 32 to 59.8806 60.473
+event=placed on reflex vertex 7 16
+	>>>> prev guard 6.69985 16.3001 cur guard 7 16
+	was guard reflex vertex? 0
+	was guard in reflex area? 0
+	does guard intersect boundary ray 6.69985 16.3001 7 16?0
+	is guard inside polygon? 1
+1 other guards have coords 7 16
+Df=-0 -0
+h=-0 0
+Df=-0.00890809 0.000347243
+h=4.50631e-05 0.00115604
+Df=0 -0
+h=0 0
+Df=-0 0
+h=0 0
+Df=-0 0
+h=0 0
+Df=0.944543 0.944543
+h=2.22523 -2.22523
+Df=0 0
+h=2.22528 -2.22407
+is completely visible? 1
+are areas equal? 103=103?1
+i=9
+area=103
+g0=7 16
+alpha0=0.5
+area0=71
+g1=6.21438 24.0434
+alpha1=0.5
+area1=93.2767
+g2=15.9952 21.9922
+alpha2=0.5
+area2=78.7579
