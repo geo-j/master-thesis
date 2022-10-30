@@ -759,8 +759,8 @@
                             std::cout << "area" << i << '=' << cur_guard.get_area() << std::endl;
                             std::cout << "alpha" << i << '=' << cur_guard.get_learning_rate() << std::endl;
 
-                            Gradient best_gradient = gradient;
-                            Guard best_guard = Guard(cur_guard);
+                            Gradient best_gradient = gradient, normal_gradient = gradient;
+                            Guard best_guard = Guard(cur_guard), normal_guard = Guard(cur_guard);
                             auto best_arrangement = this->full_visibility(new_guards);
                             bool moved = false;
 
@@ -804,7 +804,11 @@
                                     auto new_arrangement = this->full_visibility(new_guards);
                                     // std::cout << "here?\n";
                                     // if the new guard has a better position, save it
-                                    if (compute_area(new_arrangement) > compute_area(best_arrangement) || cur_guard.get_area() > best_guard.get_area() || !moved) {
+                                    if (compute_area(new_arrangement) >= compute_area(best_arrangement) ||
+                                    // cur_guard.get_area() > best_guard.get_area() 
+                                    // || 
+                                    !moved
+                                    ) {
                                         std::cout << "\t new best guard at " << cur_guard << std::endl;
                                         std::cout << "\t\tnew arrangement area = " << compute_area(new_arrangement) << std::endl;
                                         std::cout << "\t\told arrangement area = " << compute_area(best_arrangement) << std::endl;
@@ -814,9 +818,16 @@
                                         best_guard = Guard(cur_guard);
                                         new_guards[i] = Guard(best_guard);
                                         moved = true;
+                                        best_arrangement = this->full_visibility(new_guards);
+
                                     }
                                     else
                                         new_guards[i] = old_guard;
+                                    
+                                    // if (l == 1) {
+                                    //     normal_guard = Guard(cur_guard);
+                                    //     normal_gradient = gradient;
+                                    // }
                                 }
 
                                 // restore the gradient before the next iteration
@@ -827,6 +838,11 @@
                             std::cout << "---- official new best guard " << best_guard << std::endl;
 
 
+                            // if (!moved) {
+                            //     best_guard = Guard(normal_guard);
+                            //     best_gradient = normal_gradient;
+                            //     new_guards[i] = Guard(best_guard);
+                            // }
                             // print best gradient
                             for (int i = 0; i < (int) best_gradient.get_pulls().size() - 1; i ++) {
                                 // std::cout << "h=" << this->pull_attraction * pulls.at(i) << std::endl;
