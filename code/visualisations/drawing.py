@@ -261,12 +261,27 @@ class Drawing(object):
         for guard in self.xs.keys():
             color = color_list[i]
             i += 1
+
             if len(self.xs[guard]) <= pos:
-                pos = -1
+                self.xs[guard] = self.xs[guard] + [self.xs[guard][-1]]
+                self.ys[guard] = self.ys[guard] + [self.ys[guard][-1]]
+
+            if len(self.dfs_x[guard][pos]) <= pos:
+                self.dfs_x[guard][pos] = [0] * pos
+                self.dfs_y[guard][pos] = [0] * pos
+            
+            # print(self.xs[guard], len(self.xs[guard]), pos)
+            # print(self.xs[guard][pos])
             plt.scatter(self.xs[guard][pos], self.ys[guard][pos], color = color)
 
-            plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
+            # plot all gradients
+            # plt.quiver([self.xs[guard][pos]] * len(self.dfs_x[guard][pos]), [self.ys[guard][pos]] * len(self.dfs_x[guard][pos]), [self.dfs_x[guard][pos]], [self.dfs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['g'] * (len(self.dfs_x[guard][pos]) - 1) + ['r'])
 
+            # print(self.dfs_x[guard][pos], len(self.dfs_x[guard][pos]), pos)
+            # plot only total gradient
+            plt.quiver([self.xs[guard][pos]], [self.ys[guard][pos]], [self.dfs_x[guard][pos][-1]], [self.dfs_y[guard][pos][-1]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['r'])
+
+            # plot all pulls
             plt.quiver([self.xs[guard][pos]] * len(self.hs_x[guard][pos]), [self.ys[guard][pos]] * len(self.hs_x[guard][pos]), [self.hs_x[guard][pos]], [self.hs_y[guard][pos]], scale = 1, scale_units = 'xy', angles = 'xy', width = 0.0055, color = ['b'] * (len(self.hs_x[guard][pos]) - 1) + ['purple'])
 
 
@@ -305,7 +320,7 @@ class Drawing(object):
         plt.savefig(f'{PATH + DATE}/{time.strftime("%H%M")}_area.png', format = 'png', dpi = 300, bbox_inches = 'tight')
         # plt.show()
 
-    def plot_area_combs(self) -> None:
+    def plot_area_multiple(self) -> None:
         plt.plot([x * 100 / float(self.max_area) for x in self.areas])
 
     def draw_all(self) -> None:
