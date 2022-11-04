@@ -75,10 +75,10 @@ Thus, it becomes clearer how momentum allows the smoothening of noisy guard move
 
 
 \subsubsection{Without Pulling To and Onto the Reflex Vertex}
-In this section we discuss the impact that the pull to and onto the reflex vertex heuristic has upon the behaviour of the algorithm. Sections \ref{sec:pull} and \ref{sec:pull_onto} introduced the pull to and onto reflex vertices heuristic, respectively. These heuristic tackles the idea that the closer a guard is to a reflex vertex, the stronger it is pulled towards it. If a guard is ``close enough'' to a reflex vertex, then the locally maximum seen area would be achieved by placing the guard on top of the reflex vertex. 
+In this section we discuss the impact that the pull to and onto the reflex vertex heuristic has upon the behaviour of the algorithm. Sections \ref{sec:pull} and \ref{sec:pull_onto} introduced the pull to and onto reflex vertices heuristic, respectively. These heuristic tackles the idea that the closer a guard is to a reflex vertex, the stronger it is pulled towards it. If a guard is ``close enough'' to a reflex vertex, then the locally maximum seen area would be achieved by placing the guard on top of the reflex vertex. Thus, we believe that studying the impact of these two heuristics together is the most natural. 
 % We have defined ``close enough'' as a guard being closer than two thirds of the minimum distance between any two reflex vertices in the polygon.
 
-Figure \ref{fig:no_pull_eg} displays the guards' movement both when we are using all the heuristics and when we are not pulling them onto reflex vertices. The polygon is arbitrarily shaped and requires three guards for full guarding. Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard's movement changes when it is placed onto the reflex vertex. Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard's movement changes when it is pulled towards the reflex vertex, but not onto it. We  observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moves away from the reflex vertex.
+Figure \ref{fig:no_pull_eg} displays the guards' movement both when we are using all the heuristics and when we are not pulling them to and onto reflex vertices. The polygon is arbitrarily shaped and requires three guards for full guarding. Subfigures \ref{fig:all_pull_pos0} and \ref{fig:all_pull_pos1} show how the green guard's movement changes when it is placed onto the reflex vertex. Subfigures \ref{fig:no_pull_pos0} and \ref{fig:no_pull_pos1} show how the guard's movement changes when it is not pulled towards the reflex vertex. We  observe how in Subfigure \ref{fig:all_pull_pos1} the green guard is placed onto the reflex vertex. It then strives to reach the unseen polygon part in the upper left corner. On the other hand, in Subfigure \ref{fig:no_pull_pos1} the guard moves away from the reflex vertex.
 
 \begin{figure}[h!]
     \centering
@@ -91,7 +91,7 @@ Figure \ref{fig:no_pull_eg} displays the guards' movement both when we are using
     % \vfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_pull_pos0_fixed.png}
-        \caption{No pull onto the reflex vertex. The green guard is pulled towards the reflex vertex.}
+        \caption{The green guard has a pull towards the reflex vertex. However, we are not taking it into account.}
         \label{fig:no_pull_pos0}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
@@ -102,98 +102,99 @@ Figure \ref{fig:no_pull_eg} displays the guards' movement both when we are using
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/random_no_pull_pos1_fixed.png}
-        \caption{No pull onto the reflex vertex. The green guard is placed according to the momentum computation.}
+        \caption{The green guard is placed according to the momentum computation, without being pulled towards or onto the reflex vertex.}
         \label{fig:no_pull_pos1}
     \end{subfigure}
-    \caption{Example of different movements of guards with and without pulling them onto reflex vertices in an arbitrarily shaped polygon guarded by three guards.}
+    \caption{Example of different movements of guards with and without pulling them to and onto reflex vertices in an arbitrarily shaped polygon guarded by three guards.}
     \label{fig:no_pull_eg}
 \end{figure}
 
 \newpage
 \paragraph{Evaluation and Results}
 \label{evaluation}
-We compare the performance of our algorithm in two settings: with all heuristics and without the pull to and onto reflex vertices. We observe this behaviour on the three polygons displayed in Figure \ref{fig:polygons}. For each polygon, the algorithm is run 20 times for each heuristic setting, each time with randomised guards coordinates. Our evaluation consists of comparing the average number of iterations required for the algorithm to finish. We additionally note the average iteration of the algorithm in the two cases.
+We compare the performance of our algorithm in two settings: with all heuristics and without the pull to and onto reflex vertices. We observe this behaviour on the three polygons displayed in Figure \ref{fig:polygons}. For each polygon, the algorithm is run 20 times for each heuristic setting, each time with randomised starting guards coordinates. Our evaluation consists of comparing the average number of iterations required for the algorithm to finish in the two heuristic cases. We additionally take note of the average total area seen per iteration.
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.3\textwidth}
         \includegraphics[width = \textwidth]{experiments/random.png}
-        \caption{Arbitrarily shaped polygon that requires 3 guards for complete guarding (polygon 1).}
+        \caption{\textbf{Polygon 1:} arbitrarily shaped polygon that requires 3 guards for complete guarding.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.3\textwidth}
         \includegraphics[width = \textwidth]{experiments/comb.png}
-        \caption{Comb-shaped polygon with four teeth that requires 4 guards for complete guarding (polygon 2).}
+        \caption{\textbf{Polygon 2:} comb-shaped polygon with four teeth that requires 4 guards for complete guarding.}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.3\textwidth}
         \includegraphics[width = \textwidth]{experiments/reflex_area.png}
-        \caption{Arbitrarily shaped polygon that requires 2 guards for complete guarding (polygon 3).}
+        \caption{\textbf{Polygon 3:} arbitrarily shaped polygon that requires 2 guards for complete guarding.}
     \end{subfigure}
-    \caption{The polygons used in our experiments.}
+    \caption{The polygons used for the experiments.}
     \label{fig:polygons}
 \end{figure}
 
-Figure \ref{fig:avg_area} displays how the total area seen on average per iteration for the three polygons develops in the two cases. There is a quite clear distinction between using all heuristics and not using the pull for all the polygons. Overall, the algorithm requires more iterations when the pull heuristic is not used. 
+Figure \ref{fig:avg_area} displays how the total area seen on average per iteration for the three polygons develops in the two heuristics cases. There is a quite clear distinction between using all heuristics and not using the pull for all the polygons. Overall, the algorithm requires more iterations when the pull heuristic is not used. 
 
-The initial total area seen is higher on average for the all heuristics case than for the no pull case. Nonetheless, the algorithm in the no pull case compensates this disadvantaged start within the first 6 iterations for all polygons. In these first 6 iterations, both algorithms shoot towards the 100\% polygon visibility. When using all heuristics, the algorithm manages to achieve the full visibility in approximately just as many iterations as it took for the initial spike. In the case of the no pull algorithm, the convergence towards the optimum is much slower. 
+The initial total area seen is higher on average for the all heuristics case than for the no pull case. Nonetheless, the algorithm in the no pull case compensates this disadvantaged start within the first 6 iterations for all polygons. In these first 6 iterations, reach pass 96\% total polygon visibility. When using all heuristics, the algorithm manages to achieve the full visibility in less than 10 iteration after the initial spike. In the case of the no pull algorithm, the convergence towards the optimum is much slower in terms of number of iterations. 
 Subfigure \ref{fig:avg_area_reflex_area} displays the worst such case (polygon 3), where the no pull algorithm took thrice as many iterations than in the all heuristics case. Subfigure \ref{fig:avg_area_comb} displays a less dramatic case for polygon 2. There not using the pull results in more smoothened out convergence curve, that is only a quarter longer than the all heuristics case. 
-The difference in the average number of iterations happens due to the polygon shape. Polygons 1 and 3 are polygons where guards are required to travel past reflex vertices. So, the absence of the pull influences the speed and the efficiency of the movement much more. This is because without a pull, guards only travel around reflex vertices. Subfigure \ref{fig:avg_area_random} displays such a case for polygon 1. In the first 10 iterations without a pull, the guards appear to oscillate around reflex vertices. When using the pull, guards get stabilised closer to the reflex vertices. The reflex vertices in polygon 2 do not have such a strong influence. An optimal positioning in this case can also be achieved by moving around reflex vertices, and not necessarily towards them. 
+
+The difference in the average number of iterations happens due to the polygon shape. Polygons 1 and 3 are polygons where guards are required to travel past reflex vertices. So, the absence of the pull influences the speed and the efficiency of the movement much more. This is because without a pull, guards only travel around reflex vertices. Subfigure \ref{fig:avg_area_random} displays such a case for polygon 1. In the first 10 iterations without a pull, the guards appear to oscillate between different positions. When using the pull, guards have a more stable trajectory. We reckon that this happens due to the fact that placing guards on reflex vertices maximises the seen area around the vertex. Otherwise, guards are required to find their optimal position around the reflex vertex. Conversely, polygon 2 (Subfigure \ref{fig:avg_area_comb}) shows a less drastic difference between the two heuristic cases. This is due of its shape: its reflex vertices do not have such a strong influence. Namely, an optimal positioning in this case can also be achieved by moving around reflex vertices, and not necessarily towards them. 
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/avg_area_random.png}
-        \caption{Average total area seen per iteration for polygon 1.}
+        \caption{\textbf{Polygon 1}.}
         \label{fig:avg_area_random}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/avg_area_comb.png}
-        \caption{Average total area seen per iteration for polygon 2.}
+        \caption{\textbf{Polygon 2}.}
         \label{fig:avg_area_comb}
     \end{subfigure}
     \begin{subfigure}{0.5\textwidth}
         \includegraphics[width = \textwidth]{experiments/avg_area_reflex_area.png}
-        \caption{Average total area seen per iteration for polygon 3.}
+        \caption{\textbf{Polygon 3}.}
         \label{fig:avg_area_reflex_area}
     \end{subfigure}
-    \caption{Average total area seen per iteration for all experimental polygons.}
+    \caption{Average total area seen per iteration for all the experiment polygons.}
     \label{fig:avg_area}
 \end{figure}
 
 \newpage
-Figure \ref{fig:avg_iterations} displays the average number of iterations for all polygons in the two heuristic cases. As previously mentioned, it takes more iterations on average to solve a polygon when not using the pull heuristic. Nonetheless, not using this heuristic also results in a less predictable guard movement, with a higher standard deviation.
+Figure \ref{fig:avg_iterations} displays the average number of iterations for all polygons in the two heuristic cases. As previously observed, it takes more iterations on average to solve a polygon when not using the pull heuristic. Nonetheless, not using this heuristic also results in a less predictable guard movement, with a larger variability.
+This is especially noticeable for polygons 1 and 3, in Subfigures \ref{fig:avg_iterations_random} and \ref{fig:avg_iterations_reflex_area}, respectively. In these two cases, it is unlikely that there is a statistical difference between the two approaches. This is because the median values of both cases lie within the first and third quantile of each other's boxes. However, the initial guard placement plays an important role in determining how well our algorithm performs. When no pull is used, some outliers appear. Those correspond to unfortunate initial guard coordinates. Using all heuristics mitigates such unlucky cases by swiftly moving to and placing guards onto reflex vertices and maximising the area seen around the reflex vertex. This results in a more predictable guard movement that faster converges towards an optimum. 
 
-This is especially noticeable for polygons 1 and 3, in Subfigures \ref{fig:avg_iterations_random} and \ref{fig:avg_iterations_reflex_area}, respectively. In these two cases, it is unlikely that there is a statistical difference between the two approaches. This is because the median values of both cases lie within the first and third quantile of each other's boxes. However, the initial guard placement plays an important role in determining how well our algorithm performs. When no pull is used, some outliers appear. Those correspond to unfortunate initial guard coordinates. Using all heuristics mitigates this unlucky case, resulting in a more predictable guard movement that faster converge towards an optimum. A few outliers appear also when using all heuristics on polygon 3. They still perform better than the median performance when not using the pull heuristic. Nonetheless, the starting guard positioning in the case of all heuristics used on polygon 3 appears to be positively skewed. This means that on average the starting positioning of the guards gave the algorithm a head start.
-
+A few outliers appear also when using all heuristics on polygon 3. An optimal solution is still achieved in less iteration on average than when not using the pull heuristic. Nonetheless, the starting guard positioning in the case of all heuristics used on polygon 3 appears to be positively skewed. This means that on average the starting positioning of the guards gave the algorithm a head start. It is statistically unclear how this influences our algorithm's performance.
 In the case of polygon 2 in Subfigure \ref{fig:avg_iterations_comb}, the improved performance of the all heuristic algorithm becomes clearer. The median number of iterations lays underneath the first quantile when no pull is used. This indicates that a statistical difference between them could be likely. It is worth discussing what the implications of this difference are. We have discussed that the shape of polygon 2 allows guards to find an optimum solution similarly fast to when all heuristics are used. Still, the pull appears to play a statistically important role in the faster convergence towards the optimum. 
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/avg_iterations_random.png}
-        \caption{Average number of iterations for polygon 1.}
+        \caption{\textbf{Polygon 1}.}
         \label{fig:avg_iterations_random}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \includegraphics[width = \textwidth]{experiments/avg_iterations_comb.png}
-        \caption{Average number of iterations for polygon 2.}
+        \caption{\textbf{Polygon 2}.}
         \label{fig:avg_iterations_comb}
     \end{subfigure}
     \begin{subfigure}{0.5\textwidth}
         \includegraphics[width = \textwidth]{experiments/avg_iterations_reflex_area.png}
-        \caption{Average number of iterations for polygon 3.}
+        \caption{\textbf{Polygon 3}.}
         \label{fig:avg_iterations_reflex_area}
     \end{subfigure}
-    \caption{Average number of iterations for all experimental polygons.}
+    \caption{Average number of iterations for all the experiment polygons.}
     \label{fig:avg_iterations}
 \end{figure}
 
 % These events are also observed in the two area plots in Figure \ref{fig:no_pull_plots}. The case when the green guard is not placed on top of the reflex vertex results in more iterations (Subfigure \ref{fig:area_no_pull}). This is due to the fact that the green guard cannot maximise its locally seen area by being placed on the reflex vertex. So, it needs to move around more before finding its optimal path. This is also displayed in how the total area seen lowers and then rises in between iterations 1 and 4. Note that that the red guard does not move in iteration 4 because the other two guards have already covered the whole polygon. Conversely, Subfigure \ref{fig:area_all_pull} displays how the green guard quickly moves towards the last part of the polygon that was not yet seen. This results in a steady increase in the total seen area.
 
-Therefore, we believe that pulling guards towards reflex vertices results in reaching the optimum in less iterations. This appears to be an improvement for all polygon shapes, regardless of whether guards need to move only around or also towards reflex vertices. This difference is less likely to be supported statistically for polygons with stronger pulls towards reflex vertices. Nonetheless, on average, the algorithm can solve polygons up to three times as fast when using all heuristics than when not using the pull.
+Therefore, we believe that pulling guards towards reflex vertices results in reaching the optimum in less iterations. This appears to be an improvement for all polygon shapes, regardless of whether guards need to move only around or also towards and onto reflex vertices. This difference is less likely to be supported statistically for polygons with stronger pulls towards reflex vertices. It is unclear whether this statistical uncertainty is due to the heuristic themselves, or the skewed starting guard positions.  Nonetheless, on average, the algorithm can solve polygons up to three times as fast when using all heuristics than when not using the pull.
 
 % \newpage
 
